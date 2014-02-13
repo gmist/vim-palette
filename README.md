@@ -212,6 +212,7 @@ Total of **468** color schemes:
 * evening_2.vim
 * far.vim
 * fine_blue.vim
+* [flatland.vim](https://github.com/thinkpixellab/flatland)
 * fnaqevan.vim
 * fog.vim
 * fokus.vim

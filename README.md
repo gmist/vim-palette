@@ -468,6 +468,11 @@ Total of **468** color schemes:
 * tir_black.vim
 * tolerable.vim
 * tomatosoup.vim
+* [tomorrow-night-blue.vim](https://github.com/chriskempson/vim-tomorrow-theme)
+* [tomorrow-night-bright.vim](https://github.com/chriskempson/vim-tomorrow-theme)
+* [tomorrow-night-eighties.vim](https://github.com/chriskempson/vim-tomorrow-theme)
+* [tomorrow-night.vim](https://github.com/chriskempson/vim-tomorrow-theme)
+* [tomorrow.vim](https://github.com/chriskempson/vim-tomorrow-theme)
 * tony_light.vim
 * toothpik.vim
 * torte.vim

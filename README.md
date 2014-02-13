@@ -189,6 +189,7 @@ Total of **468** color schemes:
 * devbox-dark-256.vim
 * deveiate.vim
 * developer.vim
+* [distinguished.vim](https://github.com/Lokaltog/vim-distinguished)
 * django.vim
 * donbass.vim
 * doorhinge.vim

@@ -9,12 +9,14 @@ from StringIO import StringIO
 BASE_URL = 'http://www.vim.org/scripts/%s'
 SCHEMES_URL = 'http://www.vim.org/scripts/script_search_results.php?\
 &script_type=color%20scheme&show_me=1000'
-OUT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'colors')
+CUR_DIR = os.path.dirname(os.path.abspath(__file__))
+OUT_PATH = os.path.join(CUR_DIR, 'colors')
 
 
 def get_scripts():
-    response = urllib2.urlopen(SCHEMES_URL)
-    data = response.read()
+    resp = urllib2.urlopen(SCHEMES_URL)
+    data = resp.read()
+    resp.close()
     re_ = re.compile(r'script.php\?script_id=\d+')
     links = re.findall(re_, data)
     links = set(links)
@@ -22,8 +24,9 @@ def get_scripts():
 
 
 def get_script(link):
-    response = urllib2.urlopen(link)
-    data = response.read()
+    resp = urllib2.urlopen(link)
+    data = resp.read()
+    resp.close()
     re_ = re.compile(r'download_script.php\?src_id=\d+')
     script_link = re.findall(re_, data)
     if not script_link:
@@ -41,10 +44,12 @@ def get_script(link):
 def save_colorscheme(colorscheme):
     resp = urllib2.urlopen(colorscheme['link'])
     data = resp.read()
+    resp.close()
     if colorscheme['name'].endswith('.vim'):
         file_ = open(os.path.join(OUT_PATH, colorscheme['name']), 'w')
         file_.write(data)
         file_.close()
+        return True
     if colorscheme['name'].endswith('.zip'):
         zfile = zipfile.ZipFile(StringIO(data))
         for zf_name in zfile.namelist():
@@ -57,9 +62,52 @@ def save_colorscheme(colorscheme):
                     )
                     file_.write(zfile.read(zf_name))
                     file_.close()
+                    return True
             except IndexError:
                 pass
     # todo: add .gz and .tgz
+    return False
+
+
+def load_readme_links():
+    rfile = open(os.path.join(CUR_DIR, 'README.md'), 'r')
+    data = rfile.read()
+    rfile.close()
+    re_ = re.compile(r'\* \[\S+\.vim\]\(\S+\)')
+    links = re.findall(re_, data)
+    loaded_links = {}
+    for link in links:
+        name, link = link.split('](')
+        loaded_links[name[3:]] = link[:-1]
+    return loaded_links
+
+
+def print_statistic(dwn_schemes):
+    schemes = {}
+    collisions = []
+    scheme_files = os.listdir(OUT_PATH)
+    rlinks = load_readme_links()
+    for scheme in scheme_files:
+        if scheme in rlinks.keys():
+            schemes[scheme] = rlinks[scheme]
+            if dwn_schemes.get(scheme)\
+                    and rlinks[scheme] != dwn_schemes[scheme]:
+                collisions.append(scheme)
+        else:
+            if scheme in dwn_schemes.keys():
+                schemes[scheme] = dwn_schemes[scheme]
+            else:
+                schemes[scheme] = ''
+    print 'Total of **%s** color schemes:' % len(scheme_files)
+    print ''
+    for scheme, link in sorted(schemes.items()):
+        print '* [%s](%s)' % (scheme, link) if link else '* %s' % scheme
+    print ''
+    print 'Please check %s collision(s)' % len(collisions)
+    for collision in collisions:
+        print '* [%s](%s) | [%s](%s)' % (
+                collision, rlinks[collision],
+                collision, dwn_schemes[collision])
 
 
 def run():
@@ -67,10 +115,14 @@ def run():
     links = [get_script(link) for link in links]
     colorschemes = [link for link in links if link['name']]
     len_ = len(colorschemes)
-    print "Found %s colorschemes" % len_
+    print "found %s colorschemes" % len_
+    dwn_schemes = {}
     for i, colorscheme in enumerate(colorschemes):
-        print 'Download %s of %s - %s' % (i+1, len_, colorscheme['name'])
-        save_colorscheme(colorscheme)
+        print 'download %s of %s - %s' % (i+1, len_, colorscheme['name'])
+        if save_colorscheme(colorscheme):
+            dwn_schemes[colorscheme['name']] = colorscheme['link']
+    print_statistic(dwn_schemes)
+
 
 if __name__ == '__main__':
     run()

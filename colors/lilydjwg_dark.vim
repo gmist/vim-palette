@@ -1,9 +1,8 @@
 " local syntax file - set colors on a per-machine basis:
 " vim: tw=0 ts=4 sw=4
 " Vim color file
-" Version: 1.1
+" Version:		1.2
 " Maintainer:	lilydjwg <lilydjwg@gmail.com>
-" Last Change:	2009 May 18
 
 set background=dark
 hi clear
@@ -18,6 +17,7 @@ hi Cursor guifg=#FF66FF guibg=#00AAFF ctermfg=207 ctermbg=39
 hi CursorIM guifg=#00AAFF guibg=#FF66FF ctermfg=39 ctermbg=207
 " hi CursorIM gui=None cterm=None
 hi CursorLine guibg=#333333 ctermbg=236 cterm=None
+hi CursorLineNr guifg=#FF77DD guibg=#333333 ctermfg=212 ctermbg=236 cterm=None
 hi DiffAdd guifg=#000000 guibg=#33ff33 ctermfg=16 ctermbg=83
 hi DiffChange guifg=#dddddd guibg=#5555CC ctermfg=253 ctermbg=63
 hi DiffDelete guifg=#000000 guibg=#ee6699 ctermfg=16 ctermbg=175
@@ -28,7 +28,7 @@ hi ErrorMsg guifg=#FFFF00 guibg=#0000FF ctermfg=226 ctermbg=21
 hi FoldColumn guifg=#0033FF guibg=#333333 ctermfg=27 ctermbg=236
 hi Folded guifg=#9933FF guibg=#333333 ctermfg=128 ctermbg=236
 hi Identifier guifg=#986CFF guibg=#2d222d ctermfg=135
-hi Ignore gui=None cterm=None
+hi Ignore gui=None ctermfg=235
 hi IncSearch gui=bold,reverse guifg=#33ff1c guibg=#3454ff cterm=bold,reverse ctermfg=40 ctermbg=69
 hi LineNr guifg=#FF77DD ctermfg=212
 hi MatchParen guifg=#99FF99 guibg=#444444 ctermfg=120 ctermbg=238

@@ -13,6 +13,7 @@ hi Normal ctermbg=0 ctermfg=7 cterm=none guibg=#2a2a2a guifg=#dcdccc gui=none
 hi Cursor guibg=fg guifg=bg gui=none
 hi CursorColumn guibg=#3f3f3f gui=none
 hi CursorLine guibg=#3f3f3f gui=none
+hi CursorLineNr guibg=#3f3f3f guifg=#b0a397 gui=bold
 hi DiffAdd guibg=#008b00 guifg=fg gui=none
 hi DiffChange guibg=#00008b guifg=fg gui=none
 hi DiffDelete guibg=#8b0000 guifg=fg gui=none
@@ -62,7 +63,7 @@ hi Error guibg=bg guifg=#f07070 gui=none
 hi Identifier guibg=bg guifg=#dabfa5 gui=none
 hi Ignore guibg=bg guifg=bg gui=none
 hi lCursor guibg=#c0aa94 guifg=bg gui=none
-hi MatchParen guibg=#008b8b gui=none
+hi MatchParen guibg=#907d6f gui=none
 hi PreProc guibg=bg guifg=#c2aed0 gui=none
 hi Special guibg=bg guifg=#d4b064 gui=none
 hi Statement guibg=bg guifg=#e0af91 gui=bold

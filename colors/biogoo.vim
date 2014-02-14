@@ -1,11 +1,11 @@
 " Vim color File
 " Name:			biogoo
 " Maintainer:	Benjamin Esham <bdesham@gmail.com>
-" Last Change:	2010-08-16
-" Version:		1.6.1
+" Last Change:	2011-02-28
+" Version:		1.6.2
+" Website:		https://github.com/bdesham/biogoo
 "
-" Colorful text on a light gray background.  It's pretty easy on the eyes in my
-" opinion.  Any feedback is greatly appreciated!
+" A color scheme for Vim with colorful text on a light gray background.
 "
 " Installation:
 "	Copy to ~/.vim/colors; do :color biogoo
@@ -14,27 +14,7 @@
 "	Use a 'normal' cursor color:
 "		let g:biogoo_normal_cursor = 1
 "
-" Thanks:
-"	Jani Nurminen's zenburn.vim as an example file.
-"	Scott F., Matt F., and sc for feature suggestions/bug reports.
-"	Bill McCarthy for his Vim mailing list post about Vim 7 support.
-"
-" Version History:
-"	1.6.1:	fixed some oversights in 1.6
-"	1.6:	swapped the spelling-error color so that setting 'cursorline' or
-"			'cursorcolumn' doesn't make words invisible; added "ColorColumn" to
-"			support 'colorcolumn' in Vim 7.3
-"	1.5:	should fully support Vim 7 now
-"	1.4:	more Vim 7 support: added the "MatchParen" group for ()[]{} matching
-"	1.3:	added support for Vim 7: added groups for the new spellchecking, and
-"			added a conditional to display Visual mode correctly in any version
-"	1.2:	added "SpellErrors" group for use with vimspell
-"	1.1:	added "IncSearch" group for improved visibility in incremental
-"			searches
-"	1.0:	minor tweaks
-"	0.95:	initial release
-"
-" I will add new groups as requested... e-mail me with any suggestions!
+" For a full README and version history, see the website given above.
 
 set background=light
 hi clear
@@ -118,4 +98,4 @@ if !exists("g:biogoo_normal_cursor")
 	hi Cursor		guifg=#ffffff guibg=#00007f
 endif
 
-" vim:noet:ts=4 sw=4 tw=80 cc=+1
+" vim:noet:ts=4 tw=80 cc=+1

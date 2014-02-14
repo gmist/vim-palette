@@ -1,6 +1,6 @@
 " Vim color file
 " Maintainer: Rudá Moura <ruda.moura@gmail.com>
-" Last Change: Mon Oct 18 23:09:26 BRST 2010
+" Last Change: Wed Nov  6 12:17:39 BRST 2013
 
 highlight clear Normal
 set background&
@@ -14,19 +14,19 @@ endif
 let colors_name = "satori"
 
 " Vim colors
-highlight Normal     ctermfg=NONE    cterm=NONE
-highlight Comment    ctermfg=Cyan    cterm=NONE
-highlight Constant   ctermfg=Red     cterm=NONE
-highlight Number     ctermfg=Red     cterm=NONE
-highlight Identifier ctermfg=NONE    cterm=NONE
-highlight Statement  ctermfg=NONE    cterm=Bold
-highlight PreProc    ctermfg=Blue    cterm=NONE
-highlight Type       ctermfg=Magenta cterm=NONE
-highlight Special    ctermfg=Magenta cterm=NONE
-highlight Search     ctermbg=Green   cterm=NONE
-highlight MatchParen ctermbg=NONE    cterm=Inverse
-highlight Error      ctermbg=Red     cterm=NONE
-highlight Todo	     ctermbg=Cyan    cterm=NONE
+highlight Normal     ctermfg=NONE     cterm=NONE
+highlight Comment    ctermfg=DarkCyan cterm=NONE
+highlight Constant   ctermfg=Red      cterm=NONE
+highlight Number     ctermfg=Red      cterm=NONE
+highlight Identifier ctermfg=NONE     cterm=NONE
+highlight Statement  ctermfg=NONE     cterm=Bold
+highlight PreProc    ctermfg=Blue     cterm=NONE
+highlight Type       ctermfg=Magenta  cterm=NONE
+highlight Special    ctermfg=Magenta  cterm=NONE
+highlight Search     ctermbg=Green    cterm=NONE
+highlight MatchParen ctermbg=NONE     cterm=Inverse
+highlight Error      ctermbg=Red      cterm=NONE
+highlight Todo	     ctermbg=Cyan     cterm=NONE
 
 " Vim monochrome
 highlight Normal     term=NONE
@@ -52,3 +52,5 @@ highlight Special    guifg=Red      gui=Bold
 highlight Search     guifg=Green    gui=NONE
 highlight Error	     guifg=Red	    gui=NONE
 highlight Todo	     guifg=Cyan	    gui=NONE
+
+" vim: tabstop=8 expandtab shiftwidth=2 softtabstop=2

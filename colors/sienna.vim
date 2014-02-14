@@ -45,13 +45,16 @@ if s:sienna_style == 'dark'
     hi Normal gui=none guifg=Grey85 guibg=Grey15
 
     hi Cursor guifg=Black guibg=Grey85
+    hi CursorColumn guibg=Grey25
+    hi CursorLine guibg=Grey25
+    hi CursorLineNr gui=bold guifg=Grey65
     hi LineNr gui=none guifg=Grey65
     hi NonText gui=bold guifg=Grey65 guibg=Grey20
     hi SpecialKey gui=none guifg=SkyBlue2
     hi Title gui=bold guifg=Grey85
     hi Visual gui=bold guifg=Black guibg=LightSalmon1
 
-    hi FoldColumn gui=none guifg=Black guibg=Wheat3
+    hi FoldColumn gui=none guifg=Black guibg=bg
     hi Folded gui=none guifg=White guibg=Wheat4
     hi StatusLine gui=bold guifg=Black guibg=Grey85
     hi StatusLineNC gui=none guifg=White guibg=DimGray
@@ -98,13 +101,16 @@ elseif s:sienna_style == 'light'
     hi Normal gui=none guifg=Black guibg=White
 
     hi Cursor guifg=White guibg=Black
+    hi CursorColumn guibg=Grey90
+    hi CursorLine guibg=Grey90
+    hi CursorLineNr gui=bold guifg=DarkGray
     hi LineNr gui=none guifg=DarkGray
     hi NonText gui=bold guifg=DarkGray guibg=Grey95
     hi SpecialKey gui=none guifg=RoyalBlue4
     hi Title gui=bold guifg=Black
     hi Visual gui=bold guifg=Black guibg=Sienna1
 
-    hi FoldColumn gui=none guifg=Black guibg=Wheat2
+    hi FoldColumn gui=none guifg=Black guibg=bg
     hi Folded gui=none guifg=Black guibg=Wheat1
     hi StatusLine gui=bold guifg=White guibg=Black
     hi StatusLineNC gui=none guifg=White guibg=DimGray

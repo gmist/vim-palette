@@ -1,7 +1,7 @@
 *forked from
 [flazz/vim-colorschemes](https://github.com/flazz/vim-colorschemes)*
 
-Vim colorschemes
+Vim palette
 ================
 
     Above all keep your colours fresh!
@@ -13,18 +13,18 @@ Installation
 if you [use vim + pathogen](http://vimcasts.org/episodes/synchronizing-plugins-with-git-submodules-and-pathogen/)
 
     cd ~/.vim
-    git submodule add git@github.com:flazz/vim-colorschemes.git bundle/colorschemes
+    git submodule add git@github.com:gmist/vim-palette.git bundle/colorschemes
 
 if you [use vim + vundle](https://github.com/gmarik/vundle)
 
     " add to .vimrc
-    Bundle 'flazz/vim-colorschemes'
+    Bundle 'gmist/vim-palette'
     :BundleInstall
 
 if you [use vim + NeoBundle](https://github.com/Shougo/neobundle.vim)
 
     " add to .vimrc
-    NeoBundle 'flazz/vim-colorschemes'
+    NeoBundle 'gmist/vim-palette'
     :NeoBundleInstall
 
 if you aren't so clever just get all the files in `colors/*.vim` into

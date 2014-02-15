@@ -1,16 +1,10 @@
-**me:** Hi everyone, my name is Franco and I'm addicted to colorschemes
-
-**everyone else:** *Hi Franco*
+*forked from flazz/vim-colorschemes*
 
 Vim colorschemes
 ================
 
-one stop shop for vim colorschemes.
-
-this is harvested from vim.org. only colorschemes downloaded in a single `.vim`
-file are included.
-
-for hacking on vim.org harvesting see the branch [prep](https://github.com/flazz/vim-colorschemes/tree/prep).
+    Above all keep your colours fresh!
+[Édouard Manet](http://en.wikipedia.org/wiki/%C3%89douard_Manet)
 
 Installation
 ------------
@@ -26,17 +20,17 @@ if you [use vim + vundle](https://github.com/gmarik/vundle)
     Bundle 'flazz/vim-colorschemes'
     :BundleInstall
 
+if you [use vim + NeoBundle](https://github.com/Shougo/neobundle.vim)
+
+    " add to .vimrc
+    NeoBundle 'flazz/vim-colorschemes'
+    :NeoBundleInstall
+
 if you aren't so clever just get all the files in `colors/*.vim` into
   `~/.vim/colors`
 
     # after downloading; unpacking; cd'ing
     cp colors/* ~/.vim/colors
-
-Something missing? Fork!
-------------------------
-
-fork [this repo](http://github.com/flazz/vim-colorschemes); send a
-pull request!; I'll take it!
 
 Previews
 ------------------------

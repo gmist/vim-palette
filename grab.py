@@ -33,7 +33,7 @@ def get_script(link):
     if not script_link:
         return {'name': None}
     link = BASE_URL % script_link[0]
-    re_ = re.compile(r'%s">(\S+)</a>' % script_link[0].replace('?', '\?'))
+    re_ = re.compile(r'%s">(\S+)</a>' % script_link[0].replace('?', r'\?'))
     name = re.findall(re_, data)[:1]
     if not name:
         return {'name': None}

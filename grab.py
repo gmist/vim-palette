@@ -6,9 +6,10 @@ import os
 import zipfile
 from StringIO import StringIO
 
+LIMIT = 1000
 BASE_URL = 'http://www.vim.org/scripts/%s'
 SCHEMES_URL = 'http://www.vim.org/scripts/script_search_results.php?\
-&script_type=color%20scheme&show_me=1000'
+&script_type=color%%20scheme&show_me=%s' % LIMIT
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 OUT_PATH = os.path.join(CUR_DIR, 'colors')
 

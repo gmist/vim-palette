@@ -660,6 +660,3 @@ Total of **614** color schemes:
 
 - - -
 
-I'm a slave to aesthetics. If you are too, I hope this helps.
-
-[email](mailto:flazzarino@gmail.com)

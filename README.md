@@ -41,7 +41,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of **614** color schemes:
+Total of **615** color schemes:
 
 * [0x7A69_dark.vim](http://www.vim.org/scripts/download_script.php?src_id=20665)
 * [256-grayvim.vim](http://www.vim.org/scripts/download_script.php?src_id=12849)
@@ -465,6 +465,7 @@ Total of **614** color schemes:
 * [print_bw.vim](http://www.vim.org/scripts/download_script.php?src_id=2037)
 * [prmths.vim](http://www.vim.org/scripts/download_script.php?src_id=8246)
 * [professional.vim](http://www.vim.org/scripts/download_script.php?src_id=4571)
+* [prop.vim](http://www.vim.org/scripts/download_script.php?src_id=21489)
 * [proton.vim](http://www.vim.org/scripts/download_script.php?src_id=9818)
 * [pspad.vim](http://www.vim.org/scripts/download_script.php?src_id=8114)
 * [psql.vim](http://www.vim.org/scripts/download_script.php?src_id=2943)

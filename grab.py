@@ -6,6 +6,7 @@ import os
 import zipfile
 from StringIO import StringIO
 
+
 LIMIT = 1000
 BASE_URL = 'http://www.vim.org/scripts/%s'
 SCHEMES_URL = 'http://www.vim.org/scripts/script_search_results.php?\
@@ -50,9 +51,15 @@ def save_colorscheme(colorscheme):
         file_ = open(os.path.join(OUT_PATH, colorscheme['name']), 'w')
         file_.write(data)
         file_.close()
-        return True
+        return colorscheme['name']
     if colorscheme['name'].endswith('.zip'):
         zfile = zipfile.ZipFile(StringIO(data))
+        num_files = 0
+        for zf_name in zfile.namelist():
+            if zf_name.endswith('.vim'):
+                num_files += 1
+            if num_files >= 1:
+                return '' # skip colors packs
         for zf_name in zfile.namelist():
             try:
                 if zf_name.endswith('.vim') and\
@@ -63,11 +70,11 @@ def save_colorscheme(colorscheme):
                     )
                     file_.write(zfile.read(zf_name))
                     file_.close()
-                    return True
+                    return os.path.basename(zf_name)
             except IndexError:
                 pass
     # todo: add .gz and .tgz
-    return False
+    return ''
 
 
 def load_readme_links():
@@ -87,6 +94,8 @@ def print_statistic(dwn_schemes):
     schemes = {}
     collisions = []
     scheme_files = os.listdir(OUT_PATH)
+    scheme_files = [file_name for file_name in scheme_files if
+            file_name.endswith('.vim')]
     rlinks = load_readme_links()
     for scheme in scheme_files:
         if scheme in rlinks.keys():
@@ -120,8 +129,9 @@ def run():
     dwn_schemes = {}
     for i, colorscheme in enumerate(colorschemes):
         print 'download %s of %s - %s' % (i+1, len_, colorscheme['name'])
-        if save_colorscheme(colorscheme):
-            dwn_schemes[colorscheme['name']] = colorscheme['link']
+        scheme_name = save_colorscheme(colorscheme)
+        if scheme_name:
+            dwn_schemes[scheme_name] = colorscheme['link']
     print_statistic(dwn_schemes)
 
 

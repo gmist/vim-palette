@@ -55,8 +55,8 @@ Total of **614** color schemes:
 * [DevC++.vim](http://www.vim.org/scripts/download_script.php?src_id=4912)
 * Dev_Delight.vim
 * [IDLE.vim](http://www.vim.org/scripts/download_script.php?src_id=15771)
-* Monokai.vim
 * [MountainDew.vim](http://www.vim.org/scripts/download_script.php?src_id=8639)
+* [Mustang.vim](http://www.vim.org/scripts/download_script.php?src_id=11274)
 * [PapayaWhip.vim](http://www.vim.org/scripts/download_script.php?src_id=1927)
 * [SlateDark.vim](http://www.vim.org/scripts/download_script.php?src_id=21001)
 * [adam.vim](http://www.vim.org/scripts/download_script.php?src_id=2757)
@@ -388,6 +388,7 @@ Total of **614** color schemes:
 * [mod_tcsoft.vim](http://www.vim.org/scripts/download_script.php?src_id=3761)
 * [molokai.vim](http://www.vim.org/scripts/download_script.php?src_id=9750)
 * [molokai_nancle.vim](http://www.vim.org/scripts/download_script.php?src_id=19735)
+* [monokai.vim](http://www.vim.org/scripts/download_script.php?src_id=20558)
 * [montz.vim](http://www.vim.org/scripts/download_script.php?src_id=5806)
 * [mophiaDark.vim](http://www.vim.org/scripts/download_script.php?src_id=14751)
 * [mophiaSmoke.vim](http://www.vim.org/scripts/download_script.php?src_id=14750)
@@ -397,7 +398,6 @@ Total of **614** color schemes:
 * [mrkn256.vim](http://www.vim.org/scripts/download_script.php?src_id=12384)
 * [mrpink.vim](http://www.vim.org/scripts/download_script.php?src_id=10957)
 * [mud.vim](http://www.vim.org/scripts/download_script.php?src_id=4570)
-* mustang.vim
 * [muzzl.vim](http://www.vim.org/scripts/download_script.php?src_id=20371)
 * [native.vim](http://www.vim.org/scripts/download_script.php?src_id=6962)
 * [nature.vim](http://www.vim.org/scripts/download_script.php?src_id=12543)

@@ -3,7 +3,6 @@
 " CONTACT: leo.ercolanelli@gmail.com
 
 
-
 "================================================
 " Option:
 "================================================
@@ -155,9 +154,9 @@ else
 
     hi CursorColumn                 ctermbg=16
     hi CursorLine                   ctermbg=16
-    hi IncSearch    ctermfg=24      ctermbg=NONE    cterm=bold
-    hi MatchParen   ctermfg=24      ctermbg=NONE    cterm=bold
-    hi Search       ctermfg=24      ctermbg=NONE    cterm=bold
+    hi IncSearch    ctermfg=202      ctermbg=NONE    cterm=bold,underline
+    hi MatchParen   ctermfg=202      ctermbg=NONE    cterm=bold
+    hi Search       ctermfg=202      ctermbg=NONE    cterm=bold,underline
     hi Visual                       ctermbg=59
     hi Error        ctermfg=160     ctermbg=bg      cterm=bold
     hi Todo         ctermfg=226                     cterm=underline
@@ -225,19 +224,26 @@ else
     hi CursorLineNr ctermfg=172     ctermbg=16
     hi LineNr       ctermfg=241     ctermbg=bg
     hi VertSplit    ctermfg=16      ctermbg=251
-    hi Pmenu        ctermfg=251     ctermbg=16
-    hi PmenuSel     ctermfg=24      ctermbg=16          cterm=bold
+    hi Pmenu        ctermfg=251     ctermbg=232
+    hi PmenuSel     ctermfg=172     ctermbg=234         cterm=bold
     hi PmenuSbar    ctermfg=251     ctermbg=16
-    hi TabLineFill  ctermfg=16
-    hi TabLine      ctermfg=255     ctermbg=16          cterm=bold
-    hi TabLineSel   ctermfg=24
-"   hi PmenuThumb
+    hi PmenuThumb   ctermfg=251     ctermbg=234
+    hi TabLineFill  ctermfg=234
+    hi TabLine      ctermfg=246     ctermbg=234         cterm=bold
+    hi TabLineSel   ctermfg=172
 "   hi WildMenu
 "   hi SignColumn
-    hi Folded       ctermfg=214 	    ctermbg=bg
+    hi Folded       ctermfg=214     ctermbg=bg
 "   hi FoldColumn
 
 endif
+
+"================================================
+" Spell:
+"================================================
+
+    hi SpellBad     ctermfg=160     ctermbg=bg          cterm=underline
+    hi SpellCap     ctermfg=205     ctermbg=bg          cterm=underline
 
 "================================================
 " Diff:

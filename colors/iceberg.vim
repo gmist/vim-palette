@@ -1,111 +1,105 @@
-" _________________________________________
-" \_ _/ ____| ____| ___ \ ____| ___ \  ___/
-"  | | |____| ____| ___ < ____| __  / |__ \
-" /___\_____|_____|_____/_____|_| \_\_____/
-"
-"  cool-headed perspective for your coding
-"
-"
-" File:       iceberg.vim
-" Maintainer: cocopon <cocopon@me.com>
-" Modified:   2014-01-14 16:20+0900
-" License:    MIT
-
-
-if !has('gui_running') && &t_Co < 256
-  finish
-endif
+" ======================================================================
+" Iceberg
+" ======================================================================
+" A Sublime Text 2 / Textmate theme.
+" Copyright (c) 2014 Dayle Rees.
+" Released under the MIT License <http://opensource.org/licenses/MIT>
+" ======================================================================
+" Find more themes at : https://github.com/daylerees/colour-schemes
+" ======================================================================
 
 set background=dark
 hi clear
+syntax reset
 
-if exists('syntax_on')
-  syntax reset
-endif
+" Colors for the User Interface.
 
-let g:colors_name = 'iceberg'
+hi Cursor      guibg=#cc4455  guifg=white     ctermbg=4 ctermfg=15
+hi link CursorIM Cursor
+hi Normal      guibg=#323B3D  guifg=#BDD6DB    gui=none ctermbg=0 ctermfg=15
+hi NonText     guibg=bg  guifg=#BDD6DB   ctermbg=8 ctermfg=14
+hi Visual      guibg=#557799  guifg=white    gui=none ctermbg=9 ctermfg=15
 
+hi Linenr      guibg=bg       guifg=#aaaaaa  gui=none ctermbg=bg ctermfg=7
 
-hi! ColorColumn cterm=NONE ctermbg=235 guibg=#1e2132
-hi! CursorColumn cterm=NONE ctermbg=235 guibg=#1e2132
-hi! CursorLine cterm=NONE ctermbg=235 guibg=#1e2132
-hi! Comment ctermfg=242 guifg=#6b7089
-hi! Constant ctermfg=140 guifg=#a093c7
-hi! Cursor ctermbg=252 ctermfg=234 guibg=#c6c8d1 guifg=#161821
-hi! CursorLineNr ctermbg=237 ctermfg=253 guibg=#2a3158 guifg=#cdd1e6
-hi! Delimiter ctermfg=252 guifg=#c6c8d1
-hi! DiffAdd ctermbg=108 ctermfg=234 guibg=#555a47 guifg=#bec4b1
-hi! DiffChange ctermbg=66 ctermfg=234 guibg=#445861 guifg=#adc1cb
-hi! DiffDelete ctermbg=95 ctermfg=234 guibg=#673e43 guifg=#d1a8ad
-hi! DiffText cterm=NONE ctermbg=116 ctermfg=234 gui=NONE guibg=#89b8c2 guifg=#161821
-hi! Directory ctermfg=109 guifg=#89b8c2
-hi! Error ctermbg=234 ctermfg=203 guibg=#161821 guifg=#e27878
-hi! ErrorMsg ctermbg=234 ctermfg=203 guibg=#161821 guifg=#e27878
-hi! WarningMsg ctermbg=234 ctermfg=203 guibg=#161821 guifg=#e27878
-hi! Folded ctermbg=235 ctermfg=245 guibg=#1e2132 guifg=#686f9a
-hi! FoldColumn ctermbg=235 ctermfg=239 guibg=#1e2132 guifg=#444b71
-hi! Function ctermfg=216 guifg=#e2a478
-hi! Identifier cterm=NONE ctermfg=109 guifg=#89b8c2
-hi! LineNr ctermbg=235 ctermfg=239 guibg=#1e2132 guifg=#444b71
-hi! MatchParen ctermbg=237 ctermfg=255 guibg=#3e445e guifg=#ffffff
-hi! MoreMsg ctermfg=150 guifg=#b4be82
-hi! NonText ctermbg=234 ctermfg=236 guibg=#161821 guifg=#242940
-hi! SpecialKey ctermbg=234 ctermfg=236 guibg=#161821 guifg=#242940
-hi! Normal ctermbg=234 ctermfg=252 guibg=#161821 guifg=#c6c8d1
-hi! Operator ctermfg=110 guifg=#84a0c6
-hi! Pmenu ctermbg=236 ctermfg=251 guibg=#3d425b guifg=#c6c8d1
-hi! PmenuSbar ctermbg=236 guibg=#3d425b
-hi! PmenuSel ctermbg=240 ctermfg=255 guibg=#5b6389 guifg=#eff0f4
-hi! PmenuThumb ctermbg=251 guibg=#c6c8d1
-hi! PreProc ctermfg=150 guifg=#b4be82
-hi! Question ctermfg=150 guifg=#b4be82
-hi! Search ctermbg=216 ctermfg=234 guibg=#e4aa80 guifg=#392313
-hi! SignColumn ctermbg=235 ctermfg=239 guibg=#1e2132 guifg=#444b71
-hi! Special ctermfg=150 guifg=#b4be82
-hi! SpellBad guisp=#e27878
-hi! SpellCap guisp=#84a0c6
-hi! SpellLocal guisp=#89b8c2
-hi! SpellRare guisp=#a093c7
-hi! Statement ctermfg=110 gui=NONE guifg=#84a0c6
-hi! StatusLine cterm=reverse ctermbg=234 ctermfg=245 gui=reverse guibg=#17171b guifg=#818596 term=reverse
-hi! StatusLineNC cterm=reverse ctermbg=238 ctermfg=233 gui=reverse guibg=#3e445e guifg=#0f1117
-hi! StorageClass ctermfg=110 guifg=#84a0c6
-hi! String ctermfg=109 guifg=#89b8c2
-hi! Structure ctermfg=109 guifg=#89b8c2
-hi! TabLine cterm=NONE ctermbg=245 ctermfg=234 gui=NONE guibg=#818596 guifg=#17171b
-hi! TabLineFill cterm=reverse ctermbg=234 ctermfg=245 gui=reverse guibg=#17171b guifg=#818596
-hi! TabLineSel cterm=NONE ctermbg=234 ctermfg=252 gui=NONE guibg=#161821 guifg=#9a9ca5
-hi! Title ctermfg=216 gui=NONE guifg=#e2a478
-hi! Todo ctermbg=234 ctermfg=150 guibg=#161821 guifg=#d8e599
-hi! Type ctermfg=109 gui=NONE guifg=#89b8c2
-hi! Underlined cterm=underline ctermfg=110 gui=underline guifg=#84a0c6 term=underline
-hi! VertSplit ctermbg=233 ctermfg=233 guibg=#0f1117 guifg=#0f1117
-hi! Visual ctermbg=236 guibg=#272c42
-hi! WildMenu ctermbg=255 ctermfg=234 guibg=#d4d5db guifg=#17171b
-hi! diffAdded ctermfg=150 guifg=#b4be82
-hi! diffRemoved ctermfg=203 guifg=#e27878
+hi Directory   guibg=bg       guifg=#337700  gui=none ctermbg=bg ctermfg=10
 
-hi! link cssBraces Delimiter
-hi! link helpHyperTextJump Constant
-hi! link htmlEndTag Statement
-hi! link htmlTag Statement
-hi! link jsFunction Function
-hi! link markdownCode String
-hi! link markdownCodeDelimiter String
-hi! link markdownHeadingDelimiter Comment
-hi! link markdownRule Comment
-hi! link phpVarSelector Identifier
-hi! link rubyDefine Statement
-hi! link rubyInclude Statement
-hi! link rubyInterpolationDelimiter String
-hi! link rubySharpBang Comment
-hi! link rubyStringDelimiter String
-hi! link svssBraces Delimiter
-hi! link vimContinue Comment
-hi! link vimIsCommand Statement
-hi! link xmlAttribPunct Statement
-hi! link xmlEndTag Statement
-hi! link xmlNamespace Statement
-hi! link xmlTag Statement
-hi! link xmlTagName Statement
-hi! link yamlKeyValueDelimiter Delimiter
+hi IncSearch   guibg=#0066cc  guifg=white    gui=none ctermbg=1 ctermfg=15
+hi link Seach IncSearch
+
+hi SpecialKey  guibg=bg guifg=fg       gui=none ctermbg=bg ctermfg=fg
+hi Titled      guibg=bg guifg=fg       gui=none ctermbg=bg ctermfg=fg
+
+hi ErrorMsg    guibg=bg guifg=#ff0000   ctermbg=bg ctermfg=12
+hi ModeMsg     guibg=bg guifg=#ffeecc  gui=none ctermbg=bg ctermfg=14
+hi link  MoreMsg     ModeMsg
+hi Question    guibg=bg guifg=#59C0E3   ctermbg=bg ctermfg=10
+hi link  WarningMsg  ErrorMsg
+
+hi StatusLine     guibg=#ffeecc  guifg=black     ctermbg=14 ctermfg=0
+hi StatusLineNC   guibg=#cc4455  guifg=white    gui=none ctermbg=4  ctermfg=11
+hi VertSplit      guibg=#cc4455  guifg=white    gui=none ctermbg=4  ctermfg=11
+
+hi DiffAdd     guibg=#446688  guifg=fg    gui=none ctermbg=1 ctermfg=fg
+hi DiffChange  guibg=#558855  guifg=fg    gui=none ctermbg=2 ctermfg=fg
+hi DiffDelete  guibg=#884444  guifg=fg    gui=none ctermbg=4 ctermfg=fg
+hi DiffText    guibg=#884444  guifg=fg     ctermbg=4 ctermfg=fg
+
+" Colors for Syntax Highlighting.
+
+hi Comment  guibg=bg  guifg=#537178  gui=none    ctermbg=8   ctermfg=7
+
+hi Constant    guibg=bg    guifg=white        ctermbg=8   ctermfg=15
+hi String      guibg=bg    guifg=#FFFFFF    ctermbg=bg  ctermfg=14
+hi Character   guibg=bg    guifg=#2D8DA1      ctermbg=bg  ctermfg=14
+hi Number      guibg=bg    guifg=#FFFFFF      ctermbg=1   ctermfg=15
+hi Boolean     guibg=bg    guifg=#FFFFFF  gui=none    ctermbg=1   ctermfg=15
+hi Float       guibg=bg    guifg=#FFFFFF      ctermbg=1   ctermfg=15
+
+hi Identifier  guibg=bg    guifg=#BDD6DB      ctermbg=bg  ctermfg=12
+hi Function    guibg=bg    guifg=#2D8DA1      ctermbg=bg  ctermfg=12
+hi Statement   guibg=bg    guifg=#2D8DA1      ctermbg=bg  ctermfg=14
+
+hi Conditional guibg=bg    guifg=#B1E2F2      ctermbg=bg  ctermfg=12
+hi Repeat      guibg=bg    guifg=#B1E2F2      ctermbg=4   ctermfg=14
+hi Label       guibg=bg    guifg=#ffccff      ctermbg=bg   ctermfg=13
+hi Operator    guibg=bg    guifg=#B1E2F2      ctermbg=6   ctermfg=15
+hi Keyword     guibg=bg    guifg=#B1E2F2      ctermbg=bg  ctermfg=10
+hi Exception   guibg=bg    guifg=#2D8DA1      ctermbg=bg  ctermfg=10
+
+hi PreProc    guibg=bg   guifg=#ffcc99   ctermbg=4  ctermfg=14
+hi Include    guibg=bg   guifg=#59C0E3   ctermbg=bg ctermfg=10
+hi link Define    Include
+hi link Macro     Include
+hi link PreCondit Include
+
+hi Type       guibg=bg   guifg=#59C0E3      ctermbg=bg  ctermfg=12
+hi StorageClass   guibg=bg   guifg=#2D8DA1      ctermbg=bg  ctermfg=10
+hi Structure      guibg=bg   guifg=#BDD6DB      ctermbg=bg  ctermfg=10
+hi Typedef    guibg=bg   guifg=#59C0E3    ctermbg=bg  ctermfg=10
+
+hi Special    guibg=bg   guifg=#bbddff      ctermbg=1   ctermfg=15
+hi SpecialChar    guibg=bg   guifg=#bbddff      ctermbg=1   ctermfg=15
+hi Tag        guibg=bg   guifg=#bbddff      ctermbg=1   ctermfg=15
+hi Delimiter      guibg=bg   guifg=fg       ctermbg=1   ctermfg=fg
+hi SpecialComment guibg=#334455  guifg=#79a2ab    ctermbg=1   ctermfg=15
+hi Debug      guibg=bg   guifg=#ff9999  gui=none    ctermbg=8   ctermfg=12
+
+hi Underlined guibg=bg guifg=#99ccff gui=underline ctermbg=bg ctermfg=9 cterm=underline
+
+hi Title    guibg=bg  guifg=#BDD6DB        ctermbg=1   ctermfg=15
+hi Ignore   guibg=bg       guifg=#cccccc    ctermbg=bg  ctermfg=8
+hi Error    guibg=#ff0000  guifg=white        ctermbg=12  ctermfg=15
+hi Todo     guibg=#556677  guifg=#ff0000      ctermbg=1   ctermfg=12
+
+hi htmlH2 guibg=bg guifg=fg  ctermbg=8 ctermfg=fg
+hi link htmlH3 htmlH2
+hi link htmlH4 htmlH3
+hi link htmlH5 htmlH4
+hi link htmlH6 htmlH5
+
+" And finally.
+
+let g:colors_name = "Iceberg"
+let colors_name   = "Iceberg"
+

@@ -309,7 +309,7 @@ Total of **615** color schemes:
 * [hybrid.vim](https://github.com/w0ng/vim-hybrid)
 * [ibmedit.vim](http://www.vim.org/scripts/download_script.php?src_id=1149)
 * [icansee.vim](http://www.vim.org/scripts/download_script.php?src_id=7656)
-* iceberg.vim
+* [iceberg.vim](https://github.com/daylerees/colour-schemes/blob/master/vim/colors/iceberg.vim)
 * [impact.vim](http://www.vim.org/scripts/download_script.php?src_id=4597)
 * [impactG.vim](http://www.vim.org/scripts/download_script.php?src_id=4766)
 * [industrial.vim](http://www.vim.org/scripts/download_script.php?src_id=7993)

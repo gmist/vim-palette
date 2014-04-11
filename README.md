@@ -41,7 +41,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of **615** color schemes:
+Total of **618** color schemes:
 
 * [0x7A69_dark.vim](http://www.vim.org/scripts/download_script.php?src_id=20665)
 * [256-grayvim.vim](http://www.vim.org/scripts/download_script.php?src_id=12849)
@@ -85,6 +85,7 @@ Total of **615** color schemes:
 * [autumn.vim](http://www.vim.org/scripts/download_script.php?src_id=2065)
 * [autumnleaf.vim](http://www.vim.org/scripts/download_script.php?src_id=3553)
 * [autumnleaf_modified.vim](http://www.vim.org/scripts/download_script.php?src_id=18172)
+* [avahi.vim](http://www.vim.org/scripts/download_script.php?src_id=21674)
 * [ayumi.vim](http://www.vim.org/scripts/download_script.php?src_id=17705)
 * badwolf.vim
 * [baobaozhu.vim](http://www.vim.org/scripts/download_script.php?src_id=16182)
@@ -163,6 +164,7 @@ Total of **615** color schemes:
 * [cmd.vim](http://www.vim.org/scripts/download_script.php?src_id=18649)
 * [cobalt.vim](http://www.vim.org/scripts/download_script.php?src_id=15086)
 * [cobaltish.vim](http://www.vim.org/scripts/download_script.php?src_id=15087)
+* [codeblocks-dark.vim](http://www.vim.org/scripts/download_script.php?src_id=21691)
 * [codeblocks_dark.vim](http://www.vim.org/scripts/download_script.php?src_id=17704)
 * [codeburn.vim](http://www.vim.org/scripts/download_script.php?src_id=10187)
 * [codepaper.vim](http://www.vim.org/scripts/download_script.php?src_id=20064)
@@ -444,6 +446,7 @@ Total of **615** color schemes:
 * [orange.vim](http://www.vim.org/scripts/download_script.php?src_id=12726)
 * [orangeocean256.vim](http://www.vim.org/scripts/download_script.php?src_id=16148)
 * [osx_like.vim](http://www.vim.org/scripts/download_script.php?src_id=8362)
+* [otaku.vim](http://www.vim.org/scripts/download_script.php?src_id=21754)
 * [pacific.vim](http://www.vim.org/scripts/download_script.php?src_id=8652)
 * [paintbox.vim](http://www.vim.org/scripts/download_script.php?src_id=9616)
 * [paper.vim](http://www.vim.org/scripts/download_script.php?src_id=15216)
@@ -502,7 +505,7 @@ Total of **615** color schemes:
 * [rslate.vim](http://www.vim.org/scripts/download_script.php?src_id=18419)
 * [rtl.vim](http://www.vim.org/scripts/download_script.php?src_id=12992)
 * [sand.vim](http://www.vim.org/scripts/download_script.php?src_id=1017)
-* [satori.vim](http://www.vim.org/scripts/download_script.php?src_id=21011)
+* [satori.vim](satori.vim](http://www.vim.org/scripts/download_script.php?src_id=21667)
 * [saturn.vim](http://www.vim.org/scripts/download_script.php?src_id=16187)
 * [scala.vim](http://www.vim.org/scripts/download_script.php?src_id=6665)
 * [scite.vim](http://www.vim.org/scripts/download_script.php?src_id=776)

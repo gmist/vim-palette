@@ -1,6 +1,6 @@
 " Vim color file
-" Maintainer: Rudá Moura <ruda.moura@gmail.com>
-" Last Change: Wed Nov  6 12:17:39 BRST 2013
+" Maintainer: Ruda Moura <ruda.moura@gmail.com>
+" Last Change: Tue Mar 25 19:26:02 BRT 2014
 
 highlight clear Normal
 set background&
@@ -14,43 +14,46 @@ endif
 let colors_name = "satori"
 
 " Vim colors
-highlight Normal     ctermfg=NONE     cterm=NONE
-highlight Comment    ctermfg=DarkCyan cterm=NONE
-highlight Constant   ctermfg=Red      cterm=NONE
-highlight Number     ctermfg=Red      cterm=NONE
-highlight Identifier ctermfg=NONE     cterm=NONE
-highlight Statement  ctermfg=NONE     cterm=Bold
-highlight PreProc    ctermfg=Blue     cterm=NONE
-highlight Type       ctermfg=Magenta  cterm=NONE
-highlight Special    ctermfg=Magenta  cterm=NONE
-highlight Search     ctermbg=Green    cterm=NONE
-highlight MatchParen ctermbg=NONE     cterm=Inverse
-highlight Error      ctermbg=Red      cterm=NONE
-highlight Todo	     ctermbg=Cyan     cterm=NONE
+highlight Normal     ctermfg=NONE     ctermbg=NONE cterm=NONE
+highlight Comment    ctermfg=DarkCyan ctermbg=NONE cterm=NONE
+highlight Constant   ctermfg=Red      ctermbg=NONE cterm=NONE
+highlight Number     ctermfg=Red      ctermbg=NONE cterm=NONE
+highlight Identifier ctermfg=Blue     ctermbg=NONE cterm=NONE
+highlight Statement  ctermfg=NONE     ctermbg=NONE cterm=Bold
+highlight PreProc    ctermfg=NONE     ctermbg=NONE cterm=Bold
+highlight Type       ctermfg=Magenta  ctermbg=NONE cterm=NONE
+highlight Special    ctermfg=Red      ctermbg=NONE cterm=Bold
+highlight Search     ctermfg=NONE     ctermbg=NONE cterm=Underline
+highlight MatchParen ctermfg=NONE     ctermbg=NONE cterm=Inverse
+highlight Error      ctermfg=Red      ctermbg=NONE cterm=Standout
+highlight Todo       ctermfg=DarkCyan ctermbg=NONE cterm=Inverse
 
 " Vim monochrome
 highlight Normal     term=NONE
 highlight Comment    term=NONE
-highlight Constant   term=Underline
-highlight Number     term=Underline
+highlight Constant   term=NONE
+highlight Number     term=NONE
 highlight Identifier term=NONE
 highlight Statement  term=Bold
-highlight PreProc    term=NONE
+highlight PreProc    term=Bold
 highlight Type       term=Bold
 highlight Special    term=NONE
+highlight Search     term=Underline
+highlight MatchParen term=Inverse
 
 " GVim colors
-highlight Normal     guifg=NONE     gui=NONE
-highlight Comment    guifg=DarkCyan gui=NONE
-highlight Constant   guifg=Red      gui=NONE
-highlight Number     guifg=Red      gui=Bold
-highlight Identifier guifg=NONE     gui=NONE
-highlight Statement  guifg=NONE     gui=Bold
-highlight PreProc    guifg=Blue     gui=NONE
-highlight Type       guifg=Magenta  gui=NONE
-highlight Special    guifg=Red      gui=Bold
-highlight Search     guifg=Green    gui=NONE
-highlight Error	     guifg=Red	    gui=NONE
-highlight Todo	     guifg=Cyan	    gui=NONE
+highlight Normal     guifg=NONE     guibg=NONE gui=NONE
+highlight Comment    guifg=DarkCyan guibg=NONE gui=NONE
+highlight Constant   guifg=Red      guibg=NONE gui=NONE
+highlight Number     guifg=Red      guibg=NONE gui=Bold
+highlight Identifier guifg=blue     guibg=NONE gui=NONE
+highlight Statement  guifg=NONE     guibg=NONE gui=Bold
+highlight PreProc    guifg=Blue     guibg=NONE gui=NONE
+highlight Type       guifg=Magenta  guibg=NONE gui=NONE
+highlight Special    guifg=Red      guibg=NONE gui=Bold
+highlight Search     guifg=NONE     guibg=NONE gui=Underline
+highlight MatchParen guifg=NONE     guibg=NONE gui=Bold
+highlight Error      guifg=Red      guibg=NONE gui=Standout
+highlight Todo       guifg=DarkCyan guibg=NONE gui=Inverse
 
 " vim: tabstop=8 expandtab shiftwidth=2 softtabstop=2

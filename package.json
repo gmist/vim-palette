@@ -1,0 +1,17 @@
+{
+  "name": "vim-palette",
+  "homepage": "https://github.com/gmist/vim-palette",
+  "author": "gmist",
+  "description": "Vim colour schemes pack",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gmist/vim-palette.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gmist/vim-palette/issues"
+  },
+  "dependencies": {
+    "phantomjs": "^1.9.7-3",
+    "casperjs": "^1.1.0-beta3"
+  }
+}

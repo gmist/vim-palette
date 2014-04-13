@@ -22,7 +22,9 @@ request schemes_url, (error, response, html) ->
   schemes = {}
   for e in rows
     $ = cheerio.load(e)
-    name = link = description = ''
+    name = ''
+    link = ''
+    description = ''
     $('td').each (index) ->
       el = $(@)
       switch index

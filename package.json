@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "request": "latest",
-    "cheerio": "latest"
+    "cheerio": "latest",
+    "async": "latest"
   }
 }

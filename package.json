@@ -11,7 +11,7 @@
     "url": "https://github.com/gmist/vim-palette/issues"
   },
   "dependencies": {
-    "phantomjs": "^1.9.7-3",
-    "casperjs": "^1.1.0-beta3"
+    "request": "latest",
+    "cheerio": "latest"
   }
 }

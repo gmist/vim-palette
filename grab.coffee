@@ -59,12 +59,16 @@ async.auto
           $ = cheerio.load(el)
           last_download = $('td .rowodd').first()
           download_link = ''
+          download_name = ''
           if last_download
             $(last_download).each (index) ->
               switch index
                 when 0
                   download_link = [base_url, 'scripts/', $(@).find('a').attr('href')].join('')
+                  download_name = $(@).find('a').text()
+                  break
                 else
+            schemes[main_index]['download_name'] = download_name
             res.push schemes[main_index]['download_link'] = download_link
         next null, schemes
   ]

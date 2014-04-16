@@ -26,7 +26,8 @@ async.auto
       $ = cheerio.load(html)
       $('tr').each ->
         e = $(@)
-        if e.html().indexOf('script.php?script_id=') != -1 and e.children().length == 5
+        if e.html().indexOf('script.php?script_id=') != -1 and
+        e.children().length == 5
           rows.push e.html()
 
       for e in rows
@@ -64,7 +65,8 @@ async.auto
             $(last_download).each (index) ->
               switch index
                 when 0
-                  download_link = [base_url, 'scripts/', $(@).find('a').attr('href')].join('')
+                  download_link =
+                  [base_url, 'scripts/', $(@).find('a').attr('href')].join('')
                   download_name = $(@).find('a').text()
                   break
                 else

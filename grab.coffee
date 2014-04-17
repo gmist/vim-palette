@@ -1,9 +1,10 @@
 async = require 'async'
 cheerio = require 'cheerio'
 fs = require 'fs'
+path = require 'path'
 request = require 'request'
 
-max_schemes = 10
+max_schemes = 1000
 base_url="http://www.vim.org/"
 schemes_url = """#{base_url}scripts/script_search_results.php?
 &script_type=color%20scheme&show_me=#{max_schemes}"""
@@ -14,6 +15,18 @@ get_html = (link, cb) ->
     if err
       throw err
     cb null, html
+
+download_vim_org = (scheme, cb) ->
+  req = request(scheme.download_link)
+  req.on "response", (resp) ->
+    filename = resp.headers['content-disposition']
+    if /^attachment; filename=/.test filename
+      filename = filename.replace /^attachment; filename=/, ''
+      filename = path.join('./colors', filename)
+      if /\.vim$/.test filename
+        console.log """Downloading "#{filename}" color scheme"""
+        resp.pipe fs.createWriteStream(filename)
+  cb null, null
 
 async.auto
   get_pages_links: (next) ->
@@ -46,6 +59,7 @@ async.auto
         if name and link
           schemes.push {"name": name, "link": link, "description": description}
       console.log "Found #{Object.keys(schemes).length} schemes"
+      console.log "Fetching download urls, please be patient..."
       next null, schemes
 
 
@@ -70,12 +84,16 @@ async.auto
                   download_name = $(@).find('a').text()
                   break
                 else
-            schemes[main_index]['download_name'] = download_name
-            res.push schemes[main_index]['download_link'] = download_link
+          schemes[main_index]['download_name'] = download_name
+          res.push schemes[main_index]['download_link'] = download_link
+        schemes = schemes.filter (el)->
+          el.download_link? and el.download_link isnt ''
         next null, schemes
   ]
 
   download_schemes: ['get_download_links'
     (next, res) ->
-      console.log res
+      schemes = res.get_download_links
+      console.log "Prepare to downloading #{schemes.length} schemes"
+      async.map schemes, download_vim_org, (err, res) ->
   ]

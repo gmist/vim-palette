@@ -13,6 +13,7 @@
   "dependencies": {
     "request": "latest",
     "cheerio": "latest",
-    "async": "latest"
+    "async": "latest",
+    "adm-zip": "latest"
   }
 }

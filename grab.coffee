@@ -1,3 +1,4 @@
+AdmZip = require 'adm-zip'
 async = require 'async'
 cheerio = require 'cheerio'
 fs = require 'fs'
@@ -23,9 +24,23 @@ download_vim_org = (scheme, cb) ->
     if /^attachment; filename=/.test filename
       filename = filename.replace /^attachment; filename=/, ''
       filename = path.join('./colors', filename)
+      console.log """Downloading "#{filename}" color scheme"""
       if /\.vim$/.test filename
-        console.log """Downloading "#{filename}" color scheme"""
         resp.pipe fs.createWriteStream(filename)
+      else if /\.zip$/.test filename
+        file = fs.createWriteStream(filename)
+        resp.pipe file
+        file.on 'finish', ->
+          zip = new AdmZip(filename)
+          zipEntries = zip.getEntries()
+          zipEntries.forEach (zipEntry)->
+            if /\.vim$/.test zipEntry.entryName
+              console.log "Unpack #{zipEntry.entryName} from #{filename}"
+              zip.extractEntryTo(zipEntry.entryName, "./colors/", false, true)
+          fs.unlink(filename)
+      else
+        console.log "Oops, file format #{filename} is not supported"
+
   cb null, null
 
 async.auto

@@ -40,9 +40,11 @@ download_vim_org = (scheme, cb) ->
           files = []
           zipEntries.forEach (zipEntry)->
             if /\.vim$/.test zipEntry.entryName
-              console.log "Unpack #{zipEntry.entryName} from #{filename}"
-              zip.extractEntryTo(zipEntry.entryName, "./colors/", false, true)
-              files.push path.basename(zipEntry.entryName)
+              entry_basename = path.basename(zipEntry.entryName)
+              if not fs.existsSync path.join('colors', entry_basename)
+                console.log "Unpack #{zipEntry.entryName} from #{filename}"
+                zip.extractEntryTo zipEntry.entryName, "colors/", false, true
+                files.push entry_basename
           fs.unlink(filename)
           res = []
           for file in files

@@ -27,21 +27,32 @@ download_vim_org = (scheme, cb) ->
       console.log """Downloading "#{filename}" color scheme"""
       if /\.vim$/.test filename
         resp.pipe fs.createWriteStream(filename)
+        res = {}
+        res[path.basename(filename)] = scheme.link
+        res = [res]
+        cb null, res
       else if /\.zip$/.test filename
         file = fs.createWriteStream(filename)
         resp.pipe file
         file.on 'finish', ->
           zip = new AdmZip(filename)
           zipEntries = zip.getEntries()
+          files = []
           zipEntries.forEach (zipEntry)->
             if /\.vim$/.test zipEntry.entryName
               console.log "Unpack #{zipEntry.entryName} from #{filename}"
               zip.extractEntryTo(zipEntry.entryName, "./colors/", false, true)
+              files.push path.basename(zipEntry.entryName)
           fs.unlink(filename)
+          res = []
+          for file in files
+            el = {}
+            el[file] = scheme.link
+            res.push el
+          cb null, res
       else
         console.log "Oops, file format #{filename} is not supported"
-
-  cb null, null
+        cb null, []
 
 async.auto
   get_pages_links: (next) ->
@@ -101,7 +112,7 @@ async.auto
                 else
           schemes[main_index]['download_name'] = download_name
           res.push schemes[main_index]['download_link'] = download_link
-        schemes = schemes.filter (el)->
+        schemes = schemes.filter (el) ->
           el.download_link? and el.download_link isnt ''
         next null, schemes
   ]
@@ -111,4 +122,21 @@ async.auto
       schemes = res.get_download_links
       console.log "Prepare to downloading #{schemes.length} schemes"
       async.map schemes, download_vim_org, (err, res) ->
+        flat = {}
+        for files in res
+          for file in files
+            for k,v of file
+              flat[k] = v
+        next null, flat
+  ]
+
+  statistics: ['download_schemes'
+    (next, res) ->
+      res = res.download_schemes
+      console.log "Downloaded #{Object.keys(res).length} schemes"
+      sorted_res = {}
+      Object.keys(res).sort().forEach((key) ->
+        sorted_res[key] = res[key]
+      )
+      console.log sorted_res
   ]

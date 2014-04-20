@@ -5,7 +5,7 @@ fs = require 'fs'
 path = require 'path'
 request = require 'request'
 
-max_schemes = 1
+max_schemes = 1000
 base_url="http://www.vim.org/"
 github_base_url = "https://raw.githubusercontent.com"
 schemes_url = """#{base_url}scripts/script_search_results.php?

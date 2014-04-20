@@ -59,7 +59,6 @@ download_vim_org = (scheme, cb) ->
     else
       filename = path.join('colors', scheme.name)
       console.log """Downloading "#{filename}" color scheme"""
-      console.log scheme.download_link
       resp.pipe fs.createWriteStream(filename)
       res = {}
       res[scheme.name] = scheme.download_link

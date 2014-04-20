@@ -5,8 +5,9 @@ fs = require 'fs'
 path = require 'path'
 request = require 'request'
 
-max_schemes = 1000
+max_schemes = 1
 base_url="http://www.vim.org/"
+github_base_url = "https://raw.githubusercontent.com"
 schemes_url = """#{base_url}scripts/script_search_results.php?
 &script_type=color%20scheme&show_me=#{max_schemes}"""
 
@@ -55,6 +56,15 @@ download_vim_org = (scheme, cb) ->
       else
         console.log "Oops, file format #{filename} is not supported"
         cb null, []
+    else
+      filename = path.join('colors', scheme.name)
+      console.log """Downloading "#{filename}" color scheme"""
+      console.log scheme.download_link
+      resp.pipe fs.createWriteStream(filename)
+      res = {}
+      res[scheme.name] = scheme.download_link
+      cb null, res
+
 
 async.auto
   get_pages_links: (next) ->
@@ -132,13 +142,45 @@ async.auto
         next null, flat
   ]
 
-  statistics: ['download_schemes'
+  github_custom: ['download_schemes'
     (next, res) ->
-      res = res.download_schemes
-      console.log "Downloaded #{Object.keys(res).length} schemes"
+      schemes = res.download_schemes
+      fs.readFile 'custom.json', 'utf-8', (err, data) ->
+        data = JSON.parse(data).github
+        raw = []
+        pack = []
+        async.map data, get_html, (err, github_res) ->
+          github_schemes = []
+          for el in github_res
+            $ = cheerio.load(el)
+            $('.js-directory-link').each ->
+              e = $(@)
+              name = e.text
+              link = e.attr('href')
+              if /\.vim/.test name and link
+                scheme = {}
+                scheme['download_link'] = [
+                  github_base_url, link.replace('/blob', '')].join('')
+                scheme['name'] = link.split('/').pop()
+                github_schemes.push scheme
+          async.map github_schemes, download_vim_org, (err, github_schemes) ->
+            flat = {}
+            for scheme in github_schemes
+              for k, v of scheme
+                flat[k] = v
+            for k of flat
+              schemes[k] = flat[k]
+            next null, schemes
+  ]
+
+  statistics: ['github_custom'
+    (next, res) ->
+      res = res.github_custom
+      console.log "Total of #{Object.keys(res).length} color schemes:"
       sorted_res = {}
       Object.keys(res).sort().forEach((key) ->
         sorted_res[key] = res[key]
       )
-      console.log sorted_res
+      for k, v of sorted_res
+        console.log "* [#{k}](#{v})"
   ]

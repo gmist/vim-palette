@@ -5,7 +5,7 @@
 " Author:      Sergio Nobre <sergio.o.nobre@gmail.com>
 " License:     The Vim License (this command will show it: ':help copyright')
 " Website:     http://www.vim.org/scripts/script.php?script_id=4136
-" Last Change: v3.0.8: December 28, 2013
+" Last Change: v3.1.0: March 4, 2014
 " Note:        Check the companion help file for usage help and the release history.
 "              Newer versions may be downloaded from the above mentioned web address.
 " ====================================================================================
@@ -17,7 +17,7 @@ if (!has('gui_running')) || (!v:version >= 703)
     finish
 endif
 
-let    s:briofitaversion = ["3.0.8"]
+let    s:briofitaversion = ["3.1.0"]
 unlet! g:briofitaversion
 let    g:briofitaversion = copy(s:briofitaversion)
 
@@ -42,23 +42,22 @@ let s:export_cycling_highlights = 1
 " Configuration Dictionary:  s:dic_cf_options:                                         {{{1
 " configuration settings
 if !exists("s:dic_cf_options")
-        " Note:     both the first element and the second may be changed by the colorscheme;
-        "           the first element is the option's default value on startup, or is
-        "           the option's current value after processing user's options;
-        "           the second element, is its limit, if greater than one;
+        " Note:     both the first element and the second may be set/changed
+        "           by the colorscheme; the 1st element is the default or the
+        "           current value of the option; the initial value of the 1st
+        "           element is the option's default value on startup; upon processing
+        "           user's options, the 1st element gets the user's defined
+        "           cycle number choice; the second element, is the option limit,
+        "           its maximum value, if greater than one; the 2nd element
+        "           cannot be changed via user options.
         " Criteria: (1) if the 2nd list element is 1 it means a "boolean" option
         "           so that any non-zero key value means 'true', zero means 'false', and
         "           (highlight subscript zero will be used, if true); boolean options are not
         "           set when the first element (default) is zero in the below options dict;
         "           (2) when the 2nd element is (-1) it means its setting is postponed; in this case
-        "               the real limit is computed and moved here, based on the given highlights
-        "           (3) if the 1st element >= 0, it is subject to automated cycling by some plugin
-        "           (4) if the 1st element <= (-1) it is a special case, not subject to automated cycling
-        "           (5) if the 1st element == (-2) it is used for distractionless editing mode
-        "           (6) reserved for future use: (a) 1st element if equal to (-1)
+        "           the real limit is computed and moved here, based on the given highlights.
         let s:dic_cf_options = {
             \ "warnlevel":          [ 0,  1],
-            \ "nodistractionmode":  [ 0,  1],
             \ "statusline":         [ 0,  1],
             \ "brackets":           [ 1,  1],
             \ "localcursorline":    [ 0,  1],
@@ -80,7 +79,7 @@ endif
 " List Of Allowed Options:  s:briofita_allowed_parms:                                     {{{1
 " user selectable choices
 if !exists("s:briofita_allowed_parms")
-        let s:briofita_allowed_parms = [ "nodistractionmode", "statusline",
+        let s:briofita_allowed_parms = [ "statusline",
                               \          "localcursorline",   "cursorline",
                               \          "colorcolumn",       "search",
                               \          "diff",              "normal",
@@ -136,18 +135,22 @@ endfunction
 " dictionary of highlight options: a dict. of dicts. of lists of highlights lists
 if !exists("s:dic_hi_options")
         " NOTE: 1. An ""-entry in foreground position means "fg", in background, "bg" (not NONE!).
-        "                      so if you want  NONE in fg/bg position the entry has to be "NONE"!
-        "       2. An ""-entry in the gui (rightmost position) means "NONE"
-        "       3. The numeric keys may have the sequence skipped (example: 0 followed by 2)
-        "       4. The ZERO KEY (0:) is required for all entries (it is the default)!
-        "       5. The brackets boolean key currently relates only to level16* highlighting;
+        "          so if you want NONE in fg/bg position the entry has to be "NONE"!
+        "       2. An ""-entry in the gui (rightmost position) means "NONE".
+        "       3. The numeric keys may have the sequence skipped (example: 0 followed by 2).
+        "       4. Each option has its numeric keys provided in ascending order.
+        "       5. The ZERO KEY (0:) is required for all entries (it is the default)!
+        "       6. When the dict option numeric key >= 0, it may be cycled;
+        "       7. When the dict option numeric key <= (-1) it is a special case,
+        "          not cycleable;
+        "       8. The brackets boolean key currently relates only to level16* highlighting;
         "          these syntax elements are defined by the rainbow parentheses plugin;
         "          ON by default, there is no problem if you do not have installed that plugin.
-        "       6. The "diff" options option span will likely be reduced in future releases.
+
         let s:dic_hi_options = {
            \    'conceal': {
            \                    0: [
-           \                           [ "conceal",   "BurlyWood2",     "bg",           "bold" ],
+           \                           [ "conceal",   "BurlyWood3",     "bg",           "bold" ],
            \                           [ "vertSplit", "#71D3B4",        "#1E3B31",      "bold" ],
            \                       ],
            \                    1: [
@@ -159,10 +162,14 @@ if !exists("s:dic_hi_options")
            \                           [ "vertSplit", "FireBrick",      "Gray5",        "bold" ],
            \                       ],
            \                    3: [
+           \                           [ "conceal",   "BurlyWood2",     "bg",           "bold" ],
+           \                           [ "vertSplit", "#71D3B4",        "bg",           "bold" ],
+           \                       ],
+           \                    4: [
            \                           [ "conceal",   "Green",          "#1E4959",      "bold" ],
            \                           [ "vertSplit", "DarkSlateGray",  "DarkSlateGray","bold" ],
            \                       ],
-           \                    4: [
+           \                    5: [
            \                           [ "conceal",   "#CCFFCC",        "bg",           "bold" ],
            \                           [ "vertSplit", "Black",          "Black",        "bold" ],
            \                       ],
@@ -170,148 +177,207 @@ if !exists("s:dic_hi_options")
            \    'special': {
            \                    0: [
            \                           [ "Special",           "#88CB35",        "NONE",    "NONE" ],
-           \                           [ "cStatement",        "CadetBlue3",     "",        "" ],
-           \                           [ "_Operator",         "CornFlowerBlue",  "",        "" ],
-           \                           [ "helpSectionDelim",  "DeepSkyBlue3",   "NONE",    "NONE" ],
-           \                           [ "helpHypertextEntry","SteelBlue3",      "NONE",    "NONE" ],
+           \                           [ "cRepeat",           "#00B880",        "",        "bold" ],
+           \                           [ "cStatement",        "#00B880",        "",           "" ],
+           \                           [ "_Operator",         "CornFlowerBlue", "",        "" ],
+           \                           [ "Error",             "#A191F5",        "",           "NONE", ],
+           \                           [ "errorMsg",          "Black",          "#8B7FFF", "NONE" ],
+           \                           [ "helpCommand",       "DodgerBlue",     "NONE",    "italic" ],
+           \                           [ "helpHypertextEntry","SteelBlue3",     "NONE",    "NONE" ],
            \                           [ "helpHypertextJump", "DodgerBlue",     "",        "italic" ],
            \                           [ "helpHeadline",      "AquaMarine3",    "NONE",    "italic" ],
            \                           [ "helpHeader",        "DeepSkyBlue2",   "NONE",    "italic" ],
-           \                           [ "helpCommand",       "#F3C284",        "Gray20",  "" ],
+           \                           [ "helpNotVi",         "Tomato",         "",        "" ],
+           \                           [ "helpOption",        "SteelBlue2",     "",        "bold" ],
+           \                           [ "helpSectionDelim",  "DeepSkyBlue3",   "NONE",    "NONE" ],
            \                           [ "manLongOptionDesc", "DarkSeaGreen3",  "",        "" ],
            \                           [ "manOptionDesc",     "DarkSeaGreen3",  "",        "bold" ],
            \                           [ "pythonDocTest",     "#6D8C63",        "",        "italic"],
            \                           [ "pythonDocTest2",    "#6D8C63",        "",        "italic"],
            \                           [ "pythonDot",         "#00FFAF",        "",        "bold" ],
-           \                           [ "pythonSpaceError",  "LemonChiffon2", "#1D3E3E",  "" ],
+           \                           [ "pythonIndentError", "DarkSlateGray",  "#0C2628", "underline" ],
+           \                           [ "pythonSpaceError",  "LemonChiffon2",  "#1C3644", "" ],
            \                           [ "pythonStatement",   "DeepSkyBlue3",   "",        "" ],
            \                           [ "pythonImport",      "DeepSkyBlue3",   "",        "" ],
-           \                           [ "rubyArrayDelimiter","#4A77FF", "",  "", ],
+           \                           [ "qfError",			  "#5D8B9C",        "",        "" ],
+           \                           [ "rubyArrayDelimiter","#4A77FF",        "",        "", ],
+           \                           [ "shConditional",     "#89AEB3",        "", "bold,italic", ],
+           \                           [ "shSnglCase",        "#89AEB3",        "",  ""],
+           \                           [ "syntasticWarningSign","MediumPurple4","",        "", ],
            \                       ],
            \                    1: [
-           \                           [ "Special",           "#78B37A",        "NONE",    "NONE" ],
-           \                           [ "cStatement",        "#00B880",        "",        "" ],
-           \                           [ "_Operator",         "#00B880",        "",        "" ],
-           \                           [ "helpSectionDelim",  "#0F450F",        "NONE",    "bold,italic" ],
-           \                           [ "helpHypertextEntry","AquaMarine4",    "NONE",    "NONE" ],
-           \                           [ "helpHypertextJump", "CadetBlue3",     "",        "italic" ],
-           \                           [ "helpHeadline",      "AquaMarine3",    "NONE",    "NONE" ],
-           \                           [ "helpHeader",        "#2FBBA6",        "NONE",    "NONE" ],
-           \                           [ "helpCommand",       "#F3C284",        "#880C0E",  "" ],
-           \                           [ "manLongOptionDesc", "#DAD085",        "Black",   "" ],
-           \                           [ "manOptionDesc",     "#DAD085",        "Black",   "" ],
-           \                           [ "pythonDocTest",     "#84AABF",        "",        "italic"],
-           \                           [ "pythonDocTest2",    "#84AABF",        "",        "italic"],
-           \                           [ "pythonDot",         "#F38F00",        "",        "bold" ],
-           \                           [ "pythonSpaceError",  "LemonChiffon2", "#1E4959",  "" ],
-           \                           [ "pythonStatement",   "#2FBBA6",        "",        "" ],
-           \                           [ "pythonImport",      "DeepSkyBlue3",   "",        "" ],
-           \                           [ "rubyArrayDelimiter","#8870FF", "",  "", ],
+           \                           [ "Special",           "#78B37A",        "NONE",       "NONE" ],
+           \                           [ "cRepeat",           "FireBrick2",     "",           "" ],
+           \                           [ "cStatement",        "FireBrick2",     "",           "" ],
+           \                           [ "_Operator",         "#00B880",        "",           "" ],
+           \                           [ "Error",             "FireBrick3",     "",           "NONE" ],
+           \                           [ "errorMsg",          "LightGoldenRod", "FireBrick4", "NONE" ],
+           \                           [ "helpCommand",       "SteelBlue1",     "#880C0E",    "italic" ],
+           \                           [ "helpHypertextEntry","AquaMarine4",    "NONE",       "NONE" ],
+           \                           [ "helpHypertextJump", "CadetBlue3",     "",           "italic" ],
+           \                           [ "helpHeadline",      "AquaMarine3",    "NONE",       "NONE" ],
+           \                           [ "helpHeader",        "#2FBBA6",        "NONE",       "NONE" ],
+           \                           [ "helpNotVi",         "#567F8F",        "",           "italic" ],
+           \                           [ "helpOption",        "SteelBlue2",     "",        "bold" ],
+           \                           [ "helpSectionDelim",  "#0F450F",        "NONE",       "bold,italic" ],
+           \                           [ "manLongOptionDesc", "#DAD085",        "Black",      "" ],
+           \                           [ "manOptionDesc",     "#DAD085",        "Black",      "" ],
+           \                           [ "pythonDocTest",     "#84AABF",        "",           "italic"],
+           \                           [ "pythonDocTest2",    "#84AABF",        "",           "italic"],
+           \                           [ "pythonDot",         "#F38F00",        "",           "bold" ],
+           \                           [ "pythonIndentError", "LemonChiffon2",  "#1C3644", "" ],
+           \                           [ "pythonSpaceError",  "LemonChiffon2",  "#1E4959",    "" ],
+           \                           [ "pythonStatement",   "#2FBBA6",        "",           "" ],
+           \                           [ "pythonImport",      "DeepSkyBlue3",   "",           "" ],
+           \                           [ "qfError",			  "RosyBrown",      "",           "" ],
+           \                           [ "rubyArrayDelimiter","#8870FF",        "",           "", ],
+           \                           [ "shConditional",     "Red3",           "",           "bold,italic", ],
+           \                           [ "shSnglCase",        "Red3",           "",           ""],
+           \                           [ "syntasticWarningSign","MediumPurple3","",           "", ],
            \                       ],
            \                    2: [
            \                           [ "Special",           "Gray50",         "NONE",    "NONE" ],
+           \                           [ "cRepeat",           "CadetBlue3",     "",        "bold" ],
            \                           [ "cStatement",        "CadetBlue3",     "",        "" ],
            \                           [ "_Operator",         "SkyBlue",        "",        "" ],
-           \                           [ "helpSectionDelim",  "#869BCC",        "NONE",    "NONE" ],
+           \                           [ "Error",             "MediumPurple3",  "",        "NONE" ],
+           \                           [ "errorMsg",          "LightGoldenRod", "Gray10",  "NONE" ],
+           \                           [ "helpCommand",       "#A191F5",        "NONE",    "italic" ],
            \                           [ "helpHypertextEntry","#869BCC",        "NONE",    "NONE" ],
            \                           [ "helpHypertextJump", "DodgerBlue",     "",        "italic" ],
            \                           [ "helpHeadline",      "#6CA0FF",        "NONE",    "italic" ],
            \                           [ "helpHeader",        "#00B780",        "NONE",    "italic" ],
-           \                           [ "helpCommand",       "#A191F5",        "NONE",    "" ],
+           \                           [ "helpNotVi",         "SteelBlue2",     "",        "" ],
+           \                           [ "helpOption",        "Tomato",         "",        "" ],
+           \                           [ "helpSectionDelim",  "#C48844",        "NONE",    "NONE" ],
            \                           [ "manLongOptionDesc", "LightSkyBlue",   "",        "" ],
            \                           [ "manOptionDesc",     "LightSkyBlue",   "",        "bold" ],
            \                           [ "pythonDocTest",     "Gray50",         "",        "italic"],
            \                           [ "pythonDocTest2",    "#6D8C63",        "",        "italic"],
            \                           [ "pythonDot",         "LimeGreen",      "",        "bold" ],
-           \                           [ "pythonSpaceError",  "LemonChiffon2", "#0C2628",  "" ],
+           \                           [ "pythonIndentError", "LemonChiffon2",  "#0C2628", "" ],
+           \                           [ "pythonSpaceError",  "LemonChiffon2",  "#0C2628", "" ],
            \                           [ "pythonStatement",   "#2FBBA6",        "",        "" ],
-           \                           [ "pythonImport",      "#2FBBA6",   "",        "" ],
-           \                           [ "rubyArrayDelimiter","BurlyWood3", "",  "", ],
+           \                           [ "pythonImport",      "#2FBBA6",        "",        "" ],
+           \                           [ "qfError",			  "#B3AC64",        "",           "" ],
+           \                           [ "rubyArrayDelimiter","BurlyWood3",     "",        "", ],
+           \                           [ "shConditional",     "#89AEB3",        "",        "bold,italic", ],
+           \                           [ "shSnglCase",        "#89AEB3",        "", ""],
+           \                           [ "syntasticWarningSign","MediumPurple4","",        "", ],
            \                       ],
            \                    3: [
-           \                           [ "Special",           "AquaMarine",     "#880C0E", "NONE" ],
-           \                           [ "cStatement",        "#00B880",        "",        "" ],
-           \                           [ "_Operator",         "#00B880",        "",        "" ],
-           \                           [ "helpSectionDelim",  "Brown3",         "NONE",    "NONE" ],
-           \                           [ "helpHypertextEntry","Brown3",         "NONE",    "bold" ],
-           \                           [ "helpHypertextJump", "DodgerBlue",     "",        "italic" ],
-           \                           [ "helpHeadline",      "#6CA0FF",        "NONE",    "italic" ],
-           \                           [ "helpHeader",        "#00B780",        "NONE",    "italic" ],
-           \                           [ "helpCommand",       "#71D3B4",        "NONE",    "" ],
-           \                           [ "manLongOptionDesc", "Pink1",          "",        "" ],
-           \                           [ "manOptionDesc",     "Pink1",          "",        "bold" ],
-           \                           [ "pythonDocTest",     "Gray50",         "",        "italic"],
-           \                           [ "pythonDocTest2",    "#84AABF",        "",        "italic"],
-           \                           [ "pythonDot",         "BurlyWood1",     "",        "bold" ],
-           \                           [ "pythonSpaceError",  "LemonChiffon2", "bg",  "" ],
-           \                           [ "pythonStatement",   "CadetBlue",      "",        "" ],
-           \                           [ "pythonImport",      "DeepSkyBlue2",   "",        "" ],
-           \                           [ "rubyArrayDelimiter","#8870FF", "",  "bold", ],
+           \                           [ "Special",           "AquaMarine",     "#880C0E",    "NONE" ],
+           \                           [ "cRepeat",           "#00B880",        "",        "bold" ],
+           \                           [ "cStatement",        "CadetBlue3",     "",        "" ],
+           \                           [ "_Operator",         "#00B880",        "",           "" ],
+           \                           [ "Error",             "Linen",          "FireBrick4", "NONE", ],
+           \                           [ "errorMsg",          "LightGoldenRod", "#1E4959",    "NONE" ],
+           \                           [ "helpCommand",       "#71D3B4",        "NONE",       "italic" ],
+           \                           [ "helpHypertextEntry","Brown3",         "NONE",       "bold" ],
+           \                           [ "helpHypertextJump", "DodgerBlue",     "",           "italic" ],
+           \                           [ "helpHeadline",      "#6CA0FF",        "NONE",       "italic" ],
+           \                           [ "helpHeader",        "#00B780",        "NONE",       "italic" ],
+           \                           [ "helpNotVi",         "LightPink2",     "Gray20",     "" ],
+           \                           [ "helpOption",        "SteelBlue2",     "",           "bold" ],
+           \                           [ "helpSectionDelim",  "Brown3",         "NONE",       "NONE" ],
+           \                           [ "manLongOptionDesc", "Pink1",          "",           "" ],
+           \                           [ "manOptionDesc",     "Pink1",          "",           "bold" ],
+           \                           [ "pythonDocTest",     "Gray50",         "",           "italic"],
+           \                           [ "pythonDocTest2",    "#84AABF",        "",           "italic"],
+           \                           [ "pythonDot",         "BurlyWood1",     "",           "bold" ],
+           \                           [ "pythonIndentError", "Khaki2",         "#75252F",    "" ],
+           \                           [ "pythonSpaceError",  "LemonChiffon2",  "bg",         "" ],
+           \                           [ "pythonStatement",   "CadetBlue",      "",           "" ],
+           \                           [ "pythonImport",      "DeepSkyBlue2",   "",           "" ],
+           \                           [ "qfError",			  "AquaMarine2",    "",           "" ],
+           \                           [ "rubyArrayDelimiter","#8870FF",        "",           "bold", ],
+           \                           [ "shConditional",     "Red3",           "",           "bold,italic", ],
+           \                           [ "shSnglCase",        "Red3",           "",           ""],
+           \                           [ "syntasticWarningSign","LightGray",    "",           "", ],
            \                       ],
            \               },
            \    'cursorlinenr': {
            \                    0: [
-           \                           [  "CursorLineNr",   "Orange",         "bg",              "bold"  ],
+           \                           [  "CursorLineNr",   "#8B7FFF",        "bg",              ""      ],
            \                           [  "vimLineComment", "#5D8B9C",        "",                ""      ],
+           \                           [  "vimMark",        "#CC4455",        "",                ""      ],
            \                           [  "vimNumber",      "#7FA2E6",        "bg",              "NONE"  ],
-           \                           [  "vimTodo",        "MediumSeaGreen", "bg",              "italic"  ],
+           \                           [  "vimTodo",        "MediumSeaGreen", "bg",              "italic"],
            \                       ],
            \                    1: [
            \                           [  "CursorLineNr",   "Yellow",         "bg",              "bold"  ],
            \                           [  "vimLineComment", "#557F8F",        "",                ""      ],
+           \                           [  "vimMark",        "DeepSkyBlue2",   "",                ""      ],
            \                           [  "vimNumber",      "#65C254",        "bg",              "NONE"  ],
            \                           [  "vimTodo",        "LemonChiffon3",  "#345FA8",         "NONE"  ],
            \                       ],
            \                    2: [
-           \                           [  "CursorLineNr",   "Orange",         "bg",              "bold"  ],
+           \                           [  "CursorLineNr",   "Orange",         "bg",              ""      ],
            \                           [  "vimLineComment", "DeepSkyBlue4",   "",                ""      ],
+           \                           [  "vimMark",        "#CC4455",        "",                "bold"  ],
            \                           [  "vimNumber",      "#7FA2E6",        "bg",              "NONE"  ],
            \                           [  "vimTodo",        "LemonChiffon3",  "#345FA8",         "NONE"  ],
            \                       ],
            \                    3: [
-           \                           [  "CursorLineNr",   "Yellow",         "bg",              "bold"  ],
+           \                           [  "CursorLineNr",   "#8B7FFF",        "bg",              "bold"  ],
            \                           [  "vimLineComment", "Turquoise4",     "",                ""      ],
+           \                           [  "vimMark",        "DeepSkyBlue2",   "",                "bold"  ],
            \                           [  "vimNumber",      "#65C254",        "bg",              "NONE"  ],
            \                           [  "vimTodo",        "Gray20",         "MediumSeaGreen",  "underline" ],
+           \                       ],
+           \                    4: [
+           \                           [  "CursorLineNr",   "Orange",         "bg",              "bold"  ],
+           \                           [  "vimLineComment", "#5D8B9C",        "",                ""      ],
+           \                           [  "vimMark",        "#CC4455",        "",                ""      ],
+           \                           [  "vimNumber",      "#7FA2E6",        "bg",              "NONE"  ],
+           \                           [  "vimTodo",        "MediumSeaGreen", "bg",              "italic"],
            \                       ],
            \               },
            \    'mix01': {
                         \		0:	[
-                                    \	[      "javaString",     "#7EB49C",        "NONE",  "NONE", ],
-                                    \   [      "javaConditional","#009F6F",        "NONE",  "bold", ],
-                                    \   [      "javaRepeat",     "#009F6F",        "NONE",  "bold", ],
-                                    \   [      "vimCommand",     "PowderBlue",     "",  "", ],
-                                    \	[      "vimString",      "#9A85FF",        "NONE",  "NONE", ],
-                                    \	[      "vimMapRHS",      "LightCyan3",     "NONE",  "NONE", ],
-                                    \	[      "vimIsCommand",   "SkyBlue2",       "NONE",  "italic", ],
-                                    \	[      "vimEchoHLNone",  "SkyBlue2",       "NONE",  "italic", ],
-                                    \	[      "vimFilter",      "SkyBlue2",       "NONE",  "italic", ],
-                                    \	[      "vimFuncBody",    "#779DB2",        "NONE",  "bold", ],
-                                    \   [      "vimSet",         "#85B2FE",        "#1C4F4F", "", ],
-                                    \   [      "vimSetEqual",    "#85B2FE",        "#1C4F4F", "", ],
-                                    \   [      "vimSetMod",      "#85B2FE",        "#1C4F4F", "italic", ],
-                                    \   [      "vimSetSep",      "#85B2FE",        "#1C4F4F", "", ],
+                                    \	[      "javaString",     "#7EB49C",        "NONE",    "NONE", ],
+                                    \   [      "javaConditional","#009F6F",        "NONE",    "bold", ],
+                                    \   [      "javaRepeat",     "#009F6F",        "NONE",    "bold", ],
+                                    \   [      "plsqlSQLKeyword",       "DeepSkyBlue2", "bg", "underline", ],
+                                    \   [      "plsqlSQLTypeAttribute", "DeepSkyBlue2", "",   "underline", ],
+                                    \   [      "vimCommand",     "PowderBlue",     "",        "", ],
+                                    \	[      "vimString",      "#9A85FF",        "NONE",    "NONE", ],
+                                    \	[      "vimMapRHS",      "LightCyan3",     "NONE",    "NONE", ],
+                                    \	[      "vimIsCommand",   "SkyBlue2",       "NONE",    "italic", ],
+                                    \	[      "vimEchoHLNone",  "SkyBlue2",       "NONE",    "italic", ],
+                                    \	[      "vimFilter",      "SkyBlue2",       "NONE",    "italic", ],
+                                    \	[      "vimFuncBody",    "#779DB2",        "NONE",    "bold", ],
+                                    \   [      "vimOption",      "DodgerBlue2",     "",        "", ],
+                                    \   [      "vimSet",         "DodgerBlue2",     "",        "", ],
+                                    \   [      "vimSetEqual",    "DodgerBlue2",     "",        "", ],
+                                    \   [      "vimSetMod",      "DodgerBlue2",     "",        "italic", ],
+                                    \   [      "vimSetSep",      "DodgerBlue2",     "",        "bold", ],
                                 \	],
                         \		1:	[
-                                    \	[      "javaString",     "CadetBlue3",     "NONE",  "NONE", ],
-                                    \   [      "javaConditional","#9A85FF",        "NONE",  "bold", ],
-                                    \   [      "javaRepeat",     "#9A85FF",        "NONE",  "bold", ],
-                                    \   [      "vimCommand",     "PowderBlue",     "",  "", ],
-                                    \	[      "vimString",      "CadetBlue3",     "NONE",  "NONE", ],
-                                    \	[      "vimMapRHS",      "LightCyan3",     "NONE",  "NONE", ],
-                                    \	[      "vimIsCommand",   "#32C5B0",        "NONE",  "italic", ],
-                                    \	[      "vimEchoHLNone",  "#32C5B0",        "NONE",  "italic", ],
-                                    \	[      "vimFilter",      "#32C5B0",        "NONE",  "italic", ],
-                                    \	[      "vimFuncBody",    "LightSkyBlue3",  "NONE",  "bold", ],
-                                    \   [      "vimSet",         "#85B2FE",        "#1C4F4F", "", ],
-                                    \   [      "vimSetEqual",    "#85B2FE",        "#1C4F4F", "", ],
-                                    \   [      "vimSetMod",      "#85B2FE",        "#1C4F4F", "italic", ],
-                                    \   [      "vimSetSep",      "#85B2FE",        "#1C4F4F", "", ],
+                                    \	[      "javaString",     "CadetBlue3",     "NONE",    "NONE", ],
+                                    \   [      "javaConditional","#9A85FF",        "NONE",    "bold", ],
+                                    \   [      "javaRepeat",     "#9A85FF",        "NONE",    "bold", ],
+                                    \   [      "plsqlSQLKeyword",       "#C59F6F", "bg", "underline", ],
+                                    \   [      "plsqlSQLTypeAttribute", "#C59F6F", "",   "underline", ],
+                                    \   [      "vimCommand",     "PowderBlue",     "",        "", ],
+                                    \	[      "vimString",      "CadetBlue3",     "NONE",    "NONE", ],
+                                    \	[      "vimMapRHS",      "LightCyan3",     "NONE",    "NONE", ],
+                                    \	[      "vimIsCommand",   "#32C5B0",        "NONE",    "italic", ],
+                                    \	[      "vimEchoHLNone",  "#32C5B0",        "NONE",    "italic", ],
+                                    \	[      "vimFilter",      "#32C5B0",        "NONE",    "italic", ],
+                                    \	[      "vimFuncBody",    "LightSkyBlue3",  "NONE",    "bold", ],
+                                    \   [      "vimOption",      "#AFAFFF",        "",        "", ],
+                                    \   [      "vimSet",         "DodgerBlue1",    "",        "", ],
+                                    \   [      "vimSetEqual",    "DodgerBlue1",    "",        "", ],
+                                    \   [      "vimSetMod",      "DodgerBlue1",    "",        "italic", ],
+                                    \   [      "vimSetSep",      "DodgerBlue2",    "",        "bold", ],
                                 \	],
                         \		2:	[
                                     \	[      "javaString",     "#9A85FF",        "NONE",  "NONE", ],
                                     \   [      "javaConditional","#32C5B0",        "NONE",  "bold", ],
                                     \   [      "javaRepeat",     "#32C5B0",        "NONE",  "bold", ],
+                                    \   [      "plsqlSQLKeyword",       "DeepSkyBlue2", "bg", "underline", ],
+                                    \   [      "plsqlSQLTypeAttribute", "DeepSkyBlue2", "",   "underline", ],
                                     \   [      "vimCommand",     "#7EB49C",        "",      "", ],
                                     \	[      "vimString",      "#9A85FF",        "NONE",  "NONE", ],
                                     \	[      "vimMapRHS",      "#CC4455",        "NONE",  "NONE", ],
@@ -319,6 +385,7 @@ if !exists("s:dic_hi_options")
                                     \	[      "vimEchoHLNone",  "SkyBlue2",       "NONE",  "italic", ],
                                     \	[      "vimFilter",      "SkyBlue2",       "NONE",  "italic", ],
                                     \	[      "vimFuncBody",    "LimeGreen",      "NONE",  "NONE", ],
+                                    \   [      "vimOption",      "#AFAFFF",        "",      "underline", ],
                                     \   [      "vimSet",         "#7EB49C",        "", "", ],
                                     \   [      "vimSetEqual",    "#7EB49C",        "", "", ],
                                     \   [      "vimSetMod",      "#7EB49C",        "", "italic", ],
@@ -328,33 +395,39 @@ if !exists("s:dic_hi_options")
                                     \	[      "javaString",     "BurlyWood3",     "NONE",  "NONE", ],
                                     \   [      "javaConditional","#8870FF",        "NONE",  "bold", ],
                                     \   [      "javaRepeat",     "#8870FF",        "NONE",  "bold", ],
-                                    \   [      "vimCommand",     "PowderBlue",     "",  "", ],
+                                    \   [      "plsqlSQLKeyword",       "DeepSkyBlue2", "bg", "", ],
+                                    \   [      "plsqlSQLTypeAttribute", "DeepSkyBlue2", "",   "", ],
+                                    \   [      "vimCommand",     "PowderBlue",     "",      "", ],
                                     \	[      "vimString",      "BurlyWood3",     "NONE",  "NONE", ],
                                     \	[      "vimMapRHS",      "#CC4455",        "NONE",  "NONE", ],
                                     \	[      "vimIsCommand",   "SkyBlue2",       "NONE",  "italic", ],
                                     \	[      "vimEchoHLNone",  "#32C5B0",        "NONE",  "italic", ],
                                     \	[      "vimFilter",      "#32C5B0",        "NONE",  "italic", ],
                                     \	[      "vimFuncBody",    "Coral",          "NONE",  "bold", ],
-                                    \   [      "vimSet",         "#85B2FE",        "", "", ],
-                                    \   [      "vimSetEqual",    "#85B2FE",        "", "", ],
-                                    \   [      "vimSetMod",      "#85B2FE",        "", "italic", ],
-                                    \   [      "vimSetSep",      "#85B2FE",        "", "", ],
+                                    \   [      "vimOption",      "#AFAFFF",        "#1C4F4F", "italic", ],
+                                    \   [      "vimSet",         "#85B2FE",        "",        "", ],
+                                    \   [      "vimSetEqual",    "#85B2FE",        "",        "", ],
+                                    \   [      "vimSetMod",      "#85B2FE",        "",        "italic", ],
+                                    \   [      "vimSetSep",      "#85B2FE",        "",        "", ],
                                 \	],
                         \		4:	[
                                     \	[      "javaString",     "#8870FF",        "NONE",  "NONE", ],
                                     \   [      "javaConditional","#009ACD",        "NONE",  "bold", ],
                                     \   [      "javaRepeat",     "#009ACD",        "NONE",  "bold", ],
-                                    \   [      "vimCommand",     "PowderBlue",     "",  "", ],
+                                    \   [      "plsqlSQLKeyword",       "#C59F6F", "bg", "underline", ],
+                                    \   [      "plsqlSQLTypeAttribute", "#C59F6F", "",   "underline", ],
+                                    \   [      "vimCommand",     "PowderBlue",     "",      "", ],
                                     \	[      "vimString",      "#8870FF",        "NONE",  "NONE", ],
                                     \	[      "vimMapRHS",      "LightCyan3",     "NONE",  "NONE", ],
                                     \	[      "vimIsCommand",   "#32C5B0",        "NONE",  "italic", ],
                                     \	[      "vimEchoHLNone",  "SkyBlue2",       "NONE",  "italic", ],
                                     \	[      "vimFilter",      "SkyBlue2",       "NONE",  "italic", ],
                                     \	[      "vimFuncBody",    "Plum",           "NONE",  "NONE", ],
-                                    \   [      "vimSet",         "#85B2FE",        "", "", ],
-                                    \   [      "vimSetEqual",    "#85B2FE",        "", "", ],
-                                    \   [      "vimSetMod",      "#85B2FE",        "", "italic", ],
-                                    \   [      "vimSetSep",      "#85B2FE",        "", "", ],
+                                    \   [      "vimOption",      "IndianRed2",     "",      "italic", ],
+                                    \   [      "vimSet",         "IndianRed2",      "",     "", ],
+                                    \   [      "vimSetEqual",    "IndianRed2",      "",     "", ],
+                                    \   [      "vimSetMod",      "IndianRed2",      "",     "italic", ],
+                                    \   [      "vimSetSep",      "RosyBrown",      "",      "bold", ],
                                 \	],
            \             },
            \    'folded': {
@@ -378,9 +451,6 @@ if !exists("s:dic_hi_options")
 						\			],
            \              },
            \    'foldcolumn': {
-						\    (-2):	[
-						\               [ "",  "NONE",         "#062926",  "NONE", ],
-						\			],
 						\		0:	[
 						\               [ "",  "ForestGreen",  "#082926",  "bold", ],
 						\			],
@@ -537,7 +607,7 @@ if !exists("s:dic_hi_options")
                     \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
                     \               [ "diffRemoved",  "MediumSlateBlue",  "bg",        "NONE", ],
                     \               [ "diffSubname",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "DiffText",     "Tomato",           "gray20",    "NONE", ],
+                    \               [ "DiffText",     "Tomato",           "gray20",    "italic", ],
                     \			],
                     \		1:	[
                     \               [ "diffAdd",      "IndianRed2",       "bg",        "NONE", ],
@@ -551,7 +621,7 @@ if !exists("s:dic_hi_options")
                     \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
                     \               [ "diffRemoved",  "PaleGoldenRod",    "bg",        "NONE", ],
                     \               [ "diffSubname",  "IndianRed3",       "bg",        "italic", ],
-                    \               [ "DiffText",     "Wheat3",           "#AD2728",   "NONE", ],
+                    \               [ "DiffText",     "Gold",             "Black",     "bold,italic", ],
                     \			],
                     \		2:	[
                     \               [ "diffAdd",      "#CC4455",          "Black",     "NONE", ],
@@ -565,23 +635,9 @@ if !exists("s:dic_hi_options")
                     \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
                     \               [ "diffRemoved",  "PaleGoldenRod",    "Black",     "NONE", ],
                     \               [ "diffSubname",  "IndianRed3",       "bg",        "italic", ],
-                    \               [ "DiffText",     "BurlyWood1",       "#902E3A",   "NONE", ],
+                    \               [ "DiffText",     "BurlyWood1",       "#902E3A",   "bold,italic", ],
                     \			],
                     \		3:	[
-                    \               [ "diffAdd",      "Green2",           "#0D4173",   "NONE", ],
-                    \               [ "diffAdded",    "Green2",           "#0D4173",   "NONE", ],
-                    \               [ "diffChange",   "Bisque2",          "#1E4959",   "NONE", ],
-                    \               [ "diffChanged",  "Bisque2",          "#1E4959",   "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
-                    \               [ "diffFile",     "#CC4455",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "#E68A00",          "bg",        "NONE", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "#009F6F",          "bg",        "NONE", ],
-                    \               [ "diffSubname",  "Bisque3",          "bg",        "bold", ],
-                    \               [ "DiffText",     "Gray10",           "SeaGreen",  "bold", ],
-                    \			],
-                    \		4:	[
                     \               [ "diffAdd",      "Khaki3",           "#05401C",   "NONE", ],
                     \               [ "diffAdded",    "Khaki3",           "#05401C",   "NONE", ],
                     \               [ "diffChange",   "LightGreen",       "bg",        "NONE", ],
@@ -595,7 +651,35 @@ if !exists("s:dic_hi_options")
                     \               [ "diffSubname",  "LightSkyBLue",     "bg",        "NONE", ],
                     \               [ "DiffText",     "Khaki",            "bg",        "NONE", ],
                     \			],
-                    \	    5:	[
+                    \		4:	[
+                    \               [ "diffAdd",      "#88CB35",          "#1E4959",   "underline", ],
+                    \               [ "diffAdded",    "#88CB35",          "#1E4959",   "underline", ],
+                    \               [ "diffChange",   "#88CB35",          "#1E4959",   "NONE", ],
+                    \               [ "diffChanged",  "#88CB35",          "#1E4959",   "NONE", ],
+                    \               [ "diffComment",  "#557F8F",          "",          "", ],
+                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
+                    \               [ "diffFile",     "#71D3B4",          "bg",        "NONE", ],
+                    \               [ "diffLine",     "#E68A00",          "bg",        "italic", ],
+                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
+                    \               [ "diffRemoved",  "PaleGoldenRod",    "Black",     "NONE", ],
+                    \               [ "diffSubname",  "IndianRed3",       "bg",        "italic", ],
+                    \               [ "DiffText",     "Orange",           "Black",     "bold,italic", ],
+                    \			],
+                    \		5:	[
+                    \               [ "diffAdd",      "Green2",           "#0D4173",   "NONE", ],
+                    \               [ "diffAdded",    "Green2",           "#0D4173",   "NONE", ],
+                    \               [ "diffChange",   "Bisque2",          "#1E4959",   "NONE", ],
+                    \               [ "diffChanged",  "Bisque2",          "#1E4959",   "NONE", ],
+                    \               [ "diffComment",  "#557F8F",          "",          "", ],
+                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
+                    \               [ "diffFile",     "#CC4455",          "bg",        "NONE", ],
+                    \               [ "diffLine",     "#E68A00",          "bg",        "NONE", ],
+                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
+                    \               [ "diffRemoved",  "#009F6F",          "bg",        "NONE", ],
+                    \               [ "diffSubname",  "Bisque3",          "bg",        "bold", ],
+                    \               [ "DiffText",     "Gray10",           "SeaGreen",  "bold", ],
+                    \			],
+                    \	    6:	[
                     \               [ "diffAdd",      "Gray90",           "#05401C",   "NONE", ],
                     \               [ "diffAdded",    "Gray90",           "#05401C",   "NONE", ],
                     \               [ "diffChange",   "LightGreen",       "bg",        "NONE", ],
@@ -607,9 +691,9 @@ if !exists("s:dic_hi_options")
                     \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
                     \               [ "diffRemoved",  "LightSkyBlue",     "bg",        "NONE", ],
                     \               [ "diffSubname",  "LightSkyBLue",     "bg",        "NONE", ],
-                    \               [ "DiffText",     "#E63A3A",          "bg",        "NONE", ],
+                    \               [ "DiffText",     "#E63A3A",          "bg",        "bold,italic", ],
                     \			],
-                    \		6:	[
+                    \		7:	[
                     \               [ "diffAdd",      "#88CB35",          "#1E4959",   "NONE", ],
                     \               [ "diffAdded",    "#88CB35",          "#1E4959",   "NONE", ],
                     \               [ "diffChange",   "DarkOliveGreen2",  "NONE",      "NONE", ],
@@ -622,20 +706,6 @@ if !exists("s:dic_hi_options")
                     \               [ "diffRemoved",  "PaleGoldenRod",    "Black",     "NONE", ],
                     \               [ "diffSubname",  "#8870FF",          "#082926",   "italic", ],
                     \               [ "DiffText",     "Black",            "Tomato3",   "NONE", ],
-                    \			],
-                    \		7:	[
-                    \               [ "diffAdd",      "#88CB35",          "#1E4959",   "underline", ],
-                    \               [ "diffAdded",    "#88CB35",          "#1E4959",   "underline", ],
-                    \               [ "diffChange",   "#88CB35",          "#1E4959",   "NONE", ],
-                    \               [ "diffChanged",  "#88CB35",          "#1E4959",   "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
-                    \               [ "diffFile",     "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "#E68A00",          "bg",        "italic", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "PaleGoldenRod",    "Black",     "NONE", ],
-                    \               [ "diffSubname",  "IndianRed3",       "bg",        "italic", ],
-                    \               [ "DiffText",     "BurlyWood",        "Gray30",    "bold,italic", ],
                     \			],
                     \		8:	[
                     \               [ "diffAdd",      "#88CB35",          "#1E4959",   "NONE", ],
@@ -721,145 +791,204 @@ if !exists("s:dic_hi_options")
                 \			],
            \              },
            \    'cursorline': {
-           \                 (-2): [
-           \                           [ "CursorLine",   "NONE",  "#880C0E",      "bold" ],
-           \                           [ "CursorColumn", "NONE",  "#880C0E",      "NONE" ],
-           \                       ],
            \                    0: [
+           \                           [ "CursorLine",   "Plum1",            "#322F45", "" ],
+           \                           [ "CursorColumn", "NONE",             "#322F45", "NONE" ],
+           \                       ],
+           \                    1: [
+           \                           [ "CursorLine",   "MediumPurple2",    "#0A0A70", "" ],
+           \                           [ "CursorColumn", "NONE",             "#0A0A70", "NONE" ],
+           \                       ],
+           \                    2: [
+           \                           [ "CursorLine",   "DarkOliveGreen2",  "#294C44", "" ],
+           \                           [ "CursorColumn", "NONE",             "#294C44", "NONE" ],
+           \                       ],
+           \                    3: [
+           \                           [ "CursorLine",   "Yellow",           "#8B00FF", "bold" ],
+           \                           [ "CursorColumn", "NONE",             "#8B00FF", "NONE" ],
+           \                       ],
+           \                    4: [
+           \                           [ "CursorLine",   "Black",            "#8B7FFF", "" ],
+           \                           [ "CursorColumn", "NONE",             "#8B7FFF", "NONE" ],
+           \                       ],
+           \                    5: [
+           \                           [ "CursorLine",   "DarkOliveGreen2",  "Gray30", "" ],
+           \                           [ "CursorColumn", "NONE",             "Gray30", "NONE" ],
+           \                       ],
+           \                    6: [
            \                           [ "CursorLine",   "NONE",  "#333399", "bold" ],
            \                           [ "CursorColumn", "NONE",  "#333399", "NONE" ],
            \                       ],
-           \                    1: [
+           \                    7: [
            \                           [ "CursorLine",   "NONE",  "#3A5022", "bold" ],
            \                           [ "CursorColumn", "NONE",  "#3A5022", "NONE" ],
            \                       ],
-           \                    2: [
-           \                           [ "CursorLine",   "NONE",  "#880c0e", "bold" ],
-           \                           [ "CursorColumn", "NONE",  "#880c0e", "NONE" ],
+           \                    8: [
+           \                           [ "CursorLine",   "DarkOliveGreen2",  "NavyBlue", "" ],
+           \                           [ "CursorColumn", "NONE",             "NavyBlue", "NONE" ],
            \                       ],
-           \                    3: [
-           \                           [ "CursorLine",   "NONE",  "#800080", "bold" ],
-           \                           [ "CursorColumn", "NONE",  "#800080", "NONE" ],
-           \                       ],
-           \                    4: [
-           \                           [ "CursorLine",   "NONE",  "#1E3140", "bold" ],
-           \                           [ "CursorColumn", "NONE",  "#1E3140", "NONE" ],
-           \                       ],
-           \                    5: [
+           \                    9: [
            \                           [ "CursorLine",   "DarkOliveGreen2",  "Gray40", "bold" ],
            \                           [ "CursorColumn", "NONE",             "Gray40", "NONE" ],
            \                       ],
-           \                    6: [
-           \                           [ "CursorLine",   "DarkOliveGreen2",  "NavyBlue", "bold" ],
-           \                           [ "CursorColumn", "NONE",             "NavyBlue", "NONE" ],
+           \                   10: [
+           \                           [ "CursorLine",   "NONE",  "#880c0e", "bold" ],
+           \                           [ "CursorColumn", "NONE",  "#880c0e", "NONE" ],
            \                       ],
-           \                    7: [
-           \                           [ "CursorLine",   "DarkOliveGreen2",  "Gray20", "bold" ],
-           \                           [ "CursorColumn", "NONE",  "Gray20",  "NONE" ],
+           \                   11: [
+           \                           [ "CursorLine",   "NONE",  "#800080", "bold" ],
+           \                           [ "CursorColumn", "NONE",  "#800080", "NONE" ],
            \                       ],
-           \                    8: [
-           \                           [ "CursorLine",   "Green",  "bg",      "italic" ],
-           \                           [ "CursorColumn", "NONE",   "bg",      "NONE" ],
+           \                   12: [
+           \                           [ "CursorLine",   "NONE",  "#1E3140", "bold" ],
+           \                           [ "CursorColumn", "NONE",  "#1E3140", "NONE" ],
            \                       ],
-           \                    9: [
-           \                           [ "CursorLine",   "Green",  "Black",   "underline" ],
-           \                           [ "CursorColumn", "NONE",   "Black",   "NONE" ],
+           \                   13: [
+           \                           [ "CursorLine",   "DarkOliveGreen2",  "Gray20", "" ],
+           \                           [ "CursorColumn", "NONE",  "#1E4959", "NONE" ],
+           \                       ],
+           \                   14: [
+           \                           [ "CursorLine",   "DarkOliveGreen2",  "#294C44",    "" ],
+           \                           [ "CursorColumn", "NONE",             "FireBrick2", "NONE" ],
+           \                       ],
+           \                   15: [
+           \                           [ "CursorLine",   "Green",  "bg",     "italic" ],
+           \                           [ "CursorColumn", "NONE",   "bg",     "NONE" ],
+           \                       ],
+           \                   16: [
+           \                           [ "CursorLine",   "DarkOliveGreen3",  "Gray30", "bold" ],
+           \                           [ "CursorColumn", "NONE",             "Gray30", "NONE" ],
+           \                       ],
+           \                   17: [
+           \                           [ "CursorLine",   "Green",  "Black",  "underline" ],
+           \                           [ "CursorColumn", "NONE",   "Black",  "NONE" ],
            \                       ],
            \               },
            \    'colorcolumn': {
-						\	 (-2):	[
-						\               [ "ColorColumn",               "NONE",            "NONE",        "NONE",   ],
-                        \               [ "asciidocBlockTitle",        "#CC4455",         "bg",          "italic", ],
-                        \               [ "asciidocQuotedSuperscript", "PaleGreen3",      "bg",          "NONE",   ],
-                        \               [ "asciidocOneLineTitle",      "FireBrick1",      "#112A33",     "bold,underline", ],
-                        \               [ "asciidocTableBlock",        "PaleGreen3",      "",            "", ],
-                        \               [ "asciidocTablePrefix",       "Maroon",          "",            "bold", ],
-                        \               [ "asciidocTablePrefix2",      "SeaGreen2",       "",            "", ],
-                        \               [ "asciidocTwoLineTitle",      "Green2",          "#3A5022",     "NONE",   ],
-                        \               [ "htmlCommentPart",           "#6A6A6A",         "bg",          "italic", ],
-                        \               [ "htmlError",                 "#C59F6F",         "black",       "", ],
-                        \               [ "htmlSpecialChar",           "SlateGray3",      "",  "underline", ],
-                        \               [ "markdownLinkText",          "#38ACAD",         "", "italic", ],
-                        \               [ "markdownOrderedListMarker", "#009F6F",         "",  "bold", ],
-                        \               [ "nerdtreeDir",               "LightSteelBlue",  "#0e2628",     "", ],
-                        \               [ "nerdtreeDirSlash",          "LightSteelBlue",  "",            "", ],
-                        \               [ "nerdtreeFile",              "#00B880",         "",            "", ],
-                        \               [ "nerdtreeOpenable",          "#AA88BB",         "",            "bold",   ],
-                        \               [ "netrwComment",              "#42A396",         "",            "", ],
-						\               [ "NonText",                   "bg",              "bg",          "NONE",   ],
-                        \               [ "xmlCommentPart",            "#6A6A6A",         "bg",          "", ],
-						\			],
 						\		0:	[
 						\               [ "ColorColumn",               "PaleGreen2",   "#294C44",     "NONE",   ],
                         \               [ "asciidocBlockTitle",        "#009F6F",      "bg",          "NONE",   ],
+                        \               [ "asciidocPassthroughBlock",  "RoyalBlue1",   "",            "", ],
                         \               [ "asciidocQuotedSuperscript", "LightSeaGreen","bg",          "NONE",   ],
                         \               [ "asciidocOneLineTitle",      "FireBrick1",   "#112A33",     "bold,underline", ],
-                        \               [ "asciidocTableBlock",        "#73BF73",      "Gray25",      "", ],
+                        \               [ "asciidocQuotedBold",        "#5FD75F",      "#003366",     "italic", ],
+                        \               [ "asciidocQuotedEmphasized",  "#5FD75F",      "", "italic", ],
+                        \               [ "asciidocQuotedEmphasized2", "#5FD75F",      "", "italic", ],
+                        \               [ "asciidocQuotedSingleQuoted","Green3", "",   "italic", ],
+                        \               [ "asciidocQuotedUnconstrainedBold", "#5FD75F","#003366", "", ],
+                        \               [ "asciidocQuotedUnconstrainedEmphasized", "#5FD75F", "",  "", ],
+                        \               [ "asciidocSect1",             "FireBrick1",      "#112A33", "bold,underline", ],
+                        \               [ "asciidocSect2",             "#5FD75F",         "",            "italic", ],
+                        \               [ "asciidocSect3",             "DarkSeaGreen3",   "",            "", ],
+                        \               [ "asciidocSect4",             "SlateBlue2",      "",            ""],
+                        \               [ "asciidocTableBlock",        "#73BF73",      "",            "", ],
                         \               [ "asciidocTablePrefix",       "CadetBlue4",   "",            "bold", ],
                         \               [ "asciidocTablePrefix2",      "SeaGreen2",    "",            "", ],
                         \               [ "asciidocTwoLineTitle",      "SlateBlue1",   "bg",          "NONE",   ],
                         \               [ "htmlCommentPart",           "#5D8B9C",      "bg",          "italic", ],
                         \               [ "htmlError",                 "#C59F6F",      "",            "", ],
                         \               [ "htmlSpecialChar",           "DeepSkyBlue3", "",            "", ],
-                        \               [ "markdownLinkText",          "#38ACAD",      "", "italic", ],
-                        \               [ "markdownOrderedListMarker", "SlateBlue2",   "",  "bold", ],
-                        \               [ "nerdtreeDir",               "LightSteelBlue",  "#0e2628",  "", ],
+                        \               [ "htmlTagName",               "LimeGreen",    "#152933",     "italic", ],
+                        \               [ "markdownLinkText",          "#38ACAD",      "",            "italic", ],
+                        \               [ "markdownOrderedListMarker", "SlateBlue2",   "",            "bold", ],
+                        \               [ "nerdtreeDir",               "LightSteelBlue",              "#0e2628",  "", ],
                         \               [ "nerdtreeDirSlash",          "LightSteelBlue",  "",         "", ],
                         \               [ "nerdtreeFile",              "SkyBlue2",     "",            "", ],
                         \               [ "nerdtreeOpenable",          "#AA88BB",      "",            "bold",   ],
                         \               [ "netrwComment",              "DodgerBlue3",  "",            "", ],
-						\               [ "NonText",                   "#0F450F",      "NONE",        "NONE",   ],
+						\               [ "nonText",                   "#0F450F",      "NONE",        "NONE",   ],
+                        \               [ "plsqlOperator",             "SeaGreen3",    "",            "bold", ],
                         \               [ "xmlCommentPart",            "#5D8B9C",      "bg",          "", ],
+                        \               [ "xmlEqual",                  "#00B780",      "",            "bold", ],
 						\			],
 						\		2:	[
 						\               [ "ColorColumn",               "Linen",        "DarkRed",       "NONE",   ],
                         \               [ "asciidocBlockTitle",        "#CC4455",      "bg",            "NONE",   ],
+                        \               [ "asciidocPassthroughBlock",  "#009F6F",      "",              "italic", ],
                         \               [ "asciidocQuotedSuperscript", "PaleGreen3",   "bg",            "NONE",   ],
                         \               [ "asciidocOneLineTitle",      "#71D3B4",      "#112A33",       "underline", ],
-                        \               [ "asciidocTableBlock",        "PaleGreen3",   "",              "", ],
+                        \               [ "asciidocQuotedBold",        "Green3",          "#1E4959", "italic", ],
+                        \               [ "asciidocQuotedEmphasized",  "DarkSeaGreen3","", "italic", ],
+                        \               [ "asciidocQuotedEmphasized2", "DarkSeaGreen3","", "italic", ],
+                        \               [ "asciidocQuotedSingleQuoted","Green2", "",  "italic", ],
+                        \               [ "asciidocQuotedUnconstrainedBold", "Green3","#1E4959", "", ],
+                        \               [ "asciidocQuotedUnconstrainedEmphasized", "DarkSeaGreen3", "",  "", ],
+                        \               [ "asciidocSect1",             "FireBrick1",      "#112A33", "bold,underline", ],
+                        \               [ "asciidocSect2",             "#5FD75F",         "#1C4F4F",  "underline", ],
+                        \               [ "asciidocSect3",             "DarkSeaGreen3",   "Gray26",      "underline", ],
+                        \               [ "asciidocSect4",             "#5FD75F",         "#003366",     ""],
+                        \               [ "asciidocTableBlock",        "#73BF73",      "MidnightBlue","", ],
                         \               [ "asciidocTablePrefix",       "Maroon",       "",              "bold", ],
                         \               [ "asciidocTablePrefix2",      "SeaGreen2",    "",              "", ],
                         \               [ "asciidocTwoLineTitle",      "Green2",       "bg",            "NONE",   ],
                         \               [ "htmlCommentPart",           "#6A6A6A",      "bg",            "italic", ],
                         \               [ "htmlError",                 "#C59F6F",      "",              "bold", ],
                         \               [ "htmlSpecialChar",           "SlateGray3",   "",              "underline", ],
-                        \               [ "markdownLinkText",          "SlateGray2",      "", "italic", ],
+                        \               [ "htmlTagName",               "#2FBF2F",      "#152933",       "italic", ],
+                        \               [ "markdownLinkText",          "SlateGray2",   "",              "italic", ],
                         \               [ "markdownOrderedListMarker", "#009F6F",      "",              "bold", ],
                         \               [ "nerdtreeDir",               "LightSteelBlue","#0e2628",      "", ],
                         \               [ "nerdtreeDirSlash",          "LightSteelBlue",  "",           "", ],
                         \               [ "nerdtreeFile",              "#00B880",      "",              "", ],
                         \               [ "nerdtreeOpenable",          "#AAEEBB",      "",              "bold",   ],
                         \               [ "netrwComment",              "#42A396",      "",              "", ],
-						\               [ "NonText",                   "SlateBlue",    "bg",            "NONE",   ],
+						\               [ "nonText",                   "SlateBlue",    "bg",            "NONE",   ],
+                        \               [ "plsqlOperator",             "RosyBrown",    "",              "bold", ],
                         \               [ "xmlCommentPart",            "IndianRed4",   "bg",            "", ],
+                        \               [ "xmlEqual",                  "LightGoldenRod4", "",           "bold", ],
 						\			],
 						\		3:	[
 						\               [ "ColorColumn",               "DodgerBlue1",  "#28364D",      "NONE",   ],
                         \               [ "asciidocBlockTitle",        "#009F6F",      "bg",           "italic", ],
+                        \               [ "asciidocPassthroughBlock",  "RoyalBlue2",   "",             "italic", ],
                         \               [ "asciidocQuotedSuperscript", "PaleGreen2",   "bg",           "NONE",   ],
                         \               [ "asciidocOneLineTitle",      "FireBrick1",   "#112A33",      "bold,underline", ],
-                        \               [ "asciidocTableBlock",        "PaleGreen3",   "Gray25",       "", ],
+                        \               [ "asciidocQuotedBold",        "Green2",       "#1E4959", "italic", ],
+                        \               [ "asciidocQuotedEmphasized",  "DarkSeaGreen3",   "", "italic", ],
+                        \               [ "asciidocQuotedEmphasized2", "DarkSeaGreen3",   "", "italic", ],
+                        \               [ "asciidocQuotedSingleQuoted","Green3", "",  "italic", ],
+                        \               [ "asciidocQuotedUnconstrainedBold", "Green2","#1E4959", "", ],
+                        \               [ "asciidocQuotedUnconstrainedEmphasized", "DarkSeaGreen2", "",  "", ],
+                        \               [ "asciidocSect1",             "FireBrick1",      "#112A33", "bold,underline", ],
+                        \               [ "asciidocSect2",             "#5FD75F",         "",            "italic", ],
+                        \               [ "asciidocSect3",             "DarkSeaGreen3",   "",            "", ],
+                        \               [ "asciidocSect4",             "SlateBlue2",      "",            ""],
+                        \               [ "asciidocTableBlock",        "PaleGreen3",   "",             "", ],
                         \               [ "asciidocTablePrefix",       "CadetBlue4",   "",             "bold", ],
                         \               [ "asciidocTablePrefix2",      "SeaGreen2",    "",             "", ],
                         \               [ "asciidocTwoLineTitle",      "#7FAAF2",      "bg",           "NONE",   ],
                         \               [ "htmlCommentPart",           "#557F8F",      "bg",           "italic", ],
                         \               [ "htmlError",                 "#C59F6F",      "black",        "", ],
                         \               [ "htmlSpecialChar",           "DeepSkyBlue3", "",             "underline", ],
-                        \               [ "markdownLinkText",          "CadetBlue4",   "", "italic", ],
-                        \               [ "markdownOrderedListMarker", "SlateBlue2",   "",  "bold", ],
-                        \               [ "nerdtreeDir",               "LightSteelBlue",  "#0e2628",   "", ],
-                        \               [ "nerdtreeDirSlash",          "LightSteelBlue",  "",          "", ],
+                        \               [ "htmlTagName",               "SteelBlue3",   "#152933",      "italic", ],
+                        \               [ "markdownLinkText",          "CadetBlue4",   "",             "italic", ],
+                        \               [ "markdownOrderedListMarker", "SlateBlue2",   "",             "bold", ],
+                        \               [ "nerdtreeDir",               "LightSteelBlue","#0e2628",     "", ],
+                        \               [ "nerdtreeDirSlash",          "LightSteelBlue","",            "", ],
                         \               [ "nerdtreeFile",              "SkyBlue2",     "",             "", ],
                         \               [ "nerdtreeOpenable",          "PaleGoldenRod","",             "bold",   ],
                         \               [ "netrwComment",              "DodgerBlue3",  "",             "", ],
-						\               [ "NonText",                   "bg",           "bg",           "NONE",   ],
+						\               [ "nonText",                   "bg",           "bg",           "NONE",   ],
+                        \               [ "plsqlOperator",             "SeaGreen2",    "",            "bold", ],
                         \               [ "xmlCommentPart",            "#557F8F",      "bg",           "", ],
+                        \               [ "xmlEqual",                  "#00B780",      "",             "bold", ],
 						\			],
 						\		4:	[
 						\               [ "ColorColumn",               "NONE",         "GoldenRod4","NONE", ],
                         \               [ "asciidocBlockTitle",        "#8FBFDC",      "bg",        "NONE", ],
+                        \               [ "asciidocPassthroughBlock",  "RoyalBlue1",   "",          "", ],
                         \               [ "asciidocQuotedSuperscript", "#99AD6A",      "bg",        "NONE",   ],
                         \               [ "asciidocOneLineTitle",      "#71D3B4",      "#112A33",   "underline", ],
+                        \               [ "asciidocQuotedBold",        "Green2",          "#1E4959", "italic", ],
+                        \               [ "asciidocQuotedEmphasized",  "DarkSeaGreen3",   "", "italic", ],
+                        \               [ "asciidocQuotedEmphasized2", "DarkSeaGreen3",   "", "italic", ],
+                        \               [ "asciidocQuotedSingleQuoted","Green2", "",  "italic", ],
+                        \               [ "asciidocQuotedUnconstrainedBold", "Green2","#1E4959", "", ],
+                        \               [ "asciidocQuotedUnconstrainedEmphasized", "DarkSeaGreen3", "",  "", ],
+                        \               [ "asciidocSect1",             "FireBrick1",      "#112A33", "bold,underline", ],
+                        \               [ "asciidocSect2",             "#5FD75F",      "#1C4F4F",  "italic", ],
+                        \               [ "asciidocSect3",             "DarkSeaGreen3",   "Gray26",      "underline", ],
+                        \               [ "asciidocSect4",             "#5FD75F",         "#003366",     ""],
                         \               [ "asciidocTableBlock",        "#73BF73",      "",          "", ],
                         \               [ "asciidocTablePrefix",       "CadetBlue4",   "",          "", ],
                         \               [ "asciidocTablePrefix2",      "SeaGreen2",    "",          "", ],
@@ -867,15 +996,54 @@ if !exists("s:dic_hi_options")
                         \               [ "htmlCommentPart",           "#77996C",      "bg",        "italic", ],
                         \               [ "htmlError",                 "Linen",        "DarkRed",   "", ],
                         \               [ "htmlSpecialChar",           "SlateGray3",   "",          "", ],
-                        \               [ "markdownLinkText",          "SlateGray2",      "", "italic", ],
-                        \               [ "markdownOrderedListMarker", "#009F6F",         "",  "bold", ],
+                        \               [ "htmlTagName",               "SlateBlue2",   "#152933",   "bold,italic", ],
+                        \               [ "markdownLinkText",          "SlateGray2",   "",          "italic", ],
+                        \               [ "markdownOrderedListMarker", "#009F6F",      "",          "bold", ],
                         \               [ "nerdtreeDir",               "#77996C",      "#0e2628",   "", ],
                         \               [ "nerdtreeDirSlash",          "#77996C",      "",          "", ],
                         \               [ "nerdtreeFile",              "#00B880",      "",          "", ],
                         \               [ "nerdtreeOpenable",          "PaleTurquoise","",          "bold",   ],
                         \               [ "netrwComment",              "#42A396",      "",          "", ],
-						\               [ "NonText",                   "#408C3F",      "bg",        "NONE", ],
+						\               [ "nonText",                   "#408C3F",      "bg",        "NONE", ],
+                        \               [ "plsqlOperator",             "RoyalBlue3",   "",          "bold", ],
                         \               [ "xmlCommentPart",            "#77996C",      "bg",        "", ],
+                        \               [ "xmlEqual",                  "LightGoldenRod4","",        "bold", ],
+						\			],
+						\		5:	[
+						\               [ "ColorColumn",               "Linen",           "Gray30", "NONE",   ],
+                        \               [ "asciidocBlockTitle",        "#CC4455",         "",       "NONE",   ],
+                        \               [ "asciidocPassthroughBlock",  "#009F6F",         "",       "italic", ],
+                        \               [ "asciidocQuotedSuperscript", "PaleGreen3",      "",       "NONE",   ],
+                        \               [ "asciidocOneLineTitle",      "#71D3B4",         "",       "underline", ],
+                        \               [ "asciidocQuotedBold",        "Green2",          "",       "italic", ],
+                        \               [ "asciidocQuotedEmphasized",  "DarkSeaGreen2",   "",       "italic", ],
+                        \               [ "asciidocQuotedEmphasized2", "#C19EFF",         "",       "italic", ],
+                        \               [ "asciidocQuotedSingleQuoted","Green2",          "",       "italic", ],
+                        \               [ "asciidocQuotedUnconstrainedBold", "Green2","", "", ],
+                        \               [ "asciidocQuotedUnconstrainedEmphasized",        "DarkSeaGreen3",       "",  "", ],
+                        \               [ "asciidocSect1",             "FireBrick1",      "",       "bold,underline", ],
+                        \               [ "asciidocSect2",             "#5FD75F",         "",       "underline", ],
+                        \               [ "asciidocSect3",             "DarkSeaGreen3",   "",       "underline", ],
+                        \               [ "asciidocSect4",             "#5FD75F",         "",       ""],
+                        \               [ "asciidocTableBlock",        "#73BF73",         "",       "", ],
+                        \               [ "asciidocTablePrefix",       "Maroon",          "",       "bold", ],
+                        \               [ "asciidocTablePrefix2",      "SeaGreen2",       "",       "", ],
+                        \               [ "asciidocTwoLineTitle",      "Green2",          "",       "NONE",   ],
+                        \               [ "htmlCommentPart",           "#6A6A6A",         "",       "italic", ],
+                        \               [ "htmlError",                 "#C59F6F",         "",       "bold", ],
+                        \               [ "htmlSpecialChar",           "SlateGray3",      "",       "underline", ],
+                        \               [ "htmlTagName",               "Blue1",           "#152933","italic", ],
+                        \               [ "markdownLinkText",          "SlateGray2",      "",       "italic", ],
+                        \               [ "markdownOrderedListMarker", "#009F6F",         "",       "bold", ],
+                        \               [ "nerdtreeDir",               "LightSteelBlue",  "",       "", ],
+                        \               [ "nerdtreeDirSlash",          "LightSteelBlue",  "",       "", ],
+                        \               [ "nerdtreeFile",              "SkyBlue2",        "",       "", ],
+                        \               [ "nerdtreeOpenable",          "#AA88BB",         "",       "bold",   ],
+                        \               [ "netrwComment",              "DodgerBlue3",     "",       "", ],
+						\               [ "nonText",                   "#EE4455",         "",       "NONE",   ],
+                        \               [ "plsqlOperator",             "RosyBrown",       "",       "bold", ],
+                        \               [ "xmlCommentPart",            "IndianRed4",      "",       "", ],
+                        \               [ "xmlEqual",                  "LightGoldenRod4", "",       "bold", ],
 						\			],
            \            },
            \ }
@@ -912,13 +1080,13 @@ function! s:GetUserOptions()
             let parmkeys = keys(g:briofita_parms)
             let ix = index(parmkeys, 'localcursorline')
             if ix < 0
-                " insert required key
+                " a required key must exist: creating it...
                 let g:briofita_parms['localcursorline'] = 0
                 call add (parmkeys, 'localcursorline')
             endif
             for pkey in parmkeys
                 if has_key(s:dic_cf_options, pkey)
-                    execute 'let tval  = g:briofita_parms.'    . pkey
+                    execute 'let tval  = g:briofita_parms.' . pkey
                     execute 'let limit = s:dic_cf_options.' . pkey . '[1]'
                     let correctit = 0
                     if type(tval) != type(0)
@@ -950,17 +1118,20 @@ function! s:GetUserOptions()
                             if (limit > 1)
                                 " TODO check performance at this branch (user parm wrongly set)
                                 execute 'let lstdkeys = keys(s:dic_hi_options.' . pkey . ')'
+                                " TODO review below uses of hardcoded constant "3"
                                 if len(lstdkeys) >= 3
-                                    " TODO verify the below copy()...
+                                    " TODO review the need of below copy()
                                     let dickeys = copy(lstdkeys)
                                     let correctit = 0
-                                    " TODO verify the below conditional...
+                                    " TODO review below hardcoded constant "3"
                                     if len(dickeys) >= 3
+                                        " TODO review below try/catch usage performance concerns
                                         try
                                             let lstkeys = sort(dickeys)
                                         catch /^Vim\%((\a\+)\)\=:E/
                                             let correctit = 1
                                         endtry
+                                        " TODO review below use of printf in filtering device
                                         let filterexpr = printf('(v:val > %d)&&(v:val > 0)',
                                                        \ tval)
                                         try
@@ -990,8 +1161,8 @@ function! s:GetUserOptions()
                             execute 'let g:briofita_parms.' . pkey    . ' = ' . tval
                         endif
                     endif
-                    execute 'let s:dic_cf_options.'  . pkey    . ' = ' .
-                        \        "[" . tval . ',' . limit . ']'
+                    execute 'let s:dic_cf_options.'  . pkey  . ' = ' .
+                           \        "[" . tval . ',' . limit . ']'
                 endif  " if it has the same key
             endfor
         endif
@@ -1048,20 +1219,39 @@ function!   s:HighlightPerOptionsDic(item1)
         silent call s:SetNormalIfCleared()
     endif
 
+    " TODO merge this special case with the source branch following it?
+    "if ((s:dic_cf_options.localcursorline[0] || g:briofita_parms.localcursorline))
+        if has_key(s:dic_cf_options,'cursorline')
+            if  (exists('t:briofita_cursorline'))
+                "if t:briofita_cursorline >= s:dic_cf_options.cursorline[1]
+                if  t:briofita_cursorline > s:dic_cf_options.cursorline[1]
+                    let t:briofita_cursorline = 0
+                endif
+            endif
+        endif
+    "endif
+
     if exists("s:dic_hi_options")
         if has_key(s:dic_cf_options,a:item1)
             execute 'let dictmax = s:dic_cf_options.' . a:item1 . '[1]'
             if dictmax >= 0
-                if ((a:item1 == 'cursorline') && (s:dic_cf_options.localcursorline[0]) &&
-                 \  (exists('t:briofita_choice_for_cursorline')))
-                    " local coupled highlights
-                    if    (t:briofita_choice_for_cursorline >  dictmax) ||
-                       \  (t:briofita_choice_for_cursorline <  0)
-                       " correct it
-                       let t:briofita_choice_for_cursorline = 0
-                    endif
-                    " get current value from the local variable
-                    let curdickey = t:briofita_choice_for_cursorline
+                if (a:item1 == 'cursorline')
+                     if  (exists('t:briofita_cursorline'))
+                        " local coupled highlights
+                        if    (t:briofita_cursorline >  dictmax) ||
+                           \  (t:briofita_cursorline <  0)
+                           " correct it
+                           let t:briofita_cursorline = 0
+                        endif
+                     endif
+                     if ((s:dic_cf_options.localcursorline[0] ||
+                      \  g:briofita_parms.localcursorline))   &&
+                      \  (exists('t:briofita_cursorline'))
+                            " get current value from the local variable
+                            let curdickey = t:briofita_cursorline
+                     else
+                            execute 'let curdickey = s:dic_cf_options.' . a:item1 . '[0]'
+                     endif
                 else
                     execute 'let curdickey = s:dic_cf_options.' . a:item1 . '[0]'
                 endif
@@ -1089,7 +1279,7 @@ function!   s:HighlightPerOptionsDic(item1)
                         return
                     endif
                 else
-                    " boolean option
+                    " (max EQ 1) ---> (boolean option)
                     if ! has_key(dicLstLst, 0)
                         if (curdickey == 0)
                             " internal dict construction error: default should always exist!
@@ -1107,7 +1297,7 @@ function!   s:HighlightPerOptionsDic(item1)
                         return
                     endif
                 endif
-                if (curdickey >= 0)  " if < 0, it is an exceptional case, not processed here
+                if (curdickey >= 0)  " when < 0 it is not processed here
 
                     if dictmax != 1  " if non-boolean option
                         let lstLst = dicLstLst[curdickey]
@@ -1115,6 +1305,14 @@ function!   s:HighlightPerOptionsDic(item1)
                         let lstLst = dicLstLst[0]
                     endif
                     for [grpname, hifg, hibg, guiattr] in lstLst
+                        " prevent dict formatting errors: trim blanks
+                        let hifg = substitute(hifg, '^\s\+','','')
+                        let hifg = substitute(hifg, '\s\+$','','')
+                        let hibg = substitute(hibg, '^\s\+','','')
+                        let hibg = substitute(hibg, '\s\+$','','')
+                        let guiattr = substitute(guiattr, '^\s\+','','')
+                        let guiattr = substitute(guiattr, '\s\+$','','')
+
                         if len(grpname) > 0
                             let groupname = grpname
                         else
@@ -1182,78 +1380,6 @@ function!   s:ParseAllSyntaxes(listOfDicts)
     endfor
 endfunction
 
-" Functions For Distractionless Mode:                                                     {{{1
-" NOTE: the No Distraction (distractionless) editing mode is yet experimental...
-
-" Function: s:HighlightPerOptionsND(.): Highlights the Dict NON-DISTRACTION ITEMS         {{{2
-function!   s:HighlightPerOptionsND(item1)
-	let curdickey = -2
-	if has_key(s:dic_cf_options,a:item1)
-		try
-			execute 'let dicLstLst = s:dic_hi_options["' . a:item1 . '"]'
-		catch
-			return
-		endtry
-		try
-			let lstLst = dicLstLst[curdickey]
-		catch
-			return
-		endtry
-		try
-			for [grpname, hifg, hibg, guiattr] in lstLst
-				if len(grpname) > 0
-					let groupname = grpname
-				else
-					let groupname = a:item1
-				endif
-				if len(hifg) == 0
-					let hifg='fg'
-				endif
-				if len(hibg) == 0
-					let hibg='bg'
-				endif
-				if len(guiattr) == 0
-					let guiattr='NONE'
-				endif
-				let cmd = 'highlight ' . groupname . ' ' .
-					 \    'guifg='     . hifg      . ' ' .
-					 \    'guibg='     . hibg      . ' ' .
-					 \    'gui='       . guiattr
-				execute cmd
-			endfor
-		catch
-		endtry
-	endif
-endfunction
-
-" Function: s:HighlightNoDistrMode(): do Highlight for No Distraction Mode                {{{2
-function!   s:HighlightNoDistrMode()
-    " for the distractionless editing mode
-    execute "highlight signColumn                            guibg=#062926"
-
-    execute "highlight Normal       gui=NONE   guifg=#C6B6FE guibg=#062926"
-    execute "highlight VertSplit    gui=NONE   guifg=#062926 guibg=#062926"
-
-    execute "highlight User1        gui=NONE   guifg=#401340 guibg=#401340"
-    execute "highlight User2        gui=NONE   guifg=#401340 guibg=#401340"
-    execute "highlight User3        gui=NONE   guifg=#401340 guibg=#401340"
-    execute "highlight User4        gui=NONE   guifg=#401340 guibg=#401340"
-    execute "highlight User5        gui=NONE   guifg=#401340 guibg=#401340"
-    execute "highlight User6        gui=NONE   guifg=#401340 guibg=#401340"
-    execute "highlight User7        gui=NONE   guifg=#401340 guibg=#401340"
-    execute "highlight User8        gui=NONE   guifg=#401340 guibg=#401340"
-    execute "highlight User9        gui=NONE   guifg=#401340 guibg=#401340"
-    execute "highlight StatusLine   gui=NONE   guifg=#401340 guibg=#401340"
-    execute "highlight StatusLineNC gui=NONE   guifg=#401340 guibg=#401340"
-
-    " the items below were specified in the dict, with key -2:
-    let dictitems = [ "foldcolumn", "cursorline", "colorcolumn" ]
-    for item in dictitems
-        call s:HighlightPerOptionsND(item)
-    endfor
-    return
-endfunction
-
 " Color Dictionaries Initialization:                                                      {{{1
 " Covers most non-optional highlights.
 " NOTE: Design criteria:
@@ -1265,12 +1391,12 @@ endfunction
 " Asciidoc                                                                                {{{2
 if !exists("s:dict_hi_asciidoc")
         let s:dict_hi_asciidoc = {
-            \   "asciidocAdmonition"              : [ "PowderBlue", "#007880",  ""],
-            \   "asciidocAdmonitionNote"	      : [ "#85B2FE",    "#1C4F4F", ""],
-            \   "asciidocAdmonitionWarn"	      : [ "Wheat2", "#345FA8",  ""],
-            \   "asciidocAnchorMacro"             : [ "SlateGray3", "",  ""],
-            \   "asciidocAttributeEntry"          : [ "DarkSeaGreen3", "#152933", ""],
-            \   "asciidocAttributeList"           : [ "#CC4455", "",  ""],
+            \   "asciidocAdmonition"              : [ "DeepSkyBlue3",  "",        ""],
+            \   "asciidocAdmonitionNote"	      : [ "#85B2FE",       "",        ""],
+            \   "asciidocAdmonitionWarn"	      : [ "DodgerBlue",    "",        ""],
+            \   "asciidocAnchorMacro"             : [ "SlateGray3",    "",        ""],
+            \   "asciidocAttributeEntry"          : [ "DarkSeaGreen4", "", ""],
+            \   "asciidocAttributeList"           : [ "BurlyWood4", "",  ""],
             \   "asciidocAttributeMacro"          : [ "DodgerBlue2", "",  "italic"],
             \   "asciidocAttributeRef"            : [ "#9A85FF", "#152933", "italic"],
             \   "asciidocBackslash"               : [ "Aquamarine2", "",  ""],
@@ -1296,32 +1422,25 @@ if !exists("s:dict_hi_asciidoc")
             \   "asciidocListBullet"              : [ "SpringGreen2", "",  ""],
             \   "asciidocListContinuation"        : [ "Gray50", "",  "italic"],
             \   "asciidocListingBlock"            : [ "DeepSkyBlue2", "",  ""],
-            \   "asciidocListLabel"               : [ "#00B780", "", "bold"],
+            \   "asciidocListLabel"               : [ "MediumSeaGreen", "", ""],
             \   "asciidocListNumber"              : [ "SpringGreen2", "",  ""],
             \   "asciidocLiteralBlock"            : [ "#2FBBA6", "",  "italic"],
             \   "asciidocLiteralParagraph"        : [ "#00B780", "",  ""],
             \   "asciidocMacro"                   : [ "#7FAAF2", "#152933", "italic"],
             \   "asciidocMacroAttributes"         : [ "#6885BD","","italic"],
-            \   "asciidocNonAsciidocBar"          : [ "Maroon", "",  "bold"],
+            \   "asciidocNonAsciidocBar"          : [ "Maroon4", "",  "bold"],
             \   "asciidocOddnumberedTableCol"     : [ "#9FE846", "#473273", ""],
             \   "asciidocOpenBlockDelimiter"      : [ "#779DB2", "",  ""],
             \   "asciidocPagebreak"               : [ "CadetBlue2", "",  ""],
-            \   "asciidocPassthroughBlock"        : [ "#009F6F", "",  "italic"],
             \   "asciidocQuestion"	              : [ "#00B780", "",  "underline"],
             \   "asciidocQuoteBlockDelimiter"     : [ "DeepSkyBlue2", "",  ""],
             \   "asciidocQuotedAttributeList"     : [ "#9A85FF", "",  "italic"],
-            \   "asciidocQuotedBold"              : [ "Green2","#1E4959", "italic"],
             \   "asciidocQuotedboldAttributeList" : [ "Gray50", "",  "italic"],
             \   "asciidocQuotedDoubleQuoted"      : [ "SeaGreen3", "#1E4959",  "italic"],
-            \   "asciidocQuotedEmphasized"        : [ "DarkSeaGreen2","", "bold,italic"],
-            \   "asciidocQuotedEmphasized2"       : [ "#C19EFF",      "", "italic"],
-            \   "asciidocQuotedMonospaced"        : [ "Khaki3", "#1E4959",  "italic"],
-            \   "asciidocQuotedMonospaced2"       : [ "#A08FF5", "",  "italic"],
-            \   "asciidocQuotedSingleQuoted"      : [ "Green3", "#1E4959",  "italic"],
+            \   "asciidocQuotedMonospaced"        : [ "Khaki3",  "#1E4959",  "italic"],
+            \   "asciidocQuotedMonospaced2"       : [ "#A08FF5", "",         ""],
             \   "asciidocQuotedSubscript"         : [ "SlateGray3", "", "italic"],
-            \   "asciidocQuotedUnconstrainedBold" : [ "PaleGreen3","", ""],
-            \   "asciidocQuotedUnconstrainedEmphasized" : [ "DeepSkyBlue2", "",  ""],
-            \   "asciidocQuotedUnconstrainedMonospaced" : [ "#00B780", "",  "italic"],
+            \   "asciidocQuotedUnconstrainedMonospaced" : [ "Khaki3", "#1E4959",  ""],
             \   "asciidocReference"	              : [ "#A191F5", "",  ""],
             \   "asciidocRefMacro"                : [ "LightSlateGray", "",  "italic"],
             \   "asciidocReplacements"	          : [ "DeepSkyBlue2", "",  ""],
@@ -1329,17 +1448,13 @@ if !exists("s:dict_hi_asciidoc")
             \   "asciidocRuler"                   : [ "DeepSkyBlue2", "",  ""],
             \   "asciidocSect0"                   : [ "FireBrick1", "#112A33", "bold,italic,underline"],
             \   "asciidocSect0Old"                : [ "#9B91F6", "",  "bold,italic"],
-            \   "asciidocSect1"                   : [ "FireBrick1", "#112A33", "bold,underline"],
             \   "asciidocSect1Old"	              : [ "#9B91F6", "",  "bold"],
-            \   "asciidocSect2"	                  : [ "#5FD75F", "#1C4F4F",  "underline"],
             \   "asciidocSect2Old"	              : [ "#5FD75F", "#1C4F4F",  ""],
-            \   "asciidocSect3"	                  : [ "DarkSeaGreen3", "Gray26",  "underline"],
             \   "asciidocSect3Old"	              : [ "DarkSeaGreen3", "Gray26",  ""],
-            \   "asciidocSect4"	                  : [ "#5FD75F", "#003366",  ""],
             \   "asciidocSect4Old"	              : [ "#5FD75F", "#003366",  ""],
             \   "asciidocSidebarDelimiter"        : [ "#009F6F", "MidnightBlue",  "italic,underline"],
             \   "asciidocSource"	              : [ "#c59f6f", "",  ""],
-            \   "asciidocTableDelimiter"          : [ "Maroon", "",  "bold"],
+            \   "asciidocTableDelimiter"          : [ "Maroon4",  "",  "bold"],
             \   "asciidocTableDelimiter2"         : [ "#779DB2", "",  ""],
             \   "asciidocToDo"                    : [ "LemonChiffon3", "#345FA8",  ""],
             \   "asciidocTriplePlusPassthrough"   : [ "#88CB35", "",  ""],
@@ -1439,7 +1554,6 @@ if !exists("s:dict_hi_c_cpp")
             \   "cPreCondit"            : [ "PaleGreen3","","italic"],
             \   "cPreConditMatch"       : [ "PaleGreen3","","italic"],
             \   "cPreProc"              : [ "#00B880","",""],
-            \   "cRepeat"               : [ "#00B880","","bold"],
             \   "cSpecial"              : [ "#8870FF", "", "italic"],
             \   "cSpecialCharacter"     : [ "RoyalBlue", "", "italic"],
             \   "cStorageClass"         : [ "#00B880","","bold"],
@@ -1447,8 +1561,8 @@ if !exists("s:dict_hi_c_cpp")
             \   "cStructure"            : [ "SeaGreen3",  "#152933",  ""],
             \   "cTodo"                 : [ "LemonChiffon3", "#345FA8",  "italic"],
             \   "cType"                 : [ "#00B880","",""],
-            \   "cUserFunction"         : [ "#009F6F","",""],
-            \   "cUserFunctionPointer"  : [ "LimeGreen", "",  "bold"],
+            \   "cUserFunction"         : [ "RoyalBlue","",""],
+            \   "cUserFunctionPointer"  : [ "RoyalBlue2", "",  ""],
             \   "cUserLabel"            : [ "PaleGreen3","",""],
                     \ }
 endif
@@ -1495,7 +1609,7 @@ if !exists("s:dict_hi_css")
             \   "cssStringQQ"               : [ "#9A85FF", "",  "italic"],
             \   "cssStyle"                  : [ "#c59f6f", "",  ""],
             \   "cssTableProp"              : [ "#C59F6F", "",  ""],
-            \   "cssTagName"                : [ "SeaGreen3",  "#152933",  "bold,italic"],
+            \   "cssTagName"                : [ "SeaGreen3",  "#152933",  "italic"],
             \   "cssTextAttr"               : [ "#8870FF", "",  "italic"],
             \   "cssTextProp"               : [ "#C59F6F", "",  "italic"],
             \   "cssUIattr"                 : [ "#C59F6F", "",  ""],
@@ -1638,8 +1752,6 @@ if !exists("s:dict_hi_vimhelp")
             \   "helpExample"           : [ "#99AD6A",        "",         ""],
             \   "helpIgnore"			: [ "bg",             "",         ""],
             \   "helpNote"              : [ "DodgerBlue",     "Gray10",   "underline"],
-            \   "helpNotVi"             : [ "#567F8F",        "",         "italic"],
-            \   "helpOption"            : [ "SteelBlue2",     "",         "bold"],
             \   "helpSpecial"           : [ "#65C254",        "",         "underline"],
             \   "helpStar"				: [ "FireBrick1",     "#880C0E",  ""],
             \   "helpTodo"				: [ "#7EB49C",        "",         ""],
@@ -1669,7 +1781,6 @@ if !exists("s:dict_hi_html")
             \   "htmlString"             : [ "#38ACAD", "", ""],
             \   "htmlTag"                : [ "LightCyan3", "bg",  ""],
             \   "htmlTagN"               : [ "DarkSeaGreen3", "#1C3644", "italic"],
-            \   "htmlTagName"            : [ "LimeGreen", "#152933", "italic"],
                     \ }
 endif
 
@@ -1687,11 +1798,11 @@ if !exists("s:dict_hi_javatools")
             \   "javaCommentCharacter"    : [ "blue","",""],
             \   "javaCommentStar"         : [ "AquaMarine4","","bold,italic"],
             \   "javaCommentString"       : [ "#5B8999","",""],
-            \   "javaCommentTitle"        : [ "SlateGray3", "",  "italic"],
+            \   "javaCommentTitle"        : [ "SteelBlue3", "",  "italic"],
             \   "javaConstant"            : [ "MediumSlateBlue","",""],
             \   "javaDocComment"          : [ "#5B8999", "",  "italic"],
-            \   "javaDocParam"            : [ "SlateGray4", "",  "italic"],
-            \   "javaDocTags"             : [ "SlateGray4", "",  "bold,italic"],
+            \   "javaDocParam"            : [ "SlateGray3", "",  ""],
+            \   "javaDocTags"             : [ "SteelBlue3", "",  ""],
             \   "javaError"               : [ "Red", "",  "bold"],
             \   "javaExceptions"          : [ "#2DB3A0","",""],
             \   "javaExternal"            : [ "LightCyan3", "bg",  ""],
@@ -1941,7 +2052,7 @@ if !exists("s:dict_hi_ocaml")
             \   "dotBraceErr"              : [ "Khaki2", "VioletRed4",  ""],
             \   "dotBrackEncl"             : [ "SeaGreen2", "",  ""],
             \   "dotBrackErr"              : [ "Khaki2", "VioletRed4",  ""],
-            \   "dotIdentifier"            : [ "#009F6F", "",  "italic"],
+            \   "dotIdentifier"            : [ "#009F6F", "",  ""],
             \   "dotKeyChar"               : [ "SeaGreen2", "",  ""],
             \   "dotKeyword"               : [ "SeaGreen2", "",  ""],
             \   "dotParEncl"               : [ "SeaGreen2", "",  ""],
@@ -1949,25 +2060,28 @@ if !exists("s:dict_hi_ocaml")
             \   "dotString"                : [ "#99ad6a", "",  ""],
             \   "dottedName"               : [ "#57d700", "",  ""],
             \   "dotTodo"                  : [ "LemonChiffon3", "Maroon4",  ""],
-            \   "dotType"                  : [ "PaleGreen2", "DarkSlateGray",  "italic"],
-            \   "ocamlAnyVar"              : [ "SeaGreen2", "", "bold"],
+            \   "dotType"                  : [ "PaleGreen2", "DarkSlateGray",  ""],
+            \   "ocamlAnyVar"              : [ "DodgerBlue", "", ""],
             \   "ocamlComment"             : [ "#5D8B9C", "",  "italic"],
-            \   "ocamlConstructor"         : [ "CadetBlue3", "",  "italic"],
+            \   "ocamlConstructor"         : [ "CadetBlue3", "",  ""],
+            \   "ocamlFloat"               : [ "#009F6F","",""],
             \   "ocamlFullMod"             : [ "PowderBlue", "", ""],
-            \   "ocamlKeyChar"             : [ "#7FA2E6", "",  ""],
-            \   "ocamlKeyword"             : [ "SeaGreen3", "", ""],
-            \   "ocamlLabel"               : [ "#2DB3A0", "",  "bold"],
-            \   "ocamlLCIdentifier"        : [ "#009F6F", "", ""],
+            \   "ocamlFunDef"              : [ "DodgerBlue", "", "bold"],
+            \   "ocamlKeyChar"             : [ "SlateGray3", "",  ""],
+            \   "ocamlKeyword"             : [ "#32C5B0", "", ""],
+            \   "ocamlLabel"               : [ "#2DB3A0", "",  "underline"],
+            \   "ocamlLCIdentifier"        : [ "#9A85FF", "", ""],
             \   "ocamlModPath"             : [ "LightCyan3", "",  ""],
-            \   "ocamlModule"              : [ "PowderBlue", "", "bold"],
-            \   "ocamlNumber"              : [ "#85B2FE", "#152933", "italic"],
-            \   "ocamlOperator"            : [ "#4444CC", "", ""],
+            \   "ocamlModule"              : [ "PowderBlue", "", ""],
+            \   "ocamlNumber"              : [ "#009F6F", "", ""],
+            \   "ocamlOperator"            : [ "DodgerBlue", "", ""],
+            \   "ocamlScript"              : [ "LightSeaGreen", "", ""],
             \   "ocamlSig"                 : [ "OrangeRed", "", ""],
-            \   "ocamlString"              : [ "#9A85FF","","italic"],
-            \   "ocamlType"                : [ "#2DB3A0", "", "italic"],
+            \   "ocamlString"              : [ "#9A85FF","",""],
+            \   "ocamlType"                : [ "#2DB3A0", "", ""],
             \   "smlEnd"                   : [ "#779DB2", "",   "bold"],
-            \   "smlKeyChar"               : [ "RoyalBlue", "",  ""],
-            \   "smlLCIdentifier"          : [ "#009F6F", "",  "italic"],
+            \   "smlKeyChar"               : [ "SlateGray3", "",  ""],
+            \   "smlLCIdentifier"          : [ "#9A85FF", "",  "italic"],
             \   "smlString"                : [ "#8870FF", "",  ""],
                     \ }
 endif
@@ -1975,11 +2089,12 @@ endif
 " Perl                                                                                    {{{2
 if !exists("s:dict_hi_perl")
         let s:dict_hi_perl = {
-            \   "perlComment"               : [ "#77996C", "",  "italic"],
+            \   "perlComment"               : [ "#5D8B9C", "",  "italic"],
             \   "perlConditional"           : [ "SeaGreen3",  "#152933",  "italic"],
             \   "perlControl"               : [ "SkyBlue", "DarkSlateGrey", "bold"],
-            \   "perlFileDescRead"          : [ "#A08EF8", "",  "bold"],
-            \   "perlFileDescStatement"     : [ "#A08EF8", "",  "bold"],
+            \   "perlData"                  : [ "#CC4455", "", "italic"],
+            \   "perlFileDescRead"          : [ "#A08EF8", "",  ""],
+            \   "perlFileDescStatement"     : [ "#A08EF8", "",  ""],
             \   "perlFloat"                 : [ "#7fa2e6", "", ""],
             \   "perlFunction"              : [ "#32C5B0", "", "bold"],
             \   "perlFunctionName"          : [ "Aquamarine3", "",  ""],
@@ -1987,12 +2102,14 @@ if !exists("s:dict_hi_perl")
             \   "perlLabel"                 : [ "PaleGreen2", "DarkSlateGray",  "italic"],
             \   "perlMatch"                 : [ "#8870FF", "",  ""],
             \   "perlMatchStartEnd"         : [ "#8870FF", "",  ""],
-            \   "perlMethod"                : [ "#67BF54", "#152933", "italic"],
+            \   "perlMethod"                : [ "#8870FF", "#152933", ""],
             \   "perlNumber"                : [ "#7fa2e6", "",  ""],
             \   "perlOperator"              : [ "SpringGreen3", "",  "bold"],
+            \   "perlPackageDecl"           : [ "#8870FF", "",  ""],
             \   "perlPackageRef"            : [ "#7fa2e6", "",  "bold"],
+            \   "perlPod"                   : [ "#77996C", "",  ""],
             \   "perlRepeat"                : [ "SeaGreen3",  "#152933",  "bold,italic"],
-            \   "perlSharpBang"             : [ "DeepSkyBlue2", "",  ""],
+            \   "perlSharpBang"             : [ "DeepSkyBlue2", "",  "italic"],
             \   "perlSpecialMatch"          : [ "#7fa2e6", "",  "italic"],
             \   "perlSpecialString"         : [ "#CC4455", "",  ""],
             \   "perlStatementControl"      : [ "Aquamarine3", "",  "italic"],
@@ -2000,45 +2117,49 @@ if !exists("s:dict_hi_perl")
             \   "perlStatementFiles"        : [ "Aquamarine3", "",  ""],
             \   "perlStatementFlow"         : [ "SeaGreen3",  "#152933",  "italic"],
             \   "perlStatementList"         : [ "seagreen3", "",  ""],
-            \   "perlStatementScalar"       : [ "#00CC8A", "",  "italic"],
-            \   "perlStatementStorage"      : [ "#00CC8A", "",  "italic"],
-            \   "perlString"                : [ "#7fa2e6", "",  "italic"],
+            \   "perlStatementScalar"       : [ "#00CC8A", "",  ""],
+            \   "perlStatementStorage"      : [ "#00CC8A", "",  ""],
+            \   "perlString"                : [ "#7fa2e6", "",  ""],
             \   "perlStringStartEnd"        : [ "#009F6F","",""],
-            \   "perlStringUnexpanded"      : [ "#00BA83","","italic"],
-            \   "perlSubName"               : [ "#32C5B0", "",  "bold"],
+            \   "perlStringUnexpanded"      : [ "#00BA83","",""],
+            \   "perlSubName"               : [ "#32C5B0", "",  ""],
             \   "perlSubPrototype"          : [ "#CC4455", "",  ""],
-            \   "perlTodo"                  : [ "Wheat2", "#345FA8",  "italic"],
-            \   "perlVarPlain"              : [ "#00BA83","","italic"],
-            \   "perlVarPlain2"             : [ "#2DB3A0", "",  "italic"],
+            \   "perlTodo"                  : [ "LemonChiffon3", "#345FA8",  "italic"],
+            \   "perlVarPlain"              : [ "#00BA83","",""],
+            \   "perlVarPlain2"             : [ "#2DB3A0", "",  ""],
             \   "perlVarSimpleMember"       : [ "#8870FF", "",  ""],
-            \   "perlVarSlash"              : [ "#41E7B5", "",  "bold,italic"],
+            \   "perlVarSlash"              : [ "#41E7B5", "",  "bold"],
+            \   "podCommand"                : [ "DarkGrey", "",  ""],
+            \   "podCmdText"                : [ "DarkGrey", "",  ""],
+            \   "podFormat"                 : [ "#5D8B9C", "",  ""],
+            \   "podOverIndent"             : [ "DarkGrey", "",  ""],
+            \   "podSpecial"                : [ "#77996C", "",  "italic"],
+            \   "podVerbatimLine"           : [ "#5D8B9C", "",  "italic"],
             \ }
 endif
 
 " PL/SQL and SQL plugins                                                                  {{{2
 if !exists("s:dict_hi_sql")
         let s:dict_hi_sql = {
-            \   "plsqlAttribute"            : [ "SlateGray3", "",  "bold,underline"],
+            \   "plsqlAttribute"            : [ "CornFlowerBlue", "", ""],
             \   "plsqlBooleanLiteral"       : [ "SlateBlue1", "#152933", ""],
             \   "plsqlComment"              : [ "#5D8B9C", "",  "italic"],
             \   "plsqlCommentL"             : [ "#5D8B9C", "",  ""],
             \   "plsqlConditional"          : [ "PowderBlue","",""],
             \   "plsqlErrInBracket"         : [ "RosyBrown", "",  ""],
             \   "plsqlErrInParen"           : [ "#7EB49C", "", "bold"],
+            \   "plsqlFloatLiteral"         : [ "DodgerBlue", "",  ""],
             \   "plsqlFunction"             : [ "#CC4455", "",  ""],
             \   "plsqlGarbage"              : [ "#7EB49C", "", ""],
-            \   "plsqlHostIdentifier"       : [ "#88CB35", "#152933",  ""],
+            \   "plsqlHostIdentifier"       : [ "#7EB49C", "", ""],
             \   "plsqlIdentifier"           : [ "#2FBBA6","",""],
             \   "plsqlIntLiteral"           : [ "#7FAAF2", "#152933", ""],
             \   "plsqlKeyword"              : [ "PowderBlue","",""],
-            \   "plsqlOperator"             : [ "RosyBrown", "",  "bold,italic"],
-            \   "plsqlPseudo"               : [ "SlateBlue1", "",  ""],
-            \   "plsqlRepeat"               : [ "PaleGreen2", "#1c3644",  ""],
-            \   "plsqlSQLKeyword"           : [ "Orange", "DarkSlateGrey", "" ],
-            \   "plsqlSQLKeyword2"          : [ "#2FBBA6","",""],
-            \   "plsqlSQLKeyword3"          : [ "#7EB49C", "", ""],
-            \   "plsqlSQLKeyword4"          : [ "#C59F6F", "bg", "" ],
-            \   "plsqlSQLTypeAttribute"     : [ "#C59F6F", "bg", "underline" ],
+            \   "plsqlPseudo"               : [ "SlateBlue2", "",  ""],
+            \   "plsqlRepeat"               : [ "CornFlowerBlue", "#1c3644",  ""],
+            \   "plsqlSQLKeyword2"          : [ "#2FBBA6", "bg", ""],
+            \   "plsqlSQLKeyword3"          : [ "#7EB49C", "bg", ""],
+            \   "plsqlSQLKeyword4"          : [ "#009F6F", "bg", "" ],
             \   "plsqlStorage"              : [ "CornFlowerBlue","",""],
             \   "plsqlStringError"          : [ "LemonChiffon2","DodgerBlue3",""],
             \   "plsqlStringLiteral"        : [ "Aquamarine3", "",  "italic"],
@@ -2065,8 +2186,8 @@ if !exists("s:dict_hi_python")
             \   "pythonBinError"               : [ "Tomato", "#1B5958",  ""],
             \   "pythonBinNumber"              : [ "Aquamarine2", "",  ""],
             \   "pythonBoolean"                : [ "#8870FF", "",  ""],
-            \   "pythonBuiltin"                : [ "#AE5555", "",  ""],
-            \   "pythonBuiltinFunc"            : [ "#48B091", "",  "bold"],
+            \   "pythonBuiltin"                : [ "MediumTurquoise", "",  "underline"],
+            \   "pythonBuiltinFunc"            : [ "MediumTurquoise", "",  ""],
             \   "pythonBuiltinLogic"           : [ "#729FCF", "",  ""],
             \   "pythonBuiltinObj"             : [ "#009F6F","",""],
             \   "pythonBytes"                  : [ "Salmon3", "",  ""],
@@ -2075,9 +2196,9 @@ if !exists("s:dict_hi_python")
             \   "pythonBytesEscape"            : [ "DarkSlateGray4", "",  "bold"],
             \   "pythonBytesEscapeError"       : [ "Red", "",  "bold"],
             \   "pythonCalOperator"            : [ "#af5f00", "",  ""],
-            \   "pythonClass"                  : [ "#A191F5",    "",  "italic"],
-            \   "pythonClassDef"               : [ "#2FBBA6",  "",  "bold,italic"],
-            \   "pythonClassName"              : [ "#2FBBA6",  "",  "italic"],
+            \   "pythonClass"                  : [ "#A191F5",    "",  ""],
+            \   "pythonClassDef"               : [ "#2FBBA6",  "",  "bold"],
+            \   "pythonClassName"              : [ "#2FBBA6",  "",  ""],
             \   "pythonCoding"                 : [ "SlateGray3", "",  "bold,italic"],
             \   "pythonComment"                : [ "#557F8F", "",  ""],
             \   "pythonComparison"             : [ "#2FBBA6", "",  "bold"],
@@ -2090,19 +2211,18 @@ if !exists("s:dict_hi_python")
             \   "pythonError"                  : [ "Red", "",  "bold"],
             \   "pythonEscape"                 : [ "DodgerBlue2", "",  ""],
             \   "pythonEscapeError"            : [ "Khaki2", "VioletRed4",  ""],
-            \   "pythonException"              : [ "#2FBBA6", "",  "italic"],
+            \   "pythonException"              : [ "#2FBBA6", "",  ""],
             \   "pythonExceptions"             : [ "#2FBBA6", "",  ""],
-            \   "pythonExClass"                : [ "#2FBBA6", "",  "italic"],
+            \   "pythonExClass"                : [ "#2FBBA6", "",  ""],
             \   "pythonFloat"                  : [ "SkyBlue2", "",  ""],
-            \   "pythonFunc"                   : [ "#A191F5", "",  "italic"],
-            \   "pythonFuncDef"                : [ "#85B2FE", "", "bold,italic"],
-            \   "pythonFuncName"               : [ "#85B2FE", "", "italic"],
+            \   "pythonFunc"                   : [ "#A191F5", "",  ""],
+            \   "pythonFuncDef"                : [ "#85B2FE", "", "bold"],
+            \   "pythonFuncName"               : [ "#85B2FE", "", ""],
             \   "pythonFuncParams"             : [ "Red", "", ""],
-            \   "pythonFunction"               : [ "PaleGreen3","","bold"],
+            \   "pythonFunction"               : [ "SpringGreen3","",""],
             \   "pythonHexError"               : [ "Tomato", "#1B5958",  ""],
             \   "pythonHexNumber"              : [ "Aquamarine2", "",  ""],
             \   "pythonInclude"                : [ "#009F6F", "",  ""],
-            \   "pythonIndentError"            : [ "Khaki2", "#75252F",  ""],
             \   "pythonNumber"                 : [ "#85B2FE", "",  ""],
             \   "pythonNumberError"            : [ "#CC4455", "",  ""],
             \   "pythonObjFunction"            : [ "#009F6F", "",  ""],
@@ -2110,7 +2230,7 @@ if !exists("s:dict_hi_python")
             \   "pythonOctNumber"              : [ "Aquamarine2", "",  ""],
             \   "pythonOperator"               : [ "#2FBBA6", "",  "bold"],
             \   "pythonParamDefault"           : [ "SeaGreen2", "",  ""],
-            \   "pythonParamName"              : [ "#99AD6A", "",  "italic"],
+            \   "pythonParamName"              : [ "#99AD6A", "",  ""],
             \   "pythonPreCondit"              : [ "#00B780", "", ""],
             \   "pythonRawBytes"               : [ "LightSkyBlue3", "",  ""],
             \   "pythonRawString"              : [ "#7fa2e6", "",  "italic"],
@@ -2120,8 +2240,8 @@ if !exists("s:dict_hi_python")
             \   "pythonStrFormatting"          : [ "#9FCBD0", "#264040", ""],
             \   "pythonString"                 : [ "#9A85FF", "",  ""],
             \   "pythonStrTemplate"            : [ "PowderBlue", "#264040", "italic"],
-            \   "pythonSuperclass"             : [ "#99AD6A", "", "italic"],
-            \   "pythonSync"                   : [ "#AE5555", "",  "italic"],
+            \   "pythonSuperclass"             : [ "#99AD6A",  "", ""],
+            \   "pythonSync"                   : [ "IndianRed","", "italic"],
             \   "PythonTodo"                   : [ "MediumSeaGreen", "", ""],
             \   "pythonUniEscape"              : [ "#CC4455", "",  ""],
             \   "pythonUniEscapeError"         : [ "Khaki2", "VioletRed4",  ""],
@@ -2217,7 +2337,6 @@ if !exists("s:dict_hi_sh")
             \   "shColon"                 : [ "AquaMarine3", "",  ""],
             \   "shCommandSub"            : [ "#88B4CC", "",  "italic"],
             \   "shComment"               : [ "#699DB0", "",  "italic"],
-            \   "shConditional"           : [ "Red3", "", "bold,italic"],
             \   "shDblBrace"              : [ "#009F6F", "", "bold"],
             \   "shDblParen"              : [ "#009F6F", "", "bold"],
             \   "shDerefOp"               : [ "#2DB3A0", "",  ""],
@@ -2236,7 +2355,8 @@ if !exists("s:dict_hi_sh")
             \   "shFunctionOne"           : [ "#9CC7CC", "",  "italic"],
             \   "shFunctionTwo"           : [ "SlateBlue2", "", ""],
             \   "shIf"                    : [ "#9A85FF", "",  "bold,italic"],
-            \   "shIfError"               : [ "DarkSeaGreen1","#990024", "italic"],
+            \   "shIfError"               : [ "#C59F6F", "", "italic"],
+            \   "shInError"               : [ "#C59F6F", "", "italic"],
             \   "shLoop"                  : [ "#89AEB3", "",  "bold,italic"],
             \   "shNumber"                : [ "#009F6F", "", ""],
             \   "shOperator"              : [ "#C59F6F", "",  "italic"],
@@ -2251,14 +2371,13 @@ if !exists("s:dict_hi_sh")
             \   "shSetIdentifier"         : [ "#009F6F", "",  "bold"],
             \   "shSetList"               : [ "#2DB3A0", "",  ""],
             \   "shSingleQuote"			  : [ "#9A85FF", "",  ""],
-            \   "shSnglCase"              : [ "Red", "",  ""],
             \   "shSource"                : [ "PowderBlue", "",  "bold"],
             \   "shSpecial"				  : [ "#2DB3A0", "",  "italic"],
             \   "shStatement"             : [ "#2FBBA6", "",  "italic"],
             \   "shString"				  : [ "#9A85FF", "",  ""],
             \   "shTestOpr"               : [ "#C59F6F", "",  ""],
-            \   "shTestPattern"           : [ "#99ad6a", "", "bold"],
-            \   "shTodo"                  : [ "Wheat2", "#345FA8",  "italic"],
+            \   "shTestPattern"           : [ "#99ad6a", "",  "bold"],
+            \   "shTodo"                  : [ "Brown2",  "bg","underline,italic"],
             \   "shVariable"              : [ "PaleGreen3", "", "italic"],
             \   }
 endif
@@ -2332,7 +2451,6 @@ if !exists("s:dict_hi_vimfeat")
             \   "diffOldFile"           : [ "Plum3",         "",        ""],
             \   "diffOnly"              : [ "Green3",        "",        ""],
             \   "iCursor"               : [ "white",         "red",     ""],
-            \   "qfError"				: [ "Gold",          "",        "bold"],
             \   "qfFileName"			: [ "Aquamarine2",   "",        ""],
             \   "qfLineNr"				: [ "#5D8B9C",       "",        ""],
             \   "qfSeparator"			: [ "RosyBrown",     "",        ""],
@@ -2401,7 +2519,6 @@ if !exists("s:dict_hi_vimlang")
             \   "vimMapLHS"                   : [ "SkyBlue2", "",  ""],
             \   "vimMapMod"                   : [ "#2DB3A0", "", ""],
             \   "vimMapModKey"                : [ "#2DB3A0", "",  "italic"],
-            \   "vimMark"                     : [ "#CC4455", "", "bold"],
             \   "vimMarker"                   : [ "Aquamarine1", "",  "bold"],
             \   "vimMenuLHS"                  : [ "SeaGreen4", "",  ""],
             \   "vimMenuName"                 : [ "#85B2FE", "",  ""],
@@ -2412,14 +2529,14 @@ if !exists("s:dict_hi_vimlang")
             \   "vimOper"                     : [ "#7fa2e6", "",  "bold"],
             \   "vimOperError"                : [ "SteelBlue2", "",  ""],
             \   "vimOperParen"                : [ "#7fa2e6", "",  ""],
-            \   "vimOption"                   : [ "#AFAFFF", "#1C4F4F", "italic"],
             \   "vimParenSep"                 : [ "#779DB2", "",   "bold"],
             \   "vimPatOneOrMore"             : [ "red", "",  ""],
             \   "vimPatRegionClose"           : [ "#32C5B0", "",  "bold"],
             \   "vimPatRegionOpen"            : [ "#32C5B0", "",  "bold"],
-            \   "vimPatSep"                   : [ "#CC4455", "",  ""],
-            \   "vimPatSepR"                  : [ "#CC4455", "",  ""],
-            \   "vimPatSepZ"                  : [ "#CC4455", "",  ""],
+            \   "vimPatSep"                   : [ "#30B38C", "",  ""],
+            \   "vimPatSepErr"                : [ "#CC4455", "",  ""],
+            \   "vimPatSepR"                  : [ "#CC4455",        "",  ""],
+            \   "vimPatSepZ"                  : [ "#CC4455",        "",  ""],
             \   "vimPerlRegion"               : [ "#C59F6F", "", "" ],
             \   "vimPythonRegion"             : [ "#C59F6F", "", "" ],
             \   "vimRegister"                 : [ "#C6B6FE", "bg",  ""],
@@ -2435,8 +2552,8 @@ if !exists("s:dict_hi_vimlang")
             \   "vimSubstDelim"               : [ "#57D700", "",  ""],
             \   "vimSubstFlagErr"             : [ "Turquoise3", "",  ""],
             \   "vimSubstFlags"               : [ "#009F6F","","bold,italic"],
-            \   "vimSubstPat"                 : [ "PaleGreen3", "",  "bold"],
-            \   "vimSubstRep4"                : [ "SteelBlue2","","bold"],
+            \   "vimSubstPat"                 : [ "PaleGreen3", "",  ""],
+            \   "vimSubstRep4"                : [ "SteelBlue2","",""],
             \   "vimSubstSubstr"              : [ "SkyBlue3", "",  ""],
             \   "vimSynCase"                  : [ "#009F6F","","bold"],
             \   "vimSyncKey"                  : [ "#009F6F","",""],
@@ -2515,6 +2632,9 @@ if !exists("s:dict_hi_other_plugins")
             \   "snipVar"                      : [ "DeepSkyBlue2", "",  ""],
             \   "snipVarExpansion"             : [ "DeepSkyBlue1", "",  ""],
             \   "snipVarPythonCommand"         : [ "Tomato", "",  ""],
+            \   "syntasticErrorSign"           : [ "Tomato", "",  ""],
+            \   "syntasticStyleErrorSign"      : [ "Tomato", "", "italic"],
+            \   "syntasticStyleWarningSign"    : [ "LightGray", "", "italic"],
             \   "tabLine"                      : [ "CornflowerBlue", "Gray26",  "italic"],
             \   "tabLineClose"                 : [ "CornflowerBlue",    "Gray26",           "bold"],
             \   "tabLineFill"                  : [ "CornflowerBlue", "Gray20",  "underline"],
@@ -2527,10 +2647,10 @@ if !exists("s:dict_hi_other_plugins")
             \   "tabManHSpecial"               : [ "LightSeaGreen", "",  "italic"],
             \   "tabManCurTName"               : [ "LightSeaGreen", "", "italic,undercurl"],
             \   "tabManTName"                  : [ "LightSeaGreen", "",  "italic"],
-            \   "tagListComment"               : [ "CadetBlue", "bg",  ""],
-            \   "tagListFileName"              : [ "SeaGreen3", "#473273", "bold,italic"],
+            \   "tagListComment"               : [ "LightSlateGray", "",  ""],
+            \   "tagListFileName"              : [ "RoyalBlue", "", "bold,italic"],
             \   "tagListTagScope"              : [ "CadetBlue",  "",  ""],
-            \   "tagListTitle"                 : [ "SeaGreen3",  "#1C3644",  "bold,italic"],
+            \   "tagListTitle"                 : [ "SkyBlue2",  "",  "bold,italic"],
             \   "vimCommanderFile"             : [ "#00B880",  "",  ""],
             \   "vimCommanderPath"             : [ "Green2", "#1E4959",  "italic"],
             \ }
@@ -2539,27 +2659,27 @@ endif
 " XML and DTD                                                                             {{{2
 if !exists("s:dict_hi_xml")
         let s:dict_hi_xml = {
-            \   "dtdFunction"                : [ "SlateGray4", "",  "bold"],
-            \   "dtdTag"                     : [ "#cda8c9", "",  "italic"],
-            \   "xmlAttrib"                  : [ "#7EB49C", "", ""],
-            \   "xmlCDATA"                   : [ "PaleGreen2", "DarkSlateGrey",  "bold,italic"],
-            \   "xmlCDATAcdata"              : [ "Khaki4", "DarkSlateGrey",  "italic"],
-            \   "xmlCDATAend"                : [ "Khaki4", "DarkSlateGrey",  "italic"],
-            \   "xmlCDATAstart"              : [ "Khaki4", "DarkSlateGrey",  "italic"],
-            \   "xmlComment"                 : [ "#CC4455",      "",  "italic"],
-            \   "xmlCommentStart"            : [ "#CC4455",      "",  "italic"],
-            \   "xmlDocType"                 : [ "#cda8c9", "",  "italic"],
-            \   "xmlDocTypeDecl"             : [ "SlateGray3", "",  ""],
-            \   "xmlDocTypeKeyword"          : [ "SlateGray3", "",  "italic"],
-            \   "xmlEndTag"                  : [ "SlateGray4", "", "bold"],
-            \   "xmlEntityPunct"             : [ "#00B880","",""],
-            \   "xmlEqual"                   : [ "#00B780","","bold"],
-            \   "xmlNameSpace"               : [ "#00B880","","italic"],
-            \   "xmlProcessingDelim"         : [ "#CC4455", "",  ""],
-            \   "xmlString"                  : [ "#7C9DD4", "",  "italic"],
-            \   "xmlTag"                     : [ "SlateGray3", "", ""],
-            \   "xmlTagName"                 : [ "SlateGray3", "", ""],
-            \   "xmlValue"                   : [ "Navy", "#BDCA51",  "italic"],
+            \   "dtdFunction"                : [ "SlateGray4",  "",               "bold"],
+            \   "dtdTag"                     : [ "#CDA8C9",     "",               "italic"],
+            \   "xmlAttrib"                  : [ "#7EB49C",     "",               ""],
+            \   "xmlAttribPunct"             : [ "ForestGreen", "",               ""],
+            \   "xmlCDATA"                   : [ "DarkKhaki",   "DarkSlateGrey",  "italic"],
+            \   "xmlCDATAcdata"              : [ "Khaki4",      "DarkSlateGrey",  "italic"],
+            \   "xmlCDATAend"                : [ "Khaki4",      "DarkSlateGrey",  "bold,italic"],
+            \   "xmlCDATAstart"              : [ "Khaki4",      "DarkSlateGrey",  "bold,italic"],
+            \   "xmlComment"                 : [ "#CC4455",     "",               "italic"],
+            \   "xmlCommentStart"            : [ "#CC4455",     "",               "italic"],
+            \   "xmlDocType"                 : [ "#CDA8C9",     "",               "italic"],
+            \   "xmlDocTypeDecl"             : [ "SlateGray3",  "",               ""],
+            \   "xmlDocTypeKeyword"          : [ "SlateGray3",  "",               "italic"],
+            \   "xmlEndTag"                  : [ "SlateGray4",  "",               "bold"],
+            \   "xmlEntityPunct"             : [ "#00B880",     "",               ""],
+            \   "xmlNameSpace"               : [ "#00B880",     "",               "italic"],
+            \   "xmlProcessingDelim"         : [ "#CC4455",     "",               ""],
+            \   "xmlString"                  : [ "#7C9DD4",     "",               "italic"],
+            \   "xmlTag"                     : [ "SlateGray3",  "",               ""],
+            \   "xmlTagName"                 : [ "SlateGray3",  "",               ""],
+            \   "xmlValue"                   : [ "Navy",        "#BDCA51",        "italic"],
             \ }
 endif
 
@@ -2584,14 +2704,16 @@ endif
 if !exists("s:dict_hi_manpage")
         let s:dict_hi_manpage = {
             \   "manReference"              : [ "PaleGreen1", "",  "underline"],
-            \   "manSectionHeading"         : [ "LimeGreen",  "",  "bold"],
+            \   "manSectionHeading"         : [ "LimeGreen",  "",  "italic"],
             \   "manSubHeading"             : [ "Green2",     "",   "italic"],
-            \   "manTitle"                  : [ "Brown2",     "",  "bold"],
+            \   "manTitle"                  : [ "Brown2",     "",  "italic"],
+            \   "nroffComment"				: [ "#5D8B9C","","italic"],
             \   "nroffEscape"				: [ "#00B880","","bold"],
-            \   "nroffEscRegArg"			: [ "AquaMarine", "#880C0E",  "bold"],
-            \   "nroffIdent"				: [ "SkyBlue3", "",  "underline"],
-            \   "nroffRequest"				: [ "SeaGreen3", "",  "bold"],
-            \   "nroffSpecialChar"			: [ "AquaMarine", "#880C0E",  ""],
+            \   "nroffEscRegArg"			: [ "#71D3B4", "",  ""],
+            \   "nroffIdent"				: [ "#C59F6F", "",  ""],
+            \   "nroffReqLeader"			: [ "LimeGreen", "",  "bold"],
+            \   "nroffRequest"				: [ "SeaGreen3", "",  ""],
+            \   "nroffSpecialChar"			: [ "DeepSkyBlue2", "",  ""],
             \   }
 endif
 
@@ -2695,9 +2817,7 @@ if !exists("s:dict_hi_other")
             \   "Definition"                   : [ "#f8ed97", "",  ""],
             \   "Delimiter"                    : [ "#779DB2", "",  "bold"],
             \   "Directory"                    : [ "DarkOliveGreen2", "",  "bold"],
-            \   "Entity"                       : [ "#F4E891", "CadetBlue4",  ""],
-            \   "Error"                        : [ "Linen", "DarkRed",  "bold"],
-            \   "errorMsg"                     : [ "LightGoldenRod", "Firebrick",  ""],
+            \   "Entity"                       : [ "#F4E891",   "CadetBlue4",  ""],
             \   "Exception"                    : [ "SeaGreen2", "",  ""],
             \   "Float"                        : [ "Aquamarine2", "",  ""],
             \   "Function"                     : [ "Turquoise3", "",  ""],
@@ -2730,6 +2850,7 @@ if !exists("s:dict_hi_other")
             \   "signColor"                    : [ "#C59F6F", "bg", "" ],
             \   "signColumn"                   : [ "PaleGoldenrod", "#0e2628",  ""],
             \   "specialChar"                  : [ "#88CB35", "",  ""],
+            \   "SpecialComment"               : [ "LightBlue3", "",  "italic"],
             \   "specialKey"                   : [ "#869BCC", "",  "italic"],
             \   "Statement"                    : [ "#009F6F", "", ""],
             \   "storageClass"                 : [ "#c59f6f", "",  ""],
@@ -2740,7 +2861,7 @@ if !exists("s:dict_hi_other")
             \   "Tag"                          : [ "#88CB35", "",  ""],
             \   "Test"                         : [ "#88AEB2", "",  "italic"],
             \   "Title"                        : [ "#009F6F", "", "bold,italic"],
-            \   "Todo"                         : [ "Wheat2", "Maroon4",  ""],
+            \   "Todo"                         : [ "LemonChiffon2", "DeepSkyBlue4",  ""],
             \   "Type"                         : [ "DeepSkyBlue2", "",  ""],
             \   "Typedef"                      : [ "DeepSkyBlue2", "",  ""],
             \   "Underlined"                   : [ "SkyBlue2", "",  "underline"],
@@ -2802,6 +2923,8 @@ highlight SpellBad             guifg=fg         guibg=bg      gui=undercurl     
 highlight SpellCap             guifg=fg         guibg=bg      gui=undercurl      guisp=#CCFFCC
 highlight SpellLocal           guifg=fg         guibg=bg      gui=undercurl      guisp=fg
 highlight SpellRare            guifg=fg         guibg=bg      gui=undercurl      guisp=#C59F6F
+highlight SyntasticError       guifg=fg         guibg=bg      gui=undercurl      guisp=Tomato
+highlight SyntasticWarning     guifg=fg         guibg=bg      gui=undercurl      guisp=LightGray
 
 " special case
 "highlightnetrwList            guifg=FireBrick3 guibg=NONE    gui=undercurl      guisp=LightRed
@@ -2811,24 +2934,41 @@ highlight netrwList            guifg=FireBrick3 guibg=NONE    gui=NONE          
 
 " Begin Main Flow:                                                                              {{{1
 
+if exists("g:briofita_parms")
+    if  has_key(g:briofita_parms,'localcursorline')
+        if g:briofita_parms.localcursorline
+            if  (exists('t:briofita_cursorline'))
+                "if t:briofita_cursorline != g:briofita_parms.cursorline
+                    if has_key(s:dic_cf_options,'cursorline')
+                        if t:briofita_cursorline != s:dic_cf_options.cursorline[0]
+                            " local setting prevails
+                            let g:briofita_parms.cursorline = t:briofita_cursorline
+                        endif
+                    endif
+                "endif
+            else
+                " correcting user error: the t:var HAS TO exist in this case
+                " so, we here move the corresponding g:var into the t:var;
+                " when there is no corresponding g:var, default(0) is moved
+                if !has_key(g:briofita_parms,'cursorline')
+                        let g:briofita_parms['cursorline'] = 0
+                endif
+                let t:briofita_cursorline = g:briofita_parms.cursorline
+            endif
+        endif
+    endif
+endif
+
 call s:ParseAllSyntaxes(s:lst_dict_hi)
 
 " get the options set by the user (external parameters)
 call s:GetUserOptions()
 
-" Set No Distraction Mode Highlights:                                                     {{{2
-if (s:dic_cf_options.nodistractionmode[0]) && (exists("t:briofita_nodistractionmode"))
-    " two conditions: (1) the dict enables ND mode; and,
-    "                 (2) the t:var for ND is set for the curr tabpage
-    call s:HighlightNoDistrMode()
-
-else " this (*BEGINs the ELSE branch (normal operations mode)
-
 " Set Common Highlights:                                                                  {{{1
 
 " Set each highlight per options dictionary
 for key in keys(s:dic_hi_options)
-    if has_key(s:dic_cf_options,key)
+    if  has_key(s:dic_cf_options,key)
         execute 'let maxix  = s:dic_cf_options.' . key . '[1]'
         execute 'let kvalue = s:dic_cf_options.' . key . '[0]'
         if (maxix == 1)     " first case: "boolean" options
@@ -2843,8 +2983,6 @@ for key in keys(s:dic_hi_options)
         endif
     endif
 endfor
-
-endif " this ENDs*) the ELSE branch (normal operations mode)
 
 "
 " Restore Cpo And Set Guicursor:                                                          {{{1

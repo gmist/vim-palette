@@ -1,7 +1,8 @@
 " Vim Color File
 " Name:       pencil.vim
-" Version:    0.4
+" Version:    0.6
 " Maintainer: github.com/reedes github.com/mattly
+" License:    The MIT License (MIT)
 
 " Original iA Writer colors, to use as a guide
 " White           #F1F1F1
@@ -40,6 +41,10 @@ if ! exists("g:pencil_higher_contrast_ui")
   let g:pencil_higher_contrast_ui = 0
 endif
 
+if ! exists("g:pencil_neutral_headings")
+  let g:pencil_neutral_headings = 0
+endif
+
 " Colors
 let s:black           = { "gui": "#212121", "cterm": "0"   }
 let s:medium_gray     = { "gui": "#767676", "cterm": "243" }
@@ -47,7 +52,9 @@ let s:white           = { "gui": "#F1F1F1", "cterm": "15"  }
 let s:actual_white    = { "gui": "#FFFFFF", "cterm": "231" }
 let s:light_black     = { "gui": "#424242", "cterm": "8"   }
 let s:lighter_black   = { "gui": "#545454", "cterm": "240" }
-if g:pencil_higher_contrast_ui == 0
+
+if g:pencil_higher_contrast_ui == 1
+  " darker shadow and whiter grays
   let s:subtle_black  = { "gui": "#262626", "cterm": "235" }
   let s:light_gray    = { "gui": "#D9D9D9", "cterm": "253" }
   let s:lighter_gray  = { "gui": "#E5E6E6", "cterm": "254" }
@@ -58,7 +65,8 @@ else
 endif
 
 let s:pink            = { "gui": "#fb007a", "cterm": "9"   }
-let s:red             = { "gui": "#C30771", "cterm": "1"   }
+let s:dark_red        = { "gui": "#C30771", "cterm": "1"   }
+let s:light_red       = { "gui": "#E32791", "cterm": "1"   }
 let s:orange          = { "gui": "#D75F5F", "cterm": "167" }
 
 let s:darker_blue     = { "gui": "#005F87", "cterm": "18"  }
@@ -86,7 +94,8 @@ if &background == "dark"
   let s:purple          = s:light_purple
   let s:cyan            = s:light_cyan
   let s:green           = s:light_green
-  let s:visual          = s:light_black
+  let s:red             = s:light_red
+  let s:visual          = s:lighter_black
 else
   let s:bg              = s:white
   let s:bg_subtle       = s:light_gray
@@ -96,7 +105,18 @@ else
   let s:purple          = s:dark_purple
   let s:cyan            = s:dark_cyan
   let s:green           = s:dark_green
+  let s:red             = s:dark_red
   let s:visual          = s:light_blue
+endif
+
+if g:pencil_neutral_headings == 1
+  let s:head_a         = s:norm
+  let s:head_b         = s:norm
+  let s:head_c         = s:norm
+else
+  let s:head_a         = s:dark_blue
+  let s:head_b         = s:blue
+  let s:head_c         = s:dark_cyan
 endif
 
 " shamelessly stolen from hemisu: https://github.com/noahfrederick/vim-hemisu/
@@ -164,7 +184,7 @@ call s:h("Todo",          {"fg": s:actual_white, "bg": s:pink, "gui": "bold", "c
 
 call s:h("SpecialKey",    {"fg": s:light_green})
 call s:h("NonText",       {"fg": s:medium_gray})
-call s:h("Directory",     {"fg": s:blue})
+call s:h("Directory",     {"fg": s:dark_blue})
 call s:h("ErrorMsg",      {"fg": s:pink})
 call s:h("IncSearch",     {"bg": s:yellow, "fg": s:light_black})
 call s:h("Search",        {"bg": s:bg_subtle})
@@ -190,10 +210,10 @@ call s:h("DiffText",      {"fg": s:dark_blue})
 call s:h("SignColumn",    {"fg": s:light_green})
 " hi Conceal
 if has("gui_running")
-  call s:h("SpellBad",    {"gui": "undercurl", "sp": s:red})
-  call s:h("SpellCap",    {"gui": "undercurl", "sp": s:light_green})
-  call s:h("SpellRare",   {"gui": "undercurl", "sp": s:pink})
-  call s:h("SpellLocal",  {"gui": "undercurl", "sp": s:dark_green})
+  call s:h("SpellBad",    {"gui": "underline", "sp": s:red})
+  call s:h("SpellCap",    {"gui": "underline", "sp": s:light_green})
+  call s:h("SpellRare",   {"gui": "underline", "sp": s:pink})
+  call s:h("SpellLocal",  {"gui": "underline", "sp": s:dark_green})
 else
   call s:h("SpellBad",    {"cterm": "underline", "fg": s:red})
   call s:h("SpellCap",    {"cterm": "underline", "fg": s:light_green})
@@ -212,7 +232,7 @@ call s:h("CursorLine",    {"bg": s:bg_very_subtle})
 call s:h("ColorColumn",   {"bg": s:bg_subtle})
 
 " remainder of syntax highlighting
-call s:h("MatchParen",    {"bg": s:pink, "fg": s:norm})
+call s:h("MatchParen",    {"bg": s:bg_subtle, "fg": s:norm})
 call s:h("qfLineNr",      {"fg": s:medium_gray})
 
 " hi helpHyperTextJump guifg=#5FAFD7 ctermfg=74
@@ -229,38 +249,52 @@ hi! link htmlTagN         Keyword
 call s:h("htmlItalic",    {"gui": "italic", "cterm": "bold"})
 call s:h("htmlBold",      {"gui": "bold", "cterm": "bold"})
 call s:h("htmlBoldItalic",{"gui": "bold,italic", "cterm": "bold"})
-call s:h("htmlH1",        {"fg": s:dark_blue})
-call s:h("htmlH2",        {"fg": s:dark_blue})
-call s:h("htmlH3",        {"fg": s:blue})
-call s:h("htmlH4",        {"fg": s:blue})
-call s:h("htmlH5",        {"fg": s:dark_cyan})
-call s:h("htmlH6",        {"fg": s:dark_cyan})
+call s:h("htmlH1",        {"fg": s:head_a, "gui": "bold,italic"})
+call s:h("htmlH2",        {"fg": s:head_a, "gui": "bold"})
+call s:h("htmlH3",        {"fg": s:head_b, "gui": "italic"})
+call s:h("htmlH4",        {"fg": s:head_b, "gui": "italic"})
+call s:h("htmlH5",        {"fg": s:head_c})
+call s:h("htmlH6",        {"fg": s:head_c})
 call s:h("htmlLink",      {"fg": s:blue, "gui": "underline", "cterm": "underline"})
 " hi htmlString     guifg=#87875f guibg=NONE gui=NONE        ctermfg=101 ctermbg=NONE cterm=NONE
 
-" Markdown content
-call s:h("markdownH1",                  {"fg": s:dark_blue, "gui": "bold,italic"})
-call s:h("markdownH2",                  {"fg": s:dark_blue, "gui": "bold"})
-call s:h("markdownH3",                  {"fg": s:dark_blue, "gui": "italic"})
-call s:h("markdownH4",                  {"fg": s:dark_blue, "gui": "italic"})
-call s:h("markdownH5",                  {"fg": s:dark_blue})
-call s:h("markdownH6",                  {"fg": s:dark_blue})
+" tpope/vim-markdown
+call s:h("markdownBlockquote",          {"fg": s:medium_gray})
 call s:h("markdownCodeDelimiter",       {"fg": s:norm})
+call s:h("markdownH1",                  {"fg": s:head_a, "gui": "bold,italic"})
+call s:h("markdownH2",                  {"fg": s:head_a, "gui": "bold"})
+call s:h("markdownH3",                  {"fg": s:head_a, "gui": "italic"})
+call s:h("markdownH4",                  {"fg": s:head_a, "gui": "italic"})
+call s:h("markdownH5",                  {"fg": s:head_a})
+call s:h("markdownH6",                  {"fg": s:head_a})
 call s:h("markdownHeadingDelimiter",    {"fg": s:norm})
 call s:h("markdownHeadingRule",         {"fg": s:norm})
-call s:h("markdownRule",                {"fg": s:norm})
 call s:h("markdownId",                  {"fg": s:norm})
 call s:h("markdownIdDeclaration",       {"fg": s:norm_subtle})
+call s:h("markdownLinkDelimiter",       {"fg": s:medium_gray})
 call s:h("markdownLinkText",            {"fg": s:norm})
 call s:h("markdownLinkTextDelimiter",   {"fg": s:medium_gray})
 call s:h("markdownListMarker",          {"fg": s:norm})
-call s:h("markdownLinkDelimiter",       {"fg": s:medium_gray})
+call s:h("markdownOrderedListMarker",   {"fg": s:norm})
+call s:h("markdownRule",                {"fg": s:norm})
 call s:h("markdownUrl",                 {"fg": s:medium_gray, "gui": "underline", "cterm": "underline"})
 call s:h("markdownUrlDelimiter",        {"fg": s:medium_gray})
 call s:h("markdownUrlTitle",            {"fg": s:norm})
 call s:h("markdownUrlTitleDelimiter",   {"fg": s:medium_gray})
-call s:h("markdownOrderedListMarker",   {"fg": s:norm})
-call s:h("markdownBlockquote",          {"fg": s:medium_gray})
+
+" plasticboy/vim-markdown
+call s:h("mkdBlockQuote",               {"fg": s:norm})
+call s:h("mkdCode",                     {"fg": s:norm})
+call s:h("mkdDelimiter",                {"fg": s:medium_gray})
+call s:h("mkdID",                       {"fg": s:norm})
+call s:h("mkdIndentCode",               {"fg": s:norm})
+call s:h("mkdLineContinue",             {"fg": s:norm})
+call s:h("mkdLink",                     {"fg": s:norm})
+call s:h("mkdLinkDef",                  {"fg": s:norm})
+call s:h("mkdListItem",                 {"fg": s:norm})
+call s:h("mkdNonListItemBlock",         {"fg": s:norm})
+call s:h("mkdRule",                     {"fg": s:norm})
+call s:h("mkdUrl",                      {"fg": s:medium_gray, "gui": "underline", "cterm": "underline"})
 
 " XML content
 hi! link xmlTag                     htmlTag

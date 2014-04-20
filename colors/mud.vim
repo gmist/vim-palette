@@ -1,50 +1,105 @@
-" Vim color file
-" Maintainer: iyerns <iyerns AT gmail DOT com>
-" Last Change: 25 August 2005
-" Version:1.0
+" ======================================================================
+" Mud
+" ======================================================================
+" A Sublime Text 2 / Textmate theme.
+" Copyright (c) 2014 Dayle Rees.
+" Released under the MIT License <http://opensource.org/licenses/MIT>
+" ======================================================================
+" Find more themes at : https://github.com/daylerees/colour-schemes
+" ======================================================================
 
-
-set background=light
+set background=dark
 hi clear
-if exists("syntax_on")
-	syntax reset
-endif
-let g:colors_name="mud"
+syntax reset
 
-hi Normal   guifg=#ffffcc	 guibg=#330000 
-hi LineNr   guifg=white guibg=#330000 
-hi Statusline    gui=none guibg=#993300 guifg=#ffffff
-hi StatuslineNC    gui=none guibg=#660000 guifg=#ffffff
-hi VertSplit    gui=none guibg=#330000 guifg=#ffffff
-hi Cursor    gui=none guibg=DodgerBlue guifg=#ffffff
+" Colors for the User Interface.
 
-hi Title    guifg=black	 guibg=white gui=BOLD
-hi lCursor  guibg=Cyan   guifg=NONE
+hi Cursor      guibg=#cc4455  guifg=white     ctermbg=4 ctermfg=15
+hi link CursorIM Cursor
+hi Normal      guibg=#403635  guifg=#ffffff    gui=none ctermbg=0 ctermfg=15
+hi NonText     guibg=bg  guifg=#ffffff   ctermbg=8 ctermfg=14
+hi Visual      guibg=#557799  guifg=white    gui=none ctermbg=9 ctermfg=15
 
-" syntax highlighting groups
-hi Comment    gui=NONE guifg=#996666
-hi Operator   guifg=#ff0000
+hi Linenr      guibg=bg       guifg=#aaaaaa  gui=none ctermbg=bg ctermfg=7
 
-hi Identifier    guifg=#33ff99 gui=NONE
+hi Directory   guibg=bg       guifg=#337700  gui=none ctermbg=bg ctermfg=10
 
-hi Statement	 guifg=#cc9966 gui=NONE
-hi TypeDef       guifg=#c000c8 gui=NONE
-hi Type          guifg=#ccffff gui=NONE
-hi Boolean       guifg=#ff00aa gui=NONE
+hi IncSearch   guibg=#0066cc  guifg=white    gui=none ctermbg=1 ctermfg=15
+hi link Seach IncSearch
 
-hi String        guifg=#99ccff gui=NONE
-hi Number        guifg=#66ff66 gui=NONE
-hi Constant      guifg=#f0f000 gui=NONE
+hi SpecialKey  guibg=bg guifg=fg       gui=none ctermbg=bg ctermfg=fg
+hi Titled      guibg=bg guifg=fg       gui=none ctermbg=bg ctermfg=fg
 
-hi Function      gui=NONE      guifg=#fffcfc 
-hi PreProc       guifg=#cc6600 gui=NONE
-hi Define        gui=bold guifg=#f0f0f0 
-hi Special       gui=none guifg=#cccccc 
-hi BrowseDirectory  gui=none guifg=#FFFF00 
+hi ErrorMsg    guibg=bg guifg=#ff0000   ctermbg=bg ctermfg=12
+hi ModeMsg     guibg=bg guifg=#ffeecc  gui=none ctermbg=bg ctermfg=14
+hi link  MoreMsg     ModeMsg
+hi Question    guibg=bg guifg=#e9c865   ctermbg=bg ctermfg=10
+hi link  WarningMsg  ErrorMsg
 
-hi Keyword       guifg=#ff8088 gui=NONE
-hi Search        gui=NONE guibg=#ffff00 guifg=#330000 
-hi IncSearch     gui=NONE guifg=#fcfcfc guibg=#8888ff
-hi SpecialKey    gui=NONE guifg=#fcfcfc guibg=#8888ff
-hi NonText       gui=NONE guifg=#fcfcfc 
-hi Directory     gui=NONE guifg=#999900
+hi StatusLine     guibg=#ffeecc  guifg=black     ctermbg=14 ctermfg=0
+hi StatusLineNC   guibg=#cc4455  guifg=white    gui=none ctermbg=4  ctermfg=11
+hi VertSplit      guibg=#cc4455  guifg=white    gui=none ctermbg=4  ctermfg=11
+
+hi DiffAdd     guibg=#446688  guifg=fg    gui=none ctermbg=1 ctermfg=fg
+hi DiffChange  guibg=#558855  guifg=fg    gui=none ctermbg=2 ctermfg=fg
+hi DiffDelete  guibg=#884444  guifg=fg    gui=none ctermbg=4 ctermfg=fg
+hi DiffText    guibg=#884444  guifg=fg     ctermbg=4 ctermfg=fg
+
+" Colors for Syntax Highlighting.
+
+hi Comment  guibg=bg  guifg=#c3b8b7  gui=none    ctermbg=8   ctermfg=7
+
+hi Constant    guibg=bg    guifg=white        ctermbg=8   ctermfg=15
+hi String      guibg=bg    guifg=#b5db99    ctermbg=bg  ctermfg=14
+hi Character   guibg=bg    guifg=#FF9787      ctermbg=bg  ctermfg=14
+hi Number      guibg=bg    guifg=#b5db99      ctermbg=1   ctermfg=15
+hi Boolean     guibg=bg    guifg=#b5db99  gui=none    ctermbg=1   ctermfg=15
+hi Float       guibg=bg    guifg=#b5db99      ctermbg=1   ctermfg=15
+
+hi Identifier  guibg=bg    guifg=#ffffff      ctermbg=bg  ctermfg=12
+hi Function    guibg=bg    guifg=#FF9787      ctermbg=bg  ctermfg=12
+hi Statement   guibg=bg    guifg=#FF9787      ctermbg=bg  ctermfg=14
+
+hi Conditional guibg=bg    guifg=#FF9787      ctermbg=bg  ctermfg=12
+hi Repeat      guibg=bg    guifg=#FF9787      ctermbg=4   ctermfg=14
+hi Label       guibg=bg    guifg=#ffccff      ctermbg=bg   ctermfg=13
+hi Operator    guibg=bg    guifg=#FF9787      ctermbg=6   ctermfg=15
+hi Keyword     guibg=bg    guifg=#FF9787      ctermbg=bg  ctermfg=10
+hi Exception   guibg=bg    guifg=#FF9787      ctermbg=bg  ctermfg=10
+
+hi PreProc    guibg=bg   guifg=#ffcc99   ctermbg=4  ctermfg=14
+hi Include    guibg=bg   guifg=#e9c865   ctermbg=bg ctermfg=10
+hi link Define    Include
+hi link Macro     Include
+hi link PreCondit Include
+
+hi Type       guibg=bg   guifg=#e9c865      ctermbg=bg  ctermfg=12
+hi StorageClass   guibg=bg   guifg=#FF9787      ctermbg=bg  ctermfg=10
+hi Structure      guibg=bg   guifg=#ffffff      ctermbg=bg  ctermfg=10
+hi Typedef    guibg=bg   guifg=#e9c865    ctermbg=bg  ctermfg=10
+
+hi Special    guibg=bg   guifg=#bbddff      ctermbg=1   ctermfg=15
+hi SpecialChar    guibg=bg   guifg=#bbddff      ctermbg=1   ctermfg=15
+hi Tag        guibg=bg   guifg=#bbddff      ctermbg=1   ctermfg=15
+hi Delimiter      guibg=bg   guifg=fg       ctermbg=1   ctermfg=fg
+hi SpecialComment guibg=#334455  guifg=#e3d7d6    ctermbg=1   ctermfg=15
+hi Debug      guibg=bg   guifg=#ff9999  gui=none    ctermbg=8   ctermfg=12
+
+hi Underlined guibg=bg guifg=#99ccff gui=underline ctermbg=bg ctermfg=9 cterm=underline
+
+hi Title    guibg=bg  guifg=#ffffff        ctermbg=1   ctermfg=15
+hi Ignore   guibg=bg       guifg=#cccccc    ctermbg=bg  ctermfg=8
+hi Error    guibg=#ff0000  guifg=white        ctermbg=12  ctermfg=15
+hi Todo     guibg=#556677  guifg=#ff0000      ctermbg=1   ctermfg=12
+
+hi htmlH2 guibg=bg guifg=fg  ctermbg=8 ctermfg=fg
+hi link htmlH3 htmlH2
+hi link htmlH4 htmlH3
+hi link htmlH5 htmlH4
+hi link htmlH6 htmlH5
+
+" And finally.
+
+let g:colors_name = "Mud"
+let colors_name   = "Mud"
+

@@ -18,7 +18,7 @@ get_html = (link, cb) ->
       throw err
     cb null, html
 
-download_vim_org = (scheme, cb) ->
+download_scheme = (scheme, cb) ->
   req = request(scheme.download_link)
   req.on "response", (resp) ->
     filename = resp.headers['content-disposition']
@@ -132,7 +132,7 @@ async.auto
     (next, res) ->
       schemes = res.get_download_links
       console.log "Prepare to downloading #{schemes.length} schemes"
-      async.map schemes, download_vim_org, (err, res) ->
+      async.map schemes, download_scheme, (err, res) ->
         flat = {}
         for files in res
           for file in files
@@ -162,7 +162,7 @@ async.auto
                   github_base_url, link.replace('/blob', '')].join('')
                 scheme['name'] = link.split('/').pop()
                 github_schemes.push scheme
-          async.map github_schemes, download_vim_org, (err, github_schemes) ->
+          async.map github_schemes, download_scheme, (err, github_schemes) ->
             flat = {}
             for scheme in github_schemes
               for k, v of scheme

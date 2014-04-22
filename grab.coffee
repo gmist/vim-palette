@@ -5,11 +5,11 @@ fs = require 'fs'
 path = require 'path'
 request = require 'request'
 
-max_schemes = 1000
-vim_base_url="http://www.vim.org/"
 github_base_url = "https://raw.githubusercontent.com"
-schemes_url = """#{vim_base_url}scripts/script_search_results.php?
-&script_type=color%20scheme&show_me=#{max_schemes}"""
+vim_max_schemes = 1000
+vim_base_url="http://www.vim.org/"
+vim_search_schemes_url = """#{vim_base_url}scripts/script_search_results.php?
+&script_type=color%20scheme&show_me=#{vim_max_schemes}"""
 
 get_html = (link, cb) ->
   request link, (err, resp, html) ->
@@ -67,7 +67,7 @@ download_scheme = (scheme, cb) ->
 
 async.auto
   get_pages_links: (next) ->
-    request schemes_url, (error, response, html) ->
+    request vim_search_schemes_url, (error, response, html) ->
       if error
         throw error
 

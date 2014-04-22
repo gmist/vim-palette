@@ -6,9 +6,9 @@ path = require 'path'
 request = require 'request'
 
 max_schemes = 1000
-base_url="http://www.vim.org/"
+vim_base_url="http://www.vim.org/"
 github_base_url = "https://raw.githubusercontent.com"
-schemes_url = """#{base_url}scripts/script_search_results.php?
+schemes_url = """#{vim_base_url}scripts/script_search_results.php?
 &script_type=color%20scheme&show_me=#{max_schemes}"""
 
 get_html = (link, cb) ->
@@ -90,7 +90,7 @@ async.auto
           switch index
             when 0
               name = el.text()
-              link = [base_url, el.find('a').attr('href')].join('')
+              link = [vim_base_url, el.find('a').attr('href')].join('')
             when 4 then description = el.text()
             else
         if name and link
@@ -117,7 +117,7 @@ async.auto
               switch index
                 when 0
                   download_link =
-                  [base_url, 'scripts/', $(@).find('a').attr('href')].join('')
+                  [vim_base_url, 'scripts/', $(@).find('a').attr('href')].join('')
                   download_name = $(@).find('a').text()
                   break
                 else

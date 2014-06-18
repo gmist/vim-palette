@@ -13,7 +13,7 @@
   "dependencies": {
     "request": "latest",
     "cheerio": "latest",
-    "async": "latest",
-    "adm-zip": "latest"
+    "adm-zip": "latest",
+    "bluebird": "latest"
   }
 }

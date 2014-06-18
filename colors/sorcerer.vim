@@ -1,10 +1,11 @@
+
 " 'sorcerer.vim' -- Vim color scheme.
 " Maintainer:   Jeet Sukumaran
 " Based on 'Mustang' by Henrique C. Alves (hcarvalhoalves@gmail.com),
 
 set background=dark
 
-hi clear
+" hi clear
 
 if exists("syntax_on")
   syntax reset
@@ -15,11 +16,15 @@ let colors_name = "sorcerer"
 " GUI Colors {{{1
 " ============================================================================
 
-hi Normal       guifg=#c2c2b0 guibg=#222222 gui=NONE
-hi ColorColumn  guifg=NONE    guibg=#1c1c1c
+hi Normal       guifg=#c2c2b0 guibg=#202020 gui=NONE
+hi ColorColumn  guifg=NONE    guibg=#222222
 hi Cursor       guifg=NONE    guibg=#626262 gui=NONE
+hi nCursor     guifg=black   guibg=green1     gui=NONE
+hi vCursor     guifg=black   guibg=magenta    gui=NONE
+hi iCursor     guifg=black   guibg=LightCoral gui=NONE
+hi cCursor     gui=reverse
 hi CursorColumn guibg=#2d2d2d
-hi CursorLine   guibg=#2d2d2d
+hi CursorLine   guibg=#000000
 hi DiffAdd      guifg=#000000 guibg=#3cb371 gui=NONE
 hi DiffDelete   guifg=#000000 guibg=#aa4450 gui=NONE
 hi DiffChange   guifg=#000000 guibg=#4f94cd gui=NONE
@@ -42,7 +47,7 @@ hi PmenuSel     guifg=#000000 guibg=#b1d631
 
 hi Question     guifg=#00ee00 guibg=NONE    gui=bold
 hi Search       guifg=#000000 guibg=#d6e770 gui=bold
-hi SignColumn   guifg=#ffffff guibg=#cdcdb4 gui=NONE
+hi SignColumn   guifg=#ffffff guibg=#205050 gui=NONE
 hi SpecialKey   guifg=#505060 guibg=NONE    gui=NONE
 hi SpellBad     guisp=#ee2c2c gui=undercurl
 hi SpellCap     guisp=#0000ff gui=undercurl
@@ -103,10 +108,10 @@ hi link pythonDecoratorFunction pythonDecorator
 " 256 Colors {{{1
 " ============================================================================
 hi Normal                 cterm=NONE             ctermbg=235   ctermfg=145
-hi ColorColumn            cterm=NONE             ctermbg=16   ctermfg=fg
+hi ColorColumn            cterm=NONE             ctermbg=237   ctermfg=fg
 hi Cursor                 cterm=NONE             ctermbg=241   ctermfg=fg
 hi CursorColumn           cterm=NONE             ctermbg=16   ctermfg=fg
-hi CursorLine             cterm=NONE             ctermbg=236   ctermfg=fg
+hi CursorLine             cterm=NONE             ctermbg=0
 hi DiffAdd                cterm=NONE             ctermbg=71    ctermfg=16
 hi DiffDelete             cterm=NONE             ctermbg=124    ctermfg=16
 hi DiffChange             cterm=NONE             ctermbg=68    ctermfg=16
@@ -126,7 +131,7 @@ hi PmenuSbar              cterm=NONE             ctermbg=250   ctermfg=fg
 hi PmenuSel               cterm=NONE             ctermbg=149   ctermfg=16
 hi Question               cterm=bold             ctermbg=bg    ctermfg=46
 hi Search                 cterm=bold             ctermbg=185   ctermfg=16
-hi SignColumn             cterm=NONE             ctermbg=187   ctermfg=231
+hi SignColumn             cterm=NONE             ctermbg=23   ctermfg=231
 hi SpecialKey             cterm=NONE             ctermbg=bg    ctermfg=59
 hi SpellBad               cterm=undercurl        ctermbg=bg    ctermfg=196
 hi SpellCap               cterm=undercurl        ctermbg=bg    ctermfg=21
@@ -203,3 +208,7 @@ hi lCursor                cterm=NONE             ctermbg=145   ctermfg=234
 hi nCursor                cterm=NONE             ctermbg=46    ctermfg=16
 hi vCursor                cterm=NONE             ctermbg=201   ctermfg=16
 " 1}}}
+
+" Set background again -- for some reason, this does not always 'take' {{{1
+set background=dark
+" }}}1

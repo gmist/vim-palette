@@ -41,7 +41,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 738 color schemes:
+Total of 739 color schemes:
 
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
@@ -61,7 +61,6 @@ Total of 738 color schemes:
 * [MountainDew.vim](http://www.vim.org/script.php?script_id=2191)
 * [Mustang.vim](http://www.vim.org/script.php?script_id=2758)
 * [PapayaWhip.vim](http://www.vim.org/script.php?script_id=591)
-* [README.md](https://raw.githubusercontent.com/sergey-vlasov/codeblocks-dark.vim/master/README.md)
 * [SlateDark.vim](http://www.vim.org/script.php?script_id=4757)
 * [Tomorrow-Night-Blue.vim](https://raw.githubusercontent.com/chriskempson/vim-tomorrow-theme/master/colors/Tomorrow-Night-Blue.vim)
 * [Tomorrow-Night-Bright.vim](https://raw.githubusercontent.com/chriskempson/vim-tomorrow-theme/master/colors/Tomorrow-Night-Bright.vim)
@@ -263,6 +262,8 @@ Total of 738 color schemes:
 * [dragon.vim](http://www.vim.org/script.php?script_id=3463)
 * [dual.vim](http://www.vim.org/script.php?script_id=2688)
 * [dubs.vim](http://www.vim.org/script.php?script_id=4468)
+* [dubs_green.vim](http://www.vim.org/script.php?script_id=4953)
+* [dubs_red.vim](http://www.vim.org/script.php?script_id=4952)
 * [dull.vim](http://www.vim.org/script.php?script_id=2764)
 * [dusk.vim](http://www.vim.org/script.php?script_id=758)
 * [dw_blue.vim](http://www.vim.org/script.php?script_id=3222)
@@ -566,6 +567,7 @@ Total of 738 color schemes:
 * [psclone.vim](http://www.vim.org/script.php?script_id=2831)
 * [pspad.vim](http://www.vim.org/script.php?script_id=2113)
 * [psql.vim](http://www.vim.org/script.php?script_id=952)
+* [purpledrop.vim](http://www.vim.org/script.php?script_id=4954)
 * [putty.vim](http://www.vim.org/script.php?script_id=629)
 * [pw.vim](http://www.vim.org/script.php?script_id=3170)
 * [pychimp.vim](http://www.vim.org/script.php?script_id=4071)
@@ -607,7 +609,6 @@ Total of 738 color schemes:
 * [scala.vim](http://www.vim.org/script.php?script_id=1780)
 * [scame.vim](http://www.vim.org/script.php?script_id=2831)
 * [scite.vim](http://www.vim.org/script.php?script_id=269)
-* [screen.png](https://raw.githubusercontent.com/sergey-vlasov/codeblocks-dark.vim/master/screen.png)
 * [sea.vim](http://www.vim.org/script.php?script_id=3222)
 * [sean.vim](http://www.vim.org/script.php?script_id=400)
 * [seashell.vim](http://www.vim.org/script.php?script_id=589)

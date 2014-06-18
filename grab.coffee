@@ -32,7 +32,6 @@ download_scheme_vim_org = (scheme) ->
           file.end()
         res = {}
         res[path.basename(filename)] = scheme.link
-        #res = [res]
         return res
       else if /\.zip$/.test filename
         return new Promise((resolve) ->
@@ -55,7 +54,6 @@ download_scheme_vim_org = (scheme) ->
             res = {}
             for file in files
               res[file] = scheme.link
-              #res.push el
             resolve res
         )
       else

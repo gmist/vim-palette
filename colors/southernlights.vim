@@ -2,7 +2,7 @@
 "
 " Name:        southernlights256.vim
 " Maintainer:  Jakson Aquino
-" Last Change: Sun Dec 08, 2013  01:44PM
+" Last Change: Wed Jul 02, 2014  02:28PM
 " License:     GNU/GPL
 "
 " Based on other color schemes. The starting point was 'torte'
@@ -31,9 +31,32 @@ if &t_Co < 256 && !has("gui_running")
     hi Function cterm=none ctermfg=cyan
     hi PreProc cterm=none ctermfg=lightblue
     hi Type cterm=none ctermfg=lightgreen
-    hi Pmenu	ctermfg=darkyellow	ctermbg=magenta
+    hi Pmenu	ctermfg=cyan	ctermbg=magenta
     hi PmenuSel	ctermfg=white	ctermbg=magenta
     hi Character cterm=none
+    hi SpellLocal ctermfg=black ctermbg=green
+    hi StatusLine	cterm=NONE ctermfg=white	ctermbg=gray
+    hi StatusLineNC	cterm=NONE ctermfg=black	ctermbg=gray
+    hi TabLineSel	cterm=NONE	ctermfg=white	ctermbg=gray
+    hi TabLine     	cterm=NONE	ctermfg=black	ctermbg=gray
+    hi TabLineFill      cterm=NONE	ctermfg=gray	ctermbg=black
+    hi diffFile ctermfg=cyan
+    hi diffAdded	ctermfg=green
+    hi diffRemoved	ctermfg=darkyellow
+    hi link wdiffOld diffRemoved
+    hi link wdiffNew diffAdded
+    hi mailQuoted1 ctermfg=green
+    hi mailQuoted2 ctermfg=cyan
+    hi mailQuoted3 ctermfg=darkcyan
+    hi mailQuoted4 ctermfg=blue
+    hi mailQuoted5 ctermfg=blue
+    hi mailQuoted6 ctermfg=blue
+    hi mailSignature ctermfg=darkcyan
+    hi SignColumn ctermfg=45 ctermbg=239 guifg=#00d7ff guibg=#4e4e4e
+    hi ShowMarksHLl ctermfg=yellow ctermbg=green
+    hi ShowMarksHLu ctermfg=yellow ctermbg=green
+    hi ShowMarksHLo ctermfg=yellow ctermbg=green
+    hi ShowMarksHLm ctermfg=yellow ctermbg=green
     finish
 endif
 
@@ -64,7 +87,6 @@ hi PmenuSbar    ctermbg=244      guibg=#808080
 hi PmenuThumb   ctermbg=251      guibg=#c6c6c6
 hi PreProc	ctermfg=201	ctermbg=NONE	guifg=#ff40ff
 hi Search	ctermfg=231	ctermbg=58	guifg=white	guibg=#5f5f00
-hi ShowMarksHLl	ctermfg=227	ctermbg=28	guifg=#ffff5f	guibg=#008700
 hi Special	ctermfg=221	guifg=#ffd75f
 hi SpecialKey	ctermfg=86	guifg=#00ffff
 hi SpellBad	ctermfg=196	ctermbg=NONE	cterm=UNDERLINE	guisp=red	gui=undercurl

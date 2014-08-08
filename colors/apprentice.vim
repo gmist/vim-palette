@@ -3,8 +3,6 @@
 " Essentially a streamlining and conversion to X11 colors of
 " 'sorcerer' by Jeet Sukumaran (jeetsukumaran@gmailcom)
 
-set background=dark
-
 hi clear
 
 if exists('syntax_on')
@@ -12,13 +10,18 @@ if exists('syntax_on')
 
 endif
 
+set background=dark
+
 let colors_name = 'apprentice'
 
 if &t_Co >= 256 || has('gui_running')
   hi Normal           ctermbg=235  ctermfg=250  guibg=#262626 guifg=#bcbcbc cterm=NONE           gui=NONE
+
+  set background=dark
+
   hi Comment          ctermbg=NONE ctermfg=240  guibg=NONE    guifg=#585858 cterm=NONE           gui=NONE
   hi Constant         ctermbg=NONE ctermfg=208  guibg=NONE    guifg=#ff8700 cterm=NONE           gui=NONE
-  hi Error            ctermbg=235  ctermfg=131  guibg=#262626 guifg=#af5f5f cterm=reverse        gui=reverse
+  hi Error            ctermbg=NONE ctermfg=131  guibg=NONE    guifg=#af5f5f cterm=reverse        gui=reverse
   hi Identifier       ctermbg=NONE ctermfg=67   guibg=NONE    guifg=#5f87af cterm=NONE           gui=NONE
   hi Ignore           ctermbg=NONE ctermfg=235  guibg=NONE    guifg=#262626 cterm=NONE           gui=NONE
   hi PreProc          ctermbg=NONE ctermfg=66   guibg=NONE    guifg=#5f8787 cterm=NONE           gui=NONE
@@ -101,9 +104,9 @@ else
   hi Statement        ctermbg=NONE        ctermfg=Cyan        cterm=NONE
   hi String           ctermbg=NONE        ctermfg=Green       cterm=NONE
   hi Todo             ctermbg=NONE        ctermfg=NONE        cterm=reverse
-  hi Type             ctermbg=NONE        ctermfg=DarkMagenta     cterm=bold
+  hi Type             ctermbg=NONE        ctermfg=Blue        cterm=bold
 
-  hi Error            ctermbg=Black       ctermfg=Red         cterm=reverse
+  hi Error            ctermbg=NONE        ctermfg=Red         cterm=reverse
   hi Ignore           ctermbg=NONE        ctermfg=NONE        cterm=NONE
   hi Underlined       ctermbg=NONE        ctermfg=Cyan        cterm=underline
 
@@ -132,7 +135,7 @@ else
   hi helpLeadBlank    ctermbg=NONE        ctermfg=NONE        cterm=NONE
   hi helpNormal       ctermbg=NONE        ctermfg=NONE        cterm=NONE
 
-  hi StatusLine       ctermbg=Cyan        ctermfg=Black       cterm=NONE
+  hi StatusLine       ctermbg=Yellow      ctermfg=Black       cterm=NONE
   hi StatusLineNC     ctermbg=Blue        ctermfg=Black       cterm=NONE
 
   hi Visual           ctermbg=White       ctermfg=Black       cterm=NONE
@@ -142,7 +145,7 @@ else
   hi Folded           ctermbg=Red         ctermfg=White       cterm=NONE
 
   hi VertSplit        ctermbg=Blue        ctermfg=Blue        cterm=NONE
-  hi WildMenu         ctermbg=Yellow      ctermfg=Black       cterm=NONE
+  hi WildMenu         ctermbg=Cyan        ctermfg=Black       cterm=NONE
 
   hi Function         ctermbg=NONE        ctermfg=Yellow      cterm=NONE
   hi SpecialKey       ctermbg=NONE        ctermfg=DarkGrey    cterm=bold
@@ -208,4 +211,3 @@ hi link diffNoEOL          WarningMsg
 hi link diffOnly           WarningMsg
 hi link diffRemoved        WarningMsg
 hi link diffAdded          String
-

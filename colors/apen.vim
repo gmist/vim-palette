@@ -1,6 +1,6 @@
 " Vim color file
-" Maintainer:	Pengkai Wang <pen@apk.me>
-" Last Change:	2013 Apr 7
+" Maintainer:	Pengkai Wang <pencay@gmail.com>
+" Last Change:	2014 Jun 20
 
 "come from Brackets, thanks.
 
@@ -75,3 +75,19 @@ hi Pmenu guifg=#CC0000 guibg=#404080
 hi PmenuSel guifg=#c0c0c0 guibg=#2050d0
 hi PmenuSbar guifg=blue guibg=darkgray
 hi PmenuThumb guifg=#c0c0c0
+
+
+hi CursorLine guibg=#d4f7ff 
+"hi CursorColumn guibg=#2d2d2d ctermbg=236 cterm=none
+hi MatchParen guifg=#f6f3e8 guibg=#CC0000 gui=bold 
+
+"hi Directory guifg=#FF3F3F guibg=# gui=NONE "目录名
+hi ErrorMsg guifg=#FF3F3F guibg=#EEEEEE gui=NONE "命令行上的错误信息
+hi TabLine guifg=#BBBBBB guibg=#36393B gui=NONE "非活动标签页标签
+hi TabLineFill guifg=grey20 guibg=#424546 gui=NONE "没有标签的地方
+hi Visual guifg=#FFFFFF guibg=#BB4C6A gui=NONE "可视模式的选择区
+
+hi Conditional guifg=#6084D8 guibg=NONE gui=NONE "if、then、else、endif、switch
+
+hi Label guifg=#AA57C4 gui=NONE "case、default 等
+

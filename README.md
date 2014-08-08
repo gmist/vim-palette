@@ -41,7 +41,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 739 color schemes:
+Total of 740 color schemes:
 
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
@@ -583,6 +583,7 @@ Total of 739 color schemes:
 * [rcg_gui.vim](http://www.vim.org/script.php?script_id=2073)
 * [rcg_term.vim](http://www.vim.org/script.php?script_id=2074)
 * [rdark-terminal.vim](http://www.vim.org/script.php?script_id=3202)
+* [rdark-terminal2.vim](http://www.vim.org/script.php?script_id=4970)
 * [rdark.vim](http://www.vim.org/script.php?script_id=1732)
 * [redblack.vim](http://www.vim.org/script.php?script_id=372)
 * [redstring.vim](http://www.vim.org/script.php?script_id=1570)

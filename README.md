@@ -41,14 +41,16 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 740 color schemes:
+Total of 742 color schemes:
 
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
 * [256-jungle.vim](http://www.vim.org/script.php?script_id=2240)
+* [256_darkdot.vim](http://www.vim.org/script.php?script_id=5009)
 * [3dglasses.vim](http://www.vim.org/script.php?script_id=2019)
 * [BlackSea.vim](http://www.vim.org/script.php?script_id=590)
 * [BusyBee.vim](http://www.vim.org/script.php?script_id=2549)
+* [C64.vim](http://www.vim.org/script.php?script_id=5015)
 * [CapsulaPigmentorum.vim](http://www.vim.org/script.php?script_id=3913)
 * [ChocolateLiquor.vim](http://www.vim.org/script.php?script_id=592)
 * [ChocolatePapaya.vim](http://www.vim.org/script.php?script_id=1922)

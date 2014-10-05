@@ -41,7 +41,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 742 color schemes:
+Total of 735 color schemes:
 
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
@@ -55,8 +55,6 @@ Total of 742 color schemes:
 * [ChocolateLiquor.vim](http://www.vim.org/script.php?script_id=592)
 * [ChocolatePapaya.vim](http://www.vim.org/script.php?script_id=1922)
 * [CodeFactoryv3.vim](http://www.vim.org/script.php?script_id=3079)
-* [ColorSchemeMenuMaker.vim](http://www.vim.org/script.php?script_id=2004)
-* [ColorSchemeSDK.vim](http://www.vim.org/script.php?script_id=2004)
 * [DevC++.vim](http://www.vim.org/script.php?script_id=1434)
 * [Dev_Delight.vim](http://www.vim.org/script.php?script_id=4439)
 * [IDLE.vim](http://www.vim.org/script.php?script_id=3609)
@@ -139,7 +137,6 @@ Total of 742 color schemes:
 * [borland.vim](http://www.vim.org/script.php?script_id=92)
 * [boxuk.vim](https://raw.githubusercontent.com/daylerees/colour-schemes/master/vim/colors/boxuk.vim)
 * [breeze.vim](http://www.vim.org/script.php?script_id=3222)
-* [briofita-support.vim](http://www.vim.org/script.php?script_id=4136)
 * [briofita.vim](http://www.vim.org/script.php?script_id=4136)
 * [brookstream.vim](http://www.vim.org/script.php?script_id=619)
 * [brown.vim](http://www.vim.org/script.php?script_id=227)
@@ -167,6 +164,7 @@ Total of 742 color schemes:
 * [carrot.vim](http://www.vim.org/script.php?script_id=1850)
 * [carvedwood.vim](http://www.vim.org/script.php?script_id=1417)
 * [carvedwoodcool.vim](http://www.vim.org/script.php?script_id=1426)
+* [cascadia.vim](http://www.vim.org/script.php?script_id=5026)
 * [chance-of-storm.vim](http://www.vim.org/script.php?script_id=3347)
 * [charged-256.vim](http://www.vim.org/script.php?script_id=2513)
 * [charon.vim](http://www.vim.org/script.php?script_id=1382)
@@ -192,12 +190,9 @@ Total of 742 color schemes:
 * [codeschool.vim](https://raw.githubusercontent.com/29decibel/codeschool-vim-theme/master/colors/codeschool.vim)
 * [coffee.vim](http://www.vim.org/script.php?script_id=552)
 * [coldgreen.vim](http://www.vim.org/script.php?script_id=2841)
-* [color_sample_pack.vim](http://www.vim.org/script.php?script_id=625)
 * [colorer.vim](http://www.vim.org/script.php?script_id=532)
 * [colorful.vim](http://www.vim.org/script.php?script_id=2267)
 * [colorful256.vim](http://www.vim.org/script.php?script_id=2034)
-* [colors-menu-russian.vim](http://www.vim.org/script.php?script_id=3222)
-* [colors-menu.vim](http://www.vim.org/script.php?script_id=3222)
 * [colorscheme_template.vim](http://www.vim.org/script.php?script_id=106)
 * [colorzone.vim](http://www.vim.org/script.php?script_id=2681)
 * [compot.vim](http://www.vim.org/script.php?script_id=3902)
@@ -462,7 +457,6 @@ Total of 742 color schemes:
 * [midnight2.vim](http://www.vim.org/script.php?script_id=424)
 * [miko.vim](http://www.vim.org/script.php?script_id=2452)
 * [milk.vim](http://www.vim.org/script.php?script_id=4533)
-* [mimicpak.vim](http://www.vim.org/script.php?script_id=2831)
 * [mint.vim](http://www.vim.org/script.php?script_id=1660)
 * [mintchoc.vim](https://raw.githubusercontent.com/daylerees/colour-schemes/master/vim/colors/mintchoc.vim)
 * [mirodark.vim](http://www.vim.org/script.php?script_id=3815)
@@ -687,7 +681,6 @@ Total of 742 color schemes:
 * [tchaba2.vim](http://www.vim.org/script.php?script_id=3272)
 * [tcsoft.vim](http://www.vim.org/script.php?script_id=641)
 * [telstar.vim](http://www.vim.org/script.php?script_id=1443)
-* [template.vim](http://www.vim.org/script.php?script_id=4820)
 * [termpot.vim](http://www.vim.org/script.php?script_id=4333)
 * [terse.vim](http://www.vim.org/script.php?script_id=3570)
 * [tesla.vim](http://www.vim.org/script.php?script_id=3035)
@@ -787,4 +780,3 @@ Total of 742 color schemes:
 * [zmrok.vim](http://www.vim.org/script.php?script_id=2592)
 
 - - -
-

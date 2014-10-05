@@ -25,7 +25,7 @@ download_scheme_vim_org = (scheme) ->
       filename = filename.replace /^attachment; filename=/, ''
       filename = path.join('./colors', filename)
       console.log """Downloading "#{filename}" color scheme"""
-      if /\.vim$/.test filename
+      if /\.vim$/i.test filename
         file = fs.createWriteStream(filename)
         file.once "open", ->
           file.write body
@@ -33,7 +33,7 @@ download_scheme_vim_org = (scheme) ->
         res = {}
         res[path.basename(filename)] = scheme.link
         return res
-      else if /\.zip$/.test filename
+      else if /\.zip$/i.test filename
         return new Promise((resolve) ->
           zfile = fs.createWriteStream(filename)
           zfile.once "open", ->
@@ -44,12 +44,16 @@ download_scheme_vim_org = (scheme) ->
             zipEntries = zip.getEntries()
             files = []
             zipEntries.forEach (zipEntry)->
-              if /\.vim$/.test zipEntry.entryName
-                entry_basename = path.basename(zipEntry.entryName)
-                if not fs.existsSync path.join('colors', entry_basename)
-                  console.log "Unpack #{zipEntry.entryName} from #{filename}"
-                  zip.extractEntryTo zipEntry.entryName, "colors/", false, true
-                  files.push entry_basename
+              if /\.vim$/i.test zipEntry.entryName
+                sp = zipEntry.entryName.split(path.sep)
+                if sp.length > 1 and sp[sp.length-2] != "colors"
+                  console.log "Skip, #{zipEntry.entryName} is not colorscheme"
+                else
+                  entry_basename = path.basename(zipEntry.entryName)
+                  if not fs.existsSync path.join('colors', entry_basename)
+                    console.log "Unpack #{zipEntry.entryName} from #{filename}"
+                    zip.extractEntryTo zipEntry.entryName, "colors/", false, true
+                    files.push entry_basename
             fs.unlink(filename)
             res = {}
             for file in files
@@ -60,7 +64,7 @@ download_scheme_vim_org = (scheme) ->
         console.log "Oops, file format #{filename} is not supported"
         return null
     else
-      filename = path.join('colors', scheme.name)
+      filename = path.join('./colors', scheme.name)
       console.log """Downloading "#{filename}" color scheme"""
       file = fs.createWriteStream(filename)
       file.once "open", ->
@@ -170,4 +174,3 @@ grab_colors = ->
   )
 
 grab_colors()
-

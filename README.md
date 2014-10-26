@@ -41,7 +41,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 735 color schemes:
+Total of 737 color schemes:
 
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
@@ -668,6 +668,7 @@ Total of 735 color schemes:
 * [super.vim](https://raw.githubusercontent.com/daylerees/colour-schemes/master/vim/colors/super.vim)
 * [surveyor.vim](http://www.vim.org/script.php?script_id=1478)
 * [swamplight.vim](http://www.vim.org/script.php?script_id=4798)
+* [sweater.vim](http://www.vim.org/script.php?script_id=5041)
 * [symfony.vim](http://www.vim.org/script.php?script_id=2600)
 * [synic.vim](http://www.vim.org/script.php?script_id=1897)
 * [tabula.vim](http://www.vim.org/script.php?script_id=3222)
@@ -729,6 +730,7 @@ Total of 735 color schemes:
 * [vc.vim](http://www.vim.org/script.php?script_id=698)
 * [vcbc.vim](http://www.vim.org/script.php?script_id=1136)
 * [vexorian.vim](http://www.vim.org/script.php?script_id=1680)
+* [vi-clone.vim](http://www.vim.org/script.php?script_id=5039)
 * [vibrantink.vim](http://www.vim.org/script.php?script_id=1794)
 * [vilight.vim](http://www.vim.org/script.php?script_id=2776)
 * [vim-online.vim](http://www.vim.org/script.php?script_id=3550)

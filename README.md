@@ -41,7 +41,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 737 color schemes:
+Total of 738 color schemes:
 
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
@@ -390,6 +390,7 @@ Total of 737 color schemes:
 * [jhlight.vim](http://www.vim.org/script.php?script_id=1131)
 * [juicy-contrast.vim](https://raw.githubusercontent.com/daylerees/colour-schemes/master/vim/colors/juicy-contrast.vim)
 * [juicy.vim](https://raw.githubusercontent.com/daylerees/colour-schemes/master/vim/colors/juicy.vim)
+* [kalisi.vim](https://raw.githubusercontent.com/freeo/vim-kalisi/master/colors/kalisi.vim)
 * [kalt.vim](http://www.vim.org/script.php?script_id=2689)
 * [kaltex.vim](http://www.vim.org/script.php?script_id=2690)
 * [kate.vim](http://www.vim.org/script.php?script_id=1758)

@@ -41,7 +41,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 738 color schemes:
+Total of 742 color schemes:
 
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
@@ -91,6 +91,7 @@ Total of 738 color schemes:
 * [astroboy.vim](http://www.vim.org/script.php?script_id=2831)
 * [astronaut.vim](http://www.vim.org/script.php?script_id=3222)
 * [asu1dark.vim](http://www.vim.org/script.php?script_id=121)
+* [atom-dark.vim](http://www.vim.org/script.php?script_id=5054)
 * [atom.vim](http://www.vim.org/script.php?script_id=3481)
 * [automation.vim](http://www.vim.org/script.php?script_id=876)
 * [autumn.vim](http://www.vim.org/script.php?script_id=671)
@@ -211,6 +212,7 @@ Total of 738 color schemes:
 * [d8g_04.vim](http://www.vim.org/script.php?script_id=2750)
 * [dagon.vim](http://www.vim.org/script.php?script_id=3548)
 * [dante.vim](http://www.vim.org/script.php?script_id=611)
+* [darcula.vim](http://www.vim.org/script.php?script_id=5079)
 * [dark-ruby.vim](http://www.vim.org/script.php?script_id=2256)
 * [darkBlue.vim](http://www.vim.org/script.php?script_id=3131)
 * [darkZ.vim](http://www.vim.org/script.php?script_id=2650)
@@ -293,6 +295,7 @@ Total of 738 color schemes:
 * [evening_2.vim](http://www.vim.org/script.php?script_id=2755)
 * [faded-black.vim](http://www.vim.org/script.php?script_id=4398)
 * [faded-white.vim](http://www.vim.org/script.php?script_id=4399)
+* [falmouth.vim](http://www.vim.org/script.php?script_id=5084)
 * [far.vim](http://www.vim.org/script.php?script_id=1467)
 * [felipec.vim](http://www.vim.org/script.php?script_id=4747)
 * [festoon.vim](http://www.vim.org/script.php?script_id=3852)
@@ -654,6 +657,7 @@ Total of 738 color schemes:
 * [sourlick.vim](https://raw.githubusercontent.com/daylerees/colour-schemes/master/vim/colors/sourlick.vim)
 * [southernlights.vim](http://www.vim.org/script.php?script_id=3292)
 * [southwest-fog.vim](http://www.vim.org/script.php?script_id=3363)
+* [spacegray.vim](http://www.vim.org/script.php?script_id=5071)
 * [spearmint.vim](https://raw.githubusercontent.com/daylerees/colour-schemes/master/vim/colors/spearmint.vim)
 * [spectro.vim](http://www.vim.org/script.php?script_id=1484)
 * [spiderhawk.vim](http://www.vim.org/script.php?script_id=2509)

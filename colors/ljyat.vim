@@ -20,25 +20,27 @@ hi Folded          guifg=white guibg=#403D3D
 hi FoldColumn      guifg=white guibg=#403D3D 
 hi Statement       term=bold ctermfg=14  guifg=#86C711
 hi Function        guifg=#21BC71 gui=bold 
-hi Title           guifg=#21BC71 gui=NONE
+hi Title           guifg=#00dd00 gui=bold
 hi Keyword         guifg=#E6C84F   gui=NONE
-
 hi Type            guifg=#95e454 gui=NONE
 hi VertSplit       guifg=#808080 guibg=#080808 gui=bold
 hi VisualNOS                     guibg=#403D3D
 hi Visual          guifg=black   guibg=white
-hi Normal guifg=White guibg=grey20
-hi CursorLine                    guibg=#293739
+hi Normal          guifg=#EEEEEE guibg=#303030
 hi CursorColumn                  guibg=#293739
-hi LineNr          guifg=#BCBCBC guibg=#232526
+hi Cursor          guifg=white guibg=red
+hi LineNr          guifg=#606060 guibg=#222222
 hi NonText         guifg=#BCBCBC guibg=#232526
 hi StatusLine      guifg=black   guibg=#C2BFA5 gui=bold
-hi Search          guifg=green guibg=black
-hi Identifier      guifg=cyan
+hi Search          gui=bold guifg=black guibg=#00AF5F
+hi Identifier      guibg=NONE guifg=cyan
 hi String     guifg=#FF80FF         
 hi DefinedName    guifg=#FFCC00
 hi clear Constant
 
+hi! def link Directory   Function
+hi! def link CursorLine  Search
+hi! def link ModeMsg     Directory
 hi! def link Typedef        Structure
 hi! def link CTagsType        Structure
 hi! def link StatusLineNC   StatusLine

@@ -1,5 +1,5 @@
 " Vim color file
-" baycomb v2.4
+" baycomb v3.0
 " http://www.vim.org/scripts/script.php?script_id=1454
 " 
 " Maintainer:	Shawn Axsom <axs221@gmail.com>
@@ -106,78 +106,42 @@ hi Pmenu        guibg=#3a6595 guifg=#9aadd5
 hi PmenuSel     guibg=#4a85ba guifg=#b0d0f0                    
 
 
+hi Normal         ctermfg=74 ctermbg=234
+hi SpecialKey     term=bold ctermfg=2 
+hi NonText        term=bold cterm=bold ctermfg=242 
+hi Directory      term=bold ctermfg=6 
+hi ErrorMsg       term=standout cterm=bold ctermfg=7 ctermbg=1 
+hi IncSearch      term=reverse ctermfg=11 ctermbg=130 
+hi Search         term=reverse ctermfg=0 ctermbg=130 
+hi MoreMsg        term=bold ctermfg=2 
+hi ModeMsg        term=bold ctermfg=130 
+hi LineNr         term=underline ctermfg=26 ctermbg=234
+hi CursorLineNr   term=bold ctermfg=11 
+hi Question       term=standout ctermfg=10 
+hi StatusLine     term=bold,reverse ctermfg=11 ctermbg=4 
+hi StatusLineNC   term=reverse ctermfg=248 ctermbg=4 
+hi VertSplit      term=reverse ctermfg=0 ctermbg=242 
+hi Title          term=bold ctermfg=11 
+hi Visual         term=reverse ctermfg=12 ctermbg=248 
+hi VisualNOS      term=bold,underline ctermfg=12 ctermbg=248 
+hi WarningMsg     term=standout ctermfg=1 
+hi WildMenu       term=standout ctermfg=0 ctermbg=3 
+hi Folded         term=standout ctermfg=2 ctermbg=0 
+hi FoldColumn     term=standout ctermfg=11 ctermbg=0 
+hi DiffAdd        term=bold ctermbg=4 
+hi DiffChange     term=bold ctermbg=5 
+hi Constant       ctermfg=33
+hi Comment        ctermfg=28
+hi Title          ctermfg=187 
+hi Function       term=bold cterm=bold ctermfg=248 
+hi Special        term=none cterm=none ctermfg=6 
+hi Identifier     term=none cterm=none
+hi Statement      ctermfg=181
+hi Type           term=bold cterm=bold ctermfg=39 
 
 
 
-" color terminal definitions
-hi Cursor ctermfg=black ctermbg=white
-hi Normal ctermfg=grey ctermbg=black
-hi Number ctermfg=darkgreen
-highlight Operator ctermfg=yellow
-highlight Conditional ctermfg=darkred
-highlight Repeat ctermfg=darkred
-hi Exception ctermfg=darkred
-hi SpecialKey	ctermfg=darkgreen
-hi NonText	cterm=bold ctermfg=darkgrey
-hi Directory	ctermfg=darkcyan
-hi ErrorMsg	cterm=bold ctermfg=7 ctermbg=1
-hi IncSearch	ctermfg=yellow ctermbg=darkyellow cterm=NONE
-hi Search	ctermfg=black ctermbg=darkyellow cterm=NONE
-hi MoreMsg	ctermfg=darkgreen
-hi ModeMsg	cterm=NONE ctermfg=brown
-hi LineNr	ctermfg=darkcyan ctermbg=black
-hi Question	ctermfg=green
-hi StatusLine	ctermfg=yellow ctermbg=darkblue cterm=NONE
-hi StatusLineNC ctermfg=grey ctermbg=darkblue cterm=NONE
-hi VertSplit	ctermfg=black ctermbg=darkgrey cterm=NONE
-hi Title	ctermfg=yellow cterm=NONE
-hi Visual	ctermbg=grey ctermfg=blue cterm=NONE
-hi VisualNOS	ctermbg=grey ctermfg=blue cterm=NONE
-hi WarningMsg	ctermfg=1
-hi WildMenu	ctermfg=0 ctermbg=3
-hi Folded	ctermfg=darkgreen ctermbg=darkblue cterm=NONE
-hi FoldColumn	ctermfg=yellow ctermbg=black
-hi DiffAdd	ctermbg=4
-hi DiffChange	ctermbg=5
-hi DiffDelete	cterm=bold ctermfg=4 ctermbg=6
-hi DiffText	cterm=bold ctermbg=1
-hi Comment		ctermfg=darkgreen ctermbg=black
-hi Identifier   ctermfg=cyan
 
-"set comments to grey on non-Windows OS's to make sure
-"it is readable
-if &term == "builtin_gui" || &term == "win32"
-	hi function ctermfg=grey
-	hi Type		ctermfg=darkyellow ctermbg=darkblue
-	hi IncSearch	ctermfg=black ctermbg=grey cterm=NONE
-	hi Search	ctermfg=black ctermbg=darkgrey cterm=NONE
-else
-	hi function ctermfg=white
-	hi Type		ctermfg=grey
-	hi IncSearch	ctermfg=yellow ctermbg=darkyellow cterm=NONE
-	hi Search	ctermfg=black ctermbg=darkyellow cterm=NONE
-endif
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-hi Constant	ctermfg=darkcyan
-hi Special	ctermfg=white
-hi Statement	ctermfg=yellow
-hi PreProc	ctermfg=darkred
-hi Underlined	ctermfg=cyan cterm=NONE
-hi Ignore	cterm=bold ctermfg=7
-hi Ignore	ctermfg=darkgrey
-hi Error	cterm=bold ctermfg=7 ctermbg=1
-
-" new Vim 7.0 items
-hi Pmenu        ctermbg=darkblue ctermfg=lightgrey
-hi PmenuSel     ctermbg=lightblue ctermfg=white                    
-
-hi tablinesel   ctermfg=cyan ctermbg=blue
-hi tabline      ctermfg=black ctermbg=blue
-hi tablinefill  ctermfg=green ctermbg=darkblue
-"vim: sw=4
-"
-hi MatchParen	ctermfg=black ctermbg=green
 
 
 elseif &background == "light"

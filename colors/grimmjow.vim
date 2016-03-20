@@ -1,38 +1,37 @@
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Name:           kalisi
-" Author:         Arthur Jaron
-" EMail:          hifreeo@gmail.com
-" Version:        0.8.0
-" Last Change:    2015.09.27
-"
-"
+" Name:           grimmjow
+" Author:         Adelar S. Queiroz
+" Version:        0.0.10
+" Last Change:    2016.05.15
+" URL:            https://github.com/adelarsq/vim-grimmjow
+" License:        Apache 2.0
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Settings
-if !exists('g:kalisi_recolor_quickfixsigns')
-  let g:kalisi_recolor_quickfixsigns = 1
+if !exists('g:grimmjow_recolor_quickfixsigns')
+  let g:grimmjow_recolor_quickfixsigns = 1
 endif
 
 " the default scheme is 'light'
 if &background == "dark"
   hi clear
-  let g:colors_name = "kalisi"
+  let g:colors_name = "grimmjow"
 
-  hi Normal 	        guifg=#d0d0d0 guibg=#404042  gui=none
+  hi Normal 	  guifg=#d0d0d0 guibg=#404042  gui=none
 
-  hi Comment 	        guifg=#8a8a8a
-  hi CommentURL       guifg=#6090c0 guibg=NONE     gui=underline
-  hi CommentEmail     guifg=#6090c0 guibg=NONE     gui=underline
+  hi Comment 	  guifg=#8a8a8a
+  hi CommentURL   guifg=#6090c0 guibg=NONE gui=underline
+  hi CommentEmail guifg=#6090c0 guibg=NONE gui=underline
 
-  hi Constant 	      guifg=#ffaf00                   gui=bold
-  hi String 	        guifg=#ffc63f
-  hi Character        guifg=#c85bff
-  hi Number           guifg=#ffad3f
-  hi Boolean 	        guifg=#94be54
-  hi Float            guifg=#fff650
+  hi Constant 	  guifg=#ffaf00 gui=bold
+  hi String 	  guifg=#ffc63f
+  hi Character    guifg=#c85bff
+  hi Number       guifg=#ffad3f
+  hi Boolean 	  guifg=#94be54
+  hi Float        guifg=#fff650
   
+  hi ColorColumn      guibg=#303032 term=reverse ctermbg=12
+
   " HTML Closing tags </...> 
   " Vim variables
   hi Identifier       guifg=#29a3ac                   gui=none
@@ -46,11 +45,11 @@ if &background == "dark"
   " operator cpp: sizeof()
   hi Operator         guifg=#658aa5 guibg=NONE      gui=none
   "html: special keywords in jscript: window log
-  hi Keyword	        guifg=#adffdd                   gui=none
+  hi Keyword	      guifg=#adffdd                   gui=none
   hi Exception        guifg=#2080c0 guibg=NONE      gui=bold
 
-  hi PreProc 	        guifg=#2288ee                   gui=bold
-  hi Include 	        guifg=#2288ee                   gui=bold
+  hi PreProc 	      guifg=#2288ee                   gui=bold
+  hi Include 	      guifg=#2288ee                   gui=bold
   hi Define           guifg=#2288ee                   gui=bold
   hi Macro            guifg=#a68ad2                   gui=none
   hi PreCondit        guifg=#7aa6c2                   gui=none
@@ -65,10 +64,6 @@ if &background == "dark"
   hi Structure        guifg=#557a95 gui=none
   " cpp: static cast
   hi Typedef          guifg=#55aa85
-
-  hi Special	        guifg=#e7f6da gui=none
-  hi SpecialChar      guifg=#6a96ff
-  hi SpecialKey	      guifg=#767676 guibg=#3a3a3a ctermbg=243 ctermfg=237
 
   hi Tag              guifg=#00c0ff               gui=bold
   hi Delimiter        guifg=#7a9acd guibg=NONE    gui=none
@@ -96,7 +91,7 @@ if &background == "dark"
 
   " User interface ############################################################
   
-  hi Search           guifg=#000000 guibg=#b8ea00 gui=bold
+  hi Search           guifg=#000000 guibg=#00875f gui=bold
   hi IncSearch        guifg=#f8cf00 guibg=#000000
 
   hi Error            guifg=#e5a5a5 guibg=#602020 gui=bold,underline
@@ -107,28 +102,28 @@ if &background == "dark"
   hi MoreMsg          guifg=#000000 guibg=#A6DB29 gui=none
   hi ModeMsg          guifg=#000000 guibg=#A6DB29
 
-  hi Cursor           guibg=#d80000 guifg=#ffffff
+  hi Cursor           guibg=#afd700 guifg=#121212
   hi CursorLineNr     guifg=#d0d0d0 guibg=#482020 gui=bold
   hi CursorLine       guibg=#4a4a4c
   hi CursorColumn     guibg=#4a4a4c
   hi MatchParen       guifg=#202020 guibg=#8fca24 gui=none
 
-  hi Visual           guibg=#3a4d6e               gui=none
-  hi VisualNOS                      guibg=#4a4d4e gui=none
+  hi Visual           guibg=#3a4d6e gui=none
+  hi VisualNOS        guibg=#4a4d4e gui=none
 
   hi Pmenu 	          guifg=#b5b5b5 guibg=#303032
   hi PmenuSel         guifg=#222222 guibg=#A6DB29 gui=none
-  hi PmenuSbar                      guibg=#a0a0a0
-  hi PmenuThumb                     guibg=#555555
+  hi PmenuSbar        guibg=#a0a0a0
+  hi PmenuThumb       guibg=#555555
 
   hi SignColumn       guifg=#A6E22E guibg=#303032
   hi FoldColumn       guifg=#b0b8c0 guibg=#373d43 gui=bold
-  hi Folded 	        guifg=#727780 guibg=#373d43 gui=none
+  hi Folded 	      guifg=#727780 guibg=#373d43 gui=none
 
   hi NonText          guifg=#958b7f guibg=#3a3a3a gui=none
   hi Conceal          guifg=#f6f3e8 guibg=#303030
 
-  hi LineNr 	        guifg=#857b6f guibg=#303032 gui=none
+  hi LineNr 	      guifg=#857b6f guibg=#303032 gui=none
   hi StatusLine       guifg=#b5b5b5 guibg=#222222 gui=none term=NONE cterm=NONE
   hi StatusLineNC     guifg=#857b6f guibg=#303032 gui=none
 
@@ -141,33 +136,38 @@ if &background == "dark"
 
   " Language Specific ##########################################################
   
-  " Python (non-default syntax file)
-  hi PythonOperator   guifg=#7aa6c2 gui=none
-  hi pythonDocstring        guifg=#6a7a8d guibg=NONE gui=none
-  hi pythonDoctest    guifg=#4a6a8d
-  hi link pythonDocTest pythonDoctest
-  hi link pythonDocTest2 pythonDoctest
-
   " C
   hi link cType Type
+
+  " Java
+  hi javaScopeDecl    guifg=#1994d1
+  hi javaClassDecl    guifg=#1994d1
+
+  " Python (non-default syntax file)
+  hi PythonOperator      guifg=#7aa6c2 gui=none
+  hi pythonDocstring     guifg=#6a7a8d guibg=NONE gui=none
+  hi pythonDoctest       guifg=#4a6a8d
+  hi link pythonDocTest  pythonDoctest
+  hi link pythonDocTest2 pythonDoctest
 
   " Embedded inside HTML <script>
   hi javaScript       guifg=#a5c5b5 guibg=NONE gui=none
 
   " htmldjango
-  hi DjangoBlock      guifg=#20ba50            gui=none
+  hi DjangoBlock         guifg=#20ba50            gui=none
   hi link djangoTagBlock DjangoBlock
   hi link djangoVarBlock DjangoBlock
   hi link djangoFilter   SpecialChar
 
+  " Markdown
   hi markdownUrl guifg=#0087ff gui=underline ctermfg=33 cterm=underline
   
-  " mail
-  hi link mailHeader  Comment
-  hi link mailSubject	Constant
+  " Mail
+  hi link mailHeader    Comment
+  hi link mailSubject   Constant
   hi link mailURL	    CommentURL
-  hi link mailEmail   PreCondit
-  hi mailSubject   	  ctermfg=226	guifg=#ffff00
+  hi link mailEmail     PreCondit
+  hi mailSubject   	    ctermfg=226	guifg=#ffff00
   hi mailQuoted1	    ctermfg=189	guifg=#d7d7ff
   hi mailQuoted2	    ctermfg=194 guifg=#d7ffd7
   hi mailQuoted3	    ctermfg=105 guifg=#8787ff
@@ -176,51 +176,42 @@ if &background == "dark"
   hi mailQuoted6	    ctermfg=77	guifg=#5fd75f
   hi link mailSignature Comment
 
-
   " Plugins ####################################################################
   
+  " https://github.com/rhysd/clever-f.vim
+  hi CleverFDefaultLabel guibg=#5fd700 guifg=#404040 gui=bold ctermbg=76 ctermfg=238 cterm=bold
+
   " https://github.com/kien/ctrlp.vim
   hi CtrlPMatch       guifg=#000000 guibg=#f8cf00 gui=none
+
+  " https://github.com/dyng/ctrlsf.vim
+  hi CtrlsfLnumMatch guifg=#0087d7
+  hi CtrlsfMatch     guibg=#ffd700 guifg=#000000
+  
+  " https://github.com/ervandew/eclim
+  hi EclimError   guibg=#303030 guifg=#f92672
+  hi EclimWarning guibg=#303030 guifg=#FFFF00
+  hi EclimInfo    guibg=#303030 guifg=#afd700
+
+  " https://github.com/davidhalter/jedi-vim
+  hi jediFunction guibg=#303030 guifg=#767676 ctermbg=236 ctermfg=243
+  hi jediFat      guibg=#303030 guifg=#afd700 gui=bold ctermbg=236 ctermfg=148 cterm=bold
 
   " https://github.com/scrooloose/nerdtree
   hi NERDTreeDir      guifg=#5d8fbe ctermfg=67
   hi link NERDTreeDirSlash NERDTreeDir
-  hi link NERDTreeOpenable NERDTreeDir
-  hi NERDTreeClosable guifg=#66b600 guibg=#385038 gui=bold ctermfg=70 ctermbg=22 cterm=bold
+  hi NERDTreeOpenable guifg=#5d8fbe guibg=#404042 gui=bold ctermfg=70 ctermbg=22 cterm=bold
+  hi NERDTreeClosable guifg=#5d8fbe guibg=#404042 gui=bold ctermfg=70 ctermbg=22 cterm=bold
   hi NERDTreePart     guifg=#707070 ctermfg=243
   hi NERDTreePartFile guifg=#FFFFFF gui=bold ctermfg=231 cterm=bold
   hi NERDTreeLinkFile guifg=#ffaf00 ctermfg=214
   hi NERDTreeLinkDir  guifg=#ffaf00 ctermfg=214
-
-  " https://github.com/majutsushi/tagbar
-  hi link TagbarSignature Comment
-  hi TagbarScope      guifg=#0087d7 gui=bold ctermfg=32 cterm=bold
-  hi TagbarType       guifg=#66b600 gui=bold ctermfg=70 cterm=bold
-  hi TagbarKind       guifg=#7ad6ff ctermfg=117
-
-  " https://github.com/justinmk/vim-sneak
-  hi SneakPluginTarget guibg=#ff5f00 guifg=#ffff00 ctermbg=202 ctermfg=226
-  hi link SneakPluginScope Visual
-
-  " https://github.com/rhysd/clever-f.vim
-  hi CleverFDefaultLabel guibg=#5fd700 guifg=#404040 gui=bold ctermbg=76 ctermfg=238 cterm=bold
-
-  " https://github.com/mhinz/vim-startify
-  hi StartifyBracket  guifg=#0087d7 guibg=#303030 gui=bold ctermfg=32 ctermbg=236 cterm=bold
-  hi StartifyFile     guifg=#00afff ctermfg=39
-  hi StartifyHeader   guifg=#00afff ctermfg=39
-  hi link StartifyFooter StartifyHeader
-  hi StartifyNumber   ctermfg=215 guifg=#00d700 guibg=#303030 gui=bold ctermfg=40 ctermbg=236 cterm=bold
-  hi StartifyPath     guifg=#949494 ctermfg=246
-  hi StartifySlash    guifg=#dadada ctermfg=253
-  hi StartifySpecial  guifg=#b2b2b2 guibg=#606060 ctermfg=249 ctermbg=241
-
-  " https://github.com/davidhalter/jedi-vim
-  hi jediFunction     guibg=#303030 guifg=#767676 ctermbg=236 ctermfg=243
-  hi  jediFat         guibg=#303030  guifg=#afd700 gui=bold ctermbg=236 ctermfg=148 cterm=bold
+  hi NERDTreeBookmarkName gui=bold ctermbg=4 guifg=#afd700
+  hi NERDTreeBookmark     ctermbg=4 guifg=#797772
+  hi NERDTreeBookmarksLeader guifg=#404042 guibg=#404042
 
   " https://github.com/tomtom/quickfixsigns_vim
-  if g:kalisi_recolor_quickfixsigns == 1
+  if g:grimmjow_recolor_quickfixsigns == 1
      hi QFSignsMark       guifg=#ffc63f guibg=#202020 gui=bold ctermfg=220 ctermbg=234 cterm=bold
      hi QFSignsDiffAdd    guifg=#108f4f guibg=#324832 ctermfg=35 ctermbg=22
      hi QFSignsDiffChange guifg=#336fdf guibg=#20385f ctermfg=27 ctermbg=17
@@ -228,6 +219,70 @@ if &background == "dark"
      let g:quickfixsigns#marks#texthl = "QFSignsMark"
      let g:quickfixsigns#vcsdiff#highlight = {'DEL': 'QFSignsDiffDelete', 'ADD': 'QFSignsDiffAdd', 'CHANGE': 'QFSignsDiffChange'}
   endif
+  
+  " https://github.com/luochen1990/rainbow
+  let g:rainbow_conf = {
+  \	'guifgs': ['royalblue3', 'darkorange3', '#108f4f', 'firebrick'],
+  \	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+  \}
+
+  " https://github.com/scrooloose/syntastic
+  hi SyntasticErrorSign  guifg=#f92672 guibg=#f5f5f5
+  hi SyntasticWarningSign guifg=#afd700 guibg=#f5f5f5
+
+  " https://github.com/majutsushi/tagbar
+  hi link TagbarSignature Comment
+  hi TagbarScope      guifg=#0087d7 gui=bold ctermfg=32 cterm=bold
+  hi TagbarType       guifg=#66b600 gui=bold ctermfg=70 cterm=bold
+  hi TagbarKind       guifg=#7ad6ff ctermfg=117
+
+  " https://github.com/Lokaltog/vim-easymotion
+  hi EasyMotionTarget        ctermbg=none ctermfg=green guifg=#A6E22E
+  hi EasyMotionTarget2First  ctermbg=none ctermfg=green guifg=#F92672
+  hi EasyMotionTarget2Second ctermbg=none ctermfg=green guifg=#1994d1
+  
+  " https://github.com/nathanaelkane/vim-indent-guides
+  hi IndentGuidesEven guifg=#a0a0a0 guibg=#797772
+  hi IndentGuidesOdd  guifg=#797772 guibg=#a0a0a0
+
+  " https://github.com/qstrahl/vim-matchmaker
+  hi Matchmaker gui=underline
+
+  " https://github.com/weynhamz/vim-plugin-minibufexpl
+  hi MBENormal               guifg=#586e75 guibg=#404042
+  hi MBEChanged              guifg=#79b541 guibg=#404042
+  hi MBEVisibleNormal        guifg=#586e75 guibg=#404042
+  hi MBEVisibleChanged       guifg=#79b541 guibg=#404042
+  hi MBEVisibleActiveNormal  guifg=#005f00 guibg=#afd700
+  hi MBEVisibleActiveChanged guifg=#005f00 guibg=#afd700
+
+  " https://github.com/kshenoy/vim-signature
+  hi SignatureMarkText guifg=#0087d7 guibg=#404042
+
+  " https://github.com/mhinz/vim-signify
+  hi SignifySignAdd             guifg=#008700 guibg=#404042
+  hi SignifySignChange          guifg=#ff5f00 guibg=#404042
+  hi SignifySignChangeDelete    guifg=#ff5f00 guibg=#404042
+  hi SignifySignDelete          guifg=#ff0000 guibg=#404042
+  hi SignifySignDeleteFirstLine guifg=#ff0000 guibg=#404042
+
+  " https://github.com/justinmk/vim-sneak
+  hi SneakPluginTarget guibg=#ff5f00 guifg=#ffff00 ctermbg=202 ctermfg=226
+  hi link SneakPluginScope Visual
+
+  " https://github.com/mhinz/vim-startify
+  hi StartifyBracket  guifg=#5DC2D6 guibg=#404042 gui=bold ctermfg=32 ctermbg=236 cterm=bold
+  hi StartifyFile     guifg=#3c960f ctermfg=39
+  hi StartifyHeader   guifg=#1094a0 ctermfg=39
+  hi StartifyNumber   ctermfg=215 guifg=#1994d1 guibg=#404042 gui=bold ctermfg=40 ctermbg=236 cterm=bold
+  hi StartifyPath     guifg=#66b600 ctermfg=246
+  hi StartifySlash    guifg=#66b600 ctermfg=253
+  hi StartifySpecial  guifg=#b2b2b2 guibg=#606060 ctermfg=249 ctermbg=241
+  hi link StartifyFooter StartifyHeader
+
+  " https://github.com/mbbill/undotree
+  hi UndotreeSavedBig ctermfg=245   guifg=#11AF46
+  hi UndotreeSavedSmall ctermfg=240 guifg=#F1266F
 
   " 256 Color Terminal (dark) ##################################################
   if &t_Co > 255
@@ -324,14 +379,16 @@ else
   " Light
   """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
   hi clear
-  let g:colors_name = "kalisi"
+  let g:colors_name = "grimmjow"
 
-  hi Normal           guifg=#000000 guibg=#f5f7f5 gui=NONE
+  hi Normal           guifg=#444444 guibg=#f5f5f5 gui=NONE
 
   " Syntax ####################################################################
 
   hi Comment          guifg=#70a0d0 guibg=NONE    gui=NONE
+  " TODO avoid background glitch 
   hi CommentURL       guifg=#70a0ff guibg=NONE    gui=underline
+  " TODO avoid background glitch 
   hi CommentEmail     guifg=#70a0ff guibg=NONE    gui=underline
   hi SpecialComment   guifg=#6090c0               gui=bold
 
@@ -364,9 +421,6 @@ else
   hi Structure        guifg=#274aac guibg=NONE    gui=none
   hi Typedef          guifg=#274aac               gui=italic
 
-  hi Special          guifg=#ffaf00 guibg=NONE    gui=bold
-  hi SpecialChar      guifg=#F92672               gui=bold
-  hi SpecialKey       guifg=#9e9e9e guibg=#e4e4e4 ctermfg=247 ctermbg=254
   hi Tag              guifg=#0010ff               gui=bold
   hi Delimiter        guifg=#d80050 guibg=NONE    gui=none
   hi Debug            guifg=#ddb800 guibg=NONE    gui=bold
@@ -378,16 +432,22 @@ else
 
 
   " Misc syntax ###############################################################
-  "
-  hi Todo             guifg=#000000 guibg=#ffff00 gui=bold
+  
+  hi Todo             guifg=#00af5f guibg=#f5f5f5 gui=bold
  
   hi Directory        guifg=#0060a0 guibg=NONE    gui=bold
   " html: special keywords in jscript: window log 
   hi Keyword          guifg=#66b600               gui=none
   hi Title            guifg=#1060a0 guibg=NONE    gui=bold
-  hi NonText          guifg=#000000 guibg=#e6e6e6 gui=none
+  
+  hi Special	      guifg=#3a3a3a gui=none
+  hi SpecialChar      guifg=#6a96ff gui=bold
+  hi SpecialKey	      guifg=#999999 guibg=#f5f7f5 ctermbg=243 ctermfg=237
+  hi NonText          guifg=#999999 guibg=#f5f5f5 gui=none
  
   hi Conceal          guifg=#303030 guibg=#e0e8e0
+
+  hi ColorColumn      guibg=#f0f0f0 term=reverse ctermbg=254
 
   hi DiffAdd                        guibg=#ddffdd 
   hi DiffChange                     guibg=#e8e8e8 
@@ -401,23 +461,21 @@ else
 
   " User interface ############################################################
 
-  hi Visual                         guibg=#d0eeff gui=NONE
+  hi Visual           guifg=#ffffff guibg=#398df0 gui=NONE
   hi VisualNOS                      guibg=#d8d8d8 gui=none
 
-  hi Cursor           guifg=#ffffff guibg=#ff0000 gui=NONE
-  hi CursorLineNr     guifg=#e0e0e0 guibg=#c9c4c4 gui=bold
+  hi Cursor           guifg=#F5F5F5 guibg=#444444 gui=NONE
+  hi CursorLineNr     guifg=#000000 guibg=#f5f5f5 gui=bold
   hi Cursorline                     guibg=#eaeaea
   hi CursorColumn                   guibg=#eaeaea
+  hi LineNr           guifg=#707070 guibg=#f5f5f5 gui=NONE
   hi MatchParen       guifg=#ffffff guibg=#ffd030 gui=none
 
-  hi Search           guifg=#000000 guibg=#b8ea00 gui=bold
+  hi Search           guifg=#000000 guibg=#ffff5f gui=bold
   hi IncSearch        guifg=#f8cf00 guibg=#000000
-
-  hi LineNr           guifg=#707070 guibg=#e0e0e0 gui=NONE
 
   hi StatusLine       guifg=#e0e0e0 guibg=#707070 gui=NONE
   hi StatusLineNC     guifg=#e0e0e0 guibg=#a0a0a0 gui=NONE
-  hi VertSplit        guifg=#a0a0a0 guibg=#a0a0a0 gui=NONE
   hi Folded           guifg=#707070 guibg=#e8e8e8 gui=NONE
   hi FoldColumn       guifg=#707070 guibg=#b0b0b0 gui=bold
 
@@ -428,31 +486,44 @@ else
   hi ModeMsg          guifg=#000000 guibg=#A6DB29
   hi WarningMsg       guifg=#d82020 guibg=NONE    gui=bold
 
-
   hi TabLine          guifg=#afd700 guibg=#005f00 gui=none
   hi TabLineSel       guifg=#005f00 guibg=#afd700 gui=none
   hi TabLineFill      guifg=#303030 guibg=#a0a0a0 gui=none
 
-  hi SignColumn       guifg=#A6E22E guibg=#c9c4c4
+  hi VertSplit        guifg=#a0a0a0 guibg=#f5f5f5 gui=NONE
+  hi SignColumn       guifg=#005f00 guibg=#f5f5f5 
 
-  hi Pmenu            guifg=#000000 guibg=#e8e8e8 gui=NONE
-  hi PmenuSel         guifg=#000000 guibg=#A6DB29 gui=bold
-  hi PmenuSbar                      guibg=#a0a0a0
-  hi PmenuThumb                     guibg=#555555
+  hi Pmenu        guifg=#ffffff   guibg=#323232
+  hi PmenuSel     guifg=#ffffff   guibg=#1994d1
+  hi PmenuSbar    guifg=#323232   guibg=#323232
+  hi PmenuThumb   guifg=#646464   guibg=#646464   gui=none
 
-
+  " hi Visual                         guibg=#d0eeff gui=NONE
   " Language Specific ##########################################################
   
+  " C
+  hi cType guifg=#66b600 ctermfg=70
+  hi link  javaType cType
+  hi link  TexType Function
+
+  " Java
+  hi javaScopeDecl    guifg=#0167dd
+  hi javaClassDecl    guifg=#0167dd
+
   " Python (non-default syntax file)
   hi PythonOperator   guifg=#0167dd               gui=none
-  hi pythonDocstring        guifg=#004B84 guibg=NONE    gui=none
+  hi pythonDocstring  guifg=#004B84 guibg=NONE    gui=none
   hi pythonDoctest    guifg=#0000af
   hi link pythonDocTest pythonDoctest
   hi link pythonDocTest2 pythonDoctest
-  " C
-  hi cType            guifg=#66b600 ctermfg=70
-  hi link javaType cType
-  hi link TexType Function
+
+  "  Ruby
+  hi rubyInterpolation      guifg=#ff4040 guibg=NONE gui=NONE
+  hi rubyMethodBlock        guifg=#ffb28d guibg=NONE gui=NONE
+  hi rubyCurlyBlock         guifg=#f64a8a guibg=NONE gui=NONE
+  hi rubyDoBlock            guifg=#f64a8a guibg=NONE gui=NONE
+  hi rubyBlockExpression    guifg=#f64a8a guibg=NONE gui=NONE
+  hi rubyArrayDelimiter     guifg=#00bcbc guibg=NONE gui=NONE
 
   " Embedded inside HTML <script>
   hi javaScript       guifg=#486050 guibg=NONE    gui=none
@@ -463,67 +534,68 @@ else
   hi link djangoVarBlock DjangoBlock
   hi link djangoFilter   Typedef
 
-  hi markdownUrl      guifg=#005faf gui=underline ctermfg=25 cterm=underline
+  " Markdown
+  hi markdownUrl guifg=#005faf gui=underline ctermfg=25 cterm=underline
 
+  " Mail
   hi link mailHeader  Comment
-  hi link mailSubject	Constant
-  hi link mailURL	    CommentURL
+  hi link mailSubject Constant
+  hi link mailURL	  CommentURL
   hi link mailEmail   Identifier
-  hi mailQuoted1	    ctermfg=17	guifg=#00005f
-  hi mailQuoted2	    ctermfg=22	guifg=#005f00
-  hi mailQuoted3	    ctermfg=19	guifg=#0000af
-  hi mailQuoted4	    ctermfg=34 	guifg=#00af00
-  hi mailQuoted5	    ctermfg=21	guifg=#0000ff
-  hi mailQuoted6	    ctermfg=71	guifg=#5faf5f
-  hi mailQuoted7	    ctermfg=21	guifg=#5f5faf
-  hi mailQuoted8	    ctermfg=101	guifg=#87875f
-  hi mailSignature    ctermfg=209	guifg=#ff0000
-
+  hi mailQuoted1	  ctermfg=17  guifg=#00005f
+  hi mailQuoted2	  ctermfg=22  guifg=#005f00
+  hi mailQuoted3	  ctermfg=19  guifg=#0000af
+  hi mailQuoted4	  ctermfg=34  guifg=#00af00
+  hi mailQuoted5	  ctermfg=21  guifg=#0000ff
+  hi mailQuoted6	  ctermfg=71  guifg=#5faf5f
+  hi mailQuoted7	  ctermfg=21  guifg=#5f5faf
+  hi mailQuoted8	  ctermfg=101 guifg=#87875f
+  hi mailSignature    ctermfg=209 guifg=#ff0000
 
   " Plugins ####################################################################
   
-  " https://github.com/kien/ctrlp.vim
-  hi link CtrlPMatch    Search
- 
-  " https://github.com/scrooloose/nerdtree
-  hi NERDTreeDir      guifg=#0087d7 gui=bold ctermfg=32 cterm=bold
-  hi link NERDTreeDirSlash NERDTreeDir
-  hi link NERDTreeOpenable NERDTreeDir
-  hi NERDTreeClosable guifg=#008700  guibg=#5fd75f gui=bold ctermfg=28 ctermbg=77 cterm=bold
-  hi NERDTreePart     guifg=#c0c0c0 ctermfg=250
-  hi NERDTreePartFile guifg=#000000 gui=bold ctermfg=16 cterm=bold
-  hi NERDTreeLinkFile guifg=#ffaf00 ctermfg=214
-  hi NERDTreeLinkDir  guifg=#ffaf00 ctermfg=214
-
-  " https://github.com/majutsushi/tagbar
-  hi link TagbarSignature Comment
-  hi TagbarScope      guifg=#0087d7 gui=bold ctermfg=32 cterm=bold
-  hi TagbarType       guifg=#66b600 gui=bold ctermfg=70 cterm=bold
-  hi TagbarKind       guifg=#0000ff ctermfg=21
-  
-  " https://github.com/justinmk/vim-sneak
-  hi SneakPluginTarget guibg=#ffaf00 guifg=#ffff00 gui=bold ctermbg=214 ctermfg=226 cterm=bold
-  hi link SneakPluginScope Visual
-
   " https://github.com/rhysd/clever-f.vim
   hi CleverFDefaultLabel guibg=#ffd700 guifg=#000000 gui=bold ctermbg=220 ctermfg=16 cterm=bold
 
-  " https://github.com/mhinz/vim-startify
-  hi StartifyBracket  guifg=#00d7ff  guibg=#005f87 gui=bold ctermfg=45 ctermbg=24 cterm=bold
-  hi StartifyFile     guifg=#005fd7 ctermfg=26
-  hi StartifyHeader   guifg=#005fd7 ctermfg=26
-  hi link StartifyFooter StartifyHeader
-  hi StartifyNumber   ctermfg=215 guifg=#00ff00  guibg=#005f87 gui=bold ctermfg=46 ctermbg=24 cterm=bold
-  hi StartifyPath     guifg=#878787 ctermfg=242
-  hi StartifySlash    guifg=#000000 ctermfg=16
-  hi StartifySpecial  guifg=#666666 guibg=#d7d7d7 ctermfg=242 ctermbg=252
+  " https://github.com/kien/ctrlp.vim
+  hi link CtrlPMatch Search
 
+  " https://github.com/dyng/ctrlsf.vim
+  hi CtrlsfLnumMatch guifg=#0087d7
+  hi CtrlsfMatch     guibg=#ffd700 guifg=#000000
+  
+  " https://github.com/ervandew/eclim
+  hi EclimError   guibg=#c9c4c4 guifg=#f92672
+  hi EclimWarning guibg=#c9c4c4 guifg=#FFFF00
+  hi EclimInfo    guibg=#c9c4c4 guifg=#afd700
+  
   " https://github.com/davidhalter/jedi-vim
   hi jediFunction     guibg=#878787 guifg=#f0f0f0 ctermbg=244 ctermfg=255
   hi jediFat          guibg=#878787 guifg=#afd700 gui=bold ctermbg=244 ctermfg=148 cterm=bold
-  
+
+  " https://github.com/scrooloose/nerdtree
+  hi NERDTreeDir          guifg=#0087d7 gui=bold ctermfg=32 cterm=bold
+  hi link NERDTreeDirSlash NERDTreeDir
+  hi NERDTreeOpenable     guifg=#0087d7 guibg=#f5f7f5 gui=bold ctermfg=28 ctermbg=255 cterm=bold
+  hi NERDTreeClosable     guifg=#0087d7 guibg=#f5f7f5 gui=bold ctermfg=28 ctermbg=255 cterm=bold
+  hi NERDTreePart         guifg=#c0c0c0 ctermfg=250
+  hi NERDTreePartFile     guifg=#000000 gui=bold ctermfg=16 cterm=bold
+  hi NERDTreeLinkFile     guifg=#ffaf00 ctermfg=214
+  hi NERDTreeLinkDir      guifg=#ffaf00 ctermfg=214
+  hi NERDTreeBookmarkName gui=bold ctermbg=255 guifg=#07281c
+  hi NERDTreeBookmark     ctermbg=255 guifg=#797772
+  hi NERDTreeBookmarksLeader guifg=#f5f7f5 guibg=#f5f7f5
+  " NERDTress File highlighting
+  " Fonte: https://github.com/scrooloose/nerdtree/issues/433#issuecomment-92590696
+  function! GrimmjowNERDTreeHighlightFile(extension, fg, guifg)
+      exec 'au filetype nerdtree highlight ' . a:extension .' ctermfg='. a:fg .' guifg='. a:guifg
+      exec 'au filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+  endfunction
+  call GrimmjowNERDTreeHighlightFile('java' , 'cyan'    , '#d80050')
+  call GrimmjowNERDTreeHighlightFile('sql'  , 'cyan'    , '#a444ff')
+
   " https://github.com/tomtom/quickfixsigns_vim
-  if g:kalisi_recolor_quickfixsigns == 1
+  if g:grimmjow_recolor_quickfixsigns == 1
        hi QFSignsMark       guifg=#005faf guibg=#a0a0a0 gui=bold ctermfg=25 ctermbg=247 cterm=bold
        hi QFSignsDiffAdd    guifg=#008700 guibg=#5fd75f ctermfg=28 ctermbg=77
        hi QFSignsDiffChange guifg=#5f5fd7 guibg=#afafff ctermfg=62 ctermbg=147
@@ -531,6 +603,71 @@ else
        let g:quickfixsigns#marks#texthl = "QFSignsMark"
        let g:quickfixsigns#vcsdiff#highlight = {'DEL': 'QFSignsDiffDelete', 'ADD': 'QFSignsDiffAdd', 'CHANGE': 'QFSignsDiffChange'}
   endif
+
+  " https://github.com/luochen1990/rainbow
+  let g:rainbow_conf = {
+  \	'guifgs': ['royalblue3', 'darkorange3', '#108f4f', 'firebrick'],
+  \	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+  \}
+
+  " https://github.com/scrooloose/syntastic
+  hi SyntasticErrorSign  guifg=#f92672 guibg=#f5f5f5
+  hi SyntasticWarningSign guifg=#005faf guibg=#f5f5f5
+
+  " https://github.com/majutsushi/tagbar
+  hi link TagbarSignature Comment
+  hi TagbarScope        guifg=#0087d7 gui=bold ctermfg=32 cterm=bold
+  hi TagbarType         guifg=#66b600 gui=bold ctermfg=70 cterm=bold
+  hi TagbarKind         guifg=#0087d7 ctermfg=21
+  hi TagbarAccessPublic guifg=#66b600  
+  
+  " https://github.com/Lokaltog/vim-easymotion
+  hi EasyMotionTarget        ctermbg=none ctermfg=green guifg=#108f4f gui=bold
+  hi EasyMotionTarget2First  ctermbg=none ctermfg=green guifg=#F92672 gui=bold
+  hi EasyMotionTarget2Second ctermbg=none ctermfg=green guifg=#1994d1 gui=bold
+  
+  " https://github.com/nathanaelkane/vim-indent-guides
+  hi IndentGuidesEven guifg=#c6c7c6 guibg=#dcdedc
+  hi IndentGuidesOdd  guifg=#dcdedc guibg=#c6c7c6
+
+  " https://github.com/qstrahl/vim-matchmaker
+  hi Matchmaker gui=underline
+
+  " https://github.com/weynhamz/vim-plugin-minibufexpl
+  hi MBENormal               guifg=#586e75 guibg=#c9c4c4
+  hi MBEChanged              guifg=#79b541 guibg=#c9c4c4
+  hi MBEVisibleNormal        guifg=#586e75 guibg=#c9c4c4
+  hi MBEVisibleChanged       guifg=#79b541 guibg=#c9c4c4
+  hi MBEVisibleActiveNormal  guifg=#005f00 guibg=#afd700
+  hi MBEVisibleActiveChanged guifg=#005f00 guibg=#afd700
+
+  " https://github.com/kshenoy/vim-signature
+  hi SignatureMarkText guifg=#0087d7 guibg=#f5f5f5
+
+  " https://github.com/mhinz/vim-signify
+  hi SignifySignAdd             guifg=#008700 guibg=#f5f5f5
+  hi SignifySignChange          guifg=#ff5f00 guibg=#f5f5f5
+  hi SignifySignChangeDelete    guifg=#ff5f00 guibg=#f5f5f5
+  hi SignifySignDelete          guifg=#ff0000 guibg=#f5f5f5
+  hi SignifySignDeleteFirstLine guifg=#ff0000 guibg=#f5f5f5
+
+  " https://github.com/justinmk/vim-sneak
+  hi SneakPluginTarget guibg=#ffaf00 guifg=#ffff00 gui=bold ctermbg=214 ctermfg=226 cterm=bold
+  hi link SneakPluginScope Visual
+
+  " https://github.com/mhinz/vim-startify
+  hi StartifyBracket ctermfg=240 guifg=#5DC2D6 guibg=NONE gui=bold ctermfg=45 ctermbg=255 cterm=bold
+  hi StartifyFile    ctermfg=26  guifg=#008700 gui=bold
+  hi StartifyHeader  ctermfg=203 guifg=#1060a0
+  hi StartifyNumber  ctermfg=215 guifg=#005faf guibg=NONE gui=bold ctermfg=240 ctermbg=255 cterm=bold
+  hi StartifyPath    ctermfg=245 guifg=#66b600
+  hi StartifySlash   ctermfg=240 guifg=#66b600
+  hi StartifySpecial  guifg=#666666 guibg=#d7d7d7 ctermfg=242 ctermbg=252
+  hi link StartifyFooter StartifyHeader
+
+  " https://github.com/mbbill/undotree
+  hi UndotreeSavedBig ctermfg=245   guifg=#11AF46
+  hi UndotreeSavedSmall ctermfg=240 guifg=#F1266F
 
   " 256 Color Terminal (light) ################################################
   if &t_Co > 255
@@ -574,7 +711,7 @@ else
     hi Directory cterm=bold ctermfg=25
     hi Keyword ctermfg=70
     hi Title cterm=bold ctermfg=25
-    hi NonText ctermbg=253 ctermfg=16
+    hi NonText ctermbg=255 ctermfg=16
     hi Conceal ctermbg=253 ctermfg=236
     hi DiffAdd ctermbg=194
     hi DiffChange ctermbg=254
@@ -587,13 +724,13 @@ else
     hi Visual ctermbg=153
     hi VisualNOS ctermbg=253
     hi Cursor ctermbg=196 ctermfg=231
-    hi CursorLineNr cterm=bold ctermbg=251 ctermfg=254
+    hi CursorLineNr cterm=bold ctermbg=255 ctermfg=16
     hi CursorLine ctermbg=254 cterm=none
     hi CursorColumn ctermbg=254
     hi MatchParen ctermbg=221 ctermfg=231
     hi Search cterm=bold ctermbg=148 ctermfg=16
     hi IncSearch cterm=reverse ctermbg=16 ctermfg=220
-    hi LineNr ctermbg=253 ctermfg=242
+    hi LineNr ctermbg=255 ctermfg=242
     hi StatusLine ctermfg=254 ctermbg=242 term=NONE cterm=NONE
     hi StatusLineNC ctermbg=247 ctermfg=254 term=NONE cterm=NONE
     hi VertSplit ctermbg=247 ctermfg=247
@@ -607,7 +744,7 @@ else
     hi TabLine ctermbg=22 ctermfg=148 cterm=none
     hi TabLineSel ctermbg=148 ctermfg=22 cterm=none
     hi TabLineFill ctermbg=247 ctermfg=236 cterm=none
-    hi SignColumn ctermbg=251 ctermfg=148
+    hi SignColumn ctermbg=255 ctermfg=148
     hi Pmenu ctermbg=254 ctermfg=16
     hi PmenuSel cterm=bold ctermbg=148 ctermfg=16
     hi PmenuSbar ctermbg=247
@@ -618,4 +755,6 @@ else
     hi javaScript ctermfg=59
     hi DjangoBlock cterm=bold ctermfg=22
   endif
-endif 
+endif
+
+

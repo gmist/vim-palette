@@ -1,0 +1,49 @@
+*forked from
+[flazz/vim-colorschemes](https://github.com/flazz/vim-colorschemes)*
+
+Vim palette
+================
+
+    Above all keep your colours fresh!
+[Édouard Manet](http://en.wikipedia.org/wiki/%C3%89douard_Manet)
+
+Installation
+------------
+
+if you [use vim + pathogen](http://vimcasts.org/episodes/synchronizing-plugins-with-git-submodules-and-pathogen/)
+
+    cd ~/.vim
+    git submodule add git@github.com:gmist/vim-palette.git bundle/colorschemes
+
+if you [use vim + vundle](https://github.com/gmarik/vundle)
+
+    " add to .vimrc
+    Bundle 'gmist/vim-palette'
+    :BundleInstall
+
+if you [use vim + NeoBundle](https://github.com/Shougo/neobundle.vim)
+
+    " add to .vimrc
+    NeoBundle 'gmist/vim-palette'
+    :NeoBundleInstall
+
+if you aren't so clever just get all the files in `colors/*.vim` into
+  `~/.vim/colors`
+
+    # after downloading; unpacking; cd'ing
+    cp colors/* ~/.vim/colors
+
+Previews
+------------------------
+
+many of the themes here are listed [here](http://vimcolorschemetest.googlecode.com/svn/html/index-html.html)
+
+Current colorschemes
+--------------------
+
+Total of {{. | len}} color schemes:
+{{range . -}}
+  * [{{.Name}}]({{.DescriptionURL}})
+{{end -}}
+
+- - -

@@ -1,20 +1,20 @@
 " Vim color file
 " Maintainer:	Pengkai Wang <pencay@gmail.com>
-" Last Change:	2014 Jun 20
+" Last Change:	2015 Jun 8 
 
 "come from Brackets, thanks.
 
 hi clear
 
 if exists("syntax_on")
-	syntax reset
+    syntax reset
 endif
 
 let colors_name = "aPen"
 
-hi Normal		guibg=#F8F8F8 ctermbg=white
-hi Search		guifg=#CC0000 guibg=#F4EF8D
-hi IncSearch	guifg=#F6C644 guibg=#F4EF8D ctermfg=darkblue ctermbg=gray
+hi Normal       guibg=#F8F8F8 ctermbg=white
+hi Search       guifg=#CC0000 guibg=#F4EF8D
+hi IncSearch    guifg=#F6C644 guibg=#F4EF8D ctermfg=darkblue ctermbg=gray
 
 hi SpecialKey		guifg=#cc0000			ctermfg=darkcyan
 "目录
@@ -33,7 +33,7 @@ hi VertSplit	guifg=black guibg=darkgray gui=none		ctermfg=black ctermbg=gray ter
 
 hi Folded	guifg=#808080 guibg=#000040			ctermfg=darkgrey ctermbg=black cterm=bold term=bold
 hi FoldColumn	guifg=#808080 guibg=#000040			ctermfg=darkgrey ctermbg=black cterm=bold term=bold
-"行号
+"Line number
 hi LineNr	guifg=#A2A2A2 guibg=#F8F8F8
 
 hi DiffAdd	guibg=darkblue	ctermbg=darkblue term=none cterm=none
@@ -48,13 +48,13 @@ hi lCursor	guifg=black guibg=white ctermfg=black ctermbg=white
 hi Comment	guifg=#A2A2A2 ctermfg=darkred
 hi Constant	ctermfg=magenta guifg=#F18900 cterm=none
 hi Special	ctermfg=brown guifg=Orange cterm=none gui=none
-"括号
+
 hi Identifier	ctermfg=cyan guifg=#446FBD cterm=none
 hi Statement	ctermfg=yellow cterm=none guifg=#446FBD gui=none
 hi PreProc	ctermfg=magenta guifg=#738D00 gui=none cterm=none
-"属性
+"Type
 hi type		guifg=#4E9A06 gui=none
-"标题
+"Title
 hi title	guifg=#535353
 hi htmlTagName	guifg=#446FBD
 
@@ -63,11 +63,11 @@ hi htmlTagName	guifg=#446FBD
 hi statement	guifg=#446FBD
 "function
 hi function	guifg=#446FBD
-"字符串
+"String
 hi string	guifg=#F18900
 hi Underlined	cterm=underline term=underline
 hi Ignore	guifg=bg ctermfg=bg
-"类属性名
+"Class
 hi StorageClass guifg=#8757AD
 
 " suggested by tigmoid, 2008 Jul 18
@@ -81,13 +81,10 @@ hi CursorLine guibg=#d4f7ff
 "hi CursorColumn guibg=#2d2d2d ctermbg=236 cterm=none
 hi MatchParen guifg=#f6f3e8 guibg=#CC0000 gui=bold 
 
-"hi Directory guifg=#FF3F3F guibg=# gui=NONE "目录名
-hi ErrorMsg guifg=#FF3F3F guibg=#EEEEEE gui=NONE "命令行上的错误信息
-hi TabLine guifg=#BBBBBB guibg=#36393B gui=NONE "非活动标签页标签
-hi TabLineFill guifg=grey20 guibg=#424546 gui=NONE "没有标签的地方
-hi Visual guifg=#FFFFFF guibg=#BB4C6A gui=NONE "可视模式的选择区
+"hi Directory guifg=#FF3F3F guibg=# gui=NONE "Dir
+hi ErrorMsg guifg=#FF3F3F guibg=#EEEEEE gui=NONE "Error message
+hi TabLine guifg=#BBBBBB guibg=#36393B gui=NONE "Not active tab
+hi TabLineFill guifg=grey20 guibg=#424546 gui=NONE "Has not tabs
+hi Visual guifg=#FFFFFF guibg=#BB4C6A gui=NONE "Visual mode
 
 hi Conditional guifg=#6084D8 guibg=NONE gui=NONE "if、then、else、endif、switch
-
-hi Label guifg=#AA57C4 gui=NONE "case、default 等
-

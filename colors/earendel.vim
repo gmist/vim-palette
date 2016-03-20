@@ -11,7 +11,7 @@ execute "command! -nargs=1 Colo set background=<args>"
 if &background == "light"
     hi Normal ctermbg=15 ctermfg=0 guibg=#fafafa guifg=#2d2d2d gui=none
 
-    hi ColorColumn ctermbg=7 ctermfg=fg guibg=#d5d5d5 gui=none
+    hi ColorColumn ctermbg=7 ctermfg=fg guibg=#f9c1c5 gui=none
     hi Cursor guibg=#000000 guifg=#ffffff gui=none
     hi CursorColumn ctermbg=7 ctermfg=fg guibg=#e0e0e0 gui=none
     hi CursorLine ctermbg=7 ctermfg=fg guibg=#e0e0e0 gui=none
@@ -83,7 +83,7 @@ if &background == "light"
 else
     hi Normal ctermbg=0 ctermfg=7 guibg=#2a2a2a guifg=#cacaca gui=none
 
-    hi ColorColumn ctermbg=8 ctermfg=15 guibg=#4a4a4a gui=none
+    hi ColorColumn ctermbg=8 ctermfg=15 guibg=#5f3639 gui=none
     hi Cursor guibg=#e5e5e5 guifg=#000000 gui=none
     hi CursorColumn ctermbg=8 ctermfg=15 guibg=#404040 gui=none
     hi CursorLine ctermbg=8 ctermfg=15 guibg=#404040 gui=none

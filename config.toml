@@ -1,5 +1,9 @@
-{
-  "github":[
+[config]
+  concurrencyLimit = 4
+	maxSchemes = 1000
+  
+[github]
+  colors = [
     "https://github.com/thinkpixellab/flatland/tree/master/Vim/colors",
     "https://github.com/noahfrederick/vim-hemisu/tree/master/colors",
     "https://github.com/Lokaltog/vim-distinguished/tree/develop/colors",
@@ -16,7 +20,6 @@
     "https://github.com/vim-scripts/phphaxor/tree/master/colors",
     "https://github.com/hukl/Smyck-Color-Scheme",
     "https://github.com/sergey-vlasov/codeblocks-dark.vim",
-    "https://github.com/nice/sweater",
+    "https://github.com/nice/sweater/colors",
     "https://github.com/freeo/vim-kalisi/tree/master/colors"
   ]
-}

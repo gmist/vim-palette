@@ -1,5 +1,5 @@
 " Vim color file
-" bayQua v1.2b
+" bayQua v2.0
 " http://www.vim.org/scripts/script.php?script_id=1454
 " 
 " Maintainer:	Shawn Axsom <axs221@gmail.com>
@@ -40,6 +40,8 @@ endif
 
 hi Title		guifg=#857540  gui=none
 hi Underlined   guifg=#8a758a  
+
+hi CursorLineNr guifg=#555555
 
 hi Statement    guifg=#da302a  gui=none
 hi Type			guifg=#307aca  gui=none
@@ -109,8 +111,8 @@ hi PmenuSel     guibg=#4a85ba guifg=#b0d0f0
 " color terminal definitions
 hi Normal ctermfg=black ctermbg=white
 hi Number ctermfg=blue
-highlight Operator ctermfg=yellow
-highlight Conditional ctermfg=magenta
+highlight Operator ctermfg=3
+highlight Conditional ctermfg=1
 highlight Repeat ctermfg=magenta
 hi Exception ctermfg=red
 hi function ctermfg=darkyellow
@@ -122,7 +124,7 @@ hi IncSearch	ctermfg=yellow ctermbg=darkyellow cterm=NONE
 hi Search	ctermfg=white ctermbg=darkyellow cterm=NONE
 hi MoreMsg	ctermfg=darkgreen
 hi ModeMsg	cterm=NONE ctermfg=brown
-hi LineNr	ctermfg=black ctermbg=blue
+hi LineNr term=bold cterm=bold	ctermfg=17 ctermbg=32
 hi Question	ctermfg=green
 hi StatusLine	ctermfg=cyan ctermbg=blue cterm=NONE
 hi StatusLineNC ctermfg=grey ctermbg=darkblue cterm=NONE
@@ -139,7 +141,7 @@ hi DiffChange	ctermbg=5
 hi DiffDelete	cterm=bold ctermfg=4 ctermbg=6
 hi DiffText	cterm=bold ctermbg=1
 
-hi Comment		ctermfg=grey  ctermbg=blue
+hi Comment		ctermfg=7  ctermbg=32
 
 hi Constant	ctermfg=darkblue
 hi Special	ctermfg=darkmagenta

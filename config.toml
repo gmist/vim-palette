@@ -1,6 +1,6 @@
 [config]
   concurrencyLimit = 4
-	maxSchemes = 1000
+  maxSchemes = 1000
   
 [github]
   colors = [
@@ -21,5 +21,6 @@
     "https://github.com/hukl/Smyck-Color-Scheme",
     "https://github.com/sergey-vlasov/codeblocks-dark.vim",
     "https://github.com/nice/sweater/colors",
-    "https://github.com/freeo/vim-kalisi/tree/master/colors"
+    "https://github.com/freeo/vim-kalisi/tree/master/colors",
+    "https://github.com/junegunn/seoul256.vim/tree/master/colors"
   ]

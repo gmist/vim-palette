@@ -23,5 +23,6 @@
     "https://github.com/nice/sweater/colors",
     "https://github.com/freeo/vim-kalisi/tree/master/colors",
     "https://github.com/junegunn/seoul256.vim/tree/master/colors",
-    "https://github.com/tomasr/molokai/tree/master/colors"
+    "https://github.com/tomasr/molokai/tree/master/colors".
+    "https://github.com/altercation/solarized/blob/master/vim-colors-solarized/colors/solarized.vim"
   ]

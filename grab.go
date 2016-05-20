@@ -49,7 +49,7 @@ func init() {
 	config.maxSchemes = tomlConfig.GetDefault("config.maxSchemes", 1000).(int64)
 
 	config.tmpDir = "tmp"
-	config.vimDirs = []string{"colors", "plugin", "autoload"}
+	config.vimDirs = []string{"colors"}
 	for _, dir := range append(config.vimDirs, config.tmpDir) {
 		err = createDir(dir)
 		if err != nil {

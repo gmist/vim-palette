@@ -1,6 +1,3 @@
-*forked from
-[flazz/vim-colorschemes](https://github.com/flazz/vim-colorschemes)*
-
 Vim palette
 ================
 

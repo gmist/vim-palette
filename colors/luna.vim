@@ -4,14 +4,14 @@
 " (see this url for latest release & screenshots)
 " License: MIT (see LICENSE.rst in the root of project)
 " Created: In the middle of Earth's Rotation
-" Version: 0.0.2
+" Version: 0.0.7
 "
 "
 " TODO: {{{
 " ---------------------------------------------------------------------
 " -- Clean up !
 " -- create a terminal version
-" -- add more lang specifics 
+" -- add more lang specifics
 " -- (Will think of some more sutff !)
 " }}}
 "
@@ -19,7 +19,7 @@
 " ---------------------------------------------------------------------
 " REQUIREMENTS:
 " ---------------------------------------------------------------------
-" Currently, 
+" Currently,
 "
 " This colourscheme is intended for use on:
 " - gVim >= 7.3 for Linux, Mac and Windows. (Since, all colours are in hex
@@ -37,7 +37,7 @@
 " 1. Download the luna distribution (as a zip archive, available on the github page)
 " and unarchive the file.
 " 2. Move `colors/luna.vim` to your `.vim/colors` directory.
-" 3. Enjoy ! 
+" 3. Enjoy !
 "
 " ---------------------------------------------------------------------
 " HIGHLY RECOMMENDED PATHOGEN INSTALLATION OPTION:
@@ -64,7 +64,7 @@
 " syntax enable
 " colorscheme luna
 " }}}
-" 
+"
 " Colorscheme initialization "{{{
 " ---------------------------------------------------------------------
 set background=dark
@@ -77,13 +77,13 @@ let g:colors_name = "luna"
 "
 " Gvim Highlighting: (see :help highlight-groups)"{{{
 " ---------------------------------------------------------------------
-" First, the Normal 
+" First, the Normal
 hi Normal        guifg=#e5e5e5 guibg=#212121 gui=NONE
 " ---------------------------------------------------------------------
-" The Languages stuff 
+" The Languages stuff
 hi Title         guifg=#c9f0fa guibg=NONE    gui=NONE
 " ---------------------------------------------------------------------
-hi Comment       guifg=#474747 guibg=NONE    gui=NONE
+hi Comment       guifg=#616161 guibg=NONE    gui=NONE
 " ---------------------------------------------------------------------
 " hi Constant      guifg=#e3588d guibg=NONE    gui=NONE
 hi Constant      guifg=#fff159 guibg=NONE    gui=NONE
@@ -155,10 +155,10 @@ hi VertSplit     guifg=#212121 guibg=#474747 gui=NONE
 hi VisualNOS     guifg=#262626 guibg=#ffff4d gui=NONE
 "hi Folded        guifg=#2e4545 guibg=#1e2d2d gui=NONE
 hi Folded        guifg=#426464 guibg=#1e2d2d gui=NONE
-hi DiffAdd       guifg=#ffffff guibg=#009900 gui=NONE
-hi DiffChange    guifg=#ffffff guibg=#da70d6 gui=NONE
-hi DiffDelete    guifg=#ffffff guibg=#cd0000 gui=NONE
-hi DiffText      guifg=#ffffff guibg=#008040 gui=NONE
+hi DiffAdd       guifg=#ffffff guibg=#006600 gui=NONE
+hi DiffChange    guifg=#ffffff guibg=#007878 gui=NONE
+hi DiffDelete    guifg=#ff0101 guibg=#9a0000 gui=NONE
+hi DiffText      guifg=#000000 guibg=#ffb733 gui=NONE
 hi SpellBad      guifg=#d80000 guibg=#ffff9a gui=NONE
 hi SpellCap      guifg=#8b4600 guibg=#ffff9a gui=NONE
 hi SpellRare     guifg=#ff0000 guibg=#ffff9a gui=NONE
@@ -174,7 +174,9 @@ hi StatusLineNC  guifg=#ffffff guibg=#474747 gui=NONE
 " hi PmenuSel      guifg=#fdf6e3 guibg=#2aa198 gui=NONE
 " hi PmenuSbar     guifg=#fdf6e3 guibg=#fdf6e3 gui=NONE
 " hi PmenuThumb    guifg=#fdf6e3 guibg=#fdf6e3 gui=NONE
-hi Pmenu         guifg=#426464 guibg=#002b2b gui=NONE
+" hi Pmenu         guifg=#426464 guibg=#002b2b gui=NONE
+" hi Pmenu         guifg=#609292 guibg=#002b2b gui=NONE
+hi Pmenu         guifg=#7ca9a9 guibg=#002b2b gui=NONE
 hi PmenuSel      guifg=#002b2b guibg=#fdf6e3 gui=NONE
 hi PmenuSbar     guifg=#002b2b guibg=#002b2b gui=NONE
 hi PmenuThumb    guifg=#002b2b guibg=#002b2b gui=NONE
@@ -187,13 +189,64 @@ hi CursorLineNr  guifg=#87ceeb guibg=NONE    gui=NONE
 hi CursorColumn  guifg=NONE    guibg=#2e2e2e gui=NONE
 hi ColorColumn   guifg=NONE    guibg=#3e3739 gui=NONE
 hi WildMenu      guifg=#002b2b guibg=#ffffff gui=NONE
-
+hi SignColumn    guifg=NONE    guibg=#212121 gui=NONE
+" }}}
+"
+" Language Specifics: {{{
 " ---------------------------------------------------------------------
-" Python Specifics 
+" These are language specifics. These are set explicitly to override the group
+" highlighting provided by vim (Simply to make the language that you're working
+" on more awesome, and fun to work with !)
+" ---------------------------------------------------------------------
+" Python Specifics
 "hi pythonDot        guifg=#00ffa5 guibg=NONE gui=NONE
 "hi pythonDot        guifg=#ffff31 guibg=NONE gui=NONE
 "hi pythonDot        guifg=#ff0800 guibg=NONE gui=NONE
-hi pythonDot        guifg=#d70a53 guibg=NONE gui=NONE
+hi pythonDot                 guifg=#d70a53 guibg=NONE gui=NONE
+hi pythonParameters          guifg=#bada55 guibg=NONE gui=NONE
+hi pythonClassParameters     guifg=#bada55 guibg=NONE gui=NONE
+hi pythonClass               guifg=#00bcbc guibg=NONE gui=NONE
+"
+" ---------------------------------------------------------------------
+"  Ruby Specifics
+hi rubyInterpolation      guifg=#ff4040 guibg=NONE gui=NONE
+"hi rubyMethodBlock        guifg=#ff8da1 guibg=NONE gui=NONE
+"hi rubyMethodBlock        guifg=#8ddaff guibg=NONE gui=NONE
+hi rubyMethodBlock        guifg=#ffb28d guibg=NONE gui=NONE
+hi rubyCurlyBlock         guifg=#f64a8a guibg=NONE gui=NONE
+hi rubyDoBlock            guifg=#f64a8a guibg=NONE gui=NONE
+hi rubyBlockExpression    guifg=#f64a8a guibg=NONE gui=NONE
+hi rubyArrayDelimiter     guifg=#00bcbc guibg=NONE gui=NONE
+"
+" ---------------------------------------------------------------------
+" }}}
+"
+" Extras: {{{
+" ---------------------------------------------------------------------
+" These are extra parts for highlighting certain external plugins
+" ---------------------------------------------------------------------
+"
+" Startify (https://github.com/mhinz/vim-startify)
+"
+hi StartifyBracket  guifg=#b06bfc guibg=NONE gui=NONE
+hi StartifyNumber   guifg=#bada55 guibg=NONE gui=NONE
+hi StartifySpecial  guifg=#2e8857 guibg=NONE gui=NONE
+hi StartifyPath     guifg=#545454 guibg=NONE gui=NONE
+hi StartifySlash    guifg=#474747 guibg=NONE gui=NONE
+" hi StartifyFile     guifg=#00ffa5 guibg=NONE gui=NONE
+" hi StartifyFile     guifg=#2aa198 guibg=NONE gui=NONE
+" hi StartifyFile     guifg=#f0e68c guibg=NONE gui=NONE
+hi StartifyFile     guifg=#fa8072 guibg=NONE gui=NONE
+hi StartifyHeader   guifg=#f0e68c guibg=NONE gui=NONE
+hi StartifyFooter   guifg=#a0522d guibg=NONE gui=NONE
+"
+" ---------------------------------------------------------------------
+"
+" Signify (https://github.com/mhinz/vim-signify)
+"
+hi SignifySignAdd    guifg=#00ff00 guibg=#212121 gui=NONE
+hi SignifySignChange guifg=#ff5f00 guibg=#212121 gui=NONE
+hi SignifySignDelete guifg=#ff0000 guibg=#212121 gui=NONE
 "
 " ---------------------------------------------------------------------
 " }}}

@@ -332,9 +332,7 @@ func main() {
 	for _, schemeURL := range githubColors {
 		schemes, err := getGitHub(schemeURL.(string))
 		if err == nil {
-			for _, scheme := range schemes {
-				schemesGitHub = append(schemesGitHub, scheme)
-			}
+			schemesGitHub = append(schemesGitHub, schemes...)
 		}
 	}
 
@@ -381,6 +379,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = readmeTmpl.Execute(readmeFile, allSchemes)
+	readmeTmpl.Execute(readmeFile, allSchemes)
 	readmeFile.Close()
 }

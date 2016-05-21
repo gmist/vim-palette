@@ -4,6 +4,7 @@
   
 [github]
   colors = [
+    "https://github.com/sjl/badwolf/tree/master/colors",
     "https://github.com/vim-scripts/tabula.vim/tree/master/colors",
     "https://github.com/thinkpixellab/flatland/tree/master/Vim/colors",
     "https://github.com/noahfrederick/vim-hemisu/tree/master/colors",

@@ -281,8 +281,8 @@ func main() {
 			if index == -1 {
 				return
 			}
-			id, err := strconv.Atoi(cs.downloadURL[index+1:])
-			if err != nil {
+			id, errAtoi := strconv.Atoi(cs.downloadURL[index+1:])
+			if errAtoi != nil {
 				return
 			}
 			switch cs.filetype {
@@ -330,8 +330,8 @@ func main() {
 	githubColors := config.Get("github.colors").([]interface{})
 	var schemesGitHub []*ColorScheme
 	for _, schemeURL := range githubColors {
-		schemes, err := getGitHub(schemeURL.(string))
-		if err == nil {
+		schemes, errGitHub := getGitHub(schemeURL.(string))
+		if errGitHub == nil {
 			schemesGitHub = append(schemesGitHub, schemes...)
 		}
 	}

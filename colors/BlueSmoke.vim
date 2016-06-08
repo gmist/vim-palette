@@ -15,21 +15,22 @@ let colors_name = "BlueSmoke"
 " Normal should come first
 "Blue tint: #F8F8FF
 "Orange tint: #FEF1E0
-hi Normal		guifg=Grey10 guibg=#f8f8ff
+hi Normal		guifg=Grey10 guibg=White
 
 hi Cursor       guifg=White	guibg=Black
 hi lCursor      guifg=NONE guibg=Cyan
 
-hi Visual       guifg=Grey95 guibg=SlateBlue
+hi Visual       guifg=White guibg=#338FFF
 hi VisualNOS    gui=underline
 
 hi Folded       guifg=#808080 guibg=#ECECEC
 
 hi StatusLineNC	guifg=Grey75 guibg=NavyBlue gui=reverse,underline
 hi VertSplit    guifg=Grey75 guibg=NavyBlue
-hi StatusLine   guifg=White guibg=SkyBlue4 gui=none
+hi StatusLine   guifg=White guibg=SlateBlue gui=none
 
 hi LineNr       guifg=#959595 guibg=#ECECEC
+"#FFF4CE
 hi CursorLine   guibg=#FEF1E0
 
 hi DiffAdd       guibg=LightBlue
@@ -61,13 +62,17 @@ hi Comment          guifg=#858E8F
 hi String           guifg=Red4
 hi Constant         guifg=Red4
 hi Operator         guifg=Cyan4
+hi SyntaxChar       guifg=Black gui=None 
+
+" github #BA1D5D
+hi Statement        guifg=Blue3 gui=None
+hi StorageClass     guifg=Blue3
 hi Identifier       guifg=Cyan4
 hi Function         guifg=Cyan4
+
+hi csClassOrStruct  guifg=Blue3
+hi Type	            guifg=Blue3 gui=None
 hi PreProc          guifg=Magenta4
 hi Special          guifg=Orange3
-hi Statement        guifg=Blue3 gui=None
-hi Type             guifg=Blue3 gui=None
-hi SyntaxChar       guifg=NavyBlue gui=None 
-hi csClassOrStruct  guifg=Blue3
 
 " vim: sw=2

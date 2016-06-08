@@ -22,30 +22,40 @@ hi! Underlined cterm=NONE gui=NONE ctermfg=13 guifg=#6c71c4 ctermbg=NONE guibg=N
 hi! Ignore cterm=NONE gui=NONE ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE
 hi! Error cterm=NONE,bold gui=NONE,bold ctermfg=1 guifg=#dc322f ctermbg=NONE guibg=NONE
 hi! Todo cterm=NONE,bold gui=NONE,bold ctermfg=5 guifg=#d33682 ctermbg=NONE guibg=NONE
+if get(g:, "solarized_visibility", "") == "high"
+  hi! SpecialKey cterm=NONE,reverse gui=NONE,reverse ctermfg=9 guifg=#cb4b16 ctermbg=NONE guibg=NONE
+  hi! NonText cterm=NONE,bold gui=NONE,bold ctermfg=9 guifg=#cb4b16 ctermbg=NONE guibg=NONE
+  hi! CursorLineNr cterm=NONE,bold gui=NONE,bold ctermfg=9 guifg=#cb4b16 ctermbg=0 guibg=#073642
+  hi! Title cterm=NONE,bold gui=NONE,bold ctermfg=3 guifg=#b58900 ctermbg=NONE guibg=NONE
+elseif get(g:, "solarized_visibility", "") == "low"
+  hi! SpecialKey cterm=NONE,bold gui=NONE,bold ctermfg=0 guifg=#073642 ctermbg=NONE guibg=NONE
+  hi! NonText cterm=NONE,bold gui=NONE,bold ctermfg=0 guifg=#073642 ctermbg=NONE guibg=NONE
+  hi! CursorLineNr cterm=NONE,bold gui=NONE,bold ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642
+  hi! Title cterm=NONE,bold gui=NONE,bold ctermfg=11 guifg=#657b83 ctermbg=NONE guibg=NONE
+else
+  hi! SpecialKey cterm=NONE,bold gui=NONE,bold ctermfg=12 guifg=#839496 ctermbg=0 guibg=#073642
+  hi! NonText cterm=NONE,bold gui=NONE,bold ctermfg=12 guifg=#839496 ctermbg=NONE guibg=NONE
+  hi! CursorLineNr cterm=NONE,bold gui=NONE,bold ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642
+  hi! Title cterm=NONE,bold gui=NONE,bold ctermfg=3 guifg=#b58900 ctermbg=NONE guibg=NONE
+endif
 hi! NormalMode ctermfg=14 guifg=#93a1a1 ctermbg=15 guibg=#fdf6e3 cterm=NONE,reverse gui=NONE,reverse
 hi! InsertMode ctermfg=6 guifg=#2aa198 ctermbg=15 guibg=#fdf6e3 cterm=NONE,reverse gui=NONE,reverse
 hi! ReplaceMode ctermfg=9 guifg=#cb4b16 ctermbg=15 guibg=#fdf6e3 cterm=NONE,reverse gui=NONE,reverse
 hi! VisualMode ctermfg=5 guifg=#d33682 ctermbg=15 guibg=#fdf6e3 cterm=NONE,reverse gui=NONE,reverse
 hi! CommandMode ctermfg=5 guifg=#d33682 ctermbg=15 guibg=#fdf6e3 cterm=NONE,reverse gui=NONE,reverse
-if get(g:, "solarized_visibility", "") == "high"
-  hi! SpecialKey cterm=NONE,reverse gui=NONE,reverse ctermfg=1 guifg=#dc322f ctermbg=NONE guibg=NONE
-  hi! NonText cterm=NONE,bold gui=NONE,bold ctermfg=1 guifg=#dc322f ctermbg=NONE guibg=NONE
-  hi! CursorLineNr cterm=NONE,bold gui=NONE,bold ctermfg=1 guifg=#dc322f ctermbg=0 guibg=#073642
-elseif get(g:, "solarized_visibility", "") == "low"
-  hi! SpecialKey cterm=NONE,bold gui=NONE,bold ctermfg=0 guifg=#073642 ctermbg=NONE guibg=NONE
-  hi! NonText cterm=NONE,bold gui=NONE,bold ctermfg=0 guifg=#073642 ctermbg=NONE guibg=NONE
-  hi! CursorLineNr cterm=NONE,bold gui=NONE,bold ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642
-else
-  hi! SpecialKey cterm=NONE,bold gui=NONE,bold ctermfg=12 guifg=#839496 ctermbg=0 guibg=#073642
-  hi! NonText cterm=NONE,bold gui=NONE,bold ctermfg=12 guifg=#839496 ctermbg=NONE guibg=NONE
-  hi! CursorLineNr cterm=NONE,bold gui=NONE,bold ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642
-endif
 if get(g:, "solarized_statusline", "") == "low"
-  hi! StatusLine ctermfg=11 guifg=#657b83 ctermbg=7 guibg=#eee8d5 cterm=NONE,reverse gui=NONE,reverse
+  hi! StatusLine ctermfg=11 guifg=#657b83 ctermbg=15 guibg=#fdf6e3 cterm=NONE,reverse gui=NONE,reverse
+  hi! StatusLineNC ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
+  hi! TabLine ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 cterm=NONE gui=NONE
+  hi! TabLineFill ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 cterm=NONE gui=NONE
+  hi! TabLineSel ctermfg=15 guifg=#fdf6e3 ctermbg=11 guibg=#657b83 cterm=NONE gui=NONE
 else
   hi! StatusLine ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
+  hi! StatusLineNC ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
+  hi! TabLine ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 cterm=NONE gui=NONE
+  hi! TabLineFill ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 cterm=NONE gui=NONE
+  hi! TabLineSel ctermfg=15 guifg=#fdf6e3 ctermbg=11 guibg=#657b83 cterm=NONE gui=NONE
 endif
-hi! StatusLineNC ctermfg=11 guifg=#657b83 ctermbg=7 guibg=#eee8d5 cterm=NONE,reverse gui=NONE,reverse
 hi! Visual ctermfg=11 guifg=#657b83 ctermbg=8 guibg=#002b36 cterm=NONE,reverse gui=NONE,reverse
 hi! Directory cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=NONE guibg=NONE
 hi! ErrorMsg cterm=NONE,reverse gui=NONE,reverse ctermfg=1 guifg=#dc322f ctermbg=15 guibg=#fdf6e3
@@ -56,10 +66,9 @@ hi! ModeMsg cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=NONE guibg=NONE
 hi! LineNr cterm=NONE gui=NONE ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642
 hi! Question cterm=NONE,bold gui=NONE,bold ctermfg=6 guifg=#2aa198 ctermbg=NONE guibg=NONE
 hi! VertSplit cterm=NONE gui=NONE ctermfg=11 guifg=#657b83 ctermbg=11 guibg=#657b83
-hi! Title cterm=NONE,bold gui=NONE,bold ctermfg=9 guifg=#cb4b16 ctermbg=NONE guibg=NONE
 hi! VisualNOS ctermfg=NONE guifg=NONE ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
-hi! WarningMsg cterm=NONE,bold gui=NONE,bold ctermfg=1 guifg=#dc322f ctermbg=NONE guibg=NONE
-hi! WildMenu ctermfg=15 guifg=#fdf6e3 ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
+hi! WarningMsg cterm=NONE,bold gui=NONE,bold ctermfg=9 guifg=#cb4b16 ctermbg=NONE guibg=NONE
+hi! WildMenu ctermbg=15 guibg=#fdf6e3 ctermfg=0 guifg=#073642 cterm=NONE,reverse gui=NONE,reverse
 hi! Folded cterm=NONE,bold gui=NONE,bold ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 guisp=#002b36
 hi! FoldColumn cterm=NONE gui=NONE ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642
 if get(g:, "solarized_diffmode", "") == "high"
@@ -80,7 +89,7 @@ else
 endif
 hi! SignColumn cterm=NONE gui=NONE ctermfg=14 guifg=#93a1a1 ctermbg=NONE guibg=NONE
 hi! Conceal cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=NONE guibg=NONE
-hi! SpellBad cterm=NONE,undercurl gui=NONE,undercurl ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE guisp=#dc322f
+hi! SpellBad cterm=NONE,undercurl gui=NONE,undercurl ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE guisp=#d33682
 hi! SpellCap cterm=NONE,undercurl gui=NONE,undercurl ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE guisp=#6c71c4
 hi! SpellRare cterm=NONE,undercurl gui=NONE,undercurl ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE guisp=#2aa198
 hi! SpellLocal cterm=NONE,undercurl gui=NONE,undercurl ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE guisp=#b58900
@@ -88,9 +97,6 @@ hi! Pmenu ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 cterm=NONE,reverse gu
 hi! PmenuSel ctermfg=11 guifg=#657b83 ctermbg=15 guibg=#fdf6e3 cterm=NONE,reverse gui=NONE,reverse
 hi! PmenuSbar ctermfg=15 guifg=#fdf6e3 ctermbg=14 guibg=#93a1a1 cterm=NONE,reverse gui=NONE,reverse
 hi! PmenuThumb ctermfg=14 guifg=#93a1a1 ctermbg=8 guibg=#002b36 cterm=NONE,reverse gui=NONE,reverse
-hi! TabLine ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 guisp=#93a1a1 cterm=NONE gui=NONE
-hi! TabLineFill ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 guisp=#93a1a1 cterm=NONE gui=NONE
-hi! TabLineSel ctermfg=11 guifg=#657b83 ctermbg=15 guibg=#fdf6e3 guisp=#93a1a1 cterm=NONE,reverse gui=NONE,reverse
 hi! CursorColumn cterm=NONE gui=NONE ctermfg=NONE guifg=NONE ctermbg=0 guibg=#073642
 hi! CursorLine cterm=NONE gui=NONE ctermfg=NONE guifg=NONE ctermbg=0 guibg=#073642 guisp=#eee8d5
 hi! ColorColumn cterm=NONE gui=NONE ctermfg=NONE guifg=NONE ctermbg=0 guibg=#073642
@@ -270,7 +276,15 @@ hi! pandocMetadata ctermfg=4 guifg=#268bd2 ctermbg=NONE guibg=NONE cterm=NONE gu
 hi! pandocMetadataKey ctermfg=4 guifg=#268bd2 ctermbg=NONE guibg=NONE cterm=NONE gui=NONE
 hi! pandocMetadata ctermfg=4 guifg=#268bd2 ctermbg=NONE guibg=NONE cterm=NONE,bold gui=NONE,bold
 hi! link pandocMetadataTitle pandocMetadata
-
+if get(g:, "solarized_term_italics", 0) != 0
+  hi Comment cterm=italic
+  hi gitcommitComment cterm=italic
+  hi htmlSpecialTagName cterm=italic
+  hi pandocComment cterm=italic
+  hi pandocEmphasisDefinition cterm=italic
+  hi pandocEmphasisTable cterm=italic
+  hi pandocEmphasis cterm=italic
+endif
 " License "{{{
 " ---------------------------------------------------------------------
 "

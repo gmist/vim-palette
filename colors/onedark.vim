@@ -52,6 +52,8 @@ if exists("syntax_on")
   syntax reset
 endif
 
+set t_Co=256
+
 let g:colors_name="onedark"
 
 " Set to "256" for 256-color terminals, or
@@ -259,11 +261,13 @@ call s:h("javaScriptReserved", { "fg": s:purple })
 " https://github.com/pangloss/vim-javascript
 call s:h("jsArrowFunction", { "fg": s:purple })
 call s:h("jsClassKeywords", { "fg": s:purple })
+call s:h("jsDocParam", { "fg": s:blue })
+call s:h("jsDocTags", { "fg": s:purple })
 call s:h("jsFuncCall", { "fg": s:blue })
 call s:h("jsFunction", { "fg": s:purple })
 call s:h("jsGlobalObjects", { "fg": s:yellow })
-call s:h("jsModules", { "fg": s:purple })
 call s:h("jsModuleWords", { "fg": s:purple })
+call s:h("jsModules", { "fg": s:purple })
 call s:h("jsNull", { "fg": s:dark_yellow })
 call s:h("jsOperator", { "fg": s:purple })
 call s:h("jsStorageClass", { "fg": s:purple })
@@ -273,8 +277,11 @@ call s:h("jsThis", { "fg": s:red })
 call s:h("jsUndefined", { "fg": s:dark_yellow })
 " https://github.com/othree/yajs.vim
 call s:h("javascriptArrowFunc", { "fg": s:purple })
-call s:h("javascriptClassKeyword", { "fg": s:purple })
 call s:h("javascriptClassExtends", { "fg": s:purple })
+call s:h("javascriptClassKeyword", { "fg": s:purple })
+call s:h("javascriptDocNotation", { "fg": s:purple })
+call s:h("javascriptDocParamName", { "fg": s:blue })
+call s:h("javascriptDocTags", { "fg": s:purple })
 call s:h("javascriptEndColons", { "fg": s:white })
 call s:h("javascriptExport", { "fg": s:purple })
 call s:h("javascriptFuncArg", { "fg": s:white })
@@ -289,9 +296,15 @@ call s:h("javascriptTemplateSB", { "fg": s:dark_red })
 call s:h("javascriptVariable", { "fg": s:purple })
 
 " JSON
+call s:h("jsonCommentError", { "fg": s:white })
 call s:h("jsonKeyword", { "fg": s:red })
 call s:h("jsonQuote", { "fg": s:white })
+call s:h("jsonMissingCommaError", { "fg": s:red, "gui": "reverse" })
+call s:h("jsonNoQuotesError", { "fg": s:red, "gui": "reverse" })
+call s:h("jsonNumError", { "fg": s:red, "gui": "reverse" })
 call s:h("jsonString", { "fg": s:green })
+call s:h("jsonStringSQError", { "fg": s:red, "gui": "reverse" })
+call s:h("jsonSemicolonError", { "fg": s:red, "gui": "reverse" })
 
 " Markdown
 call s:h("markdownCode", { "fg": s:green })
@@ -353,6 +366,12 @@ call s:h("sassMixin", { "fg": s:purple })
 call s:h("sassMixinName", { "fg": s:blue })
 call s:h("sassMixing", { "fg": s:purple })
 
+" XML
+call s:h("xmlAttrib", { "fg": s:dark_yellow })
+call s:h("xmlEndTag", { "fg": s:red })
+call s:h("xmlTag", { "fg": s:red })
+call s:h("xmlTagName", { "fg": s:red })
+
 " +---------------------+
 " | Plugin Highlighting |
 " +---------------------+
@@ -394,3 +413,28 @@ hi link gitcommitSelected gitcommitComment
 hi link gitcommitDiscardedArrow gitcommitDiscardedFile
 hi link gitcommitSelectedArrow gitcommitSelectedFile
 hi link gitcommitUnmergedArrow gitcommitUnmergedFile
+
+" +------------------------+
+" | Neovim terminal colors |
+" +------------------------+
+
+if has("nvim")
+  let g:terminal_color_0 =  s:black.gui
+  let g:terminal_color_1 =  s:red.gui
+  let g:terminal_color_2 =  s:green.gui
+  let g:terminal_color_3 =  s:yellow.gui
+  let g:terminal_color_4 =  s:blue.gui
+  let g:terminal_color_5 =  s:purple.gui
+  let g:terminal_color_6 =  s:cyan.gui
+  let g:terminal_color_7 =  s:white.gui
+  let g:terminal_color_8 =  s:visual_grey.gui
+  let g:terminal_color_9 =  s:dark_red.gui
+  let g:terminal_color_10 = s:green.gui " No dark version
+  let g:terminal_color_11 = s:dark_yellow.gui
+  let g:terminal_color_12 = s:blue.gui " No dark version
+  let g:terminal_color_13 = s:purple.gui " No dark version
+  let g:terminal_color_14 = s:cyan.gui " No dark version
+  let g:terminal_color_15 = s:comment_grey.gui
+  let g:terminal_color_background = g:terminal_color_0
+  let g:terminal_color_foreground = g:terminal_color_7
+endif

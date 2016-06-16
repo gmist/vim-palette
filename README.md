@@ -38,7 +38,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 772+ color schemes:
+Total of 773+ color schemes:
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
 * [256-jungle.vim](http://www.vim.org/script.php?script_id=2240)
@@ -188,7 +188,7 @@ Total of 772+ color schemes:
 * [cloudy.vim](http://www.vim.org/script.php?script_id=1363)
 * [clue.vim](http://www.vim.org/script.php?script_id=2359)
 * [cmd.vim](http://www.vim.org/script.php?script_id=4187)
-* [cobalt.vim](http://www.vim.org/script.php?script_id=2828)
+* [cobalt.vim](http://www.vim.org/script.php?script_id=5022)
 * [cobaltish.vim](http://www.vim.org/script.php?script_id=3439)
 * [codeblocks-dark.vim](https://github.com/sergey-vlasov/codeblocks-dark.vim)
 * [codeburn.vim](http://www.vim.org/script.php?script_id=2574)
@@ -256,7 +256,7 @@ Total of 772+ color schemes:
 * [desert.vim](http://www.vim.org/script.php?script_id=105)
 * [desert256.vim](http://www.vim.org/script.php?script_id=1243)
 * [desertEx.vim](http://www.vim.org/script.php?script_id=1693)
-* [desertedocean.vim](http://www.vim.org/script.php?script_id=1400)
+* [desertedocean.vim](http://www.vim.org/script.php?script_id=1404)
 * [desertedoceanburnt.vim](http://www.vim.org/script.php?script_id=1407)
 * [detailed.vim](http://www.vim.org/script.php?script_id=4297)
 * [devbox-dark-256.vim](http://www.vim.org/script.php?script_id=3349)
@@ -315,7 +315,7 @@ Total of 772+ color schemes:
 * [forneus.vim](http://www.vim.org/script.php?script_id=2757)
 * [freshcut-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [freshcut.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
-* [freya.vim](http://www.vim.org/script.php?script_id=1651)
+* [freya.vim](http://www.vim.org/script.php?script_id=4239)
 * [frontier-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [frontier.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [fruidle.vim](http://www.vim.org/script.php?script_id=2494)
@@ -632,7 +632,7 @@ Total of 772+ color schemes:
 * [sienna.vim](http://www.vim.org/script.php?script_id=1259)
 * [sierra.vim](http://www.vim.org/script.php?script_id=5331)
 * [sift.vim](http://www.vim.org/script.php?script_id=1472)
-* [silent.vim](http://www.vim.org/script.php?script_id=3097)
+* [silent.vim](http://www.vim.org/script.php?script_id=2266)
 * [simple-dark.vim](http://www.vim.org/script.php?script_id=3890)
 * [simple256.vim](http://www.vim.org/script.php?script_id=1962)
 * [simpleRGB.vim](http://www.vim.org/script.php?script_id=3649)
@@ -696,7 +696,7 @@ Total of 772+ color schemes:
 * [tabula.zip](http://www.vim.org/script.php?script_id=1718)
 * [tango-desert.vim](http://www.vim.org/script.php?script_id=2671)
 * [tango-morning.vim](http://www.vim.org/script.php?script_id=2640)
-* [tango.vim](http://www.vim.org/script.php?script_id=2799)
+* [tango.vim](http://www.vim.org/script.php?script_id=1686)
 * [tango2.vim](http://www.vim.org/script.php?script_id=2414)
 * [tangolight.vim](http://www.vim.org/script.php?script_id=3629)
 * [tangoshady.vim](http://www.vim.org/script.php?script_id=3206)
@@ -707,6 +707,7 @@ Total of 772+ color schemes:
 * [tender-contrast.vim](https://github.com/jacoborus/tender/tree/master/colors)
 * [tender.vim](https://github.com/jacoborus/tender/tree/master/colors)
 * [tendercontrast.vim](https://github.com/jacoborus/tender/tree/master/colors)
+* [tenderday.vim](https://github.com/jacoborus/tender/tree/master/colors)
 * [termpot.vim](http://www.vim.org/script.php?script_id=4333)
 * [terse.vim](http://www.vim.org/script.php?script_id=3570)
 * [tesla.vim](http://www.vim.org/script.php?script_id=3035)

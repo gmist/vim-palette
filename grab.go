@@ -49,7 +49,7 @@ func init() {
 	config.maxSchemes = tomlConfig.GetDefault("config.maxSchemes", 1000).(int64)
 
 	config.tmpDir = "tmp"
-	config.vimDirs = []string{"colors"}
+	config.vimDirs = []string{"colors", "autoload", "syntax"}
 	for _, dir := range append(config.vimDirs, config.tmpDir) {
 		err = createDir(dir)
 		if err != nil {
@@ -166,11 +166,20 @@ func downloadZip(cs *ColorScheme) error {
 			if dir != "" {
 				dirs := strings.Split(dir[:len(dir)-1], string(filepath.Separator))
 				dirsLen := len(dirs)
-				i := sort.SearchStrings(config.vimDirs, dirs[dirsLen-1])
-				if i < len(config.vimDirs) {
-					file = filepath.Join(dirs[dirsLen-1], file)
+				if dirsLen == 1 {
+					i := sort.SearchStrings(config.vimDirs, dirs[0])
+					if i < len(config.vimDirs) {
+						file = filepath.Join(dirs[dirsLen-1], file)
+					} else {
+						file = ""
+					}
 				} else {
-					file = ""
+					i := sort.SearchStrings(config.vimDirs, dirs[1])
+					if i < len(config.vimDirs) {
+						file = filepath.Join(append(dirs[1:], file)...)
+					} else {
+						file = ""
+					}
 				}
 			} else {
 				file = filepath.Join("colors", file)
@@ -215,12 +224,7 @@ func writeFile(fileName string, src io.Reader) error {
 }
 
 func createDir(dirName string) error {
-	_, err := os.Stat(dirName)
-	if os.IsNotExist(err) {
-		err = os.MkdirAll(dirName, 0755)
-		return err
-	}
-	return nil
+	return os.MkdirAll(dirName, 0755)
 }
 
 func getGitHub(url string) ([]*ColorScheme, error) {

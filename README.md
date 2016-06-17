@@ -38,7 +38,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 808+ color schemes:
+Total of 809+ color schemes:
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
 * [256-jungle.vim](http://www.vim.org/script.php?script_id=2240)
@@ -350,7 +350,7 @@ Total of 808+ color schemes:
 * [forneus.vim](http://www.vim.org/script.php?script_id=2757)
 * [freshcut-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [freshcut.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
-* [freya.vim](http://www.vim.org/script.php?script_id=4239)
+* [freya.vim](http://www.vim.org/script.php?script_id=1651)
 * [frontier-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [frontier.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [fruidle.vim](http://www.vim.org/script.php?script_id=2494)
@@ -667,7 +667,7 @@ Total of 808+ color schemes:
 * [sienna.vim](http://www.vim.org/script.php?script_id=1259)
 * [sierra.vim](http://www.vim.org/script.php?script_id=5331)
 * [sift.vim](http://www.vim.org/script.php?script_id=1472)
-* [silent.vim](http://www.vim.org/script.php?script_id=2266)
+* [silent.vim](http://www.vim.org/script.php?script_id=3097)
 * [simple-dark.vim](http://www.vim.org/script.php?script_id=3890)
 * [simple256.vim](http://www.vim.org/script.php?script_id=1962)
 * [simpleRGB.vim](http://www.vim.org/script.php?script_id=3649)
@@ -700,6 +700,7 @@ Total of 808+ color schemes:
 * [solarized8_light_flat.vim](https://github.com/lifepillar/vim-solarized8/tree/master/colors)
 * [solarized8_light_high.vim](https://github.com/lifepillar/vim-solarized8/tree/master/colors)
 * [solarized8_light_low.vim](https://github.com/lifepillar/vim-solarized8/tree/master/colors)
+* [solas.vim](https://github.com/damage220/solas.vim/tree/master/colors)
 * [sonofobsidian.vim](http://www.vim.org/script.php?script_id=3260)
 * [sonoma.vim](http://www.vim.org/script.php?script_id=4072)
 * [sorcerer.vim](http://www.vim.org/script.php?script_id=3299)

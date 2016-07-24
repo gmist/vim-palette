@@ -38,7 +38,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 836+ color schemes:
+Total of 837+ color schemes:
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
 * [256-jungle.vim](http://www.vim.org/script.php?script_id=2240)
@@ -314,7 +314,7 @@ Total of 836+ color schemes:
 * [desert.vim](http://www.vim.org/script.php?script_id=105)
 * [desert256.vim](http://www.vim.org/script.php?script_id=1243)
 * [desertEx.vim](http://www.vim.org/script.php?script_id=1693)
-* [desertedocean.vim](http://www.vim.org/script.php?script_id=1400)
+* [desertedocean.vim](http://www.vim.org/script.php?script_id=1404)
 * [desertedoceanburnt.vim](http://www.vim.org/script.php?script_id=1407)
 * [detailed.vim](http://www.vim.org/script.php?script_id=4297)
 * [devbox-dark-256.vim](http://www.vim.org/script.php?script_id=3349)
@@ -493,7 +493,7 @@ Total of 836+ color schemes:
 * [lilydjwg_dark.vim](http://www.vim.org/script.php?script_id=2585)
 * [lilydjwg_green.vim](http://www.vim.org/script.php?script_id=2516)
 * [lilypink.vim](http://www.vim.org/script.php?script_id=3323)
-* [lingodirector.vim](http://www.vim.org/script.php?script_id=4068)
+* [lingodirector.vim](http://www.vim.org/script.php?script_id=1012)
 * [liquidcarbon.vim](http://www.vim.org/script.php?script_id=3274)
 * [literal_tango.vim](http://www.vim.org/script.php?script_id=2430)
 * [ljyat.vim](http://www.vim.org/script.php?script_id=4389)
@@ -504,6 +504,7 @@ Total of 836+ color schemes:
 * [luinnar.vim](http://www.vim.org/script.php?script_id=2189)
 * [luna-term.vim](https://github.com/notpratheek/vim-luna/tree/master/colors)
 * [luna.vim](https://github.com/notpratheek/vim-luna/tree/master/colors)
+* [lxvc.vim](https://github.com/0ax1/lxvc/tree/master/colors)
 * [madeofcode.vim](https://github.com/halbtuerke/madeofcode.vim/tree/master/colors)
 * [mango.vim](http://www.vim.org/script.php?script_id=3779)
 * [manuscript.vim](http://www.vim.org/script.php?script_id=2887)
@@ -691,7 +692,7 @@ Total of 836+ color schemes:
 * [sienna.vim](http://www.vim.org/script.php?script_id=1259)
 * [sierra.vim](http://www.vim.org/script.php?script_id=5331)
 * [sift.vim](http://www.vim.org/script.php?script_id=1472)
-* [silent.vim](http://www.vim.org/script.php?script_id=2266)
+* [silent.vim](http://www.vim.org/script.php?script_id=3097)
 * [simple-dark.vim](http://www.vim.org/script.php?script_id=3890)
 * [simple256.vim](http://www.vim.org/script.php?script_id=1962)
 * [simpleRGB.vim](http://www.vim.org/script.php?script_id=3649)
@@ -802,7 +803,7 @@ Total of 836+ color schemes:
 * [turnip-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [turnip.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [tutticolori.vim](http://www.vim.org/script.php?script_id=2670)
-* [twilight.vim](http://www.vim.org/script.php?script_id=3781)
+* [twilight.vim](http://www.vim.org/script.php?script_id=1677)
 * [twilight256.vim](http://www.vim.org/script.php?script_id=3436)
 * [two2tango.vim](http://www.vim.org/script.php?script_id=1988)
 * [typofree.vim](http://www.vim.org/script.php?script_id=3585)

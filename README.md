@@ -38,7 +38,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 837+ color schemes:
+Total of 838+ color schemes:
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
 * [256-jungle.vim](http://www.vim.org/script.php?script_id=2240)
@@ -46,6 +46,7 @@ Total of 837+ color schemes:
 * [285colors-with-az-menu.zip](http://www.vim.org/script.php?script_id=3222)
 * [3dglasses.vim](http://www.vim.org/script.php?script_id=2019)
 * [Apprentice-1.9.zip](http://www.vim.org/script.php?script_id=4905)
+* [Base2Tone-Evening-dark.vim](http://www.vim.org/script.php?script_id=5301)
 * [BlackSea.vim](http://www.vim.org/script.php?script_id=590)
 * [BlueSmoke.vim](https://github.com/dfrunza/vim/tree/master/colors)
 * [BusyBee.vim](http://www.vim.org/script.php?script_id=2549)
@@ -68,6 +69,7 @@ Total of 837+ color schemes:
 * [PerfectDark.vim](http://www.vim.org/script.php?script_id=5112)
 * [SlateDark.vim](http://www.vim.org/script.php?script_id=4757)
 * [Spacegray.vim-1.4.zip](http://www.vim.org/script.php?script_id=5071)
+* [Spink.vim](https://github.com/ehartc/Spink/tree/master/colors)
 * [Tomorrow-Night-Blue.vim](https://github.com/chriskempson/vim-tomorrow-theme/tree/master/colors)
 * [Tomorrow-Night-Bright.vim](https://github.com/chriskempson/vim-tomorrow-theme/tree/master/colors)
 * [Tomorrow-Night-Eighties.vim](https://github.com/chriskempson/vim-tomorrow-theme/tree/master/colors)
@@ -246,7 +248,7 @@ Total of 837+ color schemes:
 * [cloudy.vim](http://www.vim.org/script.php?script_id=1363)
 * [clue.vim](http://www.vim.org/script.php?script_id=2359)
 * [cmd.vim](http://www.vim.org/script.php?script_id=4187)
-* [cobalt.vim](http://www.vim.org/script.php?script_id=5022)
+* [cobalt.vim](http://www.vim.org/script.php?script_id=2828)
 * [cobaltish.vim](http://www.vim.org/script.php?script_id=3439)
 * [codeblocks-dark.vim](https://github.com/sergey-vlasov/codeblocks-dark.vim)
 * [codeburn.vim](http://www.vim.org/script.php?script_id=2574)
@@ -314,7 +316,7 @@ Total of 837+ color schemes:
 * [desert.vim](http://www.vim.org/script.php?script_id=105)
 * [desert256.vim](http://www.vim.org/script.php?script_id=1243)
 * [desertEx.vim](http://www.vim.org/script.php?script_id=1693)
-* [desertedocean.vim](http://www.vim.org/script.php?script_id=1404)
+* [desertedocean.vim](http://www.vim.org/script.php?script_id=1400)
 * [desertedoceanburnt.vim](http://www.vim.org/script.php?script_id=1407)
 * [detailed.vim](http://www.vim.org/script.php?script_id=4297)
 * [devbox-dark-256.vim](http://www.vim.org/script.php?script_id=3349)
@@ -332,7 +334,6 @@ Total of 837+ color schemes:
 * [dubs_green.vim](http://www.vim.org/script.php?script_id=4953)
 * [dubs_red.vim](http://www.vim.org/script.php?script_id=4952)
 * [dull.vim](http://www.vim.org/script.php?script_id=2764)
-* [duotone-dark.vim](http://www.vim.org/script.php?script_id=5301)
 * [dusk.vim](http://www.vim.org/script.php?script_id=758)
 * [dw_colors.zip](http://www.vim.org/script.php?script_id=1659)
 * [earendel.vim](http://www.vim.org/script.php?script_id=2188)
@@ -493,7 +494,7 @@ Total of 837+ color schemes:
 * [lilydjwg_dark.vim](http://www.vim.org/script.php?script_id=2585)
 * [lilydjwg_green.vim](http://www.vim.org/script.php?script_id=2516)
 * [lilypink.vim](http://www.vim.org/script.php?script_id=3323)
-* [lingodirector.vim](http://www.vim.org/script.php?script_id=1012)
+* [lingodirector.vim](http://www.vim.org/script.php?script_id=4068)
 * [liquidcarbon.vim](http://www.vim.org/script.php?script_id=3274)
 * [literal_tango.vim](http://www.vim.org/script.php?script_id=2430)
 * [ljyat.vim](http://www.vim.org/script.php?script_id=4389)

@@ -298,7 +298,7 @@ call s:H("Search",       s:darkbg,    s:orange,         "")
 " also used for current line in quickfix
 call s:H("SignColumn",   s:lightfg,          s:darkbg,   "")
 " sign gutter
-call s:H("SpecialKey",   s:orange,     "",         "bold")
+call s:H("SpecialKey",   s:orange,     "",         "")
 " :help listchars
 " non-text chars like mappings, eol-characters, nbsp etc.
 call s:H("SpelBad",      s:yellow,  s:darkred,         "undercurl")
@@ -461,17 +461,17 @@ call s:H("Todo",           s:lightfg,        s:lightbg,  "bold")
 
 " Vimscript
 "
-hi! link vimSet Normal
-hi! link vimSetEqual Normal
-hi! link vimVar Identifier
-hi! link vimFunc Function
-hi! link vimUserFunc Function
-hi! link vimIsCommand Function
-hi! link vimOper Operator
-hi! link vimOperParen Statement
-hi! link helpSpecial Special
-hi! link vimCommentString String
-hi! link vimCommentTitle Title
+hi link vimSet Normal
+hi link vimSetEqual Normal
+hi link vimVar Identifier
+hi link vimFunc Function
+hi link vimUserFunc Function
+hi link vimIsCommand Function
+hi link vimOper Operator
+hi link vimOperParen Statement
+hi link helpSpecial Special
+hi link vimCommentString String
+hi link vimCommentTitle Title
 " vimCommand       
 " vimCmdSep        
 " helpExample      
@@ -501,7 +501,7 @@ call s:H("htmlItalic",      "",               "",           "italic")
 " CSS / SASS 
 " ------------------------------------------------------------------------------
 "HiLink cssComment Comment
-hi! link cssVendor cssProp
+hi link cssVendor cssProp
 "HiLink cssHacks Comment
 "HiLink cssTagName Statement
 "HiLink cssDeprecated Error
@@ -590,7 +590,7 @@ hi! link cssVendor cssProp
 "HiLink cssInclude Include
 "HiLink cssIncludeKeyword atKeyword
 "HiLink cssImportant Special
-hi! link cssBraces Delimiter
+hi link cssBraces Delimiter
 "HiLink cssBraceError Error
 "HiLink cssError Error
 "HiLink cssUnicodeEscape Special
@@ -618,31 +618,31 @@ hi! link cssBraces Delimiter
 "HiLink cssClassNameDot Function
 "HiLink cssProp StorageClass
 "HiLink cssAttr Constant
-hi! link cssUnitDecorators Delimiter
+hi link cssUnitDecorators Delimiter
 "HiLink cssNoise Noise
 "HiLink atKeyword PreProc
 
  
 " --- Php
 " ------------------------------------------------------------------------------
-hi! link phpParent Delimiter
+hi link phpParent Delimiter
 
 " vim-sneak
 " ------------------------------------------------------------------------------
-hi! link SneakPluginTarget IncSearch
-hi! link SneakStreakTarget SneakPluginTarget
-hi! link SneakPluginScope SneakPluginTarget
-hi! link SneakStreakMask SneakPluginTarget
+hi link SneakPluginTarget IncSearch
+hi link SneakStreakTarget SpecialKey
+hi link SneakPluginScope IncSearch
+hi link SneakStreakMask SpecialKey
 " hi! link SneakStreakStatusLine
 
 " JavaScript 
 " ------------------------------------------------------------------------------
-hi! link jsFuncCall Function
-hi! link jsFunction Function
-hi! link javaScriptValue Constant
-hi! link javaScriptTemplateVar StringDelim
-hi! link javaScriptTemplateDelim Identifier
-hi! link javaScriptTemplateString String
+hi link jsFuncCall Function
+hi link jsFunction Function
+hi link javaScriptValue Constant
+hi link javaScriptTemplateVar StringDelim
+hi link javaScriptTemplateDelim Identifier
+hi link javaScriptTemplateString String
 
 " 
 " Autohotkey 
@@ -692,8 +692,8 @@ hi def link autohotkeyBuiltinVariable     autohotkeyVariable
 " gitReference
 " gitStage
 " gitType
-hi! link gitDiffAdded DiffAdded
-hi! link gitDiffRemoved DiffDelete
+hi link gitDiffAdded DiffAdded
+hi link gitDiffRemoved DiffDelete
 " gitcommit
 " gitcommitSummary
 " gitcommitComment
@@ -731,7 +731,7 @@ hi! link gitDiffRemoved DiffDelete
 call s:H("GitGutterAdd",s:positive,    s:darkbg,"")
 call s:H("GitGutterChange",s:neutral,  s:darkbg,"")
 call s:H("GitGutterDelete",s:lightred, s:darkbg,"")
-hi! link GitGutterChangeDelete GitGutterDelete
+hi link GitGutterChangeDelete GitGutterDelete
 " 
 " delf s:H
 " delete highlight function

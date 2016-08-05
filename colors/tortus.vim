@@ -2,7 +2,7 @@
 " A copy+paste color scheme
 " Designed to be used with the syntax files for KRL and Rapid
 " Maintainer: Patrick Knosowski <knosowski@graeff.de>
-" Version: 1.0.2
+" Version: 1.0.3
 " Last Change: 24.07.2016
 "
 " Credits: Thorsten Maerz (torte.vim vimscript #111), 
@@ -70,6 +70,7 @@ highlight Folded                ctermbg=black   ctermfg=green
 highlight BuildInFunction       ctermbg=Black   ctermfg=Cyan
 highlight Sysvars               ctermbg=black   ctermfg=white
 highlight Movement              ctermbg=black   ctermfg=green
+highlight link Continue          Statement
 highlight Operator              ctermbg=black   ctermfg=Red
 highlight Exception             ctermbg=black   ctermfg=Yellow
 highlight String                ctermbg=black   ctermfg=magenta

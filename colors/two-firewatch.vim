@@ -12,7 +12,7 @@ syntax reset
 "endif
 let g:colors_name = 'two-firewatch'
 
-if !exists("g:two_firewatch_italics")
+if !exists('g:two_firewatch_italics')
   let g:two_firewatch_italics = 0
 endif
 
@@ -237,7 +237,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " Color definition --------------------------------------------------------{{{
   if &background ==? 'light'
     let s:uno_1 = '2d2006'
-    let s:uno_2 = '896724'
+    let s:uno_2 = 'abb2bf'
     let s:uno_3 = 'B29762'
     let s:uno_4 = 'B6ad9a'
 
@@ -276,9 +276,9 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
     let s:syntax_color_modified = 'e0c285'
     let s:syntax_color_removed  = 'e05252'
 
-    let s:syntax_fg               = s:uno_2
+    let s:syntax_fg               = 'abb2bf'
     let s:syntax_bg               = '282c34'
-    let s:syntax_accent           = 'ff8b52'
+    let s:syntax_accent           = '56b6c2'
     let s:syntax_gutter           = '636d83'
     let s:syntax_selection        = '3e4452'
     let s:syntax_fold_bg          = '5c6370'
@@ -295,7 +295,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('CursorIM',     '',               '',                   '')
   call <sid>X('CursorColumn', '',               s:syntax_cursor_line, '')
   call <sid>X('CursorLine',   '',               s:syntax_cursor_line, '')
-  call <sid>X('Directory',    s:uno_2,          '',                   '')
+  call <sid>X('Directory',    s:uno_1,          '',                   '')
   call <sid>X('ErrorMsg',     s:syntax_accent,  s:syntax_bg,          'none')
   call <sid>X('VertSplit',    s:syntax_fold_bg, '',                   'none')
   call <sid>X('Folded',       s:syntax_bg,      s:syntax_fold_bg,     '')
@@ -320,7 +320,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('TabLine',      s:uno_4,          '',                   '')
   call <sid>X('TabLineFill',  '',               '',                   'none')
   call <sid>X('TabLineSel',   s:syntax_fg,      '',                   '')
-  call <sid>X('Title',        s:duo_2,          '',                   'none')
+  call <sid>X('Title',        s:duo_2,          '',                   'bold')
   call <sid>X('Visual',       '',               s:syntax_selection,   '')
   call <sid>X('VisualNOS',    '',               s:syntax_selection,   '')
   call <sid>X('WarningMsg',   s:syntax_accent,  '',                   '')
@@ -341,20 +341,20 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('Float',          s:duo_2,         '',          '')
   call <sid>X('Identifier',     s:uno_3,         '',          'none')
   call <sid>X('Function',       s:uno_2,         '',          '')
-  call <sid>X('Statement',      s:uno_2,         '',          'none')
+  call <sid>X('Statement',      s:duo_2,         '',          'none')
   call <sid>X('Conditional',    s:syntax_accent, '',          '')
-  call <sid>X('Repeat',         s:uno_1,         '',          '')
+  call <sid>X('Repeat',         s:duo_2,         '',          '')
   call <sid>X('Label',          s:uno_1,         '',          '')
-  call <sid>X('Operator',       '',              '',          'none')
+  call <sid>X('Operator',       s:syntax_accent, '',          'none')
   call <sid>X('Keyword',        s:uno_1,         '',          '')
   call <sid>X('Exception',      s:uno_1,         '',          '')
   call <sid>X('PreProc',        s:uno_1,         '',          '')
   call <sid>X('Include',        s:duo_2,         '',          '')
   call <sid>X('Define',         s:duo_2,         '',          'none')
   call <sid>X('Macro',          s:uno_3,         '',          '')
-  call <sid>X('PreCondit',      s:uno_1,         '',          '')
-  call <sid>X('Type',           s:uno_1,         '',          'none')
-  call <sid>X('StorageClass',   s:uno_1,         '',          '')
+  call <sid>X('PreCondit',      'ff0000',        '',          '')
+  call <sid>X('Type',           s:duo_1,         '',          'none')
+  call <sid>X('StorageClass',   s:duo_2,         '',          '')
   call <sid>X('Structure',      s:uno_1,         '',          '')
   call <sid>X('Typedef',        s:uno_1,         '',          '')
   call <sid>X('Special',        s:uno_3,         '',          '')
@@ -367,18 +367,6 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('Ignore',         '',              '',          '')
   call <sid>X('Error',          s:syntax_accent, s:syntax_bg, 'bold')
   call <sid>X('Todo',           s:duo_2,         s:syntax_bg, '')
-  " }}}
-
-  " Diff highlighting -------------------------------------------------------{{{
-  call <sid>X('DiffAdd',     s:syntax_color_added,    s:syntax_selection, '')
-  call <sid>X('DiffChange',  s:syntax_color_modified, s:syntax_selection, '')
-  call <sid>X('DiffDelete',  s:syntax_color_removed,  s:syntax_selection, '')
-  call <sid>X('DiffText',    s:uno_2,                 s:syntax_selection, '')
-  call <sid>X('DiffAdded',   s:duo_2,                 s:syntax_selection, '')
-  call <sid>X('DiffFile',    s:syntax_accent,         s:syntax_selection, '')
-  call <sid>X('DiffNewFile', s:duo_2,                 s:syntax_selection, '')
-  call <sid>X('DiffLine',    s:uno_2,                 s:syntax_selection, '')
-  call <sid>X('DiffRemoved', s:syntax_accent,         s:syntax_selection, '')
   " }}}
 
   " Asciidoc highlighting ---------------------------------------------------{{{
@@ -398,6 +386,22 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('cucumberScenarioOutline', s:duo_2,         '', 'bold')
   call <sid>X('cucumberTags',            s:uno_4,         '', 'bold')
   call <sid>X('cucumberDelimiter',       s:uno_4,         '', 'bold')
+  " }}}
+
+  " Diff highlighting -------------------------------------------------------{{{
+  call <sid>X('DiffAdd',     s:syntax_color_added,    s:syntax_selection, '')
+  call <sid>X('DiffChange',  s:syntax_color_modified, s:syntax_selection, '')
+  call <sid>X('DiffDelete',  s:syntax_color_removed,  s:syntax_selection, '')
+  call <sid>X('DiffText',    s:uno_2,                 s:syntax_selection, '')
+  call <sid>X('DiffAdded',   s:duo_2,                 s:syntax_selection, '')
+  call <sid>X('DiffFile',    s:syntax_accent,         s:syntax_selection, '')
+  call <sid>X('DiffNewFile', s:duo_2,                 s:syntax_selection, '')
+  call <sid>X('DiffLine',    s:uno_2,                 s:syntax_selection, '')
+  call <sid>X('DiffRemoved', s:syntax_accent,         s:syntax_selection, '')
+  " }}}
+
+  " C/C++ and other languages like that -------------------------------------{{{
+  "call <sid>X('cCustomParen',           s:uno_4,         '', '')
   " }}}
 
   " CSS/Sass highlighting ---------------------------------------------------{{{
@@ -453,7 +457,11 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
 
   " Elixir highlighting------------------------------------------------------{{{
   call <sid>X('elixirBlockDefinition', s:duo_3, '', '')
-  call <sid>X('elixirAtom',            s:duo_1,'', '')
+  call <sid>X('elixirAtom',            s:syntax_accent,'', '')
+  " }}}
+
+  " Go highlighting ---------------------------------------------------------{{{
+  call <sid>X('goDeclaration',         s:duo_3, '', '')
   " }}}
 
   " Git and git related plugins highlighting --------------------------------{{{
@@ -558,14 +566,21 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " }}}
 
   " Markdown highlighting ---------------------------------------------------{{{
-  call <sid>X('markdownUrl',     s:duo_3, '', '')
-  call <sid>X('markdownCode',    s:duo_1, '', '')
+  call <sid>X('markdownUrl',              s:duo_3, '', '')
+  call <sid>X('markdownCode',             s:duo_1, '', '')
+  call <sid>X('markdownHeadingDelimiter', s:duo_3, '', '')
+  call <sid>X('markdownListMarker',       s:duo_3, '', '')
+  " }}}
+
+  " NERDTree highlighting ---------------------------------------------------{{{
+  call <sid>X('NERDTreeExecFile',      s:duo_1, '', '')
   " }}}
 
   " Ruby highlighting -------------------------------------------------------{{{
   call <sid>X('rubyBlock',                     s:uno_2,         '', '')
   call <sid>X('rubyBlockParameter',            s:uno_2,         '', '')
   call <sid>X('rubyBlockParameterList',        s:uno_3,         '', '')
+  call <sid>X('rubyCapitalizedMethod',         s:duo_2,         '', '')
   call <sid>X('rubyClass',                     s:duo_2,         '', '')
   call <sid>X('rubyConstant',                  s:uno_3,         '', '')
   call <sid>X('rubyControl',                   s:duo_2,         '', '')
@@ -601,6 +616,11 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('vimCommand',      s:uno_1, '', '')
   call <sid>X('vimVar',          s:duo_2, '', '')
   call <sid>X('vimEnvVar',       s:duo_3, '', '')
+
+  " Vim Help highlights
+  call <sid>X('helpHyperTextJump', s:duo_1, '', '')
+  call <sid>X('helpSpecial',       s:duo_2, '', '')
+
   " }}}
 
   " XML highlighting --------------------------------------------------------{{{

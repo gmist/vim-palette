@@ -53,7 +53,7 @@ if ($TERM =~ '256' || &t_Co >= 256) || has("gui_running")
 
   set background=dark
 
-  hi Comment          ctermbg=NONE ctermfg=240  guibg=NONE    guifg=#585858 cterm=NONE           gui=NONE
+  hi Comment          ctermbg=NONE ctermfg=240  guibg=NONE    guifg=#585858 cterm=NONE           gui=NONE font=Courier:h12
   hi Conceal          ctermbg=NONE ctermfg=250  guibg=NONE    guifg=#bcbcbc cterm=NONE           gui=NONE
   hi Constant         ctermbg=NONE ctermfg=208  guibg=NONE    guifg=#ff8700 cterm=NONE           gui=NONE
   hi Error            ctermbg=NONE ctermfg=131  guibg=NONE    guifg=#af5f5f cterm=reverse        gui=reverse
@@ -86,8 +86,8 @@ if ($TERM =~ '256' || &t_Co >= 256) || has("gui_running")
 
   hi Cursor           ctermbg=242  ctermfg=NONE guibg=#6c6c6c guifg=NONE    cterm=NONE           gui=NONE
   hi CursorColumn     ctermbg=236  ctermfg=NONE guibg=#303030 guifg=NONE    cterm=NONE           gui=NONE
-  hi CursorLine       ctermbg=236  ctermfg=NONE guibg=#303030 guifg=NONE    cterm=NONE           gui=NONE
   hi CursorLineNr     ctermbg=236  ctermfg=73   guibg=#303030 guifg=#5fafaf cterm=NONE           gui=NONE
+  hi CursorLine       ctermbg=236  ctermfg=NONE guibg=#303030 guifg=NONE    cterm=NONE           gui=NONE
 
   hi helpLeadBlank    ctermbg=NONE ctermfg=NONE guibg=NONE    guifg=NONE    cterm=NONE           gui=NONE
   hi helpNormal       ctermbg=NONE ctermfg=NONE guibg=NONE    guifg=NONE    cterm=NONE           gui=NONE
@@ -106,9 +106,9 @@ if ($TERM =~ '256' || &t_Co >= 256) || has("gui_running")
   hi Title            ctermbg=NONE ctermfg=231  guibg=NONE    guifg=#ffffff cterm=NONE           gui=NONE
 
   hi DiffAdd          ctermbg=235  ctermfg=108  guibg=#262626 guifg=#87af87 cterm=reverse        gui=reverse
-  hi DiffChange       ctermbg=235  ctermfg=60   guibg=#262626 guifg=#5f5f87 cterm=reverse        gui=reverse
+  hi DiffChange       ctermbg=235  ctermfg=103  guibg=#262626 guifg=#8787af cterm=reverse        gui=reverse
   hi DiffDelete       ctermbg=235  ctermfg=131  guibg=#262626 guifg=#af5f5f cterm=reverse        gui=reverse
-  hi DiffText         ctermbg=235  ctermfg=103  guibg=#262626 guifg=#8787af cterm=reverse        gui=reverse
+  hi DiffText         ctermbg=235  ctermfg=208  guibg=#262626 guifg=#ff8700 cterm=reverse        gui=reverse
 
   hi IncSearch        ctermbg=131  ctermfg=235  guibg=#af5f5f guifg=#262626 cterm=NONE           gui=NONE
   hi Search           ctermbg=229  ctermfg=235  guibg=#ffffaf guifg=#262626 cterm=NONE           gui=NONE
@@ -164,14 +164,14 @@ elseif &t_Co == 8 || $TERM !~# '^linux' || &t_Co == 16
 
   hi Cursor           ctermbg=NONE        ctermfg=NONE        cterm=NONE
   hi CursorColumn     ctermbg=darkgray    ctermfg=NONE        cterm=NONE
-  hi CursorLine       ctermbg=darkgray    ctermfg=NONE        cterm=NONE
   hi CursorLineNr     ctermbg=black       ctermfg=cyan        cterm=NONE
+  hi CursorLine       ctermbg=darkgray    ctermfg=NONE        cterm=NONE
 
   hi helpLeadBlank    ctermbg=NONE        ctermfg=NONE        cterm=NONE
   hi helpNormal       ctermbg=NONE        ctermfg=NONE        cterm=NONE
 
   hi StatusLine       ctermbg=darkyellow  ctermfg=black       cterm=NONE
-  hi StatusLineNC     ctermbg=darkgray    ctermfg=black       cterm=NONE
+  hi StatusLineNC     ctermbg=darkgray    ctermfg=darkyellow  cterm=NONE
 
   hi Visual           ctermbg=black       ctermfg=blue        cterm=reverse
   hi VisualNOS        ctermbg=black       ctermfg=white       cterm=reverse
@@ -185,10 +185,10 @@ elseif &t_Co == 8 || $TERM !~# '^linux' || &t_Co == 16
   hi SpecialKey       ctermbg=NONE        ctermfg=darkgray    cterm=NONE
   hi Title            ctermbg=NONE        ctermfg=white       cterm=NONE
 
-  hi DiffAdd          ctermbg=black       ctermfg=darkgreen   cterm=reverse
-  hi DiffChange       ctermbg=black       ctermfg=darkcyan    cterm=reverse
+  hi DiffAdd          ctermbg=black       ctermfg=green       cterm=reverse
+  hi DiffChange       ctermbg=black       ctermfg=magenta     cterm=reverse
   hi DiffDelete       ctermbg=black       ctermfg=darkred     cterm=reverse
-  hi DiffText         ctermbg=black       ctermfg=yellow      cterm=reverse
+  hi DiffText         ctermbg=black       ctermfg=red         cterm=reverse
 
   hi IncSearch        ctermbg=darkred     ctermfg=black       cterm=NONE
   hi Search           ctermbg=yellow      ctermfg=black       cterm=NONE

@@ -24,8 +24,8 @@ hi Number          guifg=#99CC99
 hi String          guifg=#A8FF60
 hi Conditional     guifg=#92C5F7               gui=none
 hi Constant        guifg=#99CC99               gui=none
-hi Cursor          guifg=#000000 guibg=#F8F8F0
-hi iCursor         guifg=#000000 guibg=#F8F8F0
+hi Cursor          guifg=#F1F1F1 guibg=#777777
+hi iCursor         guifg=#F1F1F1 guibg=#777777
 hi Debug           guifg=#BCA3A3               gui=none
 hi Define          guifg=#66D9EF
 hi Delimiter       guifg=#8F8F8F
@@ -97,7 +97,7 @@ hi Visual                        guibg=#403D3D
 hi WarningMsg      guifg=#FFFFFF guibg=#333333
 hi WildMenu        guifg=#66D9EF guibg=#000000
 
-hi TabLineFill     guifg=#1D1F21 guibg=#1D1F21 
+hi TabLineFill     guifg=#1D1F21 guibg=#1D1F21
 hi TabLine         guibg=#1D1F21 guifg=#808080 gui=none
 
 hi Normal          guifg=#F8F8F2 guibg=#1D1F21
@@ -105,7 +105,7 @@ hi Comment         guifg=#7C7C7C
 hi CursorLine                    guibg=#293739
 hi CursorLineNr    guifg=#B6B7EB               gui=none
 hi CursorColumn                  guibg=#293739
-hi ColorColumn                   guibg=#232526
+hi ColorColumn     guifg=#B62323 guibg=#232526
 hi LineNr          guifg=#465457 guibg=#232526
 hi NonText         guifg=#465457
 hi SpecialKey      guifg=#465457

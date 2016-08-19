@@ -237,7 +237,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " Color definition --------------------------------------------------------{{{
   if &background ==? 'light'
     let s:uno_1 = '2d2006'
-    let s:uno_2 = 'abb2bf'
+    let s:uno_2 = '896724'
     let s:uno_3 = 'B29762'
     let s:uno_4 = 'B6ad9a'
 
@@ -258,12 +258,13 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
     let s:syntax_fold_bg          = 'd1cec7'
     let s:syntax_cursor_line      = 'F3EFE7'
   else
-    let s:duo_1 = 'fe8c52'
-    let s:duo_2 = 'df671f'
-    let s:duo_3 = '6a574d'
+    "let s:uno_1 = 'd6e9ff'
+    "let s:uno_2 = '91c1f8'
+    "let s:uno_3 = '6e88a6'
+    "let s:uno_4 = '55606d'
 
     let s:uno_1 = 'd6e9ff'
-    let s:uno_2 = '91c1f8'
+    let s:uno_2 = 'abb2bf'
     let s:uno_3 = '6e88a6'
     let s:uno_4 = '55606d'
 
@@ -276,7 +277,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
     let s:syntax_color_modified = 'e0c285'
     let s:syntax_color_removed  = 'e05252'
 
-    let s:syntax_fg               = 'abb2bf'
+    let s:syntax_fg               = s:uno_2
     let s:syntax_bg               = '282c34'
     let s:syntax_accent           = '56b6c2'
     let s:syntax_gutter           = '636d83'
@@ -456,8 +457,13 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " }}}
 
   " Elixir highlighting------------------------------------------------------{{{
-  call <sid>X('elixirBlockDefinition', s:duo_3, '', '')
-  call <sid>X('elixirAtom',            s:syntax_accent,'', '')
+  call <sid>X('elixirAtom',              s:syntax_accent, '', '')
+  call <sid>X('elixirAlias',             s:duo_1,         '', '')
+  call <sid>X('elixirBlockDefinition',   s:duo_2,         '', '')
+  call <sid>X('elixirInclude',           s:duo_2,         '', '')
+  call <sid>X('elixirId',                s:uno_2,         '', '')
+  call <sid>X('elixirModuleDeclaration', s:uno_1,         '', '')
+  call <sid>X('elixirOperator',          s:uno_3,         '', '')
   " }}}
 
   " Go highlighting ---------------------------------------------------------{{{
@@ -520,14 +526,18 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('jsClassKeywords',        s:duo_3,         '', '')
   call <sid>X('jsDocParam',             s:duo_2,         '', '')
   call <sid>X('jsDocTags',              s:duo_3,         '', '')
-  call <sid>X('jsFuncCall',             s:duo_2,         '', '')
+  call <sid>X('jsFuncCall',             s:uno_1,         '', '')
   call <sid>X('jsFunction',             s:duo_3,         '', '')
   call <sid>X('jsGlobalObjects',        s:uno_1,         '', '')
   call <sid>X('jsModuleWords',          s:duo_3,         '', '')
   call <sid>X('jsModules',              s:duo_3,         '', '')
+  call <sid>X('jsNoise',                s:uno_4,         '', '')
   call <sid>X('jsNull',                 s:uno_1,         '', '')
-  call <sid>X('jsOperator',             s:duo_3,         '', '')
-  call <sid>X('jsStorageClass',         s:duo_3,         '', '')
+  call <sid>X('jsOperator',             s:duo_2,         '', '')
+  call <sid>X('jsObjectBraces',         s:uno_4,         '', '')
+  call <sid>X('jsBrackets',             s:uno_4,         '', '')
+  call <sid>X('jsParens',               s:uno_4,         '', '')
+  call <sid>X('jsStorageClass',         s:duo_1,         '', '')
   call <sid>X('jsTemplateBraces',       s:syntax_accent, '', '')
   call <sid>X('jsTemplateVar',          s:duo_2,         '', '')
   call <sid>X('jsThis',                 s:syntax_accent, '', '')
@@ -555,12 +565,12 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
 
   " JSON highlighting -------------------------------------------------------{{{
   call <sid>X('jsonCommentError',      s:uno_1,         '', ''        )
-  call <sid>X('jsonKeyword',           s:uno_2,         '', ''        )
+  call <sid>X('jsonKeyword',           s:duo_2,         '', ''        )
   call <sid>X('jsonQuote',             s:uno_4,         '', ''        )
   call <sid>X('jsonMissingCommaError', s:syntax_accent, '', 'reverse' )
   call <sid>X('jsonNoQuotesError',     s:syntax_accent, '', 'reverse' )
   call <sid>X('jsonNumError',          s:syntax_accent, '', 'reverse' )
-  call <sid>X('jsonString',            s:duo_2,         '', ''        )
+  call <sid>X('jsonString',            s:duo_1,         '', ''        )
   call <sid>X('jsonStringSQError',     s:syntax_accent, '', 'reverse' )
   call <sid>X('jsonSemicolonError',    s:syntax_accent, '', 'reverse' )
   " }}}
@@ -570,6 +580,15 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('markdownCode',             s:duo_1, '', '')
   call <sid>X('markdownHeadingDelimiter', s:duo_3, '', '')
   call <sid>X('markdownListMarker',       s:duo_3, '', '')
+
+  call <sid>X('mkdDelimiter',             s:uno_3, '', '')
+  call <sid>X('mkdLink',                  s:duo_1, '', '')
+  call <sid>X('mkdLinkDef',               s:duo_1, '', '')
+  call <sid>X('mkdLinkDefTarget',         s:duo_1, '', 'underline')
+  call <sid>X('mkdURL',                   s:duo_1, '', 'underline')
+
+  call <sid>X('htmlBold',                 s:uno_2, '', 'bold')
+  call <sid>X('htmlItalic',               s:uno_2, '', 'italic')
   " }}}
 
   " NERDTree highlighting ---------------------------------------------------{{{

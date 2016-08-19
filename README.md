@@ -38,7 +38,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 865+ color schemes:
+Total of 866+ color schemes:
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [1989.vim](https://github.com/sonjapeterson/1989.vim/tree/master/colors)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
@@ -273,7 +273,7 @@ Total of 865+ color schemes:
 * [cloudy.vim](http://www.vim.org/script.php?script_id=1363)
 * [clue.vim](http://www.vim.org/script.php?script_id=2359)
 * [cmd.vim](http://www.vim.org/script.php?script_id=4187)
-* [cobalt.vim](http://www.vim.org/script.php?script_id=2828)
+* [cobalt.vim](http://www.vim.org/script.php?script_id=5022)
 * [cobaltish.vim](http://www.vim.org/script.php?script_id=3439)
 * [codeblocks-dark.vim](https://github.com/sergey-vlasov/codeblocks-dark.vim)
 * [codeburn.vim](http://www.vim.org/script.php?script_id=2574)
@@ -399,7 +399,7 @@ Total of 865+ color schemes:
 * [forneus.vim](http://www.vim.org/script.php?script_id=2757)
 * [freshcut-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [freshcut.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
-* [freya.vim](http://www.vim.org/script.php?script_id=1651)
+* [freya.vim](http://www.vim.org/script.php?script_id=4239)
 * [frontier-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [frontier.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [fruidle.vim](http://www.vim.org/script.php?script_id=2494)
@@ -718,7 +718,7 @@ Total of 865+ color schemes:
 * [sienna.vim](http://www.vim.org/script.php?script_id=1259)
 * [sierra.vim](http://www.vim.org/script.php?script_id=5331)
 * [sift.vim](http://www.vim.org/script.php?script_id=1472)
-* [silent.vim](http://www.vim.org/script.php?script_id=2266)
+* [silent.vim](http://www.vim.org/script.php?script_id=3097)
 * [simple-dark.vim](http://www.vim.org/script.php?script_id=3890)
 * [simple256.vim](http://www.vim.org/script.php?script_id=1962)
 * [simpleRGB.vim](http://www.vim.org/script.php?script_id=3649)
@@ -765,7 +765,7 @@ Total of 865+ color schemes:
 * [spiderhawk.vim](http://www.vim.org/script.php?script_id=2509)
 * [spring.vim](http://www.vim.org/script.php?script_id=2303)
 * [spurs_away.vim](https://github.com/RussellBradley/vim-spurs-away/tree/master/colors)
-* [srcery_0.6.1.zip](http://www.vim.org/script.php?script_id=5411)
+* [srcery-0.6.2.zip](http://www.vim.org/script.php?script_id=5411)
 * [stackoverflow.vim](http://www.vim.org/script.php?script_id=3343)
 * [stark-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [stark.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
@@ -849,6 +849,7 @@ Total of 865+ color schemes:
 * [vexorian.vim](http://www.vim.org/script.php?script_id=1680)
 * [vi-clone.vim](http://www.vim.org/script.php?script_id=5039)
 * [vibrantink.vim](http://www.vim.org/script.php?script_id=1794)
+* [vice.vim](https://github.com/bcicen/vim-vice/tree/master/colors)
 * [vilight.vim](http://www.vim.org/script.php?script_id=2776)
 * [vim-colors-pencil-0.6.zip](http://www.vim.org/script.php?script_id=4850)
 * [vim-colors-solarized-v1.0.0beta1.zip](http://www.vim.org/script.php?script_id=3520)

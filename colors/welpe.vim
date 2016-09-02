@@ -11,9 +11,11 @@
 " Description: 16color scheme for vim
 " Author: Timm Stelzer <timmstelzer@gmail.com>
 " Source: https://github.com/tstelzer/welpe.vim
-" Version: 0.1.1
+" Version: 0.1.2
 " ------------------------------------------------------------------------------
 
+" global settings
+" ------------------------------------------------------------------------------
 set background=dark
 
 hi clear
@@ -30,6 +32,8 @@ if !exists('g:welpe_use_italics')
     let g:welpe_use_italics = 0
 endif
 
+" highlighting function
+" ------------------------------------------------------------------------------
 function! s:H(group,fg,bg,style) 
 " group = Syntax Group
 " fg = Foreground Color
@@ -81,10 +85,7 @@ function! s:H(group,fg,bg,style)
                 \ " ctermbg=".l:cbg." gui=".l:gstyle." term=".l:cstyle
 endfun
 
-" ### #COLORTABLE
-" ##############################################################################
-" Important: DO NOT CHANGE THESE VALUES, ONLY ADD NEW ONES
-" --- Grayscale
+" Grayscale
 " ------------------------------------------------------------------------------
 " Because ConEmu is a special snowflake and does not care for 
 " the xterm color sequence, it has an extra bit
@@ -118,7 +119,7 @@ let s:_gray22    = [ '#e4e4e4', 254, 15, 7 ]
 let s:_white     = [ '#eeeeee', 255, 15, 7]
 let s:_truewhite = [ '#FFFFFF', 15, 15, 7]
 
-" --- Colors 
+" Colors 
 " ------------------------------------------------------------------------------
 " Important: DON'T USE THESE COLORNAMES IN THE SYNTAX GROUPS,
 " use the generic color variables instead
@@ -180,11 +181,7 @@ let s:_gold          = [ '#ffd700', 220, 11, 3 ]
 let s:_cosmos        = [ '#ffd7d7', 224, 13, 5 ]
 let s:_shalimar      = [ '#ffffaf', 229, 11, 3]
 
-" ### #PALETTE
-" ##############################################################################
-" change the assigned variables, if you want to change the presented colors
-
-" --- Palette 
+" Palette 
 " ------------------------------------------------------------------------------
 
 let s:lightfg  = s:_white         " #eeeeee
@@ -215,16 +212,13 @@ let s:positive = s:green
 let s:neutral  = s:blue
 let s:negative = s:darkred
 
-" ### #HIGHLIGHTING
-" ##############################################################################
+" UI Defaults 
+" ------------------------------------------------------------------------------
 " Schema: see function s:H()
 " s:h(<SyntaxGroup>!, <foreground>, <background>, <style>)
 " Note: if you ommit fields with "", the default fg / bg will be inherited
 " Note: entirely omitted groups fallback to their parent
 " for example "Function" inherits "Identifier" by default
-
-" --- UI Defaults 
-" ------------------------------------------------------------------------------
 
 call s:H("Normal",       s:fg,        s:bg,       "")
 " default values
@@ -280,14 +274,14 @@ call s:H("NonText",      s:orange,     "",         "")
 " set showbreak = <char>
 " characters that visualize linebreaks, tabs etc.
 
-call s:H("Pmenu",        "",          "",         "")
+call s:H("Pmenu",     s:blue,     s:lightbg,  "")
 " popup menu
 call s:H("PmenuSbar",    "",          s:lightbg,   "")
 " popup menu scrollbar
 call s:H("PmenuSel",     s:orange,     s:lightbg,  "")
 " popup menu selected text
-call s:H("PmenuThumb",   "",          "",         "")
-" popup menu thumb of scrollbar
+call s:H("PmenuThumb",   s:green,          "",         "")
+" popup menu thumb of scrollbar 
 
 call s:H("Question",     s:cyan, s:lightbg,   "bold")
 " 'hit-enter' prompt and yes/no questions
@@ -301,9 +295,9 @@ call s:H("SignColumn",   s:lightfg,          s:darkbg,   "")
 call s:H("SpecialKey",   s:orange,     "",         "")
 " :help listchars
 " non-text chars like mappings, eol-characters, nbsp etc.
-call s:H("SpelBad",      s:yellow,  s:darkred,         "undercurl")
+call s:H("SpelBad",      s:negative,  "",         "undercurl")
 " unrecognized by spellchecker
-call s:H("SpellRare",    s:neutral,   "",         "undercurl")
+call s:H("SpellRare",    s:yellow,   "",         "undercurl")
 " rare word
 call s:H("SpellCap",     s:magenta, "",         "undercurl")
 " should be starting with a capital letter
@@ -334,7 +328,7 @@ call s:H("WildMenu",     s:magenta,    "",         "")
 " current match in wildmenu completion
 call s:H("WarningMsg",   s:yellow,  s:negative,         "bold")
 " warning messages
-" --- Default Syntax Groups 
+" Default Syntax Groups 
 " ------------------------------------------------------------------------------
 " VIM classifes MAJOR and MINOR syntax groups
 " by default, every MINOR inherits its MAJORS values
@@ -445,7 +439,7 @@ call s:H("Delimiter",      s:lightred,      "",         "")
 " call s:H("SpecialComment", s:specialcomment, "",         "")
 " inherits special by default
 
-call s:H("Debug",          s:neutral,          "",         "")
+call s:H("Debug",          s:yellow,          "",         "")
 " inherits special by default
 
 call s:H("Underlined",     s:magenta,         "",         "")
@@ -456,11 +450,8 @@ call s:H("Error",          s:yellow,         s:negative, "bold")
 
 call s:H("Todo",           s:lightfg,        s:lightbg,  "bold")
 
-" --- Filetype specific Syntax 
+" vimscript
 " ------------------------------------------------------------------------------
-
-" Vimscript
-"
 hi link vimSet Normal
 hi link vimSetEqual Normal
 hi link vimVar Identifier
@@ -622,18 +613,25 @@ hi link cssUnitDecorators Delimiter
 "HiLink cssNoise Noise
 "HiLink atKeyword PreProc
 
- 
-" --- Php
+" Php
 " ------------------------------------------------------------------------------
 hi link phpParent Delimiter
 
 " vim-sneak
 " ------------------------------------------------------------------------------
 hi link SneakPluginTarget IncSearch
-hi link SneakStreakTarget SpecialKey
+hi link SneakStreakTarget Identifier
 hi link SneakPluginScope IncSearch
 hi link SneakStreakMask SpecialKey
 " hi! link SneakStreakStatusLine
+
+" incsearch
+" ------------------------------------------------------------------------------
+" hi link IncSearchMatch
+" hi link IncSearchMatchReverse
+" hi link IncSearchOnCursor Search
+hi link IncSearchCursor Visual
+" hi link IncSearchUnderline
 
 " JavaScript 
 " ------------------------------------------------------------------------------
@@ -644,8 +642,45 @@ hi link javaScriptTemplateVar StringDelim
 hi link javaScriptTemplateDelim Identifier
 hi link javaScriptTemplateString String
 
-" 
+" scss
+" hi link scssNestedProperty cssProp
+" hi link scssVariable  Identifier
+" hi link scssGlobal    Special
+" hi link scssNull      Constant
+" hi link scssBoolean   Constant
+" hi link scssBooleanOp Operator
+" hi link scssMixin     PreProc
+" hi link scssMixinName Function
+hi link scssMixinParams Delimiter
+" hi link scssContent   PreProc
+" hi link scssFunctionDefinition  PreProc
+" hi link scssFunctionName Function
+" hi link scssReturn    Statement
+" hi link scssInclude   PreProc
+" hi link scssExtend    PreProc
+" hi link scssOptional  Special
+" hi link scssComment   Comment
+" hi link scssStickyCommentChar Special
+" hi link scssSelectorChar Special
+" hi link scssSelectorName Identifier
+" hi link scssAmpersand Character
+" hi link scssDebug     Debug
+" hi link scssWarn      Debug
+" hi link scssError     Debug
+" hi link scssDefault   Special
+" hi link scssIf        Conditional
+" hi link scssElse      Conditional
+" hi link scssWhile     Repeat
+" hi link scssForKeyword  Repeat
+" hi link scssEachKeyword Repeat
+" hi link scssInterpolationDelimiter Delimiter
+" hi link scssImport    Include
+" hi link scssTodo      Todo
+" hi link scssAtRoot    Keyword
+" hi link scssMapParens Delimiter
+"
 " Autohotkey 
+" ------------------------------------------------------------------------------
 " hi def link autohotkeyHotkey              Type
 " hi def link autohotkeyKey                 Type
 " hi def link autohotkeyDelimiter           Delimiter
@@ -673,8 +708,9 @@ hi def link autohotkeyBuiltinVariable     autohotkeyVariable
 " hi def link autohotkeyType                Type
 " hi def link autohotkeyBoolean             Boolean
 
-" git & gitcommit highlighting 
 
+" git
+" ------------------------------------------------------------------------------
 " gitDateHeader
 " gitIdentityHeader
 " gitIdentityKeyword
@@ -722,9 +758,6 @@ hi link gitDiffRemoved DiffDelete
 " gitcommitArrow
 " gitcommitOverflow
 " gitcommitBlank
-" 
-" NERDTree 
-" ------------------------------------------------------------------------------
 
 " gitgutter 
 " ------------------------------------------------------------------------------
@@ -732,7 +765,70 @@ call s:H("GitGutterAdd",s:positive,    s:darkbg,"")
 call s:H("GitGutterChange",s:neutral,  s:darkbg,"")
 call s:H("GitGutterDelete",s:lightred, s:darkbg,"")
 hi link GitGutterChangeDelete GitGutterDelete
-" 
+
+" dirvish
+" ------------------------------------------------------------------------------
+hi link DirvishPathTail Directory
+hi link DirvishPathHead Comment
+
+" syntastic
+" ------------------------------------------------------------------------------
+hi link SyntasticErrorSign ErrorMsg
+hi link SyntasticWarningSign Debug
+hi link SyntasticStyleErrorSign ErrorMsg
+hi link SyntasticStyleWarningSign Debug
+
+hi link SyntasticErrorLine ErrorMsg
+hi link SyntasticWarningLine Debug
+hi link SyntasticStyleErrorLine ErrorMsg
+hi link SyntasticStyleWarningLine Debug
+
+" CtrlP
+" ------------------------------------------------------------------------------
+" the prompt's cursor when moving over the text
+hi link CtrlPPrtCursor SpecialKey
+" the matched pattern
+hi link CtrlPMatch SpecialKey
+hi link CtrlPBufferPath Directory
+hi link CtrlPBufferCurMod Title
+
+" For the CtrlP buffer:
+" CtrlPNoEntries : the message when no match is found (Error)
+" CtrlPMatch     : the matched pattern (Identifier)
+" CtrlPLinePre   : the line prefix '>' in the match window
+" CtrlPPrtBase   : the prompt's base (Comment)
+" CtrlPPrtText   : the prompt's text (|hl-Normal|)
+" CtrlPPrtCursor : the prompt's cursor when moving over the text (Constant)
+
+" Buffer explorer mode:
+" CtrlPBufferNr     : buffer number
+" CtrlPBufferInd    : '+', '-', '=' and '#' indicators (see |:buffers|)
+" CtrlPBufferHid    : hidden buffer
+" CtrlPBufferHidMod : hidden and modified buffer
+" CtrlPBufferVis    : visible buffer
+" CtrlPBufferVisMod : visible and modified buffer
+" CtrlPBufferCur    : current buffer
+" CtrlPBufferCurMod : current and modified buffer
+" CtrlPBufferPath   : buffer path
+
+" In extensions:
+" CtrlPTabExtra  : the part of each line that's not matched against (Comment)
+" CtrlPBufName   : the buffer name an entry belongs to (|hl-Directory|)
+" CtrlPTagKind   : the kind of the tag in buffer-tag mode (|hl-Title|)
+" CtrlPqfLineCol : the line and column numbers in quickfix mode (Comment)
+" CtrlPUndoT     : the elapsed time in undo mode (|hl-Directory|)
+" CtrlPUndoBr    : the square brackets [] in undo mode (Comment)
+" CtrlPUndoNr    : the undo number inside [] in undo mode (String)
+" CtrlPUndoSv    : the point where the file was saved (Comment)
+" CtrlPUndoPo    : the current position in the undo tree (|hl-Title|)
+" CtrlPBookmark  : the name of the bookmark (Identifier)
+
+" Highlight groups:
+" CtrlPMode1 : 'file' or 'path' or 'line', and the current mode (Character)
+" CtrlPMode2 : 'prt' or 'win', 'regex', the working directory (|hl-LineNr|)
+" CtrlPStats : the scanning status (Function)
+
+" cleanup
+" ------------------------------------------------------------------------------
 " delf s:H
 " delete highlight function
-

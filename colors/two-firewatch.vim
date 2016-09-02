@@ -258,11 +258,6 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
     let s:syntax_fold_bg          = 'd1cec7'
     let s:syntax_cursor_line      = 'F3EFE7'
   else
-    "let s:uno_1 = 'd6e9ff'
-    "let s:uno_2 = '91c1f8'
-    "let s:uno_3 = '6e88a6'
-    "let s:uno_4 = '55606d'
-
     let s:uno_1 = 'd6e9ff'
     let s:uno_2 = 'abb2bf'
     let s:uno_3 = '6e88a6'
@@ -300,7 +295,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('ErrorMsg',     s:syntax_accent,  s:syntax_bg,          'none')
   call <sid>X('VertSplit',    s:syntax_fold_bg, '',                   'none')
   call <sid>X('Folded',       s:syntax_bg,      s:syntax_fold_bg,     '')
-  call <sid>X('FoldColumn',   '',               s:uno_4,              '')
+  call <sid>X('FoldColumn',   s:uno_3,          s:syntax_cursor_line, '')
   call <sid>X('IncSearch',    s:syntax_bg,      s:uno_4,              '')
   call <sid>X('LineNr',       s:syntax_fold_bg, '',                   '')
   call <sid>X('CursorLineNr', s:uno_2,          '',                   'none')
@@ -459,11 +454,13 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " Elixir highlighting------------------------------------------------------{{{
   call <sid>X('elixirAtom',              s:syntax_accent, '', '')
   call <sid>X('elixirAlias',             s:duo_1,         '', '')
+  call <sid>X('elixirBlock',             s:uno_3,         '', '')
   call <sid>X('elixirBlockDefinition',   s:duo_2,         '', '')
   call <sid>X('elixirInclude',           s:duo_2,         '', '')
   call <sid>X('elixirId',                s:uno_2,         '', '')
   call <sid>X('elixirModuleDeclaration', s:uno_1,         '', '')
   call <sid>X('elixirOperator',          s:uno_3,         '', '')
+  call <sid>X('elixirVariable',          s:duo_2,         '', '')
   " }}}
 
   " Go highlighting ---------------------------------------------------------{{{
@@ -505,7 +502,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('htmlArg',            s:uno_2, '', '')
   call <sid>X('htmlTagName',        s:uno_1, '', '')
   call <sid>X('htmlSpecialTagName', s:uno_1, '', '')
-  call <sid>X('htmlTag',            s:uno_4, '', '')
+  call <sid>X('htmlTag',            s:uno_3, '', '')
 
   call <sid>X('liquidDelimiter',    s:uno_4, '', '')
   call <sid>X('liquidKeyword',      s:uno_3, '', '')
@@ -514,7 +511,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " JavaScript highlighting -------------------------------------------------{{{
   call <sid>X('coffeeString',           s:duo_2,         '', '')
 
-  call <sid>X('javaScriptBraces',       s:uno_4,         '', '')
+  call <sid>X('javaScriptBraces',       s:uno_3,         '', '')
   call <sid>X('javaScriptFunction',     s:duo_3,         '', '')
   call <sid>X('javaScriptIdentifier',   s:duo_3,         '', '')
   call <sid>X('javaScriptNull',         s:uno_1,         '', '')
@@ -531,12 +528,12 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('jsGlobalObjects',        s:uno_1,         '', '')
   call <sid>X('jsModuleWords',          s:duo_3,         '', '')
   call <sid>X('jsModules',              s:duo_3,         '', '')
-  call <sid>X('jsNoise',                s:uno_4,         '', '')
+  call <sid>X('jsNoise',                s:uno_3,         '', '')
   call <sid>X('jsNull',                 s:uno_1,         '', '')
   call <sid>X('jsOperator',             s:duo_2,         '', '')
-  call <sid>X('jsObjectBraces',         s:uno_4,         '', '')
-  call <sid>X('jsBrackets',             s:uno_4,         '', '')
-  call <sid>X('jsParens',               s:uno_4,         '', '')
+  call <sid>X('jsObjectBraces',         s:uno_3,         '', '')
+  call <sid>X('jsBrackets',             s:uno_3,         '', '')
+  call <sid>X('jsParens',               s:uno_3,         '', '')
   call <sid>X('jsStorageClass',         s:duo_1,         '', '')
   call <sid>X('jsTemplateBraces',       s:syntax_accent, '', '')
   call <sid>X('jsTemplateVar',          s:duo_2,         '', '')
@@ -549,7 +546,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('javascriptDocNotation',  s:duo_3,         '', '')
   call <sid>X('javascriptDocParamName', s:duo_2,         '', '')
   call <sid>X('javascriptDocTags',      s:duo_3,         '', '')
-  call <sid>X('javascriptEndColons',    s:uno_4,         '', '')
+  call <sid>X('javascriptEndColons',    s:uno_3,         '', '')
   call <sid>X('javascriptExport',       s:duo_3,         '', '')
   call <sid>X('javascriptFuncArg',      s:uno_1,         '', '')
   call <sid>X('javascriptFuncKeyword',  s:duo_3,         '', '')
@@ -566,7 +563,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " JSON highlighting -------------------------------------------------------{{{
   call <sid>X('jsonCommentError',      s:uno_1,         '', ''        )
   call <sid>X('jsonKeyword',           s:duo_2,         '', ''        )
-  call <sid>X('jsonQuote',             s:uno_4,         '', ''        )
+  call <sid>X('jsonQuote',             s:uno_3,         '', ''        )
   call <sid>X('jsonMissingCommaError', s:syntax_accent, '', 'reverse' )
   call <sid>X('jsonNoQuotesError',     s:syntax_accent, '', 'reverse' )
   call <sid>X('jsonNumError',          s:syntax_accent, '', 'reverse' )

@@ -281,6 +281,24 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
     let s:syntax_cursor_line      = '2c323c'
   endif
 
+  " neovim :terminal colors
+  let g:terminal_color_0 = "#282c34"
+  let g:terminal_color_8 = "#282c34"
+  let g:terminal_color_1 = "#e06c75"
+  let g:terminal_color_9 = "#e06c75"
+  let g:terminal_color_2 = "#98c379"
+  let g:terminal_color_10 = "#98c379"
+  let g:terminal_color_3 = "#e5c07b"
+  let g:terminal_color_11 = "#e5c07b"
+  let g:terminal_color_4 = "#61afef"
+  let g:terminal_color_12 = "#61afef"
+  let g:terminal_color_5 = "#c678dd"
+  let g:terminal_color_13 = "#c678dd"
+  let g:terminal_color_6 = "#56b6c2"
+  let g:terminal_color_14 = "#56b6c2"
+  let g:terminal_color_7 = "#dcdfe4"
+  let g:terminal_color_15 = "#dcdfe4"
+
   "}}}
 
   " Vim editor color --------------------------------------------------------{{{
@@ -292,7 +310,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('CursorColumn', '',               s:syntax_cursor_line, '')
   call <sid>X('CursorLine',   '',               s:syntax_cursor_line, '')
   call <sid>X('Directory',    s:uno_1,          '',                   '')
-  call <sid>X('ErrorMsg',     s:syntax_accent,  s:syntax_bg,          'none')
+  call <sid>X('ErrorMsg',     s:syntax_color_removed,  s:syntax_bg,          'none')
   call <sid>X('VertSplit',    s:syntax_fold_bg, '',                   'none')
   call <sid>X('Folded',       s:syntax_bg,      s:syntax_fold_bg,     '')
   call <sid>X('FoldColumn',   s:uno_3,          s:syntax_cursor_line, '')
@@ -301,7 +319,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('CursorLineNr', s:uno_2,          '',                   'none')
   call <sid>X('MatchParen',   s:syntax_bg,      s:syntax_accent,      '')
   call <sid>X('Italic',       '',               '',                   'italic')
-  call <sid>X('ModeMsg',      s:syntax_fg,      '',                   '')
+  call <sid>X('ModeMsg',      s:syntax_color_added,      '',                   '')
   call <sid>X('MoreMsg',      s:syntax_fg,      '',                   '')
   call <sid>X('NonText',      s:uno_4,          '',                   '')
   call <sid>X('PMenu',        '',               s:syntax_selection,   '')
@@ -328,41 +346,41 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " }}}
 
   " Standard syntax highlighting --------------------------------------------{{{
-  call <sid>X('Comment',        s:uno_4,         '',          'italic')
-  call <sid>X('Constant',       s:duo_2,         '',          '')
-  call <sid>X('String',         s:duo_1,         '',          '')
-  call <sid>X('Character',      s:duo_2,         '',          '')
-  call <sid>X('Number',         s:duo_2,         '',          '')
-  call <sid>X('Boolean',        s:duo_2,         '',          '')
-  call <sid>X('Float',          s:duo_2,         '',          '')
-  call <sid>X('Identifier',     s:uno_3,         '',          'none')
-  call <sid>X('Function',       s:uno_2,         '',          '')
-  call <sid>X('Statement',      s:duo_2,         '',          'none')
-  call <sid>X('Conditional',    s:syntax_accent, '',          '')
-  call <sid>X('Repeat',         s:duo_2,         '',          '')
-  call <sid>X('Label',          s:uno_1,         '',          '')
-  call <sid>X('Operator',       s:syntax_accent, '',          'none')
-  call <sid>X('Keyword',        s:uno_1,         '',          '')
-  call <sid>X('Exception',      s:uno_1,         '',          '')
-  call <sid>X('PreProc',        s:uno_1,         '',          '')
-  call <sid>X('Include',        s:duo_2,         '',          '')
-  call <sid>X('Define',         s:duo_2,         '',          'none')
-  call <sid>X('Macro',          s:uno_3,         '',          '')
-  call <sid>X('PreCondit',      'ff0000',        '',          '')
-  call <sid>X('Type',           s:duo_1,         '',          'none')
-  call <sid>X('StorageClass',   s:duo_2,         '',          '')
-  call <sid>X('Structure',      s:uno_1,         '',          '')
-  call <sid>X('Typedef',        s:uno_1,         '',          '')
-  call <sid>X('Special',        s:uno_3,         '',          '')
-  call <sid>X('SpecialChar',    '',              '',          '')
-  call <sid>X('Tag',            '',              '',          '')
-  call <sid>X('Delimiter',      s:uno_4,         '',          '')
-  call <sid>X('SpecialComment', '',              '',          '')
-  call <sid>X('Debug',          '',              '',          '')
-  call <sid>X('Underlined',     s:duo_1,         '',          'underline')
-  call <sid>X('Ignore',         '',              '',          '')
-  call <sid>X('Error',          s:syntax_accent, s:syntax_bg, 'bold')
-  call <sid>X('Todo',           s:duo_2,         s:syntax_bg, '')
+  call <sid>X('Comment',        s:uno_4,                '',          'italic')
+  call <sid>X('Constant',       s:duo_2,                '',          '')
+  call <sid>X('String',         s:duo_1,                '',          '')
+  call <sid>X('Character',      s:duo_2,                '',          '')
+  call <sid>X('Number',         s:duo_2,                '',          '')
+  call <sid>X('Boolean',        s:duo_2,                '',          '')
+  call <sid>X('Float',          s:duo_2,                '',          '')
+  call <sid>X('Identifier',     s:uno_3,                '',          'none')
+  call <sid>X('Function',       s:uno_2,                '',          '')
+  call <sid>X('Statement',      s:duo_1,                '',          'none')
+  call <sid>X('Conditional',    s:syntax_accent,        '',          '')
+  call <sid>X('Repeat',         s:duo_2,                '',          '')
+  call <sid>X('Label',          s:uno_1,                '',          '')
+  call <sid>X('Operator',       s:syntax_accent,        '',          'none')
+  call <sid>X('Keyword',        s:uno_1,                '',          '')
+  call <sid>X('Exception',      s:uno_1,                '',          '')
+  call <sid>X('PreProc',        s:uno_1,                '',          '')
+  "call <sid>X('Include',        s:duo_2,                '',          '')
+  "call <sid>X('Define',         s:duo_2,                '',          'none')
+  "call <sid>X('Macro',          s:uno_3,                '',          '')
+  "call <sid>X('PreCondit',      'ff0000',               '',          '')
+  call <sid>X('Type',           s:duo_1,                '',          'none')
+  call <sid>X('StorageClass',   s:duo_2,                '',          '')
+  call <sid>X('Structure',      s:uno_1,                '',          '')
+  call <sid>X('Typedef',        s:uno_1,                '',          '')
+  call <sid>X('Special',        s:uno_3,                '',          '')
+  call <sid>X('SpecialChar',    '',                     '',          '')
+  call <sid>X('Tag',            '',                     '',          '')
+  call <sid>X('Delimiter',      s:uno_4,                '',          '')
+  call <sid>X('SpecialComment', '',                     '',          '')
+  call <sid>X('Debug',          '',                     '',          '')
+  call <sid>X('Underlined',     s:duo_1,                '',          'underline')
+  call <sid>X('Ignore',         '',                     '',          '')
+  call <sid>X('Error',          s:syntax_color_removed, s:syntax_bg, 'bold')
+  call <sid>X('Todo',           s:syntax_color_added,   s:syntax_bg, '')
   " }}}
 
   " Asciidoc highlighting ---------------------------------------------------{{{
@@ -452,15 +470,17 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " }}}
 
   " Elixir highlighting------------------------------------------------------{{{
-  call <sid>X('elixirAtom',              s:syntax_accent, '', '')
-  call <sid>X('elixirAlias',             s:duo_1,         '', '')
+  "call <sid>X('elixirAtom',              s:syntax_accent, '', '')
+  "call <sid>X('elixirAlias',             s:duo_1,         '', '')
   call <sid>X('elixirBlock',             s:uno_3,         '', '')
-  call <sid>X('elixirBlockDefinition',   s:duo_2,         '', '')
-  call <sid>X('elixirInclude',           s:duo_2,         '', '')
+  "call <sid>X('elixirBlockDefinition',   s:duo_2,         '', '')
+  "call <sid>X('elixirInclude',           s:duo_2,         '', '')
   call <sid>X('elixirId',                s:uno_2,         '', '')
   call <sid>X('elixirModuleDeclaration', s:uno_1,         '', '')
-  call <sid>X('elixirOperator',          s:uno_3,         '', '')
-  call <sid>X('elixirVariable',          s:duo_2,         '', '')
+  "call <sid>X('elixirModuleDefine',      s:duo_2,         '', '')
+  "call <sid>X('elixirOperator',          s:uno_3,         '', '')
+  "call <sid>X('elixirSigil',             s:uno_4,         '', '')
+  "call <sid>X('elixirVariable',          s:duo_2,         '', '')
   " }}}
 
   " Go highlighting ---------------------------------------------------------{{{
@@ -578,6 +598,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('markdownHeadingDelimiter', s:duo_3, '', '')
   call <sid>X('markdownListMarker',       s:duo_3, '', '')
 
+  call <sid>X('mkdCode',                  s:duo_1, '', '')
   call <sid>X('mkdDelimiter',             s:uno_3, '', '')
   call <sid>X('mkdLink',                  s:duo_1, '', '')
   call <sid>X('mkdLinkDef',               s:duo_1, '', '')
@@ -626,9 +647,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " }}}
 
   " Vim highlighting --------------------------------------------------------{{{
-  call <sid>X('vimHighlight',    s:duo_2, '', '')
-  call <sid>X('vimLineComment',  s:uno_4, '', 'italic')
-  call <sid>X('vimCommentTitle', s:uno_4, '', 'bold')
+  "call <sid>X('vimCommentTitle', s:uno_4, '', 'bold')
   call <sid>X('vimCommand',      s:uno_1, '', '')
   call <sid>X('vimVar',          s:duo_2, '', '')
   call <sid>X('vimEnvVar',       s:duo_3, '', '')
@@ -654,19 +673,20 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('liquidKeyword',   s:uno_3, '', '')
   " }}}
 
+" Delete functions =========================================================={{{
+  delf <SID>X
+  delf <SID>rgb
+  delf <SID>color
+  delf <SID>rgb_color
+  delf <SID>rgb_level
+  delf <SID>rgb_number
+  delf <SID>grey_color
+  delf <SID>grey_level
+  delf <SID>grey_number
+"}}}
+
 endif
 "}}}
 
-" Delete functions =========================================================={{{
-delf <SID>X
-delf <SID>rgb
-delf <SID>color
-delf <SID>rgb_color
-delf <SID>rgb_level
-delf <SID>rgb_number
-delf <SID>grey_color
-delf <SID>grey_level
-delf <SID>grey_number
-"}}}
 
 " vim: set fdl=0 fdm=marker:

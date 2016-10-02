@@ -38,7 +38,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 877+ color schemes:
+Total of 880+ color schemes:
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [1989.vim](https://github.com/sonjapeterson/1989.vim/tree/master/colors)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
@@ -360,6 +360,7 @@ Total of 877+ color schemes:
 * [donbass.vim](http://www.vim.org/script.php?script_id=2730)
 * [doorhinge.vim](http://www.vim.org/script.php?script_id=1671)
 * [doriath.vim](http://www.vim.org/script.php?script_id=1627)
+* [dracula.vim](https://github.com/dracula/vim/tree/master/colors)
 * [dragon.vim](http://www.vim.org/script.php?script_id=3463)
 * [dual.vim](http://www.vim.org/script.php?script_id=2688)
 * [dubs.vim](http://www.vim.org/script.php?script_id=4468)
@@ -529,7 +530,7 @@ Total of 877+ color schemes:
 * [lilydjwg_dark.vim](http://www.vim.org/script.php?script_id=2585)
 * [lilydjwg_green.vim](http://www.vim.org/script.php?script_id=2516)
 * [lilypink.vim](http://www.vim.org/script.php?script_id=3323)
-* [lingodirector.vim](http://www.vim.org/script.php?script_id=1012)
+* [lingodirector.vim](http://www.vim.org/script.php?script_id=4068)
 * [liquidcarbon.vim](http://www.vim.org/script.php?script_id=3274)
 * [literal_tango.vim](http://www.vim.org/script.php?script_id=2430)
 * [ljyat.vim](http://www.vim.org/script.php?script_id=4389)
@@ -781,6 +782,7 @@ Total of 877+ color schemes:
 * [stackoverflow.vim](http://www.vim.org/script.php?script_id=3343)
 * [stark-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [stark.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
+* [stereokai.vim](https://github.com/gummesson/stereokai.vim/tree/master/colors)
 * [stingray.vim](http://www.vim.org/script.php?script_id=1944)
 * [strawimodo.vim](http://www.vim.org/script.php?script_id=2939)
 * [summerfruit.vim](http://www.vim.org/script.php?script_id=1872)
@@ -882,6 +884,7 @@ Total of 877+ color schemes:
 * [warm_grey.vim](http://www.vim.org/script.php?script_id=2061)
 * [warriors-away.vim](https://github.com/RussellBradley/vim-warriors-away/tree/master/colors)
 * [watermark.vim](http://www.vim.org/script.php?script_id=1471)
+* [wellsokai.vim](https://github.com/wellsjo/wellsokai.vim/tree/master/colors)
 * [welpe.vim](https://github.com/tstelzer/welpe.vim/tree/master/colors)
 * [werks.vim](http://www.vim.org/script.php?script_id=3685)
 * [white.vim](http://www.vim.org/script.php?script_id=3759)

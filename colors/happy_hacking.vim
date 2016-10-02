@@ -158,6 +158,10 @@ hi! link MoreMsg      Normal
 " Language specific settings that would otherwise be too generic. These
 " definitions are sorted in alphabetical order.
 
+" Aeon
+hi! link aeonInstanceVariable rubyInstanceVariable
+hi! link aeonSymbol           rubySymbol
+
 " Coffeescript
 hi! link coffeeRegex        Regexp
 hi! link coffeeSpecialIdent Directory
@@ -315,3 +319,10 @@ hi! link yardComment  Comment
 hi! link xmlTagName Normal
 hi! link xmlTag     Normal
 hi! link xmlAttrib  Normal
+
+" Neomake
+hi! link NeomakeWarningSign WarningMsg
+hi! link NeomakeErrorSign Error
+
+" Wild menu completion
+hi! link WildMenu PmenuSel

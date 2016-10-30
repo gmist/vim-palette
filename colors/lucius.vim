@@ -94,6 +94,28 @@
 " the terminal (useful for transparency or terminals with different background
 " colors).
 "
+" License:
+"
+" Copyright (c) 2015 Jonathan Filip
+"
+" Permission is hereby granted, free of charge, to any person obtaining a copy
+" of this software and associated documentation files (the "Software"), to deal
+" in the Software without restriction, including without limitation the rights
+" to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+" copies of the Software, and to permit persons to whom the Software is
+" furnished to do so, subject to the following conditions:
+"
+" The above copyright notice and this permission notice shall be included in
+" all copies or substantial portions of the Software.
+"
+" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+" IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+" FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+" AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+" LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+" OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+" THE SOFTWARE.
+"
 " ============================================================================
 
 
@@ -242,7 +264,7 @@ endfunction
 " ============================================================================
 
 let s:normal_items = [
-            \ "ColorColumn", "Comment", "Constant", "Cursor", "CursorColumn",
+            \ "ColorColumn", "Comment", "Conceal", "Constant", "Cursor", "CursorColumn",
             \ "CursorIM", "CursorLine", "CursorLineNr", "DiffAdd", "DiffChange",
             \ "DiffDelete", "Directory", "Error", "ErrorMsg", "Identifier",
             \ "IncSearch", "LineNr", "MatchParen", "ModeMsg", "MoreMsg",
@@ -337,6 +359,7 @@ if s:style == "light"
     hi SpecialKey   guifg=#afd7af
     if s:contrast == "low"
         hi Comment      guifg=#9e9e9e
+        hi Conceal      guifg=#9e9e9e
         hi Constant     guifg=#d78700
         hi Directory    guifg=#00af87
         hi Identifier   guifg=#00af00
@@ -347,6 +370,7 @@ if s:style == "light"
         hi Type         guifg=#0087af
     else
         hi Comment      guifg=#808080
+        hi Conceal      guifg=#808080
         hi Constant     guifg=#af5f00
         hi Directory    guifg=#00875f
         hi Identifier   guifg=#008700
@@ -361,6 +385,7 @@ else
     hi SpecialKey   guifg=#5f875f
     if s:contrast == "low"
         hi Comment      guifg=#6c6c6c
+        hi Conceal      guifg=#6c6c6c
         hi Constant     guifg=#afaf87
         hi Directory    guifg=#87af87
         hi Identifier   guifg=#87af5f
@@ -371,6 +396,7 @@ else
         hi Type         guifg=#5fafaf
     elseif s:contrast == "high"
         hi Comment      guifg=#8a8a8a
+        hi Conceal      guifg=#8a8a8a
         hi Constant     guifg=#ffffd7
         hi Directory    guifg=#d7ffd7
         hi Identifier   guifg=#d7ffaf
@@ -381,6 +407,7 @@ else
         hi Type         guifg=#afffff
     else
         hi Comment      guifg=#808080
+        hi Conceal      guifg=#808080
         hi Constant     guifg=#d7d7af
         hi Directory    guifg=#afd7af
         hi Identifier   guifg=#afd787

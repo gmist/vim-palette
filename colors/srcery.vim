@@ -180,9 +180,9 @@ if version >= 700
   hi! link CursorColumn CursorLine
 
   " Tab pages line filler
-  call s:HL('TabLineFill', s:black, s:black)
+  call s:HL('TabLineFill', s:green, s:black)
   " Active tab page label
-  call s:HL('TabLineSel', s:black, s:black, s:bold)
+  call s:HL('TabLineSel', s:red, s:black, s:bold)
   " Not active tab page label
   hi! link TabLine TabLineFill
 
@@ -192,7 +192,7 @@ endif
 
 if version >= 703
   " Highlighted screen columns
-  call s:HL('ColorColumn',  s:none, s:black)
+  call s:HL('ColorColumn',  s:none, s:bright_black)
 
   " Concealed element: \lambda → λ
   call s:HL('Conceal', s:blue, s:none)

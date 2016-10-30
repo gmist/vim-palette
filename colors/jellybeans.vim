@@ -13,16 +13,24 @@
 " URL:          github.com/nanotech/jellybeans.vim
 " Scripts URL:  vim.org/scripts/script.php?script_id=2555
 " Maintainer:   NanoTech (nanotech.nanotechcorp.net)
-" Version:      1.6~git
-" Last Change:  January 15th, 2012
+" Version:      1.6
+" Last Change:  October 18th, 2016
 " License:      MIT
-" Contributors: Daniel Herbert (pocketninja)
-"               Henry So, Jr. <henryso@panix.com>
+" Contributors: Andrew Wong (w0ng)
+"               Brian Marshall (bmars)
+"               Daniel Herbert (pocketninja)
 "               David Liang <bmdavll at gmail dot com>
+"               Henry So, Jr. <henryso@panix.com>
+"               Joe Doherty (docapotamus)
+"               Karl Litterfeldt (Litterfeldt)
+"               Keith Pitt (keithpitt)
+"               Philipp Rustemeier (12foo)
+"               Rafael Bicalho (rbika)
 "               Rich Healey (richo)
-"               Andrew Wong (w0ng)
+"               Siwen Yu (yusiwen)
+"               Tim Willis (willist)
 "
-" Copyright (c) 2009-2012 NanoTech
+" Copyright (c) 2009-2016 NanoTech
 "
 " Permission is hereby granted, free of charge, to any per‐
 " son obtaining a copy of this software and associated doc‐
@@ -416,6 +424,7 @@ call s:X("Statement","8197bf","","","DarkBlue","")
 call s:X("PreProc","8fbfdc","","","LightBlue","")
 
 hi! link Operator Structure
+hi! link Conceal Operator
 
 call s:X("Type","ffb964","","","Yellow","")
 call s:X("NonText","606060",s:background_color,"",s:termBlack,"")

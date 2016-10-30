@@ -2,8 +2,8 @@
 " A copy+paste color scheme
 " Designed to be used with the syntax files for KRL and Rapid
 " Maintainer: Patrick Knosowski <knosowski@graeff.de>
-" Version: 1.0.3
-" Last Change: 24.07.2016
+" Version: 1.0.4
+" Last Change: 09 Oct 2016
 "
 " Credits: Thorsten Maerz (torte.vim vimscript #111), 
 "          Sergei Matusevich (motus.vim vimscript #1393) and 
@@ -31,7 +31,7 @@ highlight Cursor     guifg=Black	guibg=Green	gui=bold
 highlight Special    guifg=Orange
 highlight Comment    guifg=#606080
 highlight StatusLine   gui=NONE guifg=White     guibg=#204040
-highlight StatusLineNC gui=NONE guifg=LightGrey guibg=#102020
+highlight StatusLineNC gui=NONE guifg=#666666 guibg=#102020
 highlight Statement  guifg=Yellow			gui=NONE
 highlight VertSplit    gui=bold guifg=Grey25    guibg=#102020
 highlight FoldColumn	 gui=bold guifg=White guibg=Black
@@ -46,6 +46,7 @@ highlight Continue          guifg=#646423
 highlight Operator          guibg=black     guifg=#c84600
 highlight Exception         guibg=black     guifg=Orange
 highlight String            guibg=#181818   guifg=lightred
+highlight CursorLine guibg=#252525
 highlight MatchParen guibg=purple guifg=yellow
 highlight Pmenu guibg=grey20 guifg=white
 highlight PmenuSel guibg=green guifg=black
@@ -53,27 +54,32 @@ highlight WildMenu guibg=cyan guifg=black
 
 " Console
 highlight Normal     ctermfg=LightGrey	ctermbg=Black
-highlight Search     ctermfg=Black  ctermbg=Red  cterm=NONE
+highlight Search     ctermfg=Black  ctermbg=green  cterm=NONE
 highlight Visual					cterm=reverse
 highlight Cursor     ctermfg=Black	ctermbg=Green	cterm=bold
-highlight Special    ctermfg=Brown
-highlight Comment    ctermfg=Blue
-highlight StatusLine   ctermfg=Black  ctermbg=Grey cterm=NONE
-highlight StatusLineNC ctermfg=White  ctermbg=Grey cterm=NONE
+highlight Special    ctermfg=DarkRed
+highlight Constant                ctermbg=black   ctermfg=brown
+highlight String                ctermbg=black   ctermfg=brown
+highlight Operator              ctermbg=black   ctermfg=red
+highlight Comment    ctermfg=darkgray
+highlight StatusLine   ctermfg=black ctermbg=lightgrey cterm=NONE
+highlight StatusLineNC ctermfg=lightgrey  ctermbg=darkgrey  cterm=NONE
+highlight VertSplit    ctermfg=lightgrey   ctermbg=DarkGrey cterm=bold
 highlight Statement  ctermfg=Yellow			cterm=NONE
-highlight VertSplit    ctermfg=DarkGrey   ctermbg=Black cterm=bold
+highlight Exception             ctermbg=black   ctermfg=Yellow
 highlight FoldColumn	ctermbg=Black		ctermfg=White cterm=bold
-highlight Type            ctermfg=green   cterm=NONE
-highlight Typedef         ctermfg=green   cterm=NONE
+highlight Type            ctermfg=darkgreen   cterm=NONE
+highlight Typedef         ctermfg=darkgreen   cterm=NONE
 highlight StorageClass    ctermfg=darkgreen   cterm=NONE
 highlight Folded                ctermbg=black   ctermfg=green
+highlight Movement              ctermbg=black   ctermfg=green
 highlight BuildInFunction       ctermbg=Black   ctermfg=Cyan
 highlight Sysvars               ctermbg=black   ctermfg=white
-highlight Movement              ctermbg=black   ctermfg=green
 highlight link Continue          Statement
-highlight Operator              ctermbg=black   ctermfg=Red
-highlight Exception             ctermbg=black   ctermfg=Yellow
-highlight String                ctermbg=black   ctermfg=magenta
+highlight CursorLine ctermbg=Darkblue
+highlight PreProc ctermfg=magenta
+highlight Underlined ctermbg=darkmagenta ctermfg=magenta
+highlight Debug ctermfg=magenta
 
 " only for vim 5
 if has("unix")
@@ -86,5 +92,4 @@ if has("unix")
   endif
 endif
 
-highlight CursorLine guibg=#252525
 

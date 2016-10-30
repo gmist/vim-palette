@@ -16,18 +16,18 @@ let s:gui00 = "fbfaf9"
 let s:gui01 = "ede7e3"
 let s:gui02 = "dcd5d0"
 let s:gui03 = "cac3be"
-let s:gui04 = "908974"
+let s:gui04 = "908774"
 let s:gui05 = "ec9255"
 let s:gui06 = "dd7c3c"
 let s:gui07 = "bc672f"
 let s:gui08 = "e58748"
-let s:gui09 = "ac9753"
+let s:gui09 = "ac8e53"
 let s:gui0A = "dd7c3c"
 let s:gui0B = "847b75"
-let s:gui0C = "5c553d"
+let s:gui0C = "5c523d"
 let s:gui0D = "e58748"
-let s:gui0E = "c6b57b"
-let s:gui0F = "ddd0a6"
+let s:gui0E = "c6ad7b"
+let s:gui0F = "ddcba6"
 
 " Terminal color definitions
 let s:cterm00 = "00"
@@ -178,7 +178,7 @@ call <sid>hi("TabLineFill",   s:gui03, s:gui01, s:cterm03, s:cterm01, "none")
 call <sid>hi("TabLineSel",    s:gui0B, s:gui01, s:cterm0B, s:cterm01, "none")
 
 " Standard syntax highlighting
-call <sid>hi("Boolean",      s:gui09, "", s:cterm09, "", "")
+call <sid>hi("Boolean",      s:gui0C, "", s:cterm0C, "", "")
 call <sid>hi("Character",    s:gui08, "", s:cterm08, "", "")
 call <sid>hi("Comment",      s:gui03, "", s:cterm03, "", "")
 call <sid>hi("Conditional",  s:gui0E, "", s:cterm0E, "", "")
@@ -254,7 +254,7 @@ call <sid>hi("GitGutterChangeDelete",  s:gui0E, s:gui01, s:cterm0E, s:cterm01, "
 call <sid>hi("htmlBold",    s:gui0A, "", s:cterm0A, "", "")
 call <sid>hi("htmlItalic",  s:gui0E, "", s:cterm0E, "", "")
 call <sid>hi("htmlEndTag",  s:gui04, "", s:cterm04, "", "")
-call <sid>hi("htmlTag",     s:gui04, "", s:cterm04, "", "")
+call <sid>hi("htmlTag",     s:gui03, "", s:cterm03, "", "")
 call <sid>hi("htmlTagN",     s:gui07, "", s:cterm07, "", "")
 
 " JavaScript highlighting

@@ -38,7 +38,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 893+ color schemes:
+Total of 894+ color schemes:
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [1989.vim](https://github.com/sonjapeterson/1989.vim/tree/master/colors)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
@@ -355,7 +355,7 @@ Total of 893+ color schemes:
 * [desert.vim](http://www.vim.org/script.php?script_id=105)
 * [desert256.vim](http://www.vim.org/script.php?script_id=1243)
 * [desertEx.vim](http://www.vim.org/script.php?script_id=1693)
-* [desertedocean.vim](http://www.vim.org/script.php?script_id=1404)
+* [desertedocean.vim](http://www.vim.org/script.php?script_id=1400)
 * [desertedoceanburnt.vim](http://www.vim.org/script.php?script_id=1407)
 * [despacio.vim](http://www.vim.org/script.php?script_id=5462)
 * [detailed.vim](http://www.vim.org/script.php?script_id=4297)
@@ -598,6 +598,7 @@ Total of 893+ color schemes:
 * [mud.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [muratori.vim](https://github.com/dfrunza/vim/tree/master/colors)
 * [muzzl.vim](http://www.vim.org/script.php?script_id=4622)
+* [mythos.vim](http://www.vim.org/script.php?script_id=5478)
 * [native.vim](http://www.vim.org/script.php?script_id=1857)
 * [nature.vim](http://www.vim.org/script.php?script_id=2677)
 * [navajo-night.vim](http://www.vim.org/script.php?script_id=271)
@@ -853,7 +854,7 @@ Total of 893+ color schemes:
 * [turnip-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [turnip.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [tutticolori.vim](http://www.vim.org/script.php?script_id=2670)
-* [twilight.vim](http://www.vim.org/script.php?script_id=3781)
+* [twilight.vim](http://www.vim.org/script.php?script_id=1677)
 * [twilight256.vim](http://www.vim.org/script.php?script_id=3436)
 * [two-firewatch.vim](https://github.com/rakr/vim-two-firewatch/tree/master/colors)
 * [two2tango.vim](http://www.vim.org/script.php?script_id=1988)

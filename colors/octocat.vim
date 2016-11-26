@@ -78,6 +78,7 @@ hi xmlEndTag                     ctermfg=070                 cterm=none
 hi xmlEndTagName                 ctermfg=070                 cterm=none
 hi xmlAttrib                     ctermfg=097                 cterm=none
 hi link rubyStringDelimiter String
+hi link elixirStringDelimiter String
 hi link NERDTreeClosable Directory
 hi link NERDTreeOpenable Directory
 hi jsThis                        ctermfg=166   ctermbg=none  cterm=none

@@ -38,7 +38,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 896+ color schemes:
+Total of 899+ color schemes:
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [1989.vim](https://github.com/sonjapeterson/1989.vim/tree/master/colors)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
@@ -244,6 +244,7 @@ Total of 896+ color schemes:
 * [borland.vim](http://www.vim.org/script.php?script_id=92)
 * [boxuk.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [briofita.zip](http://www.vim.org/script.php?script_id=4136)
+* [brogrammer.vim](https://github.com/marciomazza/vim-brogrammer-theme/tree/master/colors)
 * [brookstream.vim](http://www.vim.org/script.php?script_id=619)
 * [brown.vim](http://www.vim.org/script.php?script_id=227)
 * [burnttoast256.vim](http://www.vim.org/script.php?script_id=4075)
@@ -288,7 +289,7 @@ Total of 896+ color schemes:
 * [cloudy.vim](http://www.vim.org/script.php?script_id=1363)
 * [clue.vim](http://www.vim.org/script.php?script_id=2359)
 * [cmd.vim](http://www.vim.org/script.php?script_id=4187)
-* [cobalt.vim](http://www.vim.org/script.php?script_id=5022)
+* [cobalt.vim](http://www.vim.org/script.php?script_id=2828)
 * [cobaltish.vim](http://www.vim.org/script.php?script_id=3439)
 * [codeblocks-dark.vim](https://github.com/sergey-vlasov/codeblocks-dark.vim)
 * [codeburn.vim](http://www.vim.org/script.php?script_id=2574)
@@ -356,7 +357,7 @@ Total of 896+ color schemes:
 * [desert.vim](http://www.vim.org/script.php?script_id=105)
 * [desert256.vim](http://www.vim.org/script.php?script_id=1243)
 * [desertEx.vim](http://www.vim.org/script.php?script_id=1693)
-* [desertedocean.vim](http://www.vim.org/script.php?script_id=1400)
+* [desertedocean.vim](http://www.vim.org/script.php?script_id=1404)
 * [desertedoceanburnt.vim](http://www.vim.org/script.php?script_id=1407)
 * [despacio.vim](http://www.vim.org/script.php?script_id=5462)
 * [detailed.vim](http://www.vim.org/script.php?script_id=4297)
@@ -411,6 +412,7 @@ Total of 896+ color schemes:
 * [firewatch.vim](https://github.com/hhsnopek/vim-firewatch/tree/master/colors)
 * [fisa.vim](http://www.vim.org/script.php?script_id=4097)
 * [flatland.vim](https://github.com/thinkpixellab/flatland/tree/master/Vim/colors)
+* [flatwhite.vim](http://www.vim.org/script.php?script_id=5488)
 * [fnaqevan.vim](http://www.vim.org/script.php?script_id=469)
 * [fog.vim](http://www.vim.org/script.php?script_id=308)
 * [fokus.vim](http://www.vim.org/script.php?script_id=3398)
@@ -540,7 +542,7 @@ Total of 896+ color schemes:
 * [lilydjwg_dark.vim](http://www.vim.org/script.php?script_id=2585)
 * [lilydjwg_green.vim](http://www.vim.org/script.php?script_id=2516)
 * [lilypink.vim](http://www.vim.org/script.php?script_id=3323)
-* [lingodirector.vim](http://www.vim.org/script.php?script_id=1012)
+* [lingodirector.vim](http://www.vim.org/script.php?script_id=4068)
 * [liquidcarbon.vim](http://www.vim.org/script.php?script_id=3274)
 * [literal_tango.vim](http://www.vim.org/script.php?script_id=2430)
 * [ljyat.vim](http://www.vim.org/script.php?script_id=4389)
@@ -738,6 +740,7 @@ Total of 896+ color schemes:
 * [seoul.vim](http://www.vim.org/script.php?script_id=2211)
 * [seoul256-light.vim](https://github.com/junegunn/seoul256.vim/tree/master/colors)
 * [seoul256.vim](https://github.com/junegunn/seoul256.vim/tree/master/colors)
+* [seti.vim](https://github.com/trusktr/seti.vim/tree/master/colors)
 * [settlemyer.vim](http://www.vim.org/script.php?script_id=1574)
 * [sexy-railscasts.vim](http://www.vim.org/script.php?script_id=3737)
 * [sf.vim](http://www.vim.org/script.php?script_id=1045)
@@ -814,7 +817,7 @@ Total of 896+ color schemes:
 * [tabula.zip](http://www.vim.org/script.php?script_id=1718)
 * [tango-desert.vim](http://www.vim.org/script.php?script_id=2671)
 * [tango-morning.vim](http://www.vim.org/script.php?script_id=2640)
-* [tango.vim](http://www.vim.org/script.php?script_id=1686)
+* [tango.vim](http://www.vim.org/script.php?script_id=2799)
 * [tango2.vim](http://www.vim.org/script.php?script_id=2414)
 * [tangolight.vim](http://www.vim.org/script.php?script_id=3629)
 * [tangoshady.vim](http://www.vim.org/script.php?script_id=3206)

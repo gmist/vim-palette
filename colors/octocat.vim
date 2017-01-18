@@ -72,6 +72,7 @@ hi TabLineFill                   ctermfg=235   ctermbg=31    cterm=bold
 hi TabLineSel                    ctermfg=15    ctermbg=125   cterm=bold
 hi cucumberTags                  ctermfg=236   ctermbg=227   cterm=bold
 hi htmlTagName                   ctermfg=070                 cterm=none
+hi htmlTagN                      ctermfg=070                 cterm=none
 hi xmlTagName                    ctermfg=070                 cterm=none
 hi xmlTag                        ctermfg=070                 cterm=none
 hi xmlEndTag                     ctermfg=070                 cterm=none
@@ -91,6 +92,14 @@ hi jsFunctionKey                 ctermfg=097   ctermbg=none  cterm=none
 hi jsDotNotation                 ctermfg=125   ctermbg=none  cterm=none
 hi jsDomElemFuncs                ctermfg=097   ctermbg=none  cterm=none
 hi jsHtmlElemAttrs               ctermfg=000   ctermbg=none  cterm=none
+hi mustacheHandlebars            ctermfg=31    ctermbg=none  cterm=none
+hi mustacheInside                ctermfg=166                 cterm=none
+hi mustacheConditionals          ctermfg=31                  cterm=none
+hi mustacheHelpers               ctermfg=31                  cterm=none
+hi link mustacheOperators jsFuncCall
+hi link jsonKeyword String
+hi link jsonQuote String
+hi jsonBraces                    ctermfg=none
 
 hi SignColumn                    ctermfg=235   ctermbg=60    cterm=none
 hi PreCondit                     ctermfg=1     ctermbg=none  cterm=none

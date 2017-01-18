@@ -2,18 +2,25 @@
 " Author:   Lifepillar <lifepillar@lifepillar.me>
 " License:  OSI approved MIT license (see end of this file)
 
+set background=dark
 hi clear
 if exists("syntax_on")
   syntax reset
 endif
-
 let colors_name = "solarized8_dark_high"
-set background=dark
 
 if !has('gui_running') && get(g:, 'solarized_termtrans', 0)
   hi! Normal cterm=NONE gui=NONE ctermfg=14 guifg=#93a1a1 ctermbg=NONE guibg=NONE
+  hi! CursorLineNr ctermbg=NONE guibg=NONE
+  hi! LineNr ctermbg=NONE guibg=NONE
+  hi! Folded ctermbg=NONE guibg=NONE
+  hi! FoldColumn ctermbg=NONE guibg=NONE
 else
   hi! Normal cterm=NONE gui=NONE ctermfg=14 guifg=#93a1a1 ctermbg=8 guibg=#002b36
+  hi! CursorLineNr ctermbg=0 guibg=#073642
+  hi! LineNr ctermbg=0 guibg=#073642
+  hi! Folded ctermbg=0 guibg=#073642
+  hi! FoldColumn ctermbg=0 guibg=#073642
 endif
 hi! Comment cterm=NONE gui=NONE,italic ctermfg=11 guifg=#657b83 ctermbg=NONE guibg=NONE
 hi! Constant cterm=NONE gui=NONE ctermfg=6 guifg=#2aa198 ctermbg=NONE guibg=NONE
@@ -29,17 +36,17 @@ hi! Todo cterm=NONE,bold gui=NONE,bold ctermfg=5 guifg=#d33682 ctermbg=NONE guib
 if get(g:, "solarized_visibility", "") == "high"
   hi! SpecialKey cterm=NONE,reverse gui=NONE,reverse ctermfg=9 guifg=#cb4b16 ctermbg=NONE guibg=NONE
   hi! NonText cterm=NONE,bold gui=NONE,bold ctermfg=9 guifg=#cb4b16 ctermbg=NONE guibg=NONE
-  hi! CursorLineNr cterm=NONE,bold gui=NONE,bold ctermfg=9 guifg=#cb4b16 ctermbg=0 guibg=#073642
+  hi! CursorLineNr cterm=NONE,bold gui=NONE,bold ctermfg=9 guifg=#cb4b16
   hi! Title cterm=NONE,bold gui=NONE,bold ctermfg=3 guifg=#b58900 ctermbg=NONE guibg=NONE
 elseif get(g:, "solarized_visibility", "") == "low"
   hi! SpecialKey cterm=NONE,bold gui=NONE,bold ctermfg=0 guifg=#073642 ctermbg=NONE guibg=NONE
   hi! NonText cterm=NONE,bold gui=NONE,bold ctermfg=0 guifg=#073642 ctermbg=NONE guibg=NONE
-  hi! CursorLineNr cterm=NONE,bold gui=NONE,bold ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642
+  hi! CursorLineNr cterm=NONE,bold gui=NONE,bold ctermfg=11 guifg=#657b83
   hi! Title cterm=NONE,bold gui=NONE,bold ctermfg=11 guifg=#657b83 ctermbg=NONE guibg=NONE
 else
   hi! SpecialKey cterm=NONE,bold gui=NONE,bold ctermfg=12 guifg=#839496 ctermbg=0 guibg=#073642
   hi! NonText cterm=NONE,bold gui=NONE,bold ctermfg=12 guifg=#839496 ctermbg=NONE guibg=NONE
-  hi! CursorLineNr cterm=NONE,bold gui=NONE,bold ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642
+  hi! CursorLineNr cterm=NONE,bold gui=NONE,bold ctermfg=14 guifg=#93a1a1
   hi! Title cterm=NONE,bold gui=NONE,bold ctermfg=3 guifg=#b58900 ctermbg=NONE guibg=NONE
 endif
 hi! NormalMode ctermfg=14 guifg=#93a1a1 ctermbg=15 guibg=#fdf6e3 cterm=NONE,reverse gui=NONE,reverse
@@ -50,15 +57,15 @@ hi! CommandMode ctermfg=5 guifg=#d33682 ctermbg=15 guibg=#fdf6e3 cterm=NONE,reve
 if get(g:, "solarized_statusline", "") == "low"
   hi! StatusLine ctermfg=11 guifg=#657b83 ctermbg=15 guibg=#fdf6e3 cterm=NONE,reverse gui=NONE,reverse
   hi! StatusLineNC ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
-  hi! TabLine ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 cterm=NONE gui=NONE
-  hi! TabLineFill ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 cterm=NONE gui=NONE
-  hi! TabLineSel ctermfg=15 guifg=#fdf6e3 ctermbg=11 guibg=#657b83 cterm=NONE gui=NONE
+  hi! TabLine ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
+  hi! TabLineFill ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
+  hi! TabLineSel ctermfg=14 guifg=#93a1a1 ctermbg=15 guibg=#fdf6e3 cterm=NONE,reverse gui=NONE,reverse
 else
   hi! StatusLine ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
   hi! StatusLineNC ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
-  hi! TabLine ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 cterm=NONE gui=NONE
-  hi! TabLineFill ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 cterm=NONE gui=NONE
-  hi! TabLineSel ctermfg=15 guifg=#fdf6e3 ctermbg=11 guibg=#657b83 cterm=NONE gui=NONE
+  hi! TabLine ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
+  hi! TabLineFill ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
+  hi! TabLineSel ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
 endif
 hi! Visual ctermfg=11 guifg=#657b83 ctermbg=8 guibg=#002b36 cterm=NONE,reverse gui=NONE,reverse
 hi! Directory cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=NONE guibg=NONE
@@ -67,14 +74,14 @@ hi! IncSearch cterm=NONE,standout gui=NONE,standout ctermfg=9 guifg=#cb4b16 cter
 hi! Search cterm=NONE,reverse gui=NONE,reverse ctermfg=3 guifg=#b58900 ctermbg=NONE guibg=NONE
 hi! MoreMsg cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=NONE guibg=NONE
 hi! ModeMsg cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=NONE guibg=NONE
-hi! LineNr cterm=NONE gui=NONE ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642
+hi! LineNr cterm=NONE gui=NONE ctermfg=11 guifg=#657b83
 hi! Question cterm=NONE,bold gui=NONE,bold ctermfg=6 guifg=#2aa198 ctermbg=NONE guibg=NONE
 hi! VertSplit cterm=NONE gui=NONE ctermfg=11 guifg=#657b83 ctermbg=11 guibg=#657b83
 hi! VisualNOS ctermfg=NONE guifg=NONE ctermbg=0 guibg=#073642 cterm=NONE,reverse gui=NONE,reverse
 hi! WarningMsg cterm=NONE,bold gui=NONE,bold ctermfg=9 guifg=#cb4b16 ctermbg=NONE guibg=NONE
 hi! WildMenu ctermbg=15 guibg=#fdf6e3 ctermfg=0 guifg=#073642 cterm=NONE,reverse gui=NONE,reverse
-hi! Folded cterm=NONE,bold gui=NONE,bold ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 guisp=#002b36
-hi! FoldColumn cterm=NONE gui=NONE ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642
+hi! Folded cterm=NONE,bold gui=NONE,bold ctermfg=14 guifg=#93a1a1 guisp=#002b36
+hi! FoldColumn cterm=NONE gui=NONE ctermfg=14 guifg=#93a1a1
 if get(g:, "solarized_diffmode", "") == "high"
   hi! DiffAdd cterm=NONE,reverse gui=NONE,reverse ctermfg=2 guifg=#719e07 ctermbg=NONE guibg=NONE
   hi! DiffChange cterm=NONE,reverse gui=NONE,reverse ctermfg=3 guifg=#b58900 ctermbg=NONE guibg=NONE
@@ -85,11 +92,16 @@ elseif get(g:, "solarized_diffmode", "") == "low"
   hi! DiffChange cterm=NONE gui=NONE ctermfg=3 guifg=#b58900 ctermbg=NONE guibg=NONE guisp=#b58900
   hi! DiffDelete cterm=NONE,bold gui=NONE,bold ctermfg=1 guifg=#dc322f ctermbg=NONE guibg=NONE
   hi! DiffText cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=NONE guibg=NONE guisp=#268bd2
+elseif get(g:, "solarized_diffmode", "") == "bold"
+    hi! DiffAdd cterm=NONE,bold gui=NONE,bold ctermfg=2 guifg=#719e07 ctermbg=0 guibg=#073642 guisp=#719e07
+    hi! DiffChange cterm=NONE,bold gui=NONE,bold ctermfg=3 guifg=#b58900 ctermbg=0 guibg=#073642 guisp=#b58900
+    hi! DiffDelete cterm=NONE,bold gui=NONE,bold ctermfg=1 guifg=#dc322f ctermbg=0 guibg=#073642
+    hi! DiffText cterm=NONE,bold gui=NONE,bold ctermfg=4 guifg=#268bd2 ctermbg=0 guibg=#073642 guisp=#268bd2
 else
-  hi! DiffAdd cterm=NONE,bold gui=NONE,bold ctermfg=2 guifg=#719e07 ctermbg=0 guibg=#073642 guisp=#719e07
-  hi! DiffChange cterm=NONE,bold gui=NONE,bold ctermfg=3 guifg=#b58900 ctermbg=0 guibg=#073642 guisp=#b58900
-  hi! DiffDelete cterm=NONE,bold gui=NONE,bold ctermfg=1 guifg=#dc322f ctermbg=0 guibg=#073642
-  hi! DiffText cterm=NONE,bold gui=NONE,bold ctermfg=4 guifg=#268bd2 ctermbg=0 guibg=#073642 guisp=#268bd2
+  hi! DiffAdd cterm=NONE gui=NONE ctermfg=2 guifg=#719e07 ctermbg=0 guibg=#073642 guisp=#719e07
+  hi! DiffChange cterm=NONE gui=NONE ctermfg=3 guifg=#b58900 ctermbg=0 guibg=#073642 guisp=#b58900
+  hi! DiffDelete cterm=NONE gui=NONE ctermfg=1 guifg=#dc322f ctermbg=0 guibg=#073642
+  hi! DiffText cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=0 guibg=#073642 guisp=#268bd2
 endif
 hi! SignColumn cterm=NONE gui=NONE ctermfg=14 guifg=#93a1a1 ctermbg=NONE guibg=NONE
 hi! Conceal cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=NONE guibg=NONE
@@ -104,7 +116,7 @@ hi! PmenuThumb ctermfg=14 guifg=#93a1a1 ctermbg=8 guibg=#002b36 cterm=NONE,rever
 hi! CursorColumn cterm=NONE gui=NONE ctermfg=NONE guifg=NONE ctermbg=0 guibg=#073642
 hi! CursorLine cterm=NONE gui=NONE ctermfg=NONE guifg=NONE ctermbg=0 guibg=#073642 guisp=#eee8d5
 hi! ColorColumn cterm=NONE gui=NONE ctermfg=NONE guifg=NONE ctermbg=0 guibg=#073642
-hi! Cursor cterm=NONE gui=NONE ctermfg=8 guifg=#002b36 ctermbg=14 guibg=#93a1a1
+hi! Cursor cterm=NONE gui=NONE ctermfg=15 guifg=#fdf6e3 ctermbg=4 guibg=#268bd2
 hi! link lCursor Cursor
 hi! MatchParen cterm=NONE,bold gui=NONE,bold ctermfg=15 guifg=#fdf6e3 ctermbg=0 guibg=#073642
 hi! link vimVar Identifier

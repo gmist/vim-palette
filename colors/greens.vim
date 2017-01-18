@@ -1,6 +1,6 @@
-" Vim color file
-" Maintainer: Yuheng Xie <thinelephant@gmail.com>
-" Last Change: Nov 22, 2016
+" A green/red/yellow colorscheme
+" Maintainer: Yuheng XIE <thinelephant@gmail.com>
+" Last Change: Dec 7, 2016
 
 if &background != "light"
 	set background=dark
@@ -18,77 +18,145 @@ endif
 
 let g:colors_name = "greens"
 
-hi Cursor                         guifg=Black      guibg=#FFBF00
-hi Normal      ctermfg=Grey       guifg=#A4A090    guibg=Black
+function! s:Printf02X(n)
+  let n = a:n
+  let r = ""
+  while strlen(r) < 2
+    let r = '0123456789ABCDEF'[n % 16] . r
+    let n = n / 16
+  endwhile
+  return r
+endfunc
 
-hi Comment     ctermfg=DarkGreen  guifg=DarkGreen
-hi Constant    ctermfg=Red        guifg=Red
-hi Special     ctermfg=Yellow     guifg=Yellow                        gui=BOLD  cterm=BOLD
-hi Identifier  ctermfg=Cyan       guifg=#40D8D0                       gui=NONE  cterm=NONE
-hi Statement   ctermfg=Yellow     guifg=Yellow                        gui=BOLD  cterm=BOLD
-hi PreProc     ctermfg=Green      guifg=Green
-hi Type        ctermfg=White      guifg=White                         gui=BOLD  cterm=BOLD
-hi Ignore      ctermfg=DarkGrey   guifg=#22201C
+function! s:CtermRGB(r, g, b)
+	return a:r * 36 + a:g * 6 + a:b + 16
+endfunction
 
-hi FoldColumn  ctermfg=Black      guifg=Black      guibg=Grey         ctermbg=Grey
-hi Folded      ctermfg=Black      guifg=Black      guibg=Grey         ctermbg=Grey
+function! s:GuiRGB(r, g, b)
+	return "#" .
+			\ s:Printf02X(a:r ? a:r * 40 + 55 : 0) .
+			\ s:Printf02X(a:g ? a:g * 40 + 55 : 0) .
+			\ s:Printf02X(a:b ? a:b * 40 + 55 : 0)
+endfunction
 
-hi DiffAdd                                         guibg=DarkRed      ctermbg=DarkRed
-hi DiffDelete                                      guibg=DarkCyan     ctermbg=DarkCyan  gui=NONE  cterm=NONE
-hi DiffText                                        guibg=DarkBlue     ctermbg=DarkBlue  gui=NONE  cterm=NONE
-hi DiffChange                                      guibg=DarkMagenta  ctermbg=DarkMagenta
+function! s:ColorRGB(fgbg, color, r, g, b)
+	if &t_Co < 256
+		return "cterm" . a:fgbg . "=" . a:color .
+				\ " gui"   . a:fgbg . "=" . s:GuiRGB(a:r, a:g, a:b)
+	else
+		return "cterm" . a:fgbg . "=" . s:CtermRGB(a:r, a:g, a:b) .
+				\ " gui"   . a:fgbg . "=" . s:GuiRGB(a:r, a:g, a:b)
+	endif
+endfunction
+
+function! s:Color(fgbg, color)
+	return "cterm" . a:fgbg . "=" . a:color . " gui" . a:fgbg . "=" . a:color
+endfunction
+
+function! s:Style(style)
+	if &t_Co < 256
+		return ""
+	else
+		return "cterm=" . a:style . " gui=" . a:style
+	endif
+endfunction
+
+function! s:Hi(group, ...)
+	let command = "hi " . a:group
+	let i = 1
+	while i <= a:0
+		let arg = a:{i}
+		if arg =~ '^\(fg\|bg\)=[0-5]\{3\},\w\+$'
+			let fgbg  = strpart(arg, 0, 2)
+			let color = strpart(arg, 7)
+			let r     = strpart(arg, 3, 1)
+			let g     = strpart(arg, 4, 1)
+			let b     = strpart(arg, 5, 1)
+			let command = command . " " . s:ColorRGB(fgbg, color, r, g, b)
+		elseif arg =~ '^\(fg\|bg\)=\w\+$'
+			let fgbg  = strpart(arg, 0, 2)
+			let color = strpart(arg, 3)
+			let command = command . " " . s:Color(fgbg, color)
+		elseif arg =~ '^style=\w\+$'
+			let command = command . " " . s:Style(strpart(arg, 6))
+		endif
+		let i = i + 1
+	endwhile
+	exec command
+endfunction
+
+command! -nargs=+ Hi call s:Hi(<f-args>)
+
+if &background == "dark"
+	if has("gui_running")
+		Hi Normal fg=333,Grey bg=Black
+	else
+		Hi Normal fg=333,Grey
+	endif
+elseif &background == "light"
+	if has("gui_running")
+		Hi Normal fg=111,DarkGrey bg=LightYellow
+	else
+		Hi Normal fg=111,DarkGrey
+	endif
+endif " &background
+
+if &background == "dark"
+
+	Hi Comment     fg=030,DarkGreen
+	Hi Constant    fg=500,Red
+	Hi Special     fg=430,DarkYellow               style=NONE
+	Hi Identifier  fg=055,Cyan                     style=NONE
+	Hi Statement   fg=550,Yellow                   style=BOLD
+	Hi PreProc     fg=050,Green                    style=BOLD
+	Hi Type        fg=555,White                    style=BOLD
+	Hi Ignore      fg=111,DarkGrey
+
+	Hi FoldColumn  fg=000,Black  bg=222,Grey
+	Hi Folded      fg=000,Black  bg=222,Grey
+
+	Hi DiffAdd                   bg=300,DarkRed
+	Hi DiffDelete                bg=033,DarkCyan   style=NONE
+	Hi DiffText                  bg=004,DarkBlue   style=NONE
+	Hi DiffChange                bg=303,DarkMagenta
+
+elseif &background == "light"
+
+	Hi Comment     fg=030,DarkGreen
+	Hi Constant    fg=500,Red
+	Hi Special     fg=310,DarkRed                  style=NONE
+	Hi Identifier  fg=034,DarkCyan                 style=NONE
+	Hi Statement   fg=430,DarkYellow               style=BOLD
+	Hi PreProc     fg=050,Green                    style=BOLD
+	Hi Type        fg=000,Black                    style=BOLD
+	Hi Ignore      fg=444,LightGrey
+
+	Hi FoldColumn  fg=555,White  bg=443,LightGrey
+	Hi Folded      fg=555,White  bg=443,LightGrey
+
+	Hi DiffAdd                   bg=544,LightRed
+	Hi DiffDelete                bg=455,LightCyan  style=NONE
+	Hi DiffText                  bg=345,LightBlue  style=NONE
+	Hi DiffChange                bg=545,LightMagenta
+
+endif " &background
 
 if v:version >= 700
 
-hi! link CursorLine   Visual
-hi! link CursorColumn Visual
+	Hi MatchParen  fg=555,White  bg=030,DarkGreen
 
-hi MatchParen  ctermfg=White      guifg=White      guibg=DarkGreen    ctermbg=DarkGreen
+	Hi Pmenu       fg=000,Black  bg=444,LightGrey
+	Hi PmenuSel    fg=000,Black  bg=550,Yellow
+	Hi PmenuSbar   fg=000,Black  bg=555,White
+	Hi PmenuThumb  fg=000,Black  bg=050,Green
 
-hi Pmenu       ctermfg=Black      guifg=Black      guibg=LightGrey    ctermbg=LightGrey
-hi PmenuSel    ctermfg=Black      guifg=Black      guibg=Yellow       ctermbg=Yellow
-hi PmenuSbar   ctermfg=Black      guifg=Black      guibg=White        ctermbg=White
-hi PmenuThumb  ctermfg=Black      guifg=Black      guibg=DarkGrey     ctermbg=DarkGrey  gui=NONE  cterm=NONE
+	hi! link CursorLine   Visual
+	hi! link CursorColumn Visual
 
-hi TabLine     ctermfg=Grey       guifg=#A4A090    guibg=Black        ctermbg=NONE      gui=NONE  cterm=NONE
-hi TabLineFill ctermfg=Grey       guifg=#A4A090    guibg=Black        ctermbg=NONE      gui=NONE  cterm=NONE
-hi TabLineSel  ctermfg=White      guifg=White      guibg=Black        ctermbg=NONE      gui=NONE  cterm=NONE
+	hi! link TabLine      Normal
+	hi! link TabLineFill  Normal
+	hi! link TabLineSel   Type
 
-endif
-
-if &background == "light"
-
-if &t_Co < 256
-hi Normal      ctermfg=DarkGrey   guifg=#444030    guibg=LightYellow
-else
-hi Normal      ctermfg=240        guifg=#444030    guibg=LightYellow
-endif
-
-hi Comment     ctermfg=DarkGreen  guifg=DarkGreen
-hi Constant    ctermfg=Red        guifg=Red
-hi Special     ctermfg=DarkYellow guifg=#948000                       gui=BOLD  cterm=BOLD
-hi Identifier  ctermfg=DarkCyan   guifg=DarkCyan                      gui=NONE  cterm=NONE
-hi Statement   ctermfg=DarkYellow guifg=#948000                       gui=BOLD  cterm=BOLD
-hi PreProc     ctermfg=Green      guifg=Green                                             
-hi Type        ctermfg=Black      guifg=Black                         gui=BOLD  cterm=BOLD
-hi Ignore      ctermfg=LightGrey  guifg=#949080
-
-hi FoldColumn  ctermfg=White      guifg=White      guibg=Grey         ctermbg=Grey
-hi Folded      ctermfg=White      guifg=White      guibg=Grey         ctermbg=Grey
-
-hi DiffAdd                                         guibg=LightRed     ctermbg=LightRed
-hi DiffDelete                                      guibg=LightCyan    ctermbg=LightCyan gui=NONE  cterm=NONE
-hi DiffText                                        guibg=#60D8FF      ctermbg=LightBlue gui=NONE  cterm=NONE
-hi DiffChange                                      guibg=LightMagenta ctermbg=LightMagenta
-
-if v:version >= 700
-
-hi TabLine     ctermfg=Black      guifg=#042000    guibg=#D4D090      ctermbg=NONE      gui=NONE  cterm=NONE
-hi TabLineFill ctermfg=Black      guifg=#042000    guibg=#D4D090      ctermbg=NONE      gui=NONE  cterm=NONE
-hi TabLineSel  ctermfg=Red        guifg=White      guibg=#D4D090      ctermbg=NONE      gui=NONE  cterm=NONE
-
-endif
-
-endif
+endif " v:version >= 700
 
 " vim: ts=2 sw=2 noet

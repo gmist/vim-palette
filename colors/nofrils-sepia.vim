@@ -21,6 +21,8 @@ if !exists("g:nofrils_heavylinenumbers")
     let g:nofrils_heavylinenumbers = 0
 endif
 
+set background=light
+
 " Baseline
 hi Normal term=NONE cterm=NONE ctermfg=black ctermbg=223 gui=NONE guifg=#000000 guibg=#ffdfaf
 
@@ -123,10 +125,10 @@ hi Type term=NONE cterm=NONE ctermfg=NONE ctermbg=NONE gui=NONE guifg=NONE guibg
 hi Underlined term=NONE cterm=NONE ctermfg=NONE ctermbg=NONE gui=NONE guifg=NONE guibg=NONE
 
 " Sneak
-hi SneakPluginScope term=NONE cterm=NONE ctermfg=NONE ctermbg=NONE gui=NONE guifg=NONE guibg=NONE
-hi SneakStreakMask term=NONE cterm=NONE ctermfg=fg ctermbg=darkgreen gui=NONE guifg=black guibg=darkgreen
-hi SneakStreakStatusLine term=NONE cterm=NONE ctermfg=fg ctermbg=darkgreen gui=NONE guifg=black guibg=darkgreen
-hi SneakStreakTarget term=NONE cterm=NONE ctermfg=fg ctermbg=green gui=NONE guifg=black guibg=green
+hi SneakLabelMask term=NONE cterm=NONE ctermfg=black ctermbg=195 gui=NONE guifg=black guibg=#d7ffff
+hi SneakTarget term=NONE cterm=NONE ctermfg=black ctermbg=195 gui=NONE guifg=black guibg=#d7ffff
+hi SneakLabelTarget term=NONE cterm=NONE ctermfg=black ctermbg=183 gui=NONE guifg=black guibg=#d7afff
+hi SneakScope term=NONE cterm=NONE ctermfg=black ctermbg=183 gui=NONE guifg=black guibg=#d7afff
 
 " Helper Functions
 function! NofrilsFocusComments()
@@ -178,6 +180,7 @@ endfunction
 command! NofrilsDark :colo nofrils-dark
 command! NofrilsLight :colo nofrils-light
 command! NofrilsSepia :colo nofrils-sepia
+command! NofrilsAcme :colo nofrils-acme
 command! NofrilsFocusNormal :call NofrilsNormal()
 command! NofrilsFocusCode :call NofrilsFocusCode()
 command! NofrilsFocusComments :call NofrilsFocusComments()

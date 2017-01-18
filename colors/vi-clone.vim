@@ -2,7 +2,7 @@
 "" originally "basic", now "vi-clone"
 "" in honor of elvis' perfect highlighting
 "" originally by: Mikel Ward <mikel@mikelward.com>
-"" maintainer: Ryan P.C. McQuen <ryan.q@linux.com>
+"" maintainer: Ryan P.C. McQuen <ryanpcmcquen@member.fsf.org>
 "" last update: 2014.10
 
 "" remove all existing highlighting and set the defaults

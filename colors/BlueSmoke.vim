@@ -15,23 +15,24 @@ let colors_name = "BlueSmoke"
 " Normal should come first
 "Blue tint: #F8F8FF
 "Orange tint: #FEF1E0
-hi Normal		guifg=Grey10 guibg=White
+hi Normal		 guifg=Grey10 guibg=White
 
 hi Cursor       guifg=White	guibg=Black
 hi lCursor      guifg=NONE guibg=Cyan
 
-hi Visual       guifg=White guibg=#338FFF
+"#338FFF
+hi Visual       guifg=White guibg=SlateBlue
 hi VisualNOS    gui=underline
 
-hi Folded       guifg=#808080 guibg=#ECECEC
+hi Folded       guifg=#808080 guibg=#ECECEC gui=none
 
 hi StatusLineNC	guifg=Grey75 guibg=NavyBlue gui=reverse,underline
 hi VertSplit    guifg=Grey75 guibg=NavyBlue
-hi StatusLine   guifg=White guibg=SlateBlue gui=none
+hi StatusLine   guifg=NavyBlue guibg=Grey75 gui=underline
 
 hi LineNr       guifg=#959595 guibg=#ECECEC
 "#FFF4CE
-hi CursorLine   guibg=#FEF1E0
+hi CursorLine   guibg=White
 
 hi DiffAdd       guibg=LightBlue
 hi DiffChange    guibg=LightMagenta
@@ -58,7 +59,7 @@ hi WildMenu      guibg=Yellow guifg=Black
 
 "Cold hue: #607d8b, #858E8F
 "Warm hue: Grey50
-hi Comment          guifg=#858E8F
+hi Comment          guifg=Green4
 hi String           guifg=Red4
 hi Constant         guifg=Red4
 hi Operator         guifg=Cyan4
@@ -67,12 +68,14 @@ hi SyntaxChar       guifg=Black gui=None
 " github #BA1D5D
 hi Statement        guifg=Blue3 gui=None
 hi StorageClass     guifg=Blue3
-hi Identifier       guifg=Cyan4
-hi Function         guifg=Cyan4
+hi Identifier       guifg=Magenta4
+hi Function         guifg=Magenta4
 
 hi csClassOrStruct  guifg=Blue3
-hi Type	            guifg=Blue3 gui=None
+hi Type	           guifg=Blue3 gui=None
 hi PreProc          guifg=Magenta4
-hi Special          guifg=Orange3
+
+"Orange3
+hi Special          guifg=Red4
 
 " vim: sw=2

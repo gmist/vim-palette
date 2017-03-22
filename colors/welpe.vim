@@ -11,11 +11,58 @@
 " Description: 16color scheme for vim
 " Author: Timm Stelzer <timmstelzer@gmail.com>
 " Source: https://github.com/tstelzer/welpe.vim
-" Version: 0.1.2
 " ------------------------------------------------------------------------------
 
-" global settings
 " ------------------------------------------------------------------------------
+" How this works:
+"
+" Every call to the highlight command is wrapped in the `s:H` function.
+" The function is called like this:
+"
+" call s:H(<Group>, <foreground>, <background>, <style>, <special>)
+"
+"   <Group> is a String, like "Normal". See `:help 'highlight-groups'`.
+"
+"   <foreground> and <background> are names of the welpe palette, like s:bg.
+"     Avoid using direct reference to library colors which start with an
+"     underscore, like s:_darkred; instead bind those to one of the 16 palette
+"     colors.
+"
+"   <style> is one of 'italic', 'bold', 'underline' or 'undercurl'
+"     Note that 'undercurl' is only available in the GUI, and the other three
+"     depend on your choice of font, and your terminal settings.
+"
+"   <special> is the color of 'underline' or 'undercurl' and works only in the
+"     GUI
+"
+" To allow an identical experience between terminal and GUI, this colors
+" scheme limits itself to using exclusively colors from the 256-term palette.
+" For reference, this color chart may be of help:
+" http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
+"
+" Remembering each of those by hex is silly, so sounding names have been made
+" up, roughly following existing palettes. Hex-values and the corresponding
+" 256-term-values, and additionally 16- and 8-term-values for future
+" reference, are locally available. See Library-section.
+"
+" Note: If you want to change assignments, change the palette by swapping the
+" bound colors with existing colors from the library, or add new colors.
+"
+" For example, to use Venetian Red (#d70000) as a lightred, change the line
+"
+"   let s:lightred = s:_roman
+"
+" to
+"
+"   let s:lightred = s:_venetian
+"
+" Refrain from using library colors directly, to keep the layers separate and
+" sane.
+" ------------------------------------------------------------------------------
+
+" GLOBAL SETTINGS
+" ---------------
+
 set background=dark
 
 hi clear
@@ -29,47 +76,43 @@ if !exists('g:welpe_statusline')
   let g:welpe_statusline = 1
 endif
 
-" highlighting function
-" ------------------------------------------------------------------------------
-function! s:H(group,fg,bg,style,special)
+" HIGHLIGHTING FUNCTION
+" ---------------------
 
-  if empty(a:fg)
-    let l:guifg = "NONE"
-    let l:ctermfg = "NONE"
-  else
-    let l:guifg = a:fg[0]
-    let l:ctermfg = a:fg[1]
-  endif
+if !exists("*s:H")
+  function s:H(group,fg,bg,style,special)
 
-  if empty(a:bg)
-    let l:guibg = "NONE"
-    let l:ctermbg = "NONE"
-  else
-    let l:guibg = a:bg[0]
-    let l:ctermbg = a:bg[1]
-  endif
+    " On gVim 'guisp' is used to colorize underline/undercurl.
+    " To reduce visual redundancy, we void the foreground color
+    " if it mirrors the special color.
+    let l:guifg = empty(a:fg)
+          \     || !empty(a:special) && a:special == a:fg
+          \     && a:style == "undercurl" || a:style == "underline"
+          \ ? "NONE"
+          \ : a:fg[0]
+    let l:ctermfg = empty(a:fg) ? "NONE" : a:fg[1]
 
-  if empty(a:style)
-    let l:gstyle = "NONE"
-    let l:cstyle = "NONE"
-  else
-    let l:gstyle = a:style
-    let l:cstyle = a:style
-  endif
+    let l:guibg   = empty(a:bg) ? "NONE" : a:bg[0]
+    let l:ctermbg = empty(a:bg) ? "NONE" : a:bg[1]
 
-  if empty(a:special)
-    let l:guisp = s:darkred[0]
-  else
-    let l:guisp = a:special[0]
-  endif
+    let l:gstyle = empty(a:style) ? "NONE" : a:style
+    let l:cstyle = empty(a:style) ? "NONE" : a:style
 
-  execute "hi ".a:group." guifg=".l:guifg." ctermfg=".l:ctermfg." guibg=".l:guibg.
-        \ " ctermbg=".l:ctermbg." gui=".l:gstyle." cterm=".l:cstyle." guisp=".l:guisp
-endfunction
+    let l:guisp   = empty(a:special) ? s:lightred[0] : a:special[0]
 
-" Grayscale
-" ------------------------------------------------------------------------------
+    execute "hi ".a:group
+          \ ." guifg=".l:guifg." ctermfg=".l:ctermfg
+          \ ." guibg=".l:guibg." ctermbg=".l:ctermbg
+          \ ." gui=".l:gstyle." cterm=".l:cstyle
+          \ ." guisp=".l:guisp
+  endfunction
+endif
+
+" GRAYSCALE
+" ---------
+
 " Schema: s:<name> = [ '<hex>', <256term>, <16term>, <8term> ]
+" 16 and 8 are currently unused
 
 let s:_trueblack = [ '#000000', 0, 0, 0]
 let s:_black     = [ '#080808', 232, 0, 0 ]
@@ -99,8 +142,8 @@ let s:_gray22    = [ '#e4e4e4', 254, 15, 7 ]
 let s:_white     = [ '#eeeeee', 255, 15, 7]
 let s:_truewhite = [ '#FFFFFF', 15, 15, 7]
 
-" Color Library
-" ------------------------------------------------------------------------------
+" COLOR LIBRARY
+" -------------
 
 let s:_maroon        = [ '#5f0000', 52,  1,  1 ]
 let s:_darkred       = [ '#870000', 88,  1,  1 ]
@@ -121,7 +164,7 @@ let s:_ziggurat      = [ '#87afaf', 109, 4,  4 ]
 let s:_maya          = [ '#87afff', 111, 4,  4 ]
 let s:_sinbad        = [ '#afd7d7', 152, 4,  4 ]
 let s:_richblue      = [ '#5f5faf', 61,  5,  5 ]
-let s:_darkviolet    = [ '#8700df', 92,  5,  5 ]
+let s:_darkviolet2   = [ '#8700df', 92,  5,  5 ]
 let s:_darkviolet    = [ '#af00d7', 128, 5,  5 ]
 let s:_londonhue     = [ '#af87af', 139, 5,  5 ]
 let s:_biloba        = [ '#af87d7', 140, 5,  5 ]
@@ -162,172 +205,173 @@ let s:_palepink      = [ '#ff87af', 211, 13, 5 ]
 let s:_213           = [ '#ff87ff', 213, 13, 5 ]
 let s:_lavenderrose  = [ '#ffafff', 219, 13, 5 ]
 let s:_cosmos        = [ '#ffd7d7', 224, 13, 5 ]
-let s:_turqoise      = [ '#5fd7ff', 81,  14, 6 ]
+let s:_turquoise     = [ '#5fd7ff', 81,  14, 6 ]
 let s:_lightcyan     = [ '#d7ffff', 195, 14, 6 ]
 
-" Palette
-" ------------------------------------------------------------------------------
+" PALETTE
+" -------
 
-let s:lightfg  = s:_white         " #eeeeee
-let s:fg       = s:_gray21        " #dadada
-let s:darkfg   = s:_gray10        " #808080
+let s:lightfg    = s:_truewhite     " #ffffff
+let s:fg         = s:_gray20        " #d0d0d0
 
-let s:lightbg  = s:_gray4         " #3a3a3a
-let s:bg       = s:_gray2         " #262626
-let s:darkbg   = s:_gray0         " #121212
+let s:neutral    = s:_gray10        " #808080
 
-let s:darkred  = s:_maroon        " #5f0000
-let s:lightred = s:_roman         " #d75f5f
+let s:lightbg    = s:_gray4         " #3a3a3a
+let s:bg         = s:_gray2         " #262626
+let s:darkbg     = s:_gray1         " #1c1c1c
 
-let s:darkgreen= s:_darkgreen     " #005f00
+let s:darkred    = s:_maroon        " #5f0000
+let s:lightred   = s:_roman         " #d75f5f
+
+let s:darkgreen  = s:_darkgreen     " #005f00
 let s:lightgreen = s:_moss          " #afd7af
 
-let s:orange   = s:_orange        " #ffaf00
-let s:yellow   = s:_shalimar      " #ffffaf
+let s:orange     = s:_orange        " #ffaf00
+let s:yellow     = s:_shalimar      " #ffffaf
 
-let s:darkblue = s:_darkblue      " #000087
-let s:lightblue     = s:_maya          " #87afff
+let s:darkblue   = s:_darkblue      " #000087
+let s:lightblue  = s:_maya          " #87afff
 
-let s:magenta  = s:_palepink      " #ff87af
+let s:magenta    = s:_palepink      " #ff87af
 
-let s:cyan     = s:_paleturquoise " #afffff
+let s:cyan       = s:_paleturquoise " #afffff
 
-" UI
-" ------------------------------------------------------------------------------
+" INTERFACE
+" ---------
 
-call s:H("Normal", s:fg, s:bg, "", "")
+call s:H("Normal",       s:fg,         s:bg,         "",          "")
 
-call s:H("ColorColumn", "", s:lightbg, "", "")
-call s:H("Conceal", "", "", "", "")
-call s:H("Cursor", s:darkbg, s:fg, "", "")
-call s:H("iCursor", s:darkbg, s:fg, "", "")
-call s:H("CursorColumn", "", s:lightbg, "", "")
-call s:H("CursorLine", "", s:lightbg, "", "")
-call s:H("CursorLineNr", s:lightfg, s:darkbg, "", "")
+call s:H("ColorColumn",  "",           s:lightbg,    "",          "")
+call s:H("Conceal",      "",           "",           "",          "")
+call s:H("Cursor",       s:darkbg,     s:fg,         "",          "")
+call s:H("iCursor",      s:darkbg,     s:fg,         "",          "")
+call s:H("CursorColumn", "",           s:lightbg,    "",          "")
+call s:H("CursorLine",   "",           s:lightbg,    "",          "")
+call s:H("CursorLineNr", s:lightfg,    s:darkbg,     "",          "")
 
-call s:H("DiffAdd", "", s:darkgreen, "", "")
-call s:H("DiffChange", "", "", "", "")
-call s:H("DiffDelete", "", s:darkred, "", "")
-call s:H("DiffText", "", s:darkblue, "", "")
+call s:H("DiffAdd",      "",           s:darkgreen,  "",          "")
+call s:H("DiffChange",   "",           "",           "",          "")
+call s:H("DiffDelete",   "",           s:darkred,    "",          "")
+call s:H("DiffText",     "",           s:darkblue,   "",          "")
 
-call s:H("Directory", s:lightblue, "", "", "")
+call s:H("Directory",    s:lightblue,  "",           "",          "")
 
-call s:H("ErrorMsg", "", s:darkred, "", "")
+call s:H("ErrorMsg",     s:lightred,   "",           "bold",      "")
 
-call s:H("FoldColumn", "", s:bg, "", "")
-call s:H("Folded", s:fg, s:lightbg, "", "")
+call s:H("FoldColumn",   "",           s:bg,         "",          "")
+call s:H("Folded",       s:fg,         s:lightbg,    "",          "")
 
-call s:H("IncSearch", s:darkbg, s:orange, "", "")
+call s:H("IncSearch",    s:darkbg,     s:orange,     "",          "")
 
-call s:H("LineNr", s:darkfg, s:darkbg, "", "")
+call s:H("LineNr",       s:neutral,    s:darkbg,     "",          "")
 
-call s:H("MatchParen", s:orange, s:lightbg, "bold", "")
-call s:H("ModeMsg", s:lightblue, s:darkbg, "", "")
-call s:H("MoreMsg", s:lightblue, s:darkbg, "", "")
+call s:H("MatchParen",   s:orange,     s:lightbg,    "bold",      "")
+call s:H("ModeMsg",      s:lightblue,  s:bg,         "",          "")
+call s:H("MoreMsg",      s:lightblue,  s:bg,         "",          "")
 
-call s:H("NonText", s:orange, "", "", "")
+call s:H("NonText",      s:neutral,    "",           "",          "")
 
-call s:H("Pmenu", s:lightblue, s:lightbg, "", "")
-call s:H("PmenuSbar", "", s:lightbg, "", "")
-call s:H("PmenuSel", s:orange, s:lightbg, "", "")
-call s:H("PmenuThumb", s:lightgreen, "", "", "")
+call s:H("Pmenu",        s:lightblue,  s:lightbg,    "",          "")
+call s:H("PmenuSbar",    "",           s:lightbg,    "",          "")
+call s:H("PmenuSel",     s:orange,     s:lightbg,    "",          "")
+call s:H("PmenuThumb",   s:lightgreen, "",           "",          "")
 
-call s:H("Question", s:cyan, s:lightbg, "bold", "")
+call s:H("Question",     s:cyan,       "",           "bold",      "")
 
-call s:H("Search", s:darkbg, s:orange, "", "")
-call s:H("SignColumn", s:lightfg, s:darkbg, "", "")
-call s:H("SpecialKey", s:orange, "", "", "")
-call s:H("SpelBad", "", s:darkred, "undercurl", s:darkred)
-call s:H("SpellRare", "", "", "undercurl", s:magenta)
-call s:H("SpellCap", "", "", "undercurl", s:lightblue)
-call s:H("SpellLocal", s:lightgreen, "", "undercurl", s:lightgreen)
+call s:H("Search",       s:darkbg,     s:yellow,     "",          "")
+call s:H("SignColumn",   s:lightfg,    s:darkbg,     "",          "")
+call s:H("SpecialKey",   s:orange,     "",           "",          "")
+call s:H("SpellBad",     s:lightred,   "",           "undercurl", s:lightred)
+call s:H("SpellRare",    s:lightgreen, "",           "undercurl", s:lightgreen)
+call s:H("SpellCap",     s:lightblue,  "",           "undercurl", s:lightblue)
+call s:H("SpellLocal",   "",           "",           "undercurl", "")
 
-call s:H("StatusLine", s:lightfg, s:darkbg, "", "")
-call s:H("StatusLineNC", s:darkfg, s:darkbg, "", "")
+call s:H("StatusLine",   s:darkbg,     s:lightgreen, "",          "")
+call s:H("StatusLineNC", s:neutral,    s:darkbg,     "",          "")
 
-if exists('g:welpe_statusline') && g:welpe_statusline == 1
-  " mirrors Special, gets attention
-  call s:H("User1", s:orange, s:darkbg, "", "")
-  " mirros Comment, unintrusive information
-  call s:H("User2", s:darkfg, s:darkbg, "", "")
-  " active
-  call s:H("User3", s:cyan, s:darkbg, "", "")
-endif
+call s:H("TabLineSel",   s:darkbg,     s:fg,         "",          "")
+call s:H("TabLine",      s:neutral,    s:fg,         "",          "")
+call s:H("TabLineFill",  s:darkbg,     s:fg,         "",          "")
+call s:H("Title",        "",           "",           "bold",      "")
 
-call s:H("TabLineSel", s:lightfg, s:darkbg, "", "")
-call s:H("TabLine", s:darkfg, s:darkbg, "", "")
-call s:H("TabLineFill", s:fg, s:darkbg, "", "")
-call s:H("Title", "", "", "bold", "")
+call s:H("VertSplit",    s:neutral,    "",           "",          "")
+call s:H("Visual",       s:lightfg,    s:lightblue,  "",          "")
 
-call s:H("VertSplit", "", s:darkbg, "", "")
-call s:H("Visual", s:lightfg, s:lightblue, "", "")
+call s:H("WildMenu",     s:magenta,    "",           "",          "")
+call s:H("WarningMsg",   s:lightred,   "",           "",          "")
 
-call s:H("WildMenu", s:magenta, "", "", "")
-call s:H("WarningMsg", s:yellow, s:darkred, "bold", "")
+" SYNTAX
+" ------
 
-" Syntax
-" ------------------------------------------------------------------------------
+call s:H("Comment",          s:neutral,        "",        "",          "")
 
-call s:H("Comment", s:darkfg, "", "", "")
-
-call s:H("Constant", s:cyan, "", "", "")
+call s:H("Constant",         s:cyan,           "",        "",          "")
 " the following groups inherit constant if commented out
-call s:H("String", s:lightgreen, "", "", "")
-call s:H("Character", "", "", "bold", "")
-call s:H("Number", "", "", "bold", "")
-" call s:H("Boolean", s:boolean, "", "")
-call s:H("Float", "", "", "bold", "")
+call s:H("String",           s:lightgreen,     "",        "",          "")
+call s:H("Character",        "",               "",        "bold",      "")
+call s:H("Number",           "",               "",        "bold",      "")
+" call s:H("Boolean",        s:boolean,        "",        "")
+call s:H("Float",            "",               "",        "bold",      "")
 
-
-call s:H("Identifier", s:lightred, "", "", "")
+call s:H("Identifier",       s:lightred,       "",        "",          "")
 " the following groups inherit identifier if commented out
-call s:H("Function", s:orange, "", "", "")
+call s:H("Function",         s:orange,         "",        "",          "")
 
-call s:H("Statement", s:lightblue, "", "", "")
+call s:H("Statement",        s:lightblue,      "",        "",          "")
 " the following groups inherit statement if commented out
-" call s:H("Conditional", s:statement, "", "")
-" call s:H("Repeat", s:repeat, "", "")
-" call s:H("Label", s:label, "", "")
-" call s:H("Operator", s:operator, "", "")
-call s:H("Keyword", s:cyan, "", "", "")
-" call s:H("Exception", s:exception, "", "")
+" call s:H("Conditional",    s:statement,      "",        "")
+" call s:H("Repeat",         s:repeat,         "",        "")
+" call s:H("Label",          s:label,          "",        "")
+call s:H("Operator",         "",               "",        "",          "")
+call s:H("Keyword",          s:magenta,           "",        "",          "")
+" call s:H("Exception",      s:exception,      "",        "")
 
-call s:H("PreProc", s:cyan, "", "", "")
+call s:H("PreProc",          s:cyan,           "",        "",          "")
 " the following groups inherit preproc if commented out
-" call s:H("Include", s:include, "", "")
-" call s:H("Define", s:define, "", "")
-" call s:H("Macro", s:macro, "", "")
-" call s:H("PreCondit", s:precondit, "", "")
+" call s:H("Include",        s:include,        "",        "")
+" call s:H("Define",         s:define,         "",        "")
+" call s:H("Macro",          s:macro,          "",        "")
+" call s:H("PreCondit",      s:precondit,      "",        "")
 
-call s:H("Type", s:yellow, "", "", "")
+call s:H("Type",             s:yellow,         "",        "",          "")
 " the following groups inherit type if commented out
-" call s:H("StorageClass", s:storageclass, "", "")
-" call s:H("Structure", s:structure, "", "")
-" call s:H("Typedef", s:typedef, "", "")
+" call s:H("StorageClass",   s:storageclass,   "",        "")
+" call s:H("Structure",      s:structure,      "",        "")
+" call s:H("Typedef",        s:typedef,        "",        "")
 
-call s:H("Special", s:orange, "", "", "")
+call s:H("Special",          s:magenta,         "",        "",          "")
 " the following groups inherit special if commented out
-" call s:H("SpecialChar", s:specialchar, "", "")
-" call s:H("Tag", s:tag, "", "")
-call s:H("Delimiter", "", "", "", "")
-" call s:H("SpecialComment", s:specialcomment, "", "")
-call s:H("Debug", "", s:lightbg, "", "")
+" call s:H("SpecialChar",    s:neutral,        "",        "")
+" call s:H("Tag",            s:tag,            "",        "")
+call s:H("Delimiter",        "",               "",        "",          "")
+" call s:H("SpecialComment", s:specialcomment, "",        "")
+call s:H("Debug",            s:yellow,         s:darkbg,  "",          "")
 
-call s:H("Underlined", s:lightblue, "", "underline", "")
+call s:H("Underlined",       s:lightblue,      "",        "underline", "")
 
-call s:H("Ignore", "", "", "", "")
+call s:H("Ignore",           "",               "",        "",          "")
 
-call s:H("Error", s:yellow, s:darkred, "", "")
+call s:H("Error",            s:yellow,         s:darkred, "",          "")
 
-call s:H("Todo", s:lightfg, s:lightbg, "bold", "")
+call s:H("Todo",             s:lightfg,        s:lightbg, "bold",      "")
 
-" misc Syntax groups
-" ------------------------------------------------------------------------------
+" HELPER SYNTAX
+" -------------
+
 hi link Noise Normal
+hi link OptionalParameters Normal
 
+" --- QUICKFIX
+" ------------
 
-" vimscript
-" ------------------------------------------------------------------------------
+hi! link qfLineNr LineNr
+hi! link qfFileName Directory
+hi! link qfError ErrorMsg
+hi! link qfSeparator VertSplit
+
+" --- VIMSCRIPT
+" -------------
+
 hi! link vimSet Normal
 hi! link vimSetSep Delimiter
 hi! link vimFunc Function
@@ -339,28 +383,11 @@ hi! link vimOperParen Delimiter
 hi! link vimCommentTitle Title
 hi! link vimHiBang Special
 hi! link vimCmdSep Delimiter
-" hi! link vimSet Operator
-" hi! link vimSetEqual Normal
-" hi! link vimOper Operator
-" hi! link vimCommentString vimComment
-" hi! link helpSpecial Special
-" vimCommand       
-" vimCmdSep        
-" helpExample      
-" helpOption       
-" helpNote         
-" helpVim          
-" helpHyperTextJump
-" helpHyperTextEntry
-" vimIsCommand     
-" vimSynMtchOpt    
-" vimSynType       
-" vimHiLink        
-" vimHiGroup       
-" vimGroup         
 
-" HTML
-" ------------------------------------------------------------------------------
+" --- HTML
+" --------
+" recommended https://github.com/othree/html5.vim
+
 call s:H("htmlBold", "", "", "bold", "")
 call s:H("htmlItalic", "", "", "italic", "")
 hi! link htmlTag Statement
@@ -368,170 +395,67 @@ hi! link htmlTagName htmlTag
 hi! link htmlTagN htmlTag
 hi! link htmlEndTag htmlTag
 hi! link htmlSpecialChar Character
-" htmlSpecialTagName
-" htmlArg          
-" javaScript       
 
-" markdown
-" ------------------------------------------------------------------------------
+" --- MARKDOWN
+" ------------
+
 call s:H("markdownCode", "", s:darkbg, "", "")
 hi! link markdownCodeBlock markdownCode
 hi! link markdownItalicDelimiter Noise
 hi! link markdownBoldDelimiter Noise
 hi! link markdownUrl String
- 
-" asciidoc
+hi! link markdownItalic Noise
+
+" --- ASCIIDOC
+" ------------
+
 hi! link asciidocQuotedEmphasized2 String
 hi! link asciidocQuotedEmphasized1 String
 
-" CSS / SASS 
-" ------------------------------------------------------------------------------
-"HiLink cssComment Comment
+" --- PANDOC
+" ----------
+
+hi! link pandocNoFormatted Function
+hi! link pandocEmphasis htmlItalic
+hi! link pandocUListItemBullet Special
+
+" --- CSS
+" -------
+" recommended https://github.com/JulesWang/css.vim
+"             hail2u/vim-css3-syntax
+
 hi! link cssVendor cssProp
-"HiLink cssHacks Comment
-"HiLink cssTagName Statement
-"HiLink cssDeprecated Error
-hi! link cssSelectorOp cssNoise
-hi! link cssSelectorOp2 cssNoise
-hi! link cssAttrComma cssNoise
-
-"HiLink cssAnimationProp cssProp
-"HiLink cssBackgroundProp cssProp
-"HiLink cssBorderProp cssProp
-"HiLink cssBoxProp cssProp
-"HiLink cssColorProp cssProp
-"HiLink cssContentForPagedMediaProp cssProp
-"HiLink cssDimensionProp cssProp
-"HiLink cssFlexibleBoxProp cssProp
-"HiLink cssFontProp cssProp
-"HiLink cssGeneratedContentProp cssProp
-"HiLink cssGridProp cssProp
-"HiLink cssHyerlinkProp cssProp
-"HiLink cssLineboxProp cssProp
-"HiLink cssListProp cssProp
-"HiLink cssMarqueeProp cssProp
-"HiLink cssMultiColumnProp cssProp
-"HiLink cssPagedMediaProp cssProp
-"HiLink cssPositioningProp cssProp
-"HiLink cssPrintProp cssProp
-"HiLink cssRubyProp cssProp
-"HiLink cssSpeechProp cssProp
-"HiLink cssTableProp cssProp
-"HiLink cssTextProp cssProp
-"HiLink cssTransformProp cssProp
-"HiLink cssTransitionProp cssProp
-"HiLink cssUIProp cssProp
-"HiLink cssIEUIProp cssProp
-"HiLink cssAuralProp cssProp
-"HiLink cssRenderProp cssProp
-"HiLink cssMobileTextProp cssProp
-
-"HiLink cssAnimationAttr cssAttr
-"HiLink cssBackgroundAttr cssAttr
-"HiLink cssBorderAttr cssAttr
-"HiLink cssBoxAttr cssAttr
-"HiLink cssContentForPagedMediaAttr cssAttr
-"HiLink cssDimensionAttr cssAttr
-"HiLink cssFlexibleBoxAttr cssAttr
-"HiLink cssFontAttr cssAttr
-"HiLink cssGeneratedContentAttr cssAttr
-"HiLink cssGridAttr cssAttr
-"HiLink cssHyerlinkAttr cssAttr
-"HiLink cssLineboxAttr cssAttr
-"HiLink cssListAttr cssAttr
-"HiLink cssMarginAttr cssAttr
-"HiLink cssMarqueeAttr cssAttr
-"HiLink cssMultiColumnAttr cssAttr
-"HiLink cssPaddingAttr cssAttr
-"HiLink cssPagedMediaAttr cssAttr
-"HiLink cssPositioningAttr cssAttr
-"HiLink cssGradientAttr cssAttr
-"HiLink cssPrintAttr cssAttr
-"HiLink cssRubyAttr cssAttr
-"HiLink cssSpeechAttr cssAttr
-"HiLink cssTableAttr cssAttr
-"HiLink cssTextAttr cssAttr
-"HiLink cssTransformAttr cssAttr
-"HiLink cssTransitionAttr cssAttr
-"HiLink cssUIAttr cssAttr
-"HiLink cssIEUIAttr cssAttr
-"HiLink cssAuralAttr cssAttr
-"HiLink cssRenderAttr cssAttr
-"HiLink cssCommonAttr cssAttr
-
-"HiLink cssPseudoClassId PreProc
-"HiLink cssPseudoClassLang Constant
-"HiLink cssValueLength Number
-"HiLink cssValueInteger Number
-"HiLink cssValueNumber Number
-"HiLink cssValueAngle Number
-"HiLink cssValueTime Number
-"HiLink cssValueFrequency Number
-"HiLink cssFunction Constant
-"HiLink cssURL String
-"HiLink cssFunctionName Function
-"HiLink cssFunctionComma Function
-"HiLink cssColor Constant
-"HiLink cssIdentifier Function
-"HiLink cssInclude Include
-"HiLink cssIncludeKeyword atKeyword
-"HiLink cssImportant Special
-hi! link cssBraces cssNoise
-"HiLink cssBraceError Error
-"HiLink cssError Error
-"HiLink cssUnicodeEscape Special
-"HiLink cssStringQQ String
-"HiLink cssStringQ String
-"HiLink cssAttributeSelector String
-"HiLink cssMedia atKeyword
-"HiLink cssMediaType Special
-"HiLink cssMediaComma Normal
-"HiLink cssMediaKeyword Statement
-"HiLink cssMediaProp cssProp
-"HiLink cssMediaAttr cssAttr
-"HiLink cssPage atKeyword
-"HiLink cssPagePseudo PreProc
-"HiLink cssPageMargin atKeyword
-"HiLink cssPageProp cssProp
-"HiLink cssKeyFrame atKeyword
-"HiLink cssKeyFrameSelector Constant
-"HiLink cssFontDescriptor Special
-"HiLink cssFontDescriptorFunction Constant
-"HiLink cssFontDescriptorProp cssProp
-"HiLink cssFontDescriptorAttr cssAttr
-"HiLink cssUnicodeRange Constant
-"HiLink cssClassName Function
-"HiLink cssClassNameDot Function
-"HiLink cssProp StorageClass
-"HiLink cssAttr Constant
+hi! link cssSelectorOp Noise
+hi! link cssSelectorOp2 Noise
+hi! link cssAttrComma Noise
+hi! link cssBraces Noise
 hi! link cssUnitDecorators Delimiter
-"HiLink cssNoise Noise
-"HiLink atKeyword PreProc
 
-" Php
-" ------------------------------------------------------------------------------
+" --- PHP
+" -------
+" recommended https://github.com/StanAngeloff/php.vim
+"             https://github.com/Seb-C/better-indent-support-for-php-with-html
+
 hi! link phpVarSelector Identifier
 hi! link phpParent Delimiter
 hi! link phpFunction Normal
 
-" vim-sneak
-" ------------------------------------------------------------------------------
-hi! link SneakPluginTarget IncSearch
-hi! link SneakStreakTarget Identifier
-hi! link SneakPluginScope IncSearch
-hi! link SneakStreakMask SpecialKey
-" hi! link SneakStreakStatusLine
+" --- VIM-SNEAK
+" -------------
 
-" incsearch
-" ------------------------------------------------------------------------------
-" hi link IncSearchMatch
-" hi link IncSearchMatchReverse
-" hi link IncSearchOnCursor Search
+hi! link Sneak Search
+hi! link SneakLabel IncSearch
+hi! link SneakScope IncSearch
+
+" --- INCSEARCH
+" -------------
+
 hi! link IncSearchCursor Visual
-" hi link IncSearchUnderline
 
-" JavaScript 
-" ------------------------------------------------------------------------------
+" --- JAVASCRIPT
+" --------------
+" recommended https://github.com/pangloss/vim-javascript
+
 hi! link jsFuncCall Function
 hi! link jsFunction Function
 hi! link jsParens Delimiter
@@ -541,144 +465,59 @@ hi! link javaScriptTemplateVar StringDelim
 hi! link javaScriptTemplateDelim Identifier
 hi! link javaScriptTemplateString String
 
-" scss
-" ------------------------------------------------------------------------------
-" hi link scssNestedProperty cssProp
-" hi link scssVariable  Identifier
-" hi link scssGlobal    Special
-" hi link scssNull      Constant
-" hi link scssBoolean   Constant
-" hi link scssBooleanOp Operator
-" hi link scssMixin     PreProc
-" hi link scssMixinName Function
-hi! link scssMixinParams Delimiter
-" hi link scssContent   PreProc
-" hi link scssFunctionDefinition  PreProc
-" hi link scssFunctionName Function
-" hi link scssReturn    Statement
-" hi link scssInclude   PreProc
-" hi link scssExtend    PreProc
-" hi link scssOptional  Special
-" hi link scssComment   Comment
-" hi link scssStickyCommentChar Special
-hi link scssSelectorChar Noise
-" hi link scssSelectorName Identifier
-hi! link scssAmpersand Noise
-" hi link scssDebug     Debug
-" hi link scssWarn      Debug
-" hi link scssError     Debug
-" hi link scssDefault   Special
-" hi link scssIf        Conditional
-" hi link scssElse      Conditional
-" hi link scssWhile     Repeat
-" hi link scssForKeyword  Repeat
-" hi link scssEachKeyword Repeat
-" hi link scssInterpolationDelimiter Delimiter
-" hi link scssImport    Include
-" hi link scssTodo      Todo
-" hi link scssAtRoot    Keyword
-" hi link scssMapParens Delimiter
+" --- PYTHON
+" ----------
+" recommended https://github.com/purpleP/python-syntax
 
-" Autohotkey 
-" ------------------------------------------------------------------------------
-" hi def link autohotkeyHotkey              Type
-" hi def link autohotkeyKey                 Type
-" hi def link autohotkeyDelimiter           Delimiter
-" hi def link autohotkeyHotstringDefinition Type
-" hi def link autohotkeyHotstring           Type
-" hi def link autohotkeyHotstringDelimiter  autohotkeyDelimiter
-" hi def link autohotkeyHotstringOptions    Special
-" hi def link autohotkeyString              String
-" hi def link autohotkeyStringDelimiter     autohotkeyString
+hi! link pythonStrTemplate String
+hi! link pythonInstanceVariable Keyword
+hi! link pythonNone Keyword
+hi! link pythonBoolean Keyword
+
+" --- SCSS
+" --------
+" recommended https://github.com/cakebaker/scss-syntax.vim
+
+hi! link scssMixinParams Delimiter
+hi! link scssSelectorChar Noise
+hi! link scssAmpersand Noise
+
+" --- AUTOHOTKEY
+" --------------
+
 hi! def link autohotkeyVariable            Identifier
 hi! def link autohotkeyVariableDelimiter   Delimiter
-hi! def link autohotkeyBuiltinVariable     autohotkeyVariable            
-" hi def link autohotkeyCommand             Keyword
-" hi def link autohotkeyFunction            Function
-" hi def link autohotkeyStatement           autohotkeyCommand
-" hi def link autohotkeyRepeat              Repeat
-" hi def link autohotkeyConditional         Conditional
-" hi def link autohotkeyPreProcStart        PreProc
-" hi def link autohotkeyInclude             Include
-" hi def link autohotkeyPreProc             PreProc
-" hi def link autohotkeyMatchClass          Typedef
-" hi def link autohotkeyNumber              Number
-" hi def link autohotkeyInteger             autohotkeyNumber
-" hi def link autohotkeyFloat               autohotkeyNumber
-" hi def link autohotkeyType                Type
-" hi def link autohotkeyBoolean             Boolean
+hi! def link autohotkeyBuiltinVariable     autohotkeyVariable
 
+" --- GIT
+" -------
 
-" git
-" ------------------------------------------------------------------------------
-" gitDateHeader
-" gitIdentityHeader
-" gitIdentityKeyword
-" gitNotesHeader
-" gitReflogHeader
-" gitKeyword
-" gitIdentity
-" gitEmailDelimiter
-" gitEmail
-" gitDate
-" gitMode
-" gitHashAbbrev
-" gitHash
-" gitReflogMiddle
-" gitReference
-" gitStage
-" gitType
 hi! link gitDiffAdded DiffAdded
 hi! link gitDiffRemoved DiffDelete
-" gitcommit
-" gitcommitSummary
-" gitcommitComment
-" gitcommitUntracked 
-" gitcommitDiscarded 
-" gitcommitSelected  
-" gitcommitUnmerged
-" gitcommitOnBranch
-" gitcommitBranch
-" gitcommitNoBranch
-" gitcommitDiscardedType
-" gitcommitSelectedType
-" gitcommitUnmergedType
-" gitcommitType
-" gitcommitNoChanges
-" gitcommitHeader
-" gitcommitHeader
-" gitcommitUntrackedFile
-" gitcommitDiscardedFile
-" gitcommitSelectedFile
-" gitcommitUnmergedFile
-" gitcommitFile
-" gitcommitDiscardedArrow
-" gitcommitSelectedArrow 
-" gitcommitUnmergedArrow 
-" gitcommitArrow
-" gitcommitOverflow
-" gitcommitBlank
 
-" gitgutter
-" ------------------------------------------------------------------------------
-call s:H("GitGutterAdd",s:lightgreen,    s:darkbg,"", "")
-call s:H("GitGutterChange",s:lightblue,  s:darkbg,"", "")
-call s:H("GitGutterDelete",s:lightred, s:darkbg,"", "")
+" --- GITGUTTER
+" -------------
+
+call s:H("GitGutterAdd",    s:lightgreen, s:darkbg, "", "")
+call s:H("GitGutterChange", s:lightblue,  s:darkbg, "", "")
+call s:H("GitGutterDelete", s:lightred,   s:darkbg, "", "")
 hi! link GitGutterChangeDelete GitGutterDelete
 
-" pug
-" ------------------------------------------------------------------------------
+" --- PUG
+" -------
+
 hi! link pugClassChar Noise
 hi! link pugAttributesDelimiter Delimiter
 hi! link pugClass Identifier
 
-" dirvish
-" ------------------------------------------------------------------------------
+" --- DIRVISH
+" -----------
+
 hi! link DirvishPathTail Directory
 hi! link DirvishPathHead Comment
 
-" syntastic
-" ------------------------------------------------------------------------------
+" --- SYNTASTIC
+" -------------
 hi! link SyntasticErrorSign ErrorMsg
 hi! link SyntasticWarningSign Debug
 hi! link SyntasticStyleErrorSign ErrorMsg
@@ -689,8 +528,9 @@ hi! link SyntasticWarningLine Debug
 hi! link SyntasticStyleErrorLine ErrorMsg
 hi! link SyntasticStyleWarningLine Debug
 
-" CtrlP
-" ------------------------------------------------------------------------------
+" --- CTRLP
+" ---------
+
 " the prompt's cursor when moving over the text
 hi! link CtrlPPrtCursor SpecialKey
 " the matched pattern
@@ -698,43 +538,21 @@ hi! link CtrlPMatch SpecialKey
 hi! link CtrlPBufferPath Directory
 hi! link CtrlPBufferCurMod Title
 
-" For the CtrlP buffer:
-" CtrlPNoEntries : the message when no match is found (Error)
-" CtrlPMatch     : the matched pattern (Identifier)
-" CtrlPLinePre   : the line prefix '>' in the match window
-" CtrlPPrtBase   : the prompt's base (Comment)
-" CtrlPPrtText   : the prompt's text (|hl-Normal|)
-" CtrlPPrtCursor : the prompt's cursor when moving over the text (Constant)
+" --- NEOMAKE
+" -----------
 
-" Buffer explorer mode:
-" CtrlPBufferNr     : buffer number
-" CtrlPBufferInd    : '+', '-', '=' and '#' indicators (see |:buffers|)
-" CtrlPBufferHid    : hidden buffer
-" CtrlPBufferHidMod : hidden and modified buffer
-" CtrlPBufferVis    : visible buffer
-" CtrlPBufferVisMod : visible and modified buffer
-" CtrlPBufferCur    : current buffer
-" CtrlPBufferCurMod : current and modified buffer
-" CtrlPBufferPath   : buffer path
+hi! link NeomakeError Error
+hi! link NeomakeWarning Debug
+hi! link NeomakeInfo Question
+hi! link NeomakeMessage Normal
 
-" In extensions:
-" CtrlPTabExtra  : the part of each line that's not matched against (Comment)
-" CtrlPBufName   : the buffer name an entry belongs to (|hl-Directory|)
-" CtrlPTagKind   : the kind of the tag in buffer-tag mode (|hl-Title|)
-" CtrlPqfLineCol : the line and column numbers in quickfix mode (Comment)
-" CtrlPUndoT     : the elapsed time in undo mode (|hl-Directory|)
-" CtrlPUndoBr    : the square brackets [] in undo mode (Comment)
-" CtrlPUndoNr    : the undo number inside [] in undo mode (String)
-" CtrlPUndoSv    : the point where the file was saved (Comment)
-" CtrlPUndoPo    : the current position in the undo tree (|hl-Title|)
-" CtrlPBookmark  : the name of the bookmark (Identifier)
+" --- ULTISNIPS
+" -------------
 
-" Highlight groups:
-" CtrlPMode1 : 'file' or 'path' or 'line', and the current mode (Character)
-" CtrlPMode2 : 'prt' or 'win', 'regex', the working directory (|hl-LineNr|)
-" CtrlPStats : the scanning status (Function)
+hi! link snipLeadingSpaces Noise
 
-" cleanup
-" ------------------------------------------------------------------------------
-" delf s:H
-" delete highlight function
+" --- DIFF
+" --------
+
+hi! link DiffAdded DiffAdd
+hi! link diffRemoved DiffDelete

@@ -98,19 +98,19 @@ function! s:h(group, style)
     \ "cterm="   (has_key(a:style, "cterm") ? a:style.cterm    : "NONE")
 endfunction
 
-"public {{
+" public
 
 function! onedark#set_highlight(group, style)
   call s:h(a:group, a:style)
 endfunction
 
-"public end }}
+" /public
 
 " +-----------------+
 " | Color Variables |
 " +-----------------+
 
-let s:red = { "gui": "#E06C75", "cterm": "204", "cterm16": "1" } " Alternate cterm: 168
+let s:red = { "gui": "#E06C75", "cterm": "204", "cterm16": "1" }
 let s:dark_red = { "gui": "#BE5046", "cterm": "196", "cterm16": "9" }
 
 let s:green = { "gui": "#98C379", "cterm": "114", "cterm16": "2" }
@@ -118,20 +118,20 @@ let s:green = { "gui": "#98C379", "cterm": "114", "cterm16": "2" }
 let s:yellow = { "gui": "#E5C07B", "cterm": "180", "cterm16": "3" }
 let s:dark_yellow = { "gui": "#D19A66", "cterm": "173", "cterm16": "11" }
 
-let s:blue = { "gui": "#61AFEF", "cterm": "39", "cterm16": "4" } " Alternate cterm: 75
+let s:blue = { "gui": "#61AFEF", "cterm": "39", "cterm16": "4" }
 
-let s:purple = { "gui": "#C678DD", "cterm": "170", "cterm16": "5" } " Alternate cterm: 176
+let s:purple = { "gui": "#C678DD", "cterm": "170", "cterm16": "5" }
 
-let s:cyan = { "gui": "#56B6C2", "cterm": "38", "cterm16": "6" } " Alternate cterm: 73
+let s:cyan = { "gui": "#56B6C2", "cterm": "38", "cterm16": "6" }
 
-let s:white = { "gui": "#ABB2BF", "cterm": "145", "cterm16" : "7" }
+let s:white = { "gui": "#ABB2BF", "cterm": "145", "cterm16": "7" }
 
 let s:black = { "gui": "#282C34", "cterm": "235", "cterm16": "0" }
 let s:visual_black = { "gui": "NONE", "cterm": "NONE", "cterm16": s:black.cterm16 } " Black out selected text in 16-color visual mode
 
 let s:comment_grey = { "gui": "#5C6370", "cterm": "59", "cterm16": "15" }
 let s:gutter_fg_grey = { "gui": "#636D83", "cterm": "238", "cterm16": "15" }
-let s:cursor_grey =  { "gui": "#2C323C", "cterm": "236", "cterm16": "8" }
+let s:cursor_grey = { "gui": "#2C323C", "cterm": "236", "cterm16": "8" }
 let s:visual_grey = { "gui": "#3E4452", "cterm": "237", "cterm16": "15" }
 let s:menu_grey = { "gui": s:visual_grey.gui, "cterm": s:visual_grey.cterm, "cterm16": "8" }
 let s:special_grey = { "gui": "#3B4048", "cterm": "238", "cterm16": "15" }
@@ -170,7 +170,7 @@ call s:h("Special", { "fg": s:blue }) " any special symbol
 call s:h("SpecialChar", {}) " special character in a constant
 call s:h("Tag", {}) " you can use CTRL-] on this
 call s:h("Delimiter", {}) " character that needs attention
-call s:h("SpecialComment", {}) " special things inside a comment
+call s:h("SpecialComment", { "fg": s:comment_grey }) " special things inside a comment
 call s:h("Debug", {}) " debugging statements
 call s:h("Underlined", {}) " text that stands out, HTML links
 call s:h("Ignore", {}) " left blank, hidden
@@ -188,10 +188,10 @@ call s:h("CursorIM", {}) " like Cursor, but used when in IME mode
 call s:h("CursorColumn", { "bg": s:cursor_grey }) " the screen column that the cursor is in when 'cursorcolumn' is set
 call s:h("CursorLine", { "bg": s:cursor_grey }) " the screen line that the cursor is in when 'cursorline' is set
 call s:h("Directory", { "fg": s:blue }) " directory names (and other special names in listings)
-call s:h("DiffAdd", { "bg": s:visual_grey}) " diff mode: Added line
-call s:h("DiffChange", { "bg": s:visual_grey }) " diff mode: Changed line
-call s:h("DiffDelete", { "fg": s:red }) " diff mode: Deleted line
-call s:h("DiffText", { "bg": s:visual_grey, "fg": s:yellow }) " diff mode: Changed text within a changed line
+call s:h("DiffAdd", { "bg": s:green, "fg": s:black }) " diff mode: Added line
+call s:h("DiffChange", { "bg": s:yellow, "fg": s:black }) " diff mode: Changed line
+call s:h("DiffDelete", { "bg": s:red, "fg": s:black }) " diff mode: Deleted line
+call s:h("DiffText", { "bg": s:black, "fg": s:yellow }) " diff mode: Changed text within a changed line
 call s:h("ErrorMsg", { "fg": s:red }) " error messages on the command line
 call s:h("VertSplit", { "fg": s:vertsplit }) " the column separating vertically split windows
 call s:h("Folded", { "fg": s:comment_grey }) " line used for closed folds
@@ -252,6 +252,9 @@ call s:h("cssSelectorOp", { "fg": s:purple })
 call s:h("cssSelectorOp2", { "fg": s:purple })
 call s:h("cssTagName", { "fg": s:red })
 
+" Go
+call s:h("goDeclaration", { "fg": s:purple })
+
 " HTML
 call s:h("htmlTitle", { "fg": s:white })
 call s:h("htmlArg", { "fg": s:dark_yellow })
@@ -283,8 +286,10 @@ call s:h("jsExtendsKeyword", { "fg": s:purple })
 call s:h("jsFrom", { "fg": s:purple })
 call s:h("jsFuncCall", { "fg": s:blue })
 call s:h("jsFunction", { "fg": s:purple })
+call s:h("jsGenerator", { "fg": s:yellow })
 call s:h("jsGlobalObjects", { "fg": s:yellow })
 call s:h("jsImport", { "fg": s:purple })
+call s:h("jsModuleAs", { "fg": s:purple })
 call s:h("jsModuleWords", { "fg": s:purple })
 call s:h("jsModules", { "fg": s:purple })
 call s:h("jsNull", { "fg": s:dark_yellow })
@@ -329,6 +334,11 @@ call s:h("jsonString", { "fg": s:green })
 call s:h("jsonStringSQError", { "fg": s:red, "gui": "reverse" })
 call s:h("jsonSemicolonError", { "fg": s:red, "gui": "reverse" })
 
+" LESS
+call s:h("lessVariable", { "fg": s:purple })
+call s:h("lessAmpersandChar", { "fg": s:white })
+call s:h("lessClass", { "fg": s:dark_yellow })
+
 " Markdown
 call s:h("markdownCode", { "fg": s:green })
 call s:h("markdownCodeBlock", { "fg": s:green })
@@ -354,6 +364,42 @@ call s:h("markdownLinkText", { "fg": s:blue })
 call s:h("markdownLinkDelimiter", { "fg": s:white })
 call s:h("markdownUrl", { "fg": s:purple })
 
+" Perl
+call s:h("perlFiledescRead", { "fg": s:green })
+call s:h("perlFunction", { "fg": s:purple })
+call s:h("perlMatchStartEnd",{ "fg": s:blue })
+call s:h("perlMethod", { "fg": s:purple })
+call s:h("perlPOD", { "fg": s:comment_grey })
+call s:h("perlSharpBang", { "fg": s:comment_grey })
+call s:h("perlSpecialString",{ "fg": s:cyan })
+call s:h("perlStatementFiledesc", { "fg": s:red })
+call s:h("perlStatementFlow",{ "fg": s:red })
+call s:h("perlStatementInclude", { "fg": s:purple })
+call s:h("perlStatementScalar",{ "fg": s:purple })
+call s:h("perlStatementStorage", { "fg": s:purple })
+call s:h("perlSubName",{ "fg": s:yellow })
+call s:h("perlVarPlain",{ "fg": s:blue })
+
+" PHP
+call s:h("phpVarSelector", { "fg": s:red })
+call s:h("phpOperator", { "fg": s:white })
+call s:h("phpParent", { "fg": s:white })
+call s:h("phpMemberSelector", { "fg": s:white })
+call s:h("phpType", { "fg": s:purple })
+call s:h("phpKeyword", { "fg": s:purple })
+call s:h("phpClass", { "fg": s:yellow })
+call s:h("phpUseClass", { "fg": s:white })
+call s:h("phpUseAlias", { "fg": s:white })
+call s:h("phpInclude", { "fg": s:purple })
+call s:h("phpClassExtends", { "fg": s:green })
+call s:h("phpDocTags", { "fg": s:white })
+call s:h("phpFunction", { "fg": s:blue })
+call s:h("phpFunctions", { "fg": s:cyan })
+call s:h("phpMethodsVar", { "fg": s:dark_yellow })
+call s:h("phpMagicConstants", { "fg": s:dark_yellow })
+call s:h("phpSuperglobals", { "fg": s:red })
+call s:h("phpConstants", { "fg": s:dark_yellow })
+
 " Ruby
 call s:h("rubyBlockParameter", { "fg": s:red})
 call s:h("rubyBlockParameterList", { "fg": s:red })
@@ -375,6 +421,7 @@ call s:h("rubyStringDelimiter", { "fg": s:green})
 call s:h("rubySymbol", { "fg": s:cyan})
 
 " Sass
+" https://github.com/tpope/vim-haml
 call s:h("sassAmpersand", { "fg": s:red })
 call s:h("sassClass", { "fg": s:dark_yellow })
 call s:h("sassControl", { "fg": s:purple })
@@ -388,6 +435,14 @@ call s:h("sassMediaOperators", { "fg": s:white })
 call s:h("sassMixin", { "fg": s:purple })
 call s:h("sassMixinName", { "fg": s:blue })
 call s:h("sassMixing", { "fg": s:purple })
+call s:h("sassVariable", { "fg": s:purple })
+" https://github.com/cakebaker/scss-syntax.vim
+call s:h("scssExtend", { "fg": s:purple })
+call s:h("scssImport", { "fg": s:purple })
+call s:h("scssInclude", { "fg": s:purple })
+call s:h("scssMixin", { "fg": s:purple })
+call s:h("scssSelectorName", { "fg": s:dark_yellow })
+call s:h("scssVariable", { "fg": s:purple })
 
 " TypeScript
 call s:h("typescriptReserved", { "fg": s:purple })

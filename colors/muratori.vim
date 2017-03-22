@@ -10,7 +10,7 @@ endif
 let colors_name = "muratori"
 
 " Normal should come first
-hi Normal		 guifg=#D8B07A guibg=Grey12
+hi Normal		   guifg=#D8B07A guibg=Grey12
 hi NonText		 guifg=#607d8b guibg=Grey12
 
 hi Cursor       guifg=Black guibg=Green3
@@ -28,24 +28,25 @@ hi VertSplit    guifg=Grey65 guibg=#191970
 hi StatusLine   guifg=#191970 guibg=Grey65 gui=underline
 
 hi Pmenu         guifg=#191970 guibg=Grey65
-hi PmenuSel      guifg=#191970 guibg=#FFDAB9
+hi PmenuSel      guifg=Black guibg=#FFDAB9
 
-hi Search         guibg=#D2B48C guifg=Black gui=bold
-hi MatchParen     guibg=#00008B
+hi Search        guibg=Orange3
+hi MatchParen    guibg=#00008B
+hi Directory     guifg=#B8860B gui=None
+hi Title         gui=bold guifg=Magenta3
 
 hi DiffAdd       guibg=LightBlue
 hi DiffChange    guibg=LightMagenta
-hi DiffDelete    gui=bold guifg=Blue guibg=LightCyan
-hi DiffText      gui=bold guibg=Red
-hi ErrorMsg      guibg=White guifg=DarkRed	   
-hi Error         guibg=White guifg=DarkRed	   
+hi DiffDelete    gui=None guifg=Blue guibg=LightCyan
+hi DiffText      gui=None guibg=Red
+hi ErrorMsg      guibg=White guifg=Red4   
+hi Error         guibg=White guifg=Red4   
 hi FoldColumn    guibg=Grey guifg=DarkBlue
 hi IncSearch     gui=reverse
-hi ModeMsg       gui=bold
-hi MoreMsg       gui=bold guifg=SeaGreen
-hi Question      gui=bold guifg=SeaGreen
+hi ModeMsg       gui=None
+hi MoreMsg       gui=None guifg=SeaGreen
+hi Question      gui=None guifg=SeaGreen
 hi SpecialKey    guifg=Blue
-hi Title         gui=bold guifg=Magenta3
 hi WarningMsg    guifg=Red2
 hi WildMenu      guibg=Yellow guifg=Black
 
@@ -55,18 +56,14 @@ hi WildMenu      guibg=Yellow guifg=Black
 hi Comment          guifg=#607d8b
 hi String           guifg=#6B8E23
 hi Constant         guifg=#6B8E23
+hi Special          guifg=#2BAE2B
 hi Operator         guifg=#B8860B
 
-hi Statement        guifg=#B8860B gui=bold
-hi StorageClass     guifg=#B8860B gui=bold
+hi Statement        guifg=#B8860B gui=None
+hi StorageClass     guifg=#B8860B gui=None
 hi Identifier       guifg=#D8B07A
 hi Function         guifg=#D8B07A
-
-hi Type	           guifg=#B8860B gui=bold
+hi Type	            guifg=#B8860B gui=None
 hi PreProc          guifg=#D8B07A
-
-hi Special          guifg=#2BAE2B
-
-hi Directory        guifg=#B8860B gui=bold
 
 " vim: sw=2

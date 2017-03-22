@@ -50,7 +50,6 @@ if &background == "dark"
     endif
     if s:moria_monochrome == 1
         hi FoldColumn ctermbg=bg guibg=bg guifg=#a0a0a0 gui=none
-        hi CursorLineNr guifg=#a0a0a0 gui=bold
         hi LineNr guifg=#a0a0a0 gui=none
         hi MoreMsg guibg=bg guifg=#b6b6b6 gui=bold
         hi NonText ctermfg=8 guibg=bg guifg=#a0a0a0 gui=bold
@@ -70,7 +69,6 @@ if &background == "dark"
         endif            
     else
         hi FoldColumn ctermbg=bg guibg=bg guifg=#8fa5d1 gui=none
-        hi CursorLineNr guifg=#8fa5d1 gui=bold
         hi LineNr guifg=#8fa5d1 gui=none
         hi MoreMsg guibg=bg guifg=#97abd5 gui=bold
         hi NonText ctermfg=8 guibg=bg guifg=#8fa5d1 gui=bold
@@ -163,7 +161,6 @@ elseif &background == "light"
     if s:moria_monochrome == 1
         hi FoldColumn ctermbg=bg guibg=bg guifg=#7a7a7a gui=none
         hi Folded guibg=#cfcfcf guifg=#404040 gui=bold
-        hi CursorLineNr guifg=#7a7a7a gui=bold
         hi LineNr guifg=#7a7a7a gui=none
         hi MoreMsg guibg=bg guifg=#505050 gui=bold
         hi NonText ctermfg=8 guibg=bg guifg=#7a7a7a gui=bold
@@ -179,7 +176,6 @@ elseif &background == "light"
     else
         hi FoldColumn ctermbg=bg guibg=bg guifg=#375288 gui=none
         hi Folded guibg=#cfcfcf guifg=#25365a gui=bold
-        hi CursorLineNr guifg=#375288 gui=bold
         hi LineNr guifg=#375288 gui=none
         hi MoreMsg guibg=bg guifg=#2f4471 gui=bold
         hi NonText ctermfg=8 guibg=bg guifg=#375288 gui=bold

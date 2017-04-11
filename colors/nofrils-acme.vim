@@ -39,10 +39,10 @@ hi StatusLineNC term=NONE cterm=NONE ctermfg=fg ctermbg=195 gui=NONE guifg=fg gu
 hi VertSplit term=NONE cterm=NONE ctermfg=fg ctermbg=195 gui=NONE guifg=fg guibg=#d7ffff
 
 " Highlight
-hi CursorColumn term=NONE cterm=NONE ctermfg=NONE ctermbg=15 gui=NONE guifg=NONE guibg=#ffffff
+hi CursorColumn term=NONE cterm=NONE ctermfg=NONE ctermbg=228 gui=NONE guifg=NONE guibg=#ffff87
 hi CursorIM term=NONE cterm=NONE ctermfg=fg ctermbg=4 gui=NONE guifg=fg guibg=#00ffff
-hi CursorLineNr term=NONE cterm=NONE ctermfg=0 ctermbg=15 gui=NONE guifg=NONE guibg=#ffffff
-hi CursorLine term=NONE cterm=NONE ctermfg=NONE ctermbg=15 gui=NONE guifg=NONE guibg=#ffffff
+hi CursorLineNr term=NONE cterm=NONE ctermfg=0 ctermbg=228 gui=NONE guifg=NONE guibg=#ffff87
+hi CursorLine term=NONE cterm=NONE ctermfg=NONE ctermbg=228 gui=NONE guifg=NONE guibg=#ffff87
 hi Cursor term=NONE cterm=NONE ctermfg=fg ctermbg=4 gui=NONE guifg=fg guibg=#00ffff
 hi Directory term=NONE cterm=NONE ctermfg=53 ctermbg=NONE gui=NONE guifg=#5f005f guibg=NONE
 hi ErrorMsg term=NONE cterm=NONE ctermfg=9 ctermbg=white gui=NONE guifg=#ff5555 guibg=white
@@ -58,6 +58,7 @@ hi StatusLine term=NONE cterm=NONE ctermbg=183 ctermfg=fg gui=NONE guifg=white g
 hi Todo term=NONE cterm=NONE ctermfg=2 ctermbg=NONE gui=NONE guifg=#008000 guibg=NONE
 hi VisualNOS term=NONE cterm=NONE ctermfg=NONE ctermbg=53 gui=NONE guifg=NONE guibg=#5f005f
 hi WarningMsg term=NONE cterm=NONE ctermfg=9 ctermbg=white gui=NONE guifg=#ff5555 guibg=white
+hi WildMenu term=NONE cterm=NONE ctermbg=fg ctermfg=183 gui=NONE guifg=#000000 guibg=white
 hi Visual term=NONE cterm=NONE ctermfg=fg ctermbg=222 gui=reverse guifg=NONE guibg=NONE
 
 " Reversed
@@ -65,7 +66,6 @@ hi PmenuSbar term=reverse cterm=reverse ctermfg=NONE ctermbg=NONE gui=reverse gu
 hi Pmenu term=reverse cterm=reverse ctermfg=NONE ctermbg=NONE gui=reverse guifg=NONE guibg=NONE
 hi PmenuThumb term=reverse cterm=reverse ctermfg=NONE ctermbg=NONE gui=reverse guifg=NONE guibg=NONE
 hi TabLineSel term=reverse cterm=reverse ctermfg=NONE ctermbg=NONE gui=reverse guifg=NONE guibg=NONE
-hi WildMenu term=reverse cterm=reverse ctermfg=NONE ctermbg=NONE gui=reverse guifg=NONE guibg=NONE
 
 " Diff
 hi DiffAdd term=NONE cterm=NONE ctermfg=2 ctermbg=NONE gui=NONE guifg=#008000 guibg=NONE

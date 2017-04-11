@@ -38,7 +38,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 925+ color schemes:
+Total of 928+ color schemes:
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [1989.vim](https://github.com/sonjapeterson/1989.vim/tree/master/colors)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
@@ -209,6 +209,7 @@ Total of 925+ color schemes:
 * [base16-mexico-light.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
 * [base16-mocha.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
 * [base16-monokai.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
+* [base16-nord.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
 * [base16-ocean.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
 * [base16-oceanicnext.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
 * [base16-onedark.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
@@ -217,6 +218,7 @@ Total of 925+ color schemes:
 * [base16-pico.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
 * [base16-pop.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
 * [base16-railscasts.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
+* [base16-rebecca.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
 * [base16-seti.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
 * [base16-shapeshifter.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
 * [base16-solarflare.vim](https://github.com/chriskempson/base16-vim/tree/master/colors)
@@ -409,6 +411,7 @@ Total of 925+ color schemes:
 * [earthsong-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [earthsong-light.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [earthsong.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
+* [eclipse-lite.vim](http://www.vim.org/script.php?script_id=5543)
 * [eclipse.vim](http://www.vim.org/script.php?script_id=1802)
 * [eclm_wombat.vim](http://www.vim.org/script.php?script_id=2490)
 * [ecostation.vim](http://www.vim.org/script.php?script_id=4647)
@@ -443,7 +446,7 @@ Total of 925+ color schemes:
 * [forneus.vim](http://www.vim.org/script.php?script_id=2757)
 * [freshcut-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [freshcut.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
-* [freya.vim](http://www.vim.org/script.php?script_id=4239)
+* [freya.vim](http://www.vim.org/script.php?script_id=1651)
 * [frontier-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [frontier.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [fruidle.vim](http://www.vim.org/script.php?script_id=2494)
@@ -566,7 +569,7 @@ Total of 925+ color schemes:
 * [lilydjwg_dark.vim](http://www.vim.org/script.php?script_id=2585)
 * [lilydjwg_green.vim](http://www.vim.org/script.php?script_id=2516)
 * [lilypink.vim](http://www.vim.org/script.php?script_id=3323)
-* [lingodirector.vim](http://www.vim.org/script.php?script_id=4068)
+* [lingodirector.vim](http://www.vim.org/script.php?script_id=1012)
 * [liquidcarbon.vim](http://www.vim.org/script.php?script_id=3274)
 * [literal_tango.vim](http://www.vim.org/script.php?script_id=2430)
 * [ljyat.vim](http://www.vim.org/script.php?script_id=4389)
@@ -776,7 +779,7 @@ Total of 925+ color schemes:
 * [sienna.vim](http://www.vim.org/script.php?script_id=1259)
 * [sierra.vim](https://github.com/AlessandroYorba/Sierra/tree/master/colors)
 * [sift.vim](http://www.vim.org/script.php?script_id=1472)
-* [silent.vim](http://www.vim.org/script.php?script_id=3097)
+* [silent.vim](http://www.vim.org/script.php?script_id=2266)
 * [simple-dark.vim](http://www.vim.org/script.php?script_id=3890)
 * [simple256.vim](http://www.vim.org/script.php?script_id=1962)
 * [simpleRGB.vim](http://www.vim.org/script.php?script_id=3649)

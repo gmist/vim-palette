@@ -17,7 +17,7 @@ let colors_name = "BlueSmoke"
 "Orange tint: #FEF1E0
 hi Normal		 guifg=Grey10 guibg=White
 
-hi Cursor       guifg=White	guibg=Black
+hi Cursor       guifg=White	guibg=Red
 hi lCursor      guifg=NONE guibg=Cyan
 
 "#338FFF
@@ -32,7 +32,7 @@ hi StatusLine   guifg=NavyBlue guibg=Grey75 gui=underline
 
 hi LineNr       guifg=#959595 guibg=#ECECEC
 "#FFF4CE
-hi CursorLine   guibg=White
+hi CursorLine   guibg=#FFF4CE
 
 hi DiffAdd       guibg=LightBlue
 hi DiffChange    guibg=LightMagenta
@@ -59,23 +59,23 @@ hi WildMenu      guibg=Yellow guifg=Black
 
 "Cold hue: #607d8b, #858E8F
 "Warm hue: Grey50
-hi Comment          guifg=Green4
-hi String           guifg=Red4
-hi Constant         guifg=Red4
-hi Operator         guifg=Cyan4
-hi SyntaxChar       guifg=Black gui=None 
+hi Comment         guifg=#607d8b
+hi String          guifg=Red4
+hi Constant        guifg=Red4
+hi Operator        guifg=Cyan4
+hi SyntaxChar      guifg=Black gui=None
 
 " github #BA1D5D
-hi Statement        guifg=Blue3 gui=None
-hi StorageClass     guifg=Blue3
-hi Identifier       guifg=Magenta4
-hi Function         guifg=Magenta4
+hi Statement       guifg=Blue3 gui=None
+hi StorageClass    guifg=Blue3
+hi Identifier      guifg=Magenta4
+hi Function        guifg=Magenta4
 
-hi csClassOrStruct  guifg=Blue3
-hi Type	           guifg=Blue3 gui=None
-hi PreProc          guifg=Magenta4
+hi csClassOrStruct guifg=Blue3
+hi Type            guifg=Blue3 gui=None
+hi PreProc         guifg=Magenta4
 
 "Orange3
-hi Special          guifg=Red4
+hi Special         guifg=Magenta4
 
 " vim: sw=2

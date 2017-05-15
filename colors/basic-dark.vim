@@ -324,7 +324,7 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 
     " Ruby Highlighting
     call <SID>X("rubySymbol", s:green, "", "")
-    call <SID>X("rubyConstant", s:foreground, "", "")
+    call <SID>X("rubyConstant", s:aqua, "", "")
     call <SID>X("rubyAttribute", s:blue, "", "")
     call <SID>X("rubyInclude", s:blue, "", "")
     call <SID>X("rubyLocalVariableOrMethod", s:orange, "", "")
@@ -333,6 +333,7 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
     call <SID>X("rubyInterpolationDelimiter", s:orange, "", "")
     call <SID>X("rubyConditional", s:purple, "", "")
     call <SID>X("rubyRepeat", s:purple, "", "")
+    call <SID>X("rubyIdentifier", s:orange, "", "")
 
     " Python Highlighting
     call <SID>X("pythonInclude", s:red, "", "")
@@ -382,9 +383,9 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
     call <SID>X("javaScriptMember", s:orange, "", "")
 
     " HTML Highlighting
-    call <SID>X("htmlTag", s:foreground, "", "")
-    call <SID>X("htmlTagName", s:foreground, "", "")
-    call <SID>X("htmlArg", s:foreground, "", "")
+    call <SID>X("htmlTag", s:blue, "", "")
+    call <SID>X("htmlTagName", s:blue, "", "")
+    call <SID>X("htmlArg", s:aqua, "", "")
     call <SID>X("htmlScriptTag", s:blue, "", "")
 
     " Blade Tempalte Highlight

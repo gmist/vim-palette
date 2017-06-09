@@ -15,7 +15,7 @@ if !has("gui_running") && &t_Co != 256
     finish
 endif
 
-let colors_name = "harlequin"
+let g:colors_name = "harlequin"
 
 let s:text = ['#F8F8F2', 15]
 let s:text_bg = ['#1C1B1A', 234]
@@ -157,8 +157,8 @@ call s:Highlight('Number',          s:lilac, '', 'bold', '')
 call s:Highlight('Constant',        s:lilac, '', 'bold', '')
 call s:Highlight('Float',           s:lilac, '', 'bold', '')
 
-call s:Highlight('FoldColumn',      s:greys[1], s:black, '', '')
-call s:Highlight('Folded',          s:greys[1], s:black, '', '')
+call s:Highlight('FoldColumn',      s:white, s:greys[4], '', '')
+call s:Highlight('Folded',          s:white, s:greys[4], '', '')
 
 call s:Highlight('MatchParen',      s:black, s:gold, 'bold', '')
 
@@ -192,7 +192,7 @@ endif
 
 call s:HighlightX('VisualNOS',      '', s:greys[4], '', '')
 call s:HighlightX('Visual',         '', s:greys[4], '', '')
-call s:Highlight('Search',          s:black, s:gold, '', '')
+call s:Highlight('Search',          s:black, s:frost, '', '')
 call s:Highlight('IncSearch',       s:black, s:sunny, '', '')
 
 call s:Highlight('Pmenu',           s:black, s:gold, '', '')
@@ -251,6 +251,7 @@ call s:Highlight('clojureCond',           s:cerise, '', '', '')
 call s:Highlight('clojureParen0',         s:text, '', '', '')
 call s:Highlight('clojureMacro',          s:lime, '', 'bold', '')
 call s:Highlight('clojureDispatch',       s:lilac, '', 'bold', '')
+call s:Highlight('clojureError',          s:black, s:mordant, 'bold', '')
 
 "*** SCALA ***
 call s:Highlight('scalaClassName',        s:gold, '', '', '')
@@ -320,3 +321,10 @@ call s:Highlight('EasyMotionShade',           s:greys[2], '', '', '')
 "*** CtrlP ***
 call s:Highlight('CtrlPNoEntries',            s:mordant, '', '', '')
 call s:Highlight('CtrlPPrtBase',              '', '', 'bold', '')
+
+"*** taglist.vim ***
+call s:Highlight('TagListTitle',              s:white, '', 'bold', '')
+call s:Highlight('TagListFileName',           s:brick, '', '', '')
+
+"*** YouCompleteMe ***
+call s:Highlight('YcmErrorSection',           s:greys[5], s:mordant, 'bold', '')

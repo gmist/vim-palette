@@ -1,4 +1,4 @@
-" Vim color file for light backgrounds.
+" Vim color file for dark backgrounds.
 
 hi clear
 
@@ -26,9 +26,9 @@ hi Search     ctermfg=White	   ctermbg=DarkGreen guibg=White guifg=White
 hi SpecialKey ctermfg=Blue	   guifg=Blue
 hi StatusLine cterm=bold	   ctermbg=blue ctermfg=white guibg=gold guifg=blue
 hi StatusLineNC	cterm=bold	   ctermbg=yellow ctermfg=black  guibg=gold guifg=blue
-hi TabLineFill ctermfg=Blue        ctermbg=DarkGreen
-hi TabLine    ctermfg=White        ctermbg=Blue
-hi TabLineSel ctermfg=Black        ctermbg=White  cterm=bold
+hi TabLineFill ctermfg=DarkBlue        ctermbg=DarkGreen
+hi TabLine    ctermfg=Black        ctermbg=DarkBlue
+hi TabLineSel ctermfg=White        ctermbg=Black  cterm=bold
 hi Title      ctermfg=DarkMagenta  gui=bold guifg=Magenta
 hi VertSplit  cterm=None	   gui=reverse
 hi Visual     ctermbg=NONE	   cterm=reverse gui=reverse guifg=Grey guibg=fg
@@ -36,7 +36,7 @@ hi VisualNOS  cterm=underline,bold gui=underline,bold
 hi WarningMsg ctermfg=DarkRed	   guifg=Red
 hi WildMenu   ctermfg=Black	   ctermbg=Yellow    guibg=Yellow guifg=Black
 hi ColorColumn ctermbg=lightgrey guibg=lightgrey
-hi CursorLine  cterm=NONE ctermbg=lightgrey
+hi CursorLine  cterm=NONE ctermbg=Brown
 
 " syntax highlighting
 hi Comment    cterm=NONE ctermfg=Red     gui=NONE guifg=red2

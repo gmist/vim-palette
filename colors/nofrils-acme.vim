@@ -56,10 +56,10 @@ hi PmenuSel term=NONE cterm=NONE ctermfg=fg ctermbg=13 gui=NONE guifg=fg guibg=#
 hi Question term=NONE cterm=NONE ctermfg=53 ctermbg=NONE gui=NONE guifg=#5f005f guibg=NONE
 hi StatusLine term=NONE cterm=NONE ctermbg=183 ctermfg=fg gui=NONE guifg=white guibg=#000000
 hi Todo term=NONE cterm=NONE ctermfg=2 ctermbg=NONE gui=NONE guifg=#008000 guibg=NONE
-hi VisualNOS term=NONE cterm=NONE ctermfg=NONE ctermbg=53 gui=NONE guifg=NONE guibg=#5f005f
 hi WarningMsg term=NONE cterm=NONE ctermfg=9 ctermbg=white gui=NONE guifg=#ff5555 guibg=white
 hi WildMenu term=NONE cterm=NONE ctermbg=fg ctermfg=183 gui=NONE guifg=#000000 guibg=white
-hi Visual term=NONE cterm=NONE ctermfg=fg ctermbg=222 gui=reverse guifg=NONE guibg=NONE
+hi Visual term=NONE cterm=NONE ctermfg=fg ctermbg=222 gui=NONE guifg=NONE guibg=#ffd787
+hi VisualNOS term=underline cterm=underline ctermfg=fg ctermbg=222 gui=underline guifg=NONE guibg=#ffd787
 
 " Reversed
 hi PmenuSbar term=reverse cterm=reverse ctermfg=NONE ctermbg=NONE gui=reverse guifg=NONE guibg=NONE
@@ -151,8 +151,8 @@ function! NofrilsFocusCode()
     hi String term=NONE cterm=NONE ctermfg=NONE ctermbg=NONE gui=NONE guifg=NONE guibg=NONE
 
     if g:nofrils_strbackgrounds
-        hi Character term=NONE cterm=NONE ctermfg=NONE ctermbg=231 gui=NONE guifg=NONE guibg=#ffffff
-        hi String term=NONE cterm=NONE ctermfg=NONE ctermbg=231 gui=NONE guifg=NONE guibg=#ffffff
+        hi Character term=NONE cterm=NONE ctermfg=NONE ctermbg=223 gui=NONE guifg=NONE guibg=#ffd7af
+        hi String term=NONE cterm=NONE ctermfg=NONE ctermbg=223 gui=NONE guifg=NONE guibg=#ffd7af
     end
 endfunction
 
@@ -165,8 +165,8 @@ function! NofrilsNormal()
 
     " Optional Syntax Features
     if g:nofrils_strbackgrounds
-        hi Character term=NONE cterm=NONE ctermfg=NONE ctermbg=231 gui=NONE guifg=NONE guibg=#ffffff
-        hi String term=NONE cterm=NONE ctermfg=NONE ctermbg=231 gui=NONE guifg=NONE guibg=#ffffff
+        hi Character term=NONE cterm=NONE ctermfg=NONE ctermbg=223 gui=NONE guifg=NONE guibg=#ffd7af
+        hi String term=NONE cterm=NONE ctermfg=NONE ctermbg=223 gui=NONE guifg=NONE guibg=#ffd7af
     end
     if g:nofrils_heavycomments
         hi Comment term=NONE cterm=NONE ctermfg=89 ctermbg=NONE gui=NONE guifg=#87005f guibg=NONE

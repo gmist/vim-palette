@@ -38,7 +38,7 @@ many of the themes here are listed [here](http://vimcolorschemetest.googlecode.c
 Current colorschemes
 --------------------
 
-Total of 958+ color schemes:
+Total of 959+ color schemes:
 * [0x7A69_dark.vim](http://www.vim.org/script.php?script_id=4695)
 * [1989.vim](https://github.com/sonjapeterson/1989.vim/tree/master/colors)
 * [256-grayvim.vim](http://www.vim.org/script.php?script_id=3062)
@@ -105,6 +105,7 @@ Total of 958+ color schemes:
 * [Tomorrow-Night-Eighties.vim](https://github.com/chriskempson/vim-tomorrow-theme/tree/master/colors)
 * [Tomorrow-Night.vim](https://github.com/chriskempson/vim-tomorrow-theme/tree/master/colors)
 * [Tomorrow.vim](https://github.com/chriskempson/vim-tomorrow-theme/tree/master/colors)
+* [absolute.vim](http://www.vim.org/script.php?script_id=5576)
 * [adam.vim](http://www.vim.org/script.php?script_id=912)
 * [adaryn.vim](http://www.vim.org/script.php?script_id=617)
 * [adobe.vim](http://www.vim.org/script.php?script_id=1365)
@@ -273,7 +274,7 @@ Total of 958+ color schemes:
 * [bold.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [borland.vim](https://github.com/dfrunza/vim/tree/master/colors)
 * [boxuk.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
-* [briofita.zip](http://www.vim.org/script.php?script_id=4136)
+* [briofita_v4.0.0.zip](http://www.vim.org/script.php?script_id=4136)
 * [broduo-color-scheme.zip](http://www.vim.org/script.php?script_id=5498)
 * [brogrammer.vim](https://github.com/marciomazza/vim-brogrammer-theme/tree/master/colors)
 * [brookstream.vim](http://www.vim.org/script.php?script_id=619)
@@ -458,7 +459,7 @@ Total of 958+ color schemes:
 * [forneus.vim](http://www.vim.org/script.php?script_id=2757)
 * [freshcut-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [freshcut.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
-* [freya.vim](http://www.vim.org/script.php?script_id=1651)
+* [freya.vim](http://www.vim.org/script.php?script_id=4239)
 * [frontier-contrast.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [frontier.vim](https://github.com/daylerees/colour-schemes/tree/master/vim/colors)
 * [fruidle.vim](http://www.vim.org/script.php?script_id=2494)
@@ -583,7 +584,7 @@ Total of 958+ color schemes:
 * [lilydjwg_dark.vim](http://www.vim.org/script.php?script_id=2585)
 * [lilydjwg_green.vim](http://www.vim.org/script.php?script_id=2516)
 * [lilypink.vim](http://www.vim.org/script.php?script_id=3323)
-* [lingodirector.vim](http://www.vim.org/script.php?script_id=4068)
+* [lingodirector.vim](http://www.vim.org/script.php?script_id=1012)
 * [liquidcarbon.vim](http://www.vim.org/script.php?script_id=3274)
 * [literal_tango.vim](http://www.vim.org/script.php?script_id=2430)
 * [ljyat.vim](http://www.vim.org/script.php?script_id=4389)
@@ -804,7 +805,7 @@ Total of 958+ color schemes:
 * [sienna.vim](http://www.vim.org/script.php?script_id=1259)
 * [sierra.vim](https://github.com/AlessandroYorba/Sierra/tree/master/colors)
 * [sift.vim](http://www.vim.org/script.php?script_id=1472)
-* [silent.vim](http://www.vim.org/script.php?script_id=2266)
+* [silent.vim](http://www.vim.org/script.php?script_id=3097)
 * [simple-dark.vim](http://www.vim.org/script.php?script_id=3890)
 * [simple256.vim](http://www.vim.org/script.php?script_id=1962)
 * [simpleRGB.vim](http://www.vim.org/script.php?script_id=3649)

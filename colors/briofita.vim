@@ -1,2999 +1,2662 @@
-" Briofita Colorscheme Heading:
+" Briofita Colorscheme
 " ====================================================================================
-" Name:       Briofita
-" Scriptname:  briofita.vim                                                               {{{1
-" Author:      Sergio Nobre <sergio.o.nobre@gmail.com>
-" License:     The Vim License (this command will show it: ':help copyright')
+" Name:        Briofita
+" Scriptname:  briofita.vim
+" Description: Another oddly named dark background colorscheme.
+"              (Its name is akin to 'Bryophyta', so should it be pronounced.)
+" Author:      Sergio Nobre <brio dot develop at gmail dot com>
+" Feedback:    Any feedback is welcome! In e-mails, please prepend [VIM] in the 
+"              subject title; otherwise the email may be treated as spam. 
+" License:     The Vim License (substituting "Vim" to "Briofita"); 
+"              when using Vim, type ':help license' to read its license
+" Version:     4.0.0
+" Last Change: 2017-06-09
 " Website:     http://www.vim.org/scripts/script.php?script_id=4136
-" Last Change: v3.1.0: March 4, 2014
-" Note:        Check the companion help file for usage help and the release history.
-"              Newer versions may be downloaded from the above mentioned web address.
-" ====================================================================================
+" Github Repo: https://github.com/sonobre/briofita_vim
+" NOTES:       The colorscheme can be downloaded from either vim.org site or github 
+"              by accessing above URLs. Check the companion helpfile for additional
+"              information, changelog etc.
+" =============================================================================
 
-" Beginning:                                                                              {{{1
-let this_color = "briofita"
-if (!has('gui_running')) || (!v:version >= 703)
-    echoerr "Colorscheme " . this_color . " was designed only for Vim versions >= 7.3.0 in GUI mode."
-    finish
+" Preamble  [[[1
+if !has("gui_running")
+    set t_Co=256
 endif
-
-let    s:briofitaversion = ["3.1.0"]
-unlet! g:briofitaversion
-let    g:briofitaversion = copy(s:briofitaversion)
 
 set background=dark
 hi clear
-if exists("syntax_on")
-  syntax reset
-endif
-let g:colors_name = this_color
-unlet this_color
-let save_cpo = &cpo
-set cpo&vim
 
-" Hardcoded Configurations:
-let s:check_cleared_normal_highlight = 1
-
-" use configuration below = 0 if you have any performance concern; otherwise, use 1
-" if 0, only a dict of cycling keys is exported;
-" if 1, a dict of cycling keys, each with its highlight names in a list, is exported
-let s:export_cycling_highlights = 1
-
-" Configuration Dictionary:  s:dic_cf_options:                                         {{{1
-" configuration settings
-if !exists("s:dic_cf_options")
-        " Note:     both the first element and the second may be set/changed
-        "           by the colorscheme; the 1st element is the default or the
-        "           current value of the option; the initial value of the 1st
-        "           element is the option's default value on startup; upon processing
-        "           user's options, the 1st element gets the user's defined
-        "           cycle number choice; the second element, is the option limit,
-        "           its maximum value, if greater than one; the 2nd element
-        "           cannot be changed via user options.
-        " Criteria: (1) if the 2nd list element is 1 it means a "boolean" option
-        "           so that any non-zero key value means 'true', zero means 'false', and
-        "           (highlight subscript zero will be used, if true); boolean options are not
-        "           set when the first element (default) is zero in the below options dict;
-        "           (2) when the 2nd element is (-1) it means its setting is postponed; in this case
-        "           the real limit is computed and moved here, based on the given highlights.
-        let s:dic_cf_options = {
-            \ "warnlevel":          [ 0,  1],
-            \ "statusline":         [ 0,  1],
-            \ "brackets":           [ 1,  1],
-            \ "localcursorline":    [ 0,  1],
-            \ "cursorline":         [ 0, -1],
-            \ "colorcolumn":        [ 0, -1],
-            \ "search":             [ 0, -1],
-            \ "diff":               [ 0, -1],
-            \ "normal":             [ 0, -1],
-            \ "cursorlinenr":       [ 0, -1],
-            \ "foldcolumn":         [ 0, -1],
-            \ "folded":             [ 0, -1],
-            \ "conceal":            [ 0, -1],
-            \ "special":            [ 0, -1],
-            \ "mix01":              [ 0, -1],
-            \ "matchparen":         [ 0, -1],
-            \ }
-endif
-"
-" List Of Allowed Options:  s:briofita_allowed_parms:                                     {{{1
-" user selectable choices
-if !exists("s:briofita_allowed_parms")
-        let s:briofita_allowed_parms = [ "statusline",
-                              \          "localcursorline",   "cursorline",
-                              \          "colorcolumn",       "search",
-                              \          "diff",              "normal",
-                              \          "cursorlinenr",      "foldcolumn",
-                              \          "folded",            "conceal",
-                              \          "special",           "mix01",
-                              \          "matchparen",        "brackets" ]
+if exists('syntax_on')
+    syntax reset
 endif
 
-function! s:BuildExportVar(opdict,scope)
-    " build global informational variable g:briofita_keys
-    if exists("g:briofita_keys")
-         unlet g:briofita_keys
-    endif
-	let g:briofita_keys = {}
-	for dic2k in keys(a:opdict)
-		let l:k2 = dic2k
-		execute 'let g:briofita_keys.' . l:k2 . ' = []'
-        if (a:scope == 0)
-            continue
-        endif
-		execute 'let dic2 = a:opdict.' . l:k2
-		for dic3k in keys(dic2)
-            if dic3k < 0
-                continue
-            endif
-			execute 'let dic3 = dic2.' . dic3k
-            " FIXME when there is a negative key, the below len() will be incorrect
-			execute 'call add(g:briofita_keys.' .
-				  \  l:k2 .
-				  \  ',"' .
-				  \  len(dic3) .
-				  \  '")'
-			for hilite in dic3
-				if len(hilite[0]) > 0
-					let hiname = hilite[0]
-				else
-					let hiname = l:k2
-				endif
-				execute 'call add(g:briofita_keys.' .
-					  \  l:k2 .
-					  \  ',"' .
-					  \  hiname .
-					  \  '")'
-			endfor
-			execute 'call sort(g:briofita_keys.' . l:k2 . ')'
-			break
-		endfor
-	endfor
-endfunction
+let g:colors_name = 'briofita'
 
-" Alternative Highlights Dictionary:  s:dic_hi_options                                    {{{1
-" dictionary of highlight options: a dict. of dicts. of lists of highlights lists
-if !exists("s:dic_hi_options")
-        " NOTE: 1. An ""-entry in foreground position means "fg", in background, "bg" (not NONE!).
-        "          so if you want NONE in fg/bg position the entry has to be "NONE"!
-        "       2. An ""-entry in the gui (rightmost position) means "NONE".
-        "       3. The numeric keys may have the sequence skipped (example: 0 followed by 2).
-        "       4. Each option has its numeric keys provided in ascending order.
-        "       5. The ZERO KEY (0:) is required for all entries (it is the default)!
-        "       6. When the dict option numeric key >= 0, it may be cycled;
-        "       7. When the dict option numeric key <= (-1) it is a special case,
-        "          not cycleable;
-        "       8. The brackets boolean key currently relates only to level16* highlighting;
-        "          these syntax elements are defined by the rainbow parentheses plugin;
-        "          ON by default, there is no problem if you do not have installed that plugin.
+if (v:version < 800)
+    echoerr "Sorry, color scheme Briofita runs only under Vim version 8 or later."
+    finish
+endif
+  
+set termguicolors
 
-        let s:dic_hi_options = {
-           \    'conceal': {
-           \                    0: [
-           \                           [ "conceal",   "BurlyWood3",     "bg",           "bold" ],
-           \                           [ "vertSplit", "#71D3B4",        "#1E3B31",      "bold" ],
-           \                       ],
-           \                    1: [
-           \                           [ "conceal",   "LightGrey",      "#1E4959",      "bold" ],
-           \                           [ "vertSplit", "CornFlowerBlue", "#1E3B31",      "bold" ],
-           \                       ],
-           \                    2: [
-           \                           [ "conceal",   "AquaMarine",     "#880C0E",      "bold" ],
-           \                           [ "vertSplit", "FireBrick",      "Gray5",        "bold" ],
-           \                       ],
-           \                    3: [
-           \                           [ "conceal",   "BurlyWood2",     "bg",           "bold" ],
-           \                           [ "vertSplit", "#71D3B4",        "bg",           "bold" ],
-           \                       ],
-           \                    4: [
-           \                           [ "conceal",   "Green",          "#1E4959",      "bold" ],
-           \                           [ "vertSplit", "DarkSlateGray",  "DarkSlateGray","bold" ],
-           \                       ],
-           \                    5: [
-           \                           [ "conceal",   "#CCFFCC",        "bg",           "bold" ],
-           \                           [ "vertSplit", "Black",          "Black",        "bold" ],
-           \                       ],
-           \               },
-           \    'special': {
-           \                    0: [
-           \                           [ "Special",           "#88CB35",        "NONE",    "NONE" ],
-           \                           [ "cRepeat",           "#00B880",        "",        "bold" ],
-           \                           [ "cStatement",        "#00B880",        "",           "" ],
-           \                           [ "_Operator",         "CornFlowerBlue", "",        "" ],
-           \                           [ "Error",             "#A191F5",        "",           "NONE", ],
-           \                           [ "errorMsg",          "Black",          "#8B7FFF", "NONE" ],
-           \                           [ "helpCommand",       "DodgerBlue",     "NONE",    "italic" ],
-           \                           [ "helpHypertextEntry","SteelBlue3",     "NONE",    "NONE" ],
-           \                           [ "helpHypertextJump", "DodgerBlue",     "",        "italic" ],
-           \                           [ "helpHeadline",      "AquaMarine3",    "NONE",    "italic" ],
-           \                           [ "helpHeader",        "DeepSkyBlue2",   "NONE",    "italic" ],
-           \                           [ "helpNotVi",         "Tomato",         "",        "" ],
-           \                           [ "helpOption",        "SteelBlue2",     "",        "bold" ],
-           \                           [ "helpSectionDelim",  "DeepSkyBlue3",   "NONE",    "NONE" ],
-           \                           [ "manLongOptionDesc", "DarkSeaGreen3",  "",        "" ],
-           \                           [ "manOptionDesc",     "DarkSeaGreen3",  "",        "bold" ],
-           \                           [ "pythonDocTest",     "#6D8C63",        "",        "italic"],
-           \                           [ "pythonDocTest2",    "#6D8C63",        "",        "italic"],
-           \                           [ "pythonDot",         "#00FFAF",        "",        "bold" ],
-           \                           [ "pythonIndentError", "DarkSlateGray",  "#0C2628", "underline" ],
-           \                           [ "pythonSpaceError",  "LemonChiffon2",  "#1C3644", "" ],
-           \                           [ "pythonStatement",   "DeepSkyBlue3",   "",        "" ],
-           \                           [ "pythonImport",      "DeepSkyBlue3",   "",        "" ],
-           \                           [ "qfError",			  "#5D8B9C",        "",        "" ],
-           \                           [ "rubyArrayDelimiter","#4A77FF",        "",        "", ],
-           \                           [ "shConditional",     "#89AEB3",        "", "bold,italic", ],
-           \                           [ "shSnglCase",        "#89AEB3",        "",  ""],
-           \                           [ "syntasticWarningSign","MediumPurple4","",        "", ],
-           \                       ],
-           \                    1: [
-           \                           [ "Special",           "#78B37A",        "NONE",       "NONE" ],
-           \                           [ "cRepeat",           "FireBrick2",     "",           "" ],
-           \                           [ "cStatement",        "FireBrick2",     "",           "" ],
-           \                           [ "_Operator",         "#00B880",        "",           "" ],
-           \                           [ "Error",             "FireBrick3",     "",           "NONE" ],
-           \                           [ "errorMsg",          "LightGoldenRod", "FireBrick4", "NONE" ],
-           \                           [ "helpCommand",       "SteelBlue1",     "#880C0E",    "italic" ],
-           \                           [ "helpHypertextEntry","AquaMarine4",    "NONE",       "NONE" ],
-           \                           [ "helpHypertextJump", "CadetBlue3",     "",           "italic" ],
-           \                           [ "helpHeadline",      "AquaMarine3",    "NONE",       "NONE" ],
-           \                           [ "helpHeader",        "#2FBBA6",        "NONE",       "NONE" ],
-           \                           [ "helpNotVi",         "#567F8F",        "",           "italic" ],
-           \                           [ "helpOption",        "SteelBlue2",     "",        "bold" ],
-           \                           [ "helpSectionDelim",  "#0F450F",        "NONE",       "bold,italic" ],
-           \                           [ "manLongOptionDesc", "#DAD085",        "Black",      "" ],
-           \                           [ "manOptionDesc",     "#DAD085",        "Black",      "" ],
-           \                           [ "pythonDocTest",     "#84AABF",        "",           "italic"],
-           \                           [ "pythonDocTest2",    "#84AABF",        "",           "italic"],
-           \                           [ "pythonDot",         "#F38F00",        "",           "bold" ],
-           \                           [ "pythonIndentError", "LemonChiffon2",  "#1C3644", "" ],
-           \                           [ "pythonSpaceError",  "LemonChiffon2",  "#1E4959",    "" ],
-           \                           [ "pythonStatement",   "#2FBBA6",        "",           "" ],
-           \                           [ "pythonImport",      "DeepSkyBlue3",   "",           "" ],
-           \                           [ "qfError",			  "RosyBrown",      "",           "" ],
-           \                           [ "rubyArrayDelimiter","#8870FF",        "",           "", ],
-           \                           [ "shConditional",     "Red3",           "",           "bold,italic", ],
-           \                           [ "shSnglCase",        "Red3",           "",           ""],
-           \                           [ "syntasticWarningSign","MediumPurple3","",           "", ],
-           \                       ],
-           \                    2: [
-           \                           [ "Special",           "Gray50",         "NONE",    "NONE" ],
-           \                           [ "cRepeat",           "CadetBlue3",     "",        "bold" ],
-           \                           [ "cStatement",        "CadetBlue3",     "",        "" ],
-           \                           [ "_Operator",         "SkyBlue",        "",        "" ],
-           \                           [ "Error",             "MediumPurple3",  "",        "NONE" ],
-           \                           [ "errorMsg",          "LightGoldenRod", "Gray10",  "NONE" ],
-           \                           [ "helpCommand",       "#A191F5",        "NONE",    "italic" ],
-           \                           [ "helpHypertextEntry","#869BCC",        "NONE",    "NONE" ],
-           \                           [ "helpHypertextJump", "DodgerBlue",     "",        "italic" ],
-           \                           [ "helpHeadline",      "#6CA0FF",        "NONE",    "italic" ],
-           \                           [ "helpHeader",        "#00B780",        "NONE",    "italic" ],
-           \                           [ "helpNotVi",         "SteelBlue2",     "",        "" ],
-           \                           [ "helpOption",        "Tomato",         "",        "" ],
-           \                           [ "helpSectionDelim",  "#C48844",        "NONE",    "NONE" ],
-           \                           [ "manLongOptionDesc", "LightSkyBlue",   "",        "" ],
-           \                           [ "manOptionDesc",     "LightSkyBlue",   "",        "bold" ],
-           \                           [ "pythonDocTest",     "Gray50",         "",        "italic"],
-           \                           [ "pythonDocTest2",    "#6D8C63",        "",        "italic"],
-           \                           [ "pythonDot",         "LimeGreen",      "",        "bold" ],
-           \                           [ "pythonIndentError", "LemonChiffon2",  "#0C2628", "" ],
-           \                           [ "pythonSpaceError",  "LemonChiffon2",  "#0C2628", "" ],
-           \                           [ "pythonStatement",   "#2FBBA6",        "",        "" ],
-           \                           [ "pythonImport",      "#2FBBA6",        "",        "" ],
-           \                           [ "qfError",			  "#B3AC64",        "",           "" ],
-           \                           [ "rubyArrayDelimiter","BurlyWood3",     "",        "", ],
-           \                           [ "shConditional",     "#89AEB3",        "",        "bold,italic", ],
-           \                           [ "shSnglCase",        "#89AEB3",        "", ""],
-           \                           [ "syntasticWarningSign","MediumPurple4","",        "", ],
-           \                       ],
-           \                    3: [
-           \                           [ "Special",           "AquaMarine",     "#880C0E",    "NONE" ],
-           \                           [ "cRepeat",           "#00B880",        "",        "bold" ],
-           \                           [ "cStatement",        "CadetBlue3",     "",        "" ],
-           \                           [ "_Operator",         "#00B880",        "",           "" ],
-           \                           [ "Error",             "Linen",          "FireBrick4", "NONE", ],
-           \                           [ "errorMsg",          "LightGoldenRod", "#1E4959",    "NONE" ],
-           \                           [ "helpCommand",       "#71D3B4",        "NONE",       "italic" ],
-           \                           [ "helpHypertextEntry","Brown3",         "NONE",       "bold" ],
-           \                           [ "helpHypertextJump", "DodgerBlue",     "",           "italic" ],
-           \                           [ "helpHeadline",      "#6CA0FF",        "NONE",       "italic" ],
-           \                           [ "helpHeader",        "#00B780",        "NONE",       "italic" ],
-           \                           [ "helpNotVi",         "LightPink2",     "Gray20",     "" ],
-           \                           [ "helpOption",        "SteelBlue2",     "",           "bold" ],
-           \                           [ "helpSectionDelim",  "Brown3",         "NONE",       "NONE" ],
-           \                           [ "manLongOptionDesc", "Pink1",          "",           "" ],
-           \                           [ "manOptionDesc",     "Pink1",          "",           "bold" ],
-           \                           [ "pythonDocTest",     "Gray50",         "",           "italic"],
-           \                           [ "pythonDocTest2",    "#84AABF",        "",           "italic"],
-           \                           [ "pythonDot",         "BurlyWood1",     "",           "bold" ],
-           \                           [ "pythonIndentError", "Khaki2",         "#75252F",    "" ],
-           \                           [ "pythonSpaceError",  "LemonChiffon2",  "bg",         "" ],
-           \                           [ "pythonStatement",   "CadetBlue",      "",           "" ],
-           \                           [ "pythonImport",      "DeepSkyBlue2",   "",           "" ],
-           \                           [ "qfError",			  "AquaMarine2",    "",           "" ],
-           \                           [ "rubyArrayDelimiter","#8870FF",        "",           "bold", ],
-           \                           [ "shConditional",     "Red3",           "",           "bold,italic", ],
-           \                           [ "shSnglCase",        "Red3",           "",           ""],
-           \                           [ "syntasticWarningSign","LightGray",    "",           "", ],
-           \                       ],
-           \               },
-           \    'cursorlinenr': {
-           \                    0: [
-           \                           [  "CursorLineNr",   "#8B7FFF",        "bg",              ""      ],
-           \                           [  "vimLineComment", "#5D8B9C",        "",                ""      ],
-           \                           [  "vimMark",        "#CC4455",        "",                ""      ],
-           \                           [  "vimNumber",      "#7FA2E6",        "bg",              "NONE"  ],
-           \                           [  "vimTodo",        "MediumSeaGreen", "bg",              "italic"],
-           \                       ],
-           \                    1: [
-           \                           [  "CursorLineNr",   "Yellow",         "bg",              "bold"  ],
-           \                           [  "vimLineComment", "#557F8F",        "",                ""      ],
-           \                           [  "vimMark",        "DeepSkyBlue2",   "",                ""      ],
-           \                           [  "vimNumber",      "#65C254",        "bg",              "NONE"  ],
-           \                           [  "vimTodo",        "LemonChiffon3",  "#345FA8",         "NONE"  ],
-           \                       ],
-           \                    2: [
-           \                           [  "CursorLineNr",   "Orange",         "bg",              ""      ],
-           \                           [  "vimLineComment", "DeepSkyBlue4",   "",                ""      ],
-           \                           [  "vimMark",        "#CC4455",        "",                "bold"  ],
-           \                           [  "vimNumber",      "#7FA2E6",        "bg",              "NONE"  ],
-           \                           [  "vimTodo",        "LemonChiffon3",  "#345FA8",         "NONE"  ],
-           \                       ],
-           \                    3: [
-           \                           [  "CursorLineNr",   "#8B7FFF",        "bg",              "bold"  ],
-           \                           [  "vimLineComment", "Turquoise4",     "",                ""      ],
-           \                           [  "vimMark",        "DeepSkyBlue2",   "",                "bold"  ],
-           \                           [  "vimNumber",      "#65C254",        "bg",              "NONE"  ],
-           \                           [  "vimTodo",        "Gray20",         "MediumSeaGreen",  "underline" ],
-           \                       ],
-           \                    4: [
-           \                           [  "CursorLineNr",   "Orange",         "bg",              "bold"  ],
-           \                           [  "vimLineComment", "#5D8B9C",        "",                ""      ],
-           \                           [  "vimMark",        "#CC4455",        "",                ""      ],
-           \                           [  "vimNumber",      "#7FA2E6",        "bg",              "NONE"  ],
-           \                           [  "vimTodo",        "MediumSeaGreen", "bg",              "italic"],
-           \                       ],
-           \               },
-           \    'mix01': {
-                        \		0:	[
-                                    \	[      "javaString",     "#7EB49C",        "NONE",    "NONE", ],
-                                    \   [      "javaConditional","#009F6F",        "NONE",    "bold", ],
-                                    \   [      "javaRepeat",     "#009F6F",        "NONE",    "bold", ],
-                                    \   [      "plsqlSQLKeyword",       "DeepSkyBlue2", "bg", "underline", ],
-                                    \   [      "plsqlSQLTypeAttribute", "DeepSkyBlue2", "",   "underline", ],
-                                    \   [      "vimCommand",     "PowderBlue",     "",        "", ],
-                                    \	[      "vimString",      "#9A85FF",        "NONE",    "NONE", ],
-                                    \	[      "vimMapRHS",      "LightCyan3",     "NONE",    "NONE", ],
-                                    \	[      "vimIsCommand",   "SkyBlue2",       "NONE",    "italic", ],
-                                    \	[      "vimEchoHLNone",  "SkyBlue2",       "NONE",    "italic", ],
-                                    \	[      "vimFilter",      "SkyBlue2",       "NONE",    "italic", ],
-                                    \	[      "vimFuncBody",    "#779DB2",        "NONE",    "bold", ],
-                                    \   [      "vimOption",      "DodgerBlue2",     "",        "", ],
-                                    \   [      "vimSet",         "DodgerBlue2",     "",        "", ],
-                                    \   [      "vimSetEqual",    "DodgerBlue2",     "",        "", ],
-                                    \   [      "vimSetMod",      "DodgerBlue2",     "",        "italic", ],
-                                    \   [      "vimSetSep",      "DodgerBlue2",     "",        "bold", ],
-                                \	],
-                        \		1:	[
-                                    \	[      "javaString",     "CadetBlue3",     "NONE",    "NONE", ],
-                                    \   [      "javaConditional","#9A85FF",        "NONE",    "bold", ],
-                                    \   [      "javaRepeat",     "#9A85FF",        "NONE",    "bold", ],
-                                    \   [      "plsqlSQLKeyword",       "#C59F6F", "bg", "underline", ],
-                                    \   [      "plsqlSQLTypeAttribute", "#C59F6F", "",   "underline", ],
-                                    \   [      "vimCommand",     "PowderBlue",     "",        "", ],
-                                    \	[      "vimString",      "CadetBlue3",     "NONE",    "NONE", ],
-                                    \	[      "vimMapRHS",      "LightCyan3",     "NONE",    "NONE", ],
-                                    \	[      "vimIsCommand",   "#32C5B0",        "NONE",    "italic", ],
-                                    \	[      "vimEchoHLNone",  "#32C5B0",        "NONE",    "italic", ],
-                                    \	[      "vimFilter",      "#32C5B0",        "NONE",    "italic", ],
-                                    \	[      "vimFuncBody",    "LightSkyBlue3",  "NONE",    "bold", ],
-                                    \   [      "vimOption",      "#AFAFFF",        "",        "", ],
-                                    \   [      "vimSet",         "DodgerBlue1",    "",        "", ],
-                                    \   [      "vimSetEqual",    "DodgerBlue1",    "",        "", ],
-                                    \   [      "vimSetMod",      "DodgerBlue1",    "",        "italic", ],
-                                    \   [      "vimSetSep",      "DodgerBlue2",    "",        "bold", ],
-                                \	],
-                        \		2:	[
-                                    \	[      "javaString",     "#9A85FF",        "NONE",  "NONE", ],
-                                    \   [      "javaConditional","#32C5B0",        "NONE",  "bold", ],
-                                    \   [      "javaRepeat",     "#32C5B0",        "NONE",  "bold", ],
-                                    \   [      "plsqlSQLKeyword",       "DeepSkyBlue2", "bg", "underline", ],
-                                    \   [      "plsqlSQLTypeAttribute", "DeepSkyBlue2", "",   "underline", ],
-                                    \   [      "vimCommand",     "#7EB49C",        "",      "", ],
-                                    \	[      "vimString",      "#9A85FF",        "NONE",  "NONE", ],
-                                    \	[      "vimMapRHS",      "#CC4455",        "NONE",  "NONE", ],
-                                    \	[      "vimIsCommand",   "CornFlowerBlue", "NONE",  "italic", ],
-                                    \	[      "vimEchoHLNone",  "SkyBlue2",       "NONE",  "italic", ],
-                                    \	[      "vimFilter",      "SkyBlue2",       "NONE",  "italic", ],
-                                    \	[      "vimFuncBody",    "LimeGreen",      "NONE",  "NONE", ],
-                                    \   [      "vimOption",      "#AFAFFF",        "",      "underline", ],
-                                    \   [      "vimSet",         "#7EB49C",        "", "", ],
-                                    \   [      "vimSetEqual",    "#7EB49C",        "", "", ],
-                                    \   [      "vimSetMod",      "#7EB49C",        "", "italic", ],
-                                    \   [      "vimSetSep",      "#7EB49C",        "", "", ],
-                                \	],
-                        \		3:	[
-                                    \	[      "javaString",     "BurlyWood3",     "NONE",  "NONE", ],
-                                    \   [      "javaConditional","#8870FF",        "NONE",  "bold", ],
-                                    \   [      "javaRepeat",     "#8870FF",        "NONE",  "bold", ],
-                                    \   [      "plsqlSQLKeyword",       "DeepSkyBlue2", "bg", "", ],
-                                    \   [      "plsqlSQLTypeAttribute", "DeepSkyBlue2", "",   "", ],
-                                    \   [      "vimCommand",     "PowderBlue",     "",      "", ],
-                                    \	[      "vimString",      "BurlyWood3",     "NONE",  "NONE", ],
-                                    \	[      "vimMapRHS",      "#CC4455",        "NONE",  "NONE", ],
-                                    \	[      "vimIsCommand",   "SkyBlue2",       "NONE",  "italic", ],
-                                    \	[      "vimEchoHLNone",  "#32C5B0",        "NONE",  "italic", ],
-                                    \	[      "vimFilter",      "#32C5B0",        "NONE",  "italic", ],
-                                    \	[      "vimFuncBody",    "Coral",          "NONE",  "bold", ],
-                                    \   [      "vimOption",      "#AFAFFF",        "#1C4F4F", "italic", ],
-                                    \   [      "vimSet",         "#85B2FE",        "",        "", ],
-                                    \   [      "vimSetEqual",    "#85B2FE",        "",        "", ],
-                                    \   [      "vimSetMod",      "#85B2FE",        "",        "italic", ],
-                                    \   [      "vimSetSep",      "#85B2FE",        "",        "", ],
-                                \	],
-                        \		4:	[
-                                    \	[      "javaString",     "#8870FF",        "NONE",  "NONE", ],
-                                    \   [      "javaConditional","#009ACD",        "NONE",  "bold", ],
-                                    \   [      "javaRepeat",     "#009ACD",        "NONE",  "bold", ],
-                                    \   [      "plsqlSQLKeyword",       "#C59F6F", "bg", "underline", ],
-                                    \   [      "plsqlSQLTypeAttribute", "#C59F6F", "",   "underline", ],
-                                    \   [      "vimCommand",     "PowderBlue",     "",      "", ],
-                                    \	[      "vimString",      "#8870FF",        "NONE",  "NONE", ],
-                                    \	[      "vimMapRHS",      "LightCyan3",     "NONE",  "NONE", ],
-                                    \	[      "vimIsCommand",   "#32C5B0",        "NONE",  "italic", ],
-                                    \	[      "vimEchoHLNone",  "SkyBlue2",       "NONE",  "italic", ],
-                                    \	[      "vimFilter",      "SkyBlue2",       "NONE",  "italic", ],
-                                    \	[      "vimFuncBody",    "Plum",           "NONE",  "NONE", ],
-                                    \   [      "vimOption",      "IndianRed2",     "",      "italic", ],
-                                    \   [      "vimSet",         "IndianRed2",      "",     "", ],
-                                    \   [      "vimSetEqual",    "IndianRed2",      "",     "", ],
-                                    \   [      "vimSetMod",      "IndianRed2",      "",     "italic", ],
-                                    \   [      "vimSetSep",      "RosyBrown",      "",      "bold", ],
-                                \	],
-           \             },
-           \    'folded': {
-						\		0:	[
-						\               [ "Folded",  "LightSeaGreen",    "DarkSlateGray",  "italic", ],
-						\			],
-						\		1:	[
-						\               [ "Folded",  "PaleGreen2",       "DarkSlateGray",  "italic", ],
-						\			],
-						\		2:	[
-						\               [ "Folded",  "YellowGreen",      "DarkSlateGray",  "italic", ],
-						\			],
-						\		3:	[
-						\               [ "Folded",  "DarkSeaGreen3",    "DarkSlateGray",  "italic", ],
-						\			],
-						\		4:	[
-						\               [ "Folded",  "DarkOliveGreen3",  "DarkSlateGray",  "italic", ],
-						\			],
-						\		5:	[
-						\               [ "Folded",  "#4E7482",          "#062926",        "NONE", ],
-						\			],
-           \              },
-           \    'foldcolumn': {
-						\		0:	[
-						\               [ "",  "ForestGreen",  "#082926",  "bold", ],
-						\			],
-						\		1:	[
-						\               [ "",  "DodgerBlue3",  "#082926",  "bold", ],
-						\			],
-						\		2:	[
-						\               [ "",  "#1A8C85",      "#082926",  "bold", ],
-						\			],
-						\		3:	[
-						\               [ "",  "Chocolate",    "#082926",  "", ],
-						\			],
-						\		4:	[
-						\               [ "",  "DarkSlateGray4", "#082926","", ],
-						\			],
-						\		5:	[
-						\               [ "",  "#AA7100",      "#082926",  "", ],
-						\			],
-           \              },
-           \    'normal': {
-						\		0:	[
-						\               [ "",        "PowderBlue",    "#062926", "", ],
-                        \               [ "lineNr",  "DarkSeaGreen4", "#0C2628", "NONE"  ],
-						\			],
-						\		1:	[
-						\               [ "",        "Azure3",        "#062926", "", ],
-                        \               [ "lineNr",  "#5D8B9C",       "bg",      "NONE"  ],
-						\			],
-						\		2:	[
-						\               [ "",        "#D6B883",       "#062926", "", ],
-                        \               [ "lineNr",  "#7586AA",       "#0C2628", "NONE"  ],
-						\			],
-						\		3:	[
-						\               [ "",        "Gainsboro",     "#062926", "", ],
-                        \               [ "lineNr",  "Chartreuse3",   "bg",      "NONE"  ],
-						\			],
-						\		4:	[
-						\               [ "",        "LightSkyBlue2", "#062926", "", ],
-                        \               [ "lineNr",  "Gray40",        "bg", "NONE"  ],
-						\			],
-						\		5:	[
-						\               [ "",        "Green2",        "#062926", "", ],
-                        \               [ "lineNr",  "OliveDrab",     "bg",      "NONE"  ],
-						\			],
-						\		6:	[
-						\               [ "",        "CadetBlue2",    "#062926", "", ],
-                        \               [ "lineNr",  "#D93737",       "Gray5",   "NONE"  ],
-						\			],
-						\		7:	[
-						\               [ "",        "Azure2",        "#062926", "", ],
-                        \               [ "lineNr",  "bg",            "SeaGreen", "NONE"  ],
-						\			],
-						\		8:	[
-						\               [ "",        "#C6B6FE",       "#062926",  "", ],
-                        \               [ "lineNr",  "bg",            "DarkSeaGreen4", "NONE"  ],
-						\			],
-						\		9:	[
-						\               [ "",        "PowderBlue",    "Black",    "", ],
-                        \               [ "lineNr",  "Black",         "#5D8B9C",    "NONE"  ],
-						\			],
-           \              },
-       \    'search': {
-                    \		0:	[
-                    \               [ "Search",           "#FF88AA",      "bg",           "underline", ],
-                    \               [ "EasyMotionTarget", "Linen",        "bg",           "bold", ],
-                    \			],
-                    \		1:	[
-                    \               [ "Search",           "Green3",       "bg",           "underline", ],
-                    \               [ "EasyMotionTarget", "#FF88AA",      "bg",           "bold", ],
-                    \			],
-                    \		2:	[
-                    \               [ "Search",           "#FF9F00",      "bg",           "underline", ],
-                    \               [ "EasyMotionTarget", "Green3",       "bg",           "bold", ],
-                    \			],
-                    \		3:	[
-                    \               [ "Search",           "FireBrick1",   "bg",           "bold", ],
-                    \               [ "EasyMotionTarget", "Green3",       "bg",           "bold", ],
-                    \			],
-                    \		4:	[
-                    \               [ "Search",           "fg",           "RoyalBlue3",   "underline", ],
-                    \               [ "EasyMotionTarget", "FireBrick1",   "bg",           "bold", ],
-                    \			],
-                    \		5:	[
-                    \               [ "Search",           "#E7F56B",      "#E22A37",      "underline", ],
-                    \               [ "EasyMotionTarget", "DeepSkyBlue2", "bg",           "bold", ],
-                    \			],
-                    \		6:	[
-                    \               [ "Search",           "Black",        "Khaki2",       "underline,bold", ],
-                    \               [ "EasyMotionTarget", "Black",        "LimeGreen",    "", ],
-                    \			],
-                    \		7:	[
-                    \               [ "Search",           "#E7F56B",      "#AD2728",      "NONE", ],
-                    \               [ "EasyMotionTarget", "LightSeaGreen","bg",           "bold", ],
-                    \			],
-                    \		8:	[
-                    \               [ "Search",           "Black",        "Red",          "underline,bold", ],
-                    \               [ "EasyMotionTarget", "#E7F56B",      "bg",           "bold", ],
-                    \			],
-                    \		9:	[
-                    \               [ "Search",           "Navy",         "#5FD75F",      "underline", ],
-                    \               [ "EasyMotionTarget", "Yellow",       "bg",           "bold", ],
-                    \			],
-                    \	   10:	[
-                    \               [ "Search",           "SlateGray1",   "bg",           "underline,bold,italic", ],
-                    \               [ "EasyMotionTarget", "Green3",       "bg",           "bold", ],
-                    \			],
-                    \	   11:	[
-                    \               [ "Search",           "#0044FF",      "PowderBlue",   "underline,bold", ],
-                    \               [ "EasyMotionTarget", "#FF88AA",      "bg",           "bold", ],
-                    \			],
-                    \              },
-           \    'matchparen': {
-						\		0:	[
-						\               [ "matchParen",  "Linen",          "DarkRed", "bold", ],
-						\               [ "ModeMsg",     "OliveDrab4",     "bg",      "NONE", ],
-						\               [ "MoreMsg",     "MediumSeaGreen", "bg",      "bold", ],
-						\			],
-						\		1:	[
-						\               [ "matchParen",  "Linen",      "bg",     "bold", ],
-						\               [ "ModeMsg",     "Green",      "bg",     "italic", ],
-						\               [ "MoreMsg",     "Green",      "bg",     "", ],
-						\			],
-						\		2:	[
-						\               [ "matchParen",  "Green",    "bg",          "bold", ],
-						\               [ "ModeMsg",     "bg",       "LimeGreen",   "bold,underline", ],
-						\               [ "MoreMsg",     "Black",    "DeepSkyBlue", "", ],
-						\			],
-						\		3:	[
-						\               [ "matchParen",  "Magenta",     "Black", "bold", ],
-						\               [ "ModeMsg",     "DeepSkyBlue", "bg",    "bold,italic", ],
-						\               [ "MoreMsg",     "FireBrick1",  "Black", "bold,underline", ],
-						\			],
-						\		4:	[
-						\               [ "matchParen",  "Yellow",   "bg",       "bold", ],
-						\               [ "ModeMsg",     "White",    "#880C0E",  "bold,underline", ],
-						\               [ "MoreMsg",     "Navy",     "#C59F6F",  "", ],
-						\			],
-						\		5:	[
-						\               [ "matchParen",  "Green",   "Blue",        "NONE", ],
-						\               [ "ModeMsg",     "Black",   "DeepSkyBlue", "bold,underline", ],
-						\               [ "MoreMsg",     "#65C254", "bg",          "bold", ],
-						\			],
-           \              },
-           \    'diff': {
-                    \		0:	[
-                    \               [ "diffAdd",      "#B3AC64",          "bg",        "NONE", ],
-                    \               [ "diffAdded",    "#B3AC64",          "bg",        "NONE", ],
-                    \               [ "diffChange",   "CadetBlue4",       "bg",        "NONE", ],
-                    \               [ "diffChanged",  "CadetBlue4",       "bg",        "NONE", ],
-                    \               [ "diffComment",  "#77996C",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
-                    \               [ "diffFile",     "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "LightSlateBlue",   "bg",        "NONE", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "MediumSlateBlue",  "bg",        "NONE", ],
-                    \               [ "diffSubname",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "DiffText",     "Tomato",           "gray20",    "italic", ],
-                    \			],
-                    \		1:	[
-                    \               [ "diffAdd",      "IndianRed2",       "bg",        "NONE", ],
-                    \               [ "diffAdded",    "IndianRed2",       "bg",        "NONE", ],
-                    \               [ "diffChange",   "PaleGoldenRod",    "#25453D",   "NONE", ],
-                    \               [ "diffChanged",  "PaleGoldenRod",    "#25453D",   "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
-                    \               [ "diffFile",     "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "#E68A00",          "bg",        "italic", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "PaleGoldenRod",    "bg",        "NONE", ],
-                    \               [ "diffSubname",  "IndianRed3",       "bg",        "italic", ],
-                    \               [ "DiffText",     "Gold",             "Black",     "bold,italic", ],
-                    \			],
-                    \		2:	[
-                    \               [ "diffAdd",      "#CC4455",          "Black",     "NONE", ],
-                    \               [ "diffAdded",    "#CC4455",          "Black",     "NONE", ],
-                    \               [ "diffChange",   "DarkSlateGray2",   "#25453D",   "NONE", ],
-                    \               [ "diffChanged",  "DarkSlateGray2",   "#25453D",   "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
-                    \               [ "diffFile",     "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "#E68A00",          "bg",        "italic", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "PaleGoldenRod",    "Black",     "NONE", ],
-                    \               [ "diffSubname",  "IndianRed3",       "bg",        "italic", ],
-                    \               [ "DiffText",     "BurlyWood1",       "#902E3A",   "bold,italic", ],
-                    \			],
-                    \		3:	[
-                    \               [ "diffAdd",      "Khaki3",           "#05401C",   "NONE", ],
-                    \               [ "diffAdded",    "Khaki3",           "#05401C",   "NONE", ],
-                    \               [ "diffChange",   "LightGreen",       "bg",        "NONE", ],
-                    \               [ "diffChanged",  "LightGreen",       "bg",        "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#880C0E",   "NONE", ],
-                    \               [ "diffFile",     "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "#E68A00",          "bg",        "NONE", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "LightSkyBlue",     "bg",        "NONE", ],
-                    \               [ "diffSubname",  "LightSkyBLue",     "bg",        "NONE", ],
-                    \               [ "DiffText",     "Khaki",            "bg",        "NONE", ],
-                    \			],
-                    \		4:	[
-                    \               [ "diffAdd",      "#88CB35",          "#1E4959",   "underline", ],
-                    \               [ "diffAdded",    "#88CB35",          "#1E4959",   "underline", ],
-                    \               [ "diffChange",   "#88CB35",          "#1E4959",   "NONE", ],
-                    \               [ "diffChanged",  "#88CB35",          "#1E4959",   "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
-                    \               [ "diffFile",     "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "#E68A00",          "bg",        "italic", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "PaleGoldenRod",    "Black",     "NONE", ],
-                    \               [ "diffSubname",  "IndianRed3",       "bg",        "italic", ],
-                    \               [ "DiffText",     "Orange",           "Black",     "bold,italic", ],
-                    \			],
-                    \		5:	[
-                    \               [ "diffAdd",      "Green2",           "#0D4173",   "NONE", ],
-                    \               [ "diffAdded",    "Green2",           "#0D4173",   "NONE", ],
-                    \               [ "diffChange",   "Bisque2",          "#1E4959",   "NONE", ],
-                    \               [ "diffChanged",  "Bisque2",          "#1E4959",   "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
-                    \               [ "diffFile",     "#CC4455",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "#E68A00",          "bg",        "NONE", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "#009F6F",          "bg",        "NONE", ],
-                    \               [ "diffSubname",  "Bisque3",          "bg",        "bold", ],
-                    \               [ "DiffText",     "Gray10",           "SeaGreen",  "bold", ],
-                    \			],
-                    \	    6:	[
-                    \               [ "diffAdd",      "Gray90",           "#05401C",   "NONE", ],
-                    \               [ "diffAdded",    "Gray90",           "#05401C",   "NONE", ],
-                    \               [ "diffChange",   "LightGreen",       "bg",        "NONE", ],
-                    \               [ "diffChanged",  "LightGreen",       "bg",        "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#880C0E",   "NONE", ],
-                    \               [ "diffFile",     "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "#E68A00",          "bg",        "NONE", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "LightSkyBlue",     "bg",        "NONE", ],
-                    \               [ "diffSubname",  "LightSkyBLue",     "bg",        "NONE", ],
-                    \               [ "DiffText",     "#E63A3A",          "bg",        "bold,italic", ],
-                    \			],
-                    \		7:	[
-                    \               [ "diffAdd",      "#88CB35",          "#1E4959",   "NONE", ],
-                    \               [ "diffAdded",    "#88CB35",          "#1E4959",   "NONE", ],
-                    \               [ "diffChange",   "DarkOliveGreen2",  "NONE",      "NONE", ],
-                    \               [ "diffChanged",  "DarkOliveGreen2",  "NONE",      "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
-                    \               [ "diffFile",     "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "#E68A00",          "bg",        "italic", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "PaleGoldenRod",    "Black",     "NONE", ],
-                    \               [ "diffSubname",  "#8870FF",          "#082926",   "italic", ],
-                    \               [ "DiffText",     "Black",            "Tomato3",   "NONE", ],
-                    \			],
-                    \		8:	[
-                    \               [ "diffAdd",      "#88CB35",          "#1E4959",   "NONE", ],
-                    \               [ "diffAdded",    "#88CB35",          "#1E4959",   "NONE", ],
-                    \               [ "diffChange",   "#88CB35",          "#1E4959",   "NONE", ],
-                    \               [ "diffChanged",  "#88CB35",          "#1E4959",   "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
-                    \               [ "diffFile",     "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "#E68A00",          "bg",        "italic", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "PaleGoldenRod",    "Black",     "NONE", ],
-                    \               [ "diffSubname",  "IndianRed3",       "bg",        "italic", ],
-                    \               [ "DiffText",     "DarkSlateGrey",    "khaki2",    "underline", ],
-                    \			],
-                    \		9:	[
-                    \               [ "diffAdd",      "Green3",           "bg",        "NONE", ],
-                    \               [ "diffAdded",    "Green3",           "bg",        "NONE", ],
-                    \               [ "diffChange",   "Bisque2",          "#1E4959",   "NONE", ],
-                    \               [ "diffChanged",  "Bisque2",          "#1E4959",   "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
-                    \               [ "diffFile",     "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "#E68A00",          "bg",        "NONE", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "#009F6F",          "bg",        "NONE", ],
-                    \               [ "diffSubname",  "Bisque3",          "bg",        "bold", ],
-                    \               [ "DiffText",     "Red",              "#004700",   "bold", ],
-                    \			],
-                    \	   10:	[
-                    \               [ "diffAdd",      "Green2",           "#0D4173",   "NONE", ],
-                    \               [ "diffAdded",    "Green2",           "#0D4173",   "NONE", ],
-                    \               [ "diffChange",   "Bisque2",          "#1E4959",   "NONE", ],
-                    \               [ "diffChanged",  "Bisque2",          "#1E4959",   "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
-                    \               [ "diffFile",     "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "#E68A00",          "bg",        "NONE", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "#009F6F",          "bg",        "NONE", ],
-                    \               [ "diffSubname",  "Bisque3",          "bg",        "bold", ],
-                    \               [ "DiffText",     "Gray10",           "#218294",   "bold", ],
-                    \			],
-                    \		11:	[
-                    \               [ "diffAdd",      "#B3AC64",          "bg",        "NONE", ],
-                    \               [ "diffAdded",    "#B3AC64",          "bg",        "NONE", ],
-                    \               [ "diffChange",   "LightGoldenRod4",  "bg",        "NONE", ],
-                    \               [ "diffChanged",  "LightGoldenRod4",  "bg",        "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#1E4959",   "NONE", ],
-                    \               [ "diffFile",     "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "LightSlateBlue",   "bg",        "NONE", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "#88CB35",          "#1E4959",   "NONE", ],
-                    \               [ "diffSubname",  "MediumSlateBlue",  "#082926",   "NONE", ],
-                    \               [ "DiffText",     "Tomato",           "gray20",    "NONE", ],
-                    \			],
-                    \	   12:	[
-                    \               [ "diffAdd",      "#71D3B4",          "#05401C",   "NONE", ],
-                    \               [ "diffAdded",    "#71D3B4",          "#05401C",   "NONE", ],
-                    \               [ "diffChange",   "Bisque2",          "#1E4959",   "NONE", ],
-                    \               [ "diffChanged",  "Bisque2",          "#1E4959",   "NONE", ],
-                    \               [ "diffComment",  "#557F8F",          "",          "", ],
-                    \               [ "diffDelete",   "SlateBlue4",       "#880C0E",   "NONE", ],
-                    \               [ "diffFile",     "#CC4455",          "bg",        "NONE", ],
-                    \               [ "diffLine",     "#9A85FF",          "bg",        "NONE", ],
-                    \               [ "diffNewFile",  "#71D3B4",          "bg",        "NONE", ],
-                    \               [ "diffRemoved",  "IndianRed",        "bg",        "NONE", ],
-                    \               [ "diffSubname",  "Bisque3",          "bg",        "NONE", ],
-                    \               [ "DiffText",     "Wheat3",           "bg",        "NONE", ],
-                    \			],
-           \              },
-           \    'statusline': {
-                \		0:	[
-                \               [ "StatusLine",    "PowderBlue",     "Gray25",         "bold", ],
-                \               [ "StatusLineNC",  "#A8C2EF",        "DarkSlateGrey",  "NONE", ],
-                \			],
-           \              },
-           \    'brackets': {
-                \		0:	[
-                \               [ "Level16",       "LightSeaGreen",  "",               "", ],
-                \               [ "Level16c",      "#5B4DB3",        "",               "", ],
-                \			],
-           \              },
-           \    'cursorline': {
-           \                    0: [
-           \                           [ "CursorLine",   "Plum1",            "#322F45", "" ],
-           \                           [ "CursorColumn", "NONE",             "#322F45", "NONE" ],
-           \                       ],
-           \                    1: [
-           \                           [ "CursorLine",   "MediumPurple2",    "#0A0A70", "" ],
-           \                           [ "CursorColumn", "NONE",             "#0A0A70", "NONE" ],
-           \                       ],
-           \                    2: [
-           \                           [ "CursorLine",   "DarkOliveGreen2",  "#294C44", "" ],
-           \                           [ "CursorColumn", "NONE",             "#294C44", "NONE" ],
-           \                       ],
-           \                    3: [
-           \                           [ "CursorLine",   "Yellow",           "#8B00FF", "bold" ],
-           \                           [ "CursorColumn", "NONE",             "#8B00FF", "NONE" ],
-           \                       ],
-           \                    4: [
-           \                           [ "CursorLine",   "Black",            "#8B7FFF", "" ],
-           \                           [ "CursorColumn", "NONE",             "#8B7FFF", "NONE" ],
-           \                       ],
-           \                    5: [
-           \                           [ "CursorLine",   "DarkOliveGreen2",  "Gray30", "" ],
-           \                           [ "CursorColumn", "NONE",             "Gray30", "NONE" ],
-           \                       ],
-           \                    6: [
-           \                           [ "CursorLine",   "NONE",  "#333399", "bold" ],
-           \                           [ "CursorColumn", "NONE",  "#333399", "NONE" ],
-           \                       ],
-           \                    7: [
-           \                           [ "CursorLine",   "NONE",  "#3A5022", "bold" ],
-           \                           [ "CursorColumn", "NONE",  "#3A5022", "NONE" ],
-           \                       ],
-           \                    8: [
-           \                           [ "CursorLine",   "DarkOliveGreen2",  "NavyBlue", "" ],
-           \                           [ "CursorColumn", "NONE",             "NavyBlue", "NONE" ],
-           \                       ],
-           \                    9: [
-           \                           [ "CursorLine",   "DarkOliveGreen2",  "Gray40", "bold" ],
-           \                           [ "CursorColumn", "NONE",             "Gray40", "NONE" ],
-           \                       ],
-           \                   10: [
-           \                           [ "CursorLine",   "NONE",  "#880c0e", "bold" ],
-           \                           [ "CursorColumn", "NONE",  "#880c0e", "NONE" ],
-           \                       ],
-           \                   11: [
-           \                           [ "CursorLine",   "NONE",  "#800080", "bold" ],
-           \                           [ "CursorColumn", "NONE",  "#800080", "NONE" ],
-           \                       ],
-           \                   12: [
-           \                           [ "CursorLine",   "NONE",  "#1E3140", "bold" ],
-           \                           [ "CursorColumn", "NONE",  "#1E3140", "NONE" ],
-           \                       ],
-           \                   13: [
-           \                           [ "CursorLine",   "DarkOliveGreen2",  "Gray20", "" ],
-           \                           [ "CursorColumn", "NONE",  "#1E4959", "NONE" ],
-           \                       ],
-           \                   14: [
-           \                           [ "CursorLine",   "DarkOliveGreen2",  "#294C44",    "" ],
-           \                           [ "CursorColumn", "NONE",             "FireBrick2", "NONE" ],
-           \                       ],
-           \                   15: [
-           \                           [ "CursorLine",   "Green",  "bg",     "italic" ],
-           \                           [ "CursorColumn", "NONE",   "bg",     "NONE" ],
-           \                       ],
-           \                   16: [
-           \                           [ "CursorLine",   "DarkOliveGreen3",  "Gray30", "bold" ],
-           \                           [ "CursorColumn", "NONE",             "Gray30", "NONE" ],
-           \                       ],
-           \                   17: [
-           \                           [ "CursorLine",   "Green",  "Black",  "underline" ],
-           \                           [ "CursorColumn", "NONE",   "Black",  "NONE" ],
-           \                       ],
-           \               },
-           \    'colorcolumn': {
-						\		0:	[
-						\               [ "ColorColumn",               "PaleGreen2",   "#294C44",     "NONE",   ],
-                        \               [ "asciidocBlockTitle",        "#009F6F",      "bg",          "NONE",   ],
-                        \               [ "asciidocPassthroughBlock",  "RoyalBlue1",   "",            "", ],
-                        \               [ "asciidocQuotedSuperscript", "LightSeaGreen","bg",          "NONE",   ],
-                        \               [ "asciidocOneLineTitle",      "FireBrick1",   "#112A33",     "bold,underline", ],
-                        \               [ "asciidocQuotedBold",        "#5FD75F",      "#003366",     "italic", ],
-                        \               [ "asciidocQuotedEmphasized",  "#5FD75F",      "", "italic", ],
-                        \               [ "asciidocQuotedEmphasized2", "#5FD75F",      "", "italic", ],
-                        \               [ "asciidocQuotedSingleQuoted","Green3", "",   "italic", ],
-                        \               [ "asciidocQuotedUnconstrainedBold", "#5FD75F","#003366", "", ],
-                        \               [ "asciidocQuotedUnconstrainedEmphasized", "#5FD75F", "",  "", ],
-                        \               [ "asciidocSect1",             "FireBrick1",      "#112A33", "bold,underline", ],
-                        \               [ "asciidocSect2",             "#5FD75F",         "",            "italic", ],
-                        \               [ "asciidocSect3",             "DarkSeaGreen3",   "",            "", ],
-                        \               [ "asciidocSect4",             "SlateBlue2",      "",            ""],
-                        \               [ "asciidocTableBlock",        "#73BF73",      "",            "", ],
-                        \               [ "asciidocTablePrefix",       "CadetBlue4",   "",            "bold", ],
-                        \               [ "asciidocTablePrefix2",      "SeaGreen2",    "",            "", ],
-                        \               [ "asciidocTwoLineTitle",      "SlateBlue1",   "bg",          "NONE",   ],
-                        \               [ "htmlCommentPart",           "#5D8B9C",      "bg",          "italic", ],
-                        \               [ "htmlError",                 "#C59F6F",      "",            "", ],
-                        \               [ "htmlSpecialChar",           "DeepSkyBlue3", "",            "", ],
-                        \               [ "htmlTagName",               "LimeGreen",    "#152933",     "italic", ],
-                        \               [ "markdownLinkText",          "#38ACAD",      "",            "italic", ],
-                        \               [ "markdownOrderedListMarker", "SlateBlue2",   "",            "bold", ],
-                        \               [ "nerdtreeDir",               "LightSteelBlue",              "#0e2628",  "", ],
-                        \               [ "nerdtreeDirSlash",          "LightSteelBlue",  "",         "", ],
-                        \               [ "nerdtreeFile",              "SkyBlue2",     "",            "", ],
-                        \               [ "nerdtreeOpenable",          "#AA88BB",      "",            "bold",   ],
-                        \               [ "netrwComment",              "DodgerBlue3",  "",            "", ],
-						\               [ "nonText",                   "#0F450F",      "NONE",        "NONE",   ],
-                        \               [ "plsqlOperator",             "SeaGreen3",    "",            "bold", ],
-                        \               [ "xmlCommentPart",            "#5D8B9C",      "bg",          "", ],
-                        \               [ "xmlEqual",                  "#00B780",      "",            "bold", ],
-						\			],
-						\		2:	[
-						\               [ "ColorColumn",               "Linen",        "DarkRed",       "NONE",   ],
-                        \               [ "asciidocBlockTitle",        "#CC4455",      "bg",            "NONE",   ],
-                        \               [ "asciidocPassthroughBlock",  "#009F6F",      "",              "italic", ],
-                        \               [ "asciidocQuotedSuperscript", "PaleGreen3",   "bg",            "NONE",   ],
-                        \               [ "asciidocOneLineTitle",      "#71D3B4",      "#112A33",       "underline", ],
-                        \               [ "asciidocQuotedBold",        "Green3",          "#1E4959", "italic", ],
-                        \               [ "asciidocQuotedEmphasized",  "DarkSeaGreen3","", "italic", ],
-                        \               [ "asciidocQuotedEmphasized2", "DarkSeaGreen3","", "italic", ],
-                        \               [ "asciidocQuotedSingleQuoted","Green2", "",  "italic", ],
-                        \               [ "asciidocQuotedUnconstrainedBold", "Green3","#1E4959", "", ],
-                        \               [ "asciidocQuotedUnconstrainedEmphasized", "DarkSeaGreen3", "",  "", ],
-                        \               [ "asciidocSect1",             "FireBrick1",      "#112A33", "bold,underline", ],
-                        \               [ "asciidocSect2",             "#5FD75F",         "#1C4F4F",  "underline", ],
-                        \               [ "asciidocSect3",             "DarkSeaGreen3",   "Gray26",      "underline", ],
-                        \               [ "asciidocSect4",             "#5FD75F",         "#003366",     ""],
-                        \               [ "asciidocTableBlock",        "#73BF73",      "MidnightBlue","", ],
-                        \               [ "asciidocTablePrefix",       "Maroon",       "",              "bold", ],
-                        \               [ "asciidocTablePrefix2",      "SeaGreen2",    "",              "", ],
-                        \               [ "asciidocTwoLineTitle",      "Green2",       "bg",            "NONE",   ],
-                        \               [ "htmlCommentPart",           "#6A6A6A",      "bg",            "italic", ],
-                        \               [ "htmlError",                 "#C59F6F",      "",              "bold", ],
-                        \               [ "htmlSpecialChar",           "SlateGray3",   "",              "underline", ],
-                        \               [ "htmlTagName",               "#2FBF2F",      "#152933",       "italic", ],
-                        \               [ "markdownLinkText",          "SlateGray2",   "",              "italic", ],
-                        \               [ "markdownOrderedListMarker", "#009F6F",      "",              "bold", ],
-                        \               [ "nerdtreeDir",               "LightSteelBlue","#0e2628",      "", ],
-                        \               [ "nerdtreeDirSlash",          "LightSteelBlue",  "",           "", ],
-                        \               [ "nerdtreeFile",              "#00B880",      "",              "", ],
-                        \               [ "nerdtreeOpenable",          "#AAEEBB",      "",              "bold",   ],
-                        \               [ "netrwComment",              "#42A396",      "",              "", ],
-						\               [ "nonText",                   "SlateBlue",    "bg",            "NONE",   ],
-                        \               [ "plsqlOperator",             "RosyBrown",    "",              "bold", ],
-                        \               [ "xmlCommentPart",            "IndianRed4",   "bg",            "", ],
-                        \               [ "xmlEqual",                  "LightGoldenRod4", "",           "bold", ],
-						\			],
-						\		3:	[
-						\               [ "ColorColumn",               "DodgerBlue1",  "#28364D",      "NONE",   ],
-                        \               [ "asciidocBlockTitle",        "#009F6F",      "bg",           "italic", ],
-                        \               [ "asciidocPassthroughBlock",  "RoyalBlue2",   "",             "italic", ],
-                        \               [ "asciidocQuotedSuperscript", "PaleGreen2",   "bg",           "NONE",   ],
-                        \               [ "asciidocOneLineTitle",      "FireBrick1",   "#112A33",      "bold,underline", ],
-                        \               [ "asciidocQuotedBold",        "Green2",       "#1E4959", "italic", ],
-                        \               [ "asciidocQuotedEmphasized",  "DarkSeaGreen3",   "", "italic", ],
-                        \               [ "asciidocQuotedEmphasized2", "DarkSeaGreen3",   "", "italic", ],
-                        \               [ "asciidocQuotedSingleQuoted","Green3", "",  "italic", ],
-                        \               [ "asciidocQuotedUnconstrainedBold", "Green2","#1E4959", "", ],
-                        \               [ "asciidocQuotedUnconstrainedEmphasized", "DarkSeaGreen2", "",  "", ],
-                        \               [ "asciidocSect1",             "FireBrick1",      "#112A33", "bold,underline", ],
-                        \               [ "asciidocSect2",             "#5FD75F",         "",            "italic", ],
-                        \               [ "asciidocSect3",             "DarkSeaGreen3",   "",            "", ],
-                        \               [ "asciidocSect4",             "SlateBlue2",      "",            ""],
-                        \               [ "asciidocTableBlock",        "PaleGreen3",   "",             "", ],
-                        \               [ "asciidocTablePrefix",       "CadetBlue4",   "",             "bold", ],
-                        \               [ "asciidocTablePrefix2",      "SeaGreen2",    "",             "", ],
-                        \               [ "asciidocTwoLineTitle",      "#7FAAF2",      "bg",           "NONE",   ],
-                        \               [ "htmlCommentPart",           "#557F8F",      "bg",           "italic", ],
-                        \               [ "htmlError",                 "#C59F6F",      "black",        "", ],
-                        \               [ "htmlSpecialChar",           "DeepSkyBlue3", "",             "underline", ],
-                        \               [ "htmlTagName",               "SteelBlue3",   "#152933",      "italic", ],
-                        \               [ "markdownLinkText",          "CadetBlue4",   "",             "italic", ],
-                        \               [ "markdownOrderedListMarker", "SlateBlue2",   "",             "bold", ],
-                        \               [ "nerdtreeDir",               "LightSteelBlue","#0e2628",     "", ],
-                        \               [ "nerdtreeDirSlash",          "LightSteelBlue","",            "", ],
-                        \               [ "nerdtreeFile",              "SkyBlue2",     "",             "", ],
-                        \               [ "nerdtreeOpenable",          "PaleGoldenRod","",             "bold",   ],
-                        \               [ "netrwComment",              "DodgerBlue3",  "",             "", ],
-						\               [ "nonText",                   "bg",           "bg",           "NONE",   ],
-                        \               [ "plsqlOperator",             "SeaGreen2",    "",            "bold", ],
-                        \               [ "xmlCommentPart",            "#557F8F",      "bg",           "", ],
-                        \               [ "xmlEqual",                  "#00B780",      "",             "bold", ],
-						\			],
-						\		4:	[
-						\               [ "ColorColumn",               "NONE",         "GoldenRod4","NONE", ],
-                        \               [ "asciidocBlockTitle",        "#8FBFDC",      "bg",        "NONE", ],
-                        \               [ "asciidocPassthroughBlock",  "RoyalBlue1",   "",          "", ],
-                        \               [ "asciidocQuotedSuperscript", "#99AD6A",      "bg",        "NONE",   ],
-                        \               [ "asciidocOneLineTitle",      "#71D3B4",      "#112A33",   "underline", ],
-                        \               [ "asciidocQuotedBold",        "Green2",          "#1E4959", "italic", ],
-                        \               [ "asciidocQuotedEmphasized",  "DarkSeaGreen3",   "", "italic", ],
-                        \               [ "asciidocQuotedEmphasized2", "DarkSeaGreen3",   "", "italic", ],
-                        \               [ "asciidocQuotedSingleQuoted","Green2", "",  "italic", ],
-                        \               [ "asciidocQuotedUnconstrainedBold", "Green2","#1E4959", "", ],
-                        \               [ "asciidocQuotedUnconstrainedEmphasized", "DarkSeaGreen3", "",  "", ],
-                        \               [ "asciidocSect1",             "FireBrick1",      "#112A33", "bold,underline", ],
-                        \               [ "asciidocSect2",             "#5FD75F",      "#1C4F4F",  "italic", ],
-                        \               [ "asciidocSect3",             "DarkSeaGreen3",   "Gray26",      "underline", ],
-                        \               [ "asciidocSect4",             "#5FD75F",         "#003366",     ""],
-                        \               [ "asciidocTableBlock",        "#73BF73",      "",          "", ],
-                        \               [ "asciidocTablePrefix",       "CadetBlue4",   "",          "", ],
-                        \               [ "asciidocTablePrefix2",      "SeaGreen2",    "",          "", ],
-                        \               [ "asciidocTwoLineTitle",      "SlateBlue1",   "Black",     "italic",   ],
-                        \               [ "htmlCommentPart",           "#77996C",      "bg",        "italic", ],
-                        \               [ "htmlError",                 "Linen",        "DarkRed",   "", ],
-                        \               [ "htmlSpecialChar",           "SlateGray3",   "",          "", ],
-                        \               [ "htmlTagName",               "SlateBlue2",   "#152933",   "bold,italic", ],
-                        \               [ "markdownLinkText",          "SlateGray2",   "",          "italic", ],
-                        \               [ "markdownOrderedListMarker", "#009F6F",      "",          "bold", ],
-                        \               [ "nerdtreeDir",               "#77996C",      "#0e2628",   "", ],
-                        \               [ "nerdtreeDirSlash",          "#77996C",      "",          "", ],
-                        \               [ "nerdtreeFile",              "#00B880",      "",          "", ],
-                        \               [ "nerdtreeOpenable",          "PaleTurquoise","",          "bold",   ],
-                        \               [ "netrwComment",              "#42A396",      "",          "", ],
-						\               [ "nonText",                   "#408C3F",      "bg",        "NONE", ],
-                        \               [ "plsqlOperator",             "RoyalBlue3",   "",          "bold", ],
-                        \               [ "xmlCommentPart",            "#77996C",      "bg",        "", ],
-                        \               [ "xmlEqual",                  "LightGoldenRod4","",        "bold", ],
-						\			],
-						\		5:	[
-						\               [ "ColorColumn",               "Linen",           "Gray30", "NONE",   ],
-                        \               [ "asciidocBlockTitle",        "#CC4455",         "",       "NONE",   ],
-                        \               [ "asciidocPassthroughBlock",  "#009F6F",         "",       "italic", ],
-                        \               [ "asciidocQuotedSuperscript", "PaleGreen3",      "",       "NONE",   ],
-                        \               [ "asciidocOneLineTitle",      "#71D3B4",         "",       "underline", ],
-                        \               [ "asciidocQuotedBold",        "Green2",          "",       "italic", ],
-                        \               [ "asciidocQuotedEmphasized",  "DarkSeaGreen2",   "",       "italic", ],
-                        \               [ "asciidocQuotedEmphasized2", "#C19EFF",         "",       "italic", ],
-                        \               [ "asciidocQuotedSingleQuoted","Green2",          "",       "italic", ],
-                        \               [ "asciidocQuotedUnconstrainedBold", "Green2","", "", ],
-                        \               [ "asciidocQuotedUnconstrainedEmphasized",        "DarkSeaGreen3",       "",  "", ],
-                        \               [ "asciidocSect1",             "FireBrick1",      "",       "bold,underline", ],
-                        \               [ "asciidocSect2",             "#5FD75F",         "",       "underline", ],
-                        \               [ "asciidocSect3",             "DarkSeaGreen3",   "",       "underline", ],
-                        \               [ "asciidocSect4",             "#5FD75F",         "",       ""],
-                        \               [ "asciidocTableBlock",        "#73BF73",         "",       "", ],
-                        \               [ "asciidocTablePrefix",       "Maroon",          "",       "bold", ],
-                        \               [ "asciidocTablePrefix2",      "SeaGreen2",       "",       "", ],
-                        \               [ "asciidocTwoLineTitle",      "Green2",          "",       "NONE",   ],
-                        \               [ "htmlCommentPart",           "#6A6A6A",         "",       "italic", ],
-                        \               [ "htmlError",                 "#C59F6F",         "",       "bold", ],
-                        \               [ "htmlSpecialChar",           "SlateGray3",      "",       "underline", ],
-                        \               [ "htmlTagName",               "Blue1",           "#152933","italic", ],
-                        \               [ "markdownLinkText",          "SlateGray2",      "",       "italic", ],
-                        \               [ "markdownOrderedListMarker", "#009F6F",         "",       "bold", ],
-                        \               [ "nerdtreeDir",               "LightSteelBlue",  "",       "", ],
-                        \               [ "nerdtreeDirSlash",          "LightSteelBlue",  "",       "", ],
-                        \               [ "nerdtreeFile",              "SkyBlue2",        "",       "", ],
-                        \               [ "nerdtreeOpenable",          "#AA88BB",         "",       "bold",   ],
-                        \               [ "netrwComment",              "DodgerBlue3",     "",       "", ],
-						\               [ "nonText",                   "#EE4455",         "",       "NONE",   ],
-                        \               [ "plsqlOperator",             "RosyBrown",       "",       "bold", ],
-                        \               [ "xmlCommentPart",            "IndianRed4",      "",       "", ],
-                        \               [ "xmlEqual",                  "LightGoldenRod4", "",       "bold", ],
-						\			],
-           \            },
-           \ }
-        " Set The Limits: WARN: if limits are not set properly, items may not display as expected
-        for key in keys(s:dic_hi_options)
-            if  has_key(s:dic_cf_options,key)
-                execute 'let hardcodedlimit = s:dic_cf_options.' . key . '[1]'
-                " except boolean options which only have one group of highlights per option-key
-                if (hardcodedlimit == (-1))
-                    execute 'let      s:dic_cf_options.' . key . '[1] = ' .
-                        \   'len(keys(s:dic_hi_options.' . key . '))-1'
-                endif
-            endif
-        endfor
+" ]]]1
 
-        " TODO: check: should below cp be re-enabled (disabled for performance concerns)?
-        " let g:briofita_ke ys = copy(s:briofita_allowed_parms)
-        call s:BuildExportVar(s:dic_hi_options, s:export_cycling_highlights)
+hi Normal guifg=PowderBlue guibg=#062926 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi _Block guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi _Bracket guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi _Comment guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi _Operator guifg=#00A8CC guibg=bg gui=NONE  ctermfg=38 ctermbg=bg cterm=NONE 
+hi aapCommand guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi aapComment guifg=#557F8F guibg=bg gui=italic  ctermfg=66 ctermbg=bg cterm=italic 
+hi aapVariable guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi adaAssignment guifg=Red guibg=bg gui=NONE  ctermfg=Red ctermbg=bg cterm=NONE 
+hi adaAttribute guifg=DodgerBlue3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi adaSpecial guifg=RosyBrown guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi anyId guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocAdmonition guifg=SlateBlue guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi asciidocAdmonitionNote guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi asciidocAdmonitionWarn guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocAnchorMacro guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocAttributeEntry guifg=DarkSeaGreen4 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi asciidocAttributeList guifg=CadetBlue4 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi asciidocAttributeMacro guifg=DodgerBlue2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi asciidocAttributeRef guifg=#9A85FF guibg=#152933 gui=NONE  ctermfg=105 ctermbg=17 cterm=NONE 
+hi asciidocBackslash guifg=VioletRed2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocBiblio guifg=#2DB3A0 guibg=bg gui=bold,italic  ctermfg=37 ctermbg=bg cterm=bold,italic 
+hi asciidocBlockTitle guifg=VioletRed3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi asciidocCallout guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocCommentBlock guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi asciidocCommentLine guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi asciidocDoubleDollarPassthrough guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocEmail guifg=SkyBlue2 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi asciidocEntityRef guifg=#8fbfdc guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi asciidocExampleBlockDelimiter guifg=SlateGray4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocFilterBlock guifg=#A161F5 guibg=bg gui=NONE  ctermfg=135 ctermbg=bg cterm=NONE 
+hi asciidocFootnote guifg=SkyBlue2 guibg=Gray26 gui=italic  ctermfg=0 ctermbg=16 cterm=italic 
+hi asciidocGlossary guifg=#00B780 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi asciidocHLabel guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocHyphenInterpolation guifg=#9FE846 guibg=#573D8C gui=NONE  ctermfg=149 ctermbg=60 cterm=NONE 
+hi asciidocIdMarker guifg=SpringGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocInclude guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi asciidocIndexTerm guifg=Plum4 guibg=Gray10 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi asciidocLineBreak guifg=Gray60 guibg=bg gui=NONE  ctermfg=17 ctermbg=bg cterm=NONE 
+hi asciidocLink guifg=#8870FF guibg=bg gui=bold,underline  ctermfg=99 ctermbg=bg cterm=bold,underline 
+hi asciidocList guifg=#00B780 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi asciidocListBullet guifg=SpringGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocListContinuation guifg=Gray50 guibg=bg gui=italic  ctermfg=17 ctermbg=bg cterm=italic 
+hi asciidocListingBlock guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi asciidocListLabel guifg=MediumSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocListNumber guifg=#00D96C guibg=bg gui=NONE  ctermfg=41 ctermbg=bg cterm=NONE 
+hi asciidocLiteralBlock guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi asciidocLiteralParagraph guifg=#00B780 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi asciidocMacro guifg=YellowGreen guibg=#152933 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi asciidocMacroAttributes guifg=SlateBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocNonAsciidocBar guifg=#00996B guibg=bg gui=bold  ctermfg=29 ctermbg=bg cterm=bold 
+hi asciidocOddnumberedTableCol guifg=#437CAB guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi asciidocOneLineTitle guifg=MediumAquamarine guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi asciidocOpenBlockDelimiter guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi asciidocPagebreak guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi asciidocPassthroughBlock guifg=#9D8888 guibg=bg gui=NONE  ctermfg=138 ctermbg=bg cterm=NONE 
+hi asciidocQuestion guifg=#00B780 guibg=bg gui=italic  ctermfg=36 ctermbg=bg cterm=italic 
+hi asciidocQuoteBlockDelimiter guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi asciidocQuotedAttributeList guifg=#9A85FF guibg=bg gui=italic  ctermfg=105 ctermbg=bg cterm=italic 
+hi asciidocQuotedBold guifg=DeepSkyBlue guibg=bg gui=italic  ctermfg=160 ctermbg=bg cterm=italic 
+hi asciidocQuotedboldAttributeList guifg=Gray50 guibg=bg gui=italic  ctermfg=17 ctermbg=bg cterm=italic 
+hi asciidocQuotedDoubleQuoted guifg=Yellow4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocQuotedEmphasized guifg=SteelBlue2 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi asciidocQuotedEmphasized2 guifg=SteelBlue2 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi asciidocQuotedEmphasizedItalic guifg=Gray75 guibg=bg gui=italic  ctermfg=18 ctermbg=bg cterm=italic 
+hi asciidocQuotedMonospaced guifg=#998F00 guibg=bg gui=NONE  ctermfg=100 ctermbg=bg cterm=NONE 
+hi asciidocQuotedMonospaced2 guifg=Peru guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocQuotedSingleQuoted guifg=Yellow4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocQuotedSubscript guifg=#669900 guibg=bg gui=NONE  ctermfg=64 ctermbg=bg cterm=NONE 
+hi asciidocQuotedSuperscript guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocQuotedUnconstrainedBold guifg=DeepSkyBlue guibg=bg gui=italic  ctermfg=160 ctermbg=bg cterm=italic 
+hi asciidocQuotedUnconstrainedEmphasized guifg=SteelBlue3 guibg=bg gui=italic  ctermfg=10 ctermbg=bg cterm=italic 
+hi asciidocQuotedUnconstrainedMonospaced guifg=#998F00 guibg=bg gui=italic  ctermfg=100 ctermbg=bg cterm=italic 
+hi asciidocReference guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi asciidocRefMacro guifg=LightSlateGray guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi asciidocReplacements guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi asciidocRevisionInfo guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocRuler guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi asciidocSect0 guifg=Salmon guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi asciidocSect1 guifg=#44B6ED guibg=bg gui=underline  ctermfg=75 ctermbg=bg cterm=underline 
+hi asciidocSect2 guifg=#00B2EE guibg=bg gui=NONE  ctermfg=39 ctermbg=bg cterm=NONE 
+hi asciidocSect3 guifg=#0099D9 guibg=bg gui=NONE  ctermfg=32 ctermbg=bg cterm=NONE 
+hi asciidocSect4 guifg=VioletRed3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi asciidocSidebarDelimiter guifg=#BB3333 guibg=bg gui=italic  ctermfg=131 ctermbg=bg cterm=italic 
+hi asciidocSource guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi asciidocTableBlock guifg=#30C4BE guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi asciidocTableDelimiter guifg=#8B5FFF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi asciidocTableDelimiter2 guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi asciidocTablePrefix guifg=#8B5FFF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi asciidocTablePrefix2 guifg=#8B5FFF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi asciidocToDo guifg=#AD61FF guibg=bg gui=underline  ctermfg=135 ctermbg=bg cterm=underline 
+hi asciidocTriplePlusPassthrough guifg=#88CB35 guibg=bg gui=NONE  ctermfg=113 ctermbg=bg cterm=NONE 
+hi asciidocTripplePlusPassthrough guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi asciidocTwoLineTitle guifg=SlateBlue1 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi asciidocURL guifg=LightBlue3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi Assignment guifg=#F3DB8E guibg=bg gui=NONE  ctermfg=222 ctermbg=bg cterm=NONE 
+hi AutoHyperlink guifg=#2AA8A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi AutoHyperlinkCfile guifg=#2AA8A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi AutoHyperlinkURL guifg=#2AA8A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi AutoHyperlinkWord guifg=#2AA8A0 guibg=bg gui=underline  ctermfg=37 ctermbg=bg cterm=underline 
+hi automakeClean guifg=AquaMarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi automakeComment1 guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi automakeConditional guifg=Aquamarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi automakeExtra guifg=AquaMarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi automakeMakeBString guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi automakeSecondary guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi automakeSubDirs guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi awkArrayElement guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi awkComma guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi awkConditional guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi awkFieldVars guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi awkFunction guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi awkParen guifg=Red guibg=bg gui=NONE  ctermfg=Red ctermbg=bg cterm=NONE 
+hi awkPatterns guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi awkRegExp guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi awkRepeat guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi awkSearch guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi awkSpecialCharacter guifg=BurlyWood3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi awkSpecialPrintf guifg=#9FCBD0 guibg=DarkSlateGrey gui=NONE  ctermfg=152 ctermbg=160 cterm=NONE 
+hi awkStatement guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi awkString guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi awkVariables guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi bashStatement guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi bgDdEeFf guifg=LightBlue3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi bold guifg=Plum2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Boolean guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi bufExplorerActBuf guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi bufExplorerHelp guifg=DarkSeaGreen4 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi bufExplorerMapping guifg=#71D3B4 guibg=#1E3B31 gui=NONE  ctermfg=79 ctermbg=23 cterm=NONE 
+hi bufExplorerSortBy guifg=DeepSkyBlue3 guibg=bg gui=underline  ctermfg=160 ctermbg=bg cterm=underline 
+hi bufExplorerTitle guifg=#73A3B9 guibg=#193835 gui=NONE  ctermfg=73 ctermbg=23 cterm=NONE 
+hi bufferGatorAlternateEntry guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi bufferGatorBufferNr guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi bufferGatorBufname guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi bufferGatorBufpath guifg=Turquoise4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi bufferGatorCurrentEntry guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi bufferGatorFileLine guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi bufferGatorModifiedEntry guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi bufferGatorModifiedFileName guifg=Tomato guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi bufferGatorSymbol guifg=Brown3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi bufferGatorTabpageLine guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi bufferGatorUnmodifiedFileName guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi bufferGatorUnmodifiedFileSyntaxKey guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi BufferSaurusCurrentEntry guifg=MediumPurple2 guibg=#0A0A70 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi BuffersaurusFlashMatchedLineHighlight1 guifg=LightSlateBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi BuffersaurusFlashMatchedLineHighlight2 guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi BuffersaurusSyntaxContextedEntry guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi BufferSaurusSyntaxContextedKeyDesc guifg=#779DB2 guibg=bg gui=italic,undercurl  ctermfg=109 ctermbg=bg cterm=italic,undercurl 
+hi bufferSaurusSyntaxContextedKeyFilename guifg=#808080 guibg=bg gui=NONE  ctermfg=244 ctermbg=bg cterm=NONE 
+hi BufferSaurusSyntaxContextedKeyLines guifg=#808080 guibg=bg gui=NONE  ctermfg=244 ctermbg=bg cterm=NONE 
+hi BufferSaurusSyntaxContextedKeyRow guifg=#808080 guibg=bg gui=italic  ctermfg=244 ctermbg=bg cterm=italic 
+hi BufferSaurusSyntaxContextLineNum guifg=#808080 guibg=bg gui=NONE  ctermfg=244 ctermbg=bg cterm=NONE 
+hi BuffersaurusSyntaxContextLines guifg=LightSalmon2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi BufferSaurusSyntaxContextLineText guifg=#77996C guibg=bg gui=italic  ctermfg=101 ctermbg=bg cterm=italic 
+hi BufferSaurusSyntaxFileGroupTitle guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi bufferSaurusSyntaxKey guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi BufferSaurusSyntaxMatchedLineNum guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi BuffersaurusSyntaxMatchedLines guifg=Tan2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi BufferSaurusSyntaxMatchedLineText guifg=#D6B883 guibg=bg gui=italic  ctermfg=180 ctermbg=bg cterm=italic 
+hi BufferSaurusSyntaxUncontextedLineNum guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi BufferSaurusSyntaxUncontextedLineText guifg=#C6B6FE guibg=bg gui=NONE  ctermfg=183 ctermbg=bg cterm=NONE 
+hi builtinFunc guifg=#dad085 guibg=bg gui=underline  ctermfg=186 ctermbg=bg cterm=underline 
+hi builtinObj guifg=#7F9D90 guibg=bg gui=NONE  ctermfg=108 ctermbg=bg cterm=NONE 
+hi calOperator guifg=#af5f00 guibg=bg gui=NONE  ctermfg=130 ctermbg=bg cterm=NONE 
+hi cAnsiFunction guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi cAnsiName guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cBlock guifg=seagreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cBoolean guifg=CadetBlue3 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi cBraces guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi cBracket guifg=Green guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi cCharacter guifg=SteelBlue2 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi cComment guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi cConditional guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi cConstant guifg=#6B8FCC guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi cCppString guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi cDefine guifg=#1AA51B guibg=bg gui=NONE  ctermfg=34 ctermbg=bg cterm=NONE 
+hi cDefined guifg=#1AA51B guibg=bg gui=italic  ctermfg=34 ctermbg=bg cterm=italic 
+hi cDelimiter guifg=#77BBB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi cDoxygenComment guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ceylonBoolean guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi ceylonClassDecl guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi ceylonComment guifg=LightSkyBlue4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ceylonCommentStar guifg=CornflowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ceylonCommentTitle guifg=CornflowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ceylonConditional guifg=#21C43B guibg=bg gui=NONE  ctermfg=41 ctermbg=bg cterm=NONE 
+hi ceylonDocComment guifg=CornflowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ceylonDocParam guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ceylonDocTags guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ceylonExceptions guifg=BurlyWood3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ceylonExternal guifg=#99AD6A guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi ceylonJDKbuiltin guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ceylonLineComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi ceylonNumber guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi ceylonOperator guifg=#DE44A4 guibg=bg gui=NONE  ctermfg=169 ctermbg=bg cterm=NONE 
+hi ceylonParen guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi ceylonParen1 guifg=BurlyWood3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ceylonParen2 guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ceylonParenT guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ceylonRepeat guifg=#21C43B guibg=bg gui=NONE  ctermfg=41 ctermbg=bg cterm=NONE 
+hi ceylonScopeDecl guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi ceylonStatement guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi ceylonString guifg=#54A3BF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi ceylonTodo guifg=Tomato3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi ceylonType guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi CfgComment guifg=#7EB49C guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi CfgOnOff guifg=Aquamarine3 guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi CfgSection guifg=#7EB49C guibg=bg gui=italic  ctermfg=109 ctermbg=bg cterm=italic 
+hi CfgString guifg=#65C254 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi CfgValues guifg=SkyBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cFloat guifg=AquaMarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cflTypeRegion guifg=#779DB2 guibg=bg gui=italic  ctermfg=109 ctermbg=bg cterm=italic 
+hi cFormat guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cFunction guifg=#C6B6FE guibg=bg gui=NONE  ctermfg=183 ctermbg=bg cterm=NONE 
+hi cFunctionTag guifg=#6B8FCC guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi changeLogError guifg=Salmon1 guibg=#823636 gui=NONE  ctermfg=0 ctermbg=95 cterm=NONE 
+hi changeLogFiles guifg=#30BCC1 guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi changeLogFuncs guifg=#3FBF77 guibg=bg gui=NONE  ctermfg=72 ctermbg=bg cterm=NONE 
+hi changeLogHeader guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi changeLogMonth guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi changeLogNumber guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi changeLogText guifg=#7E9CD7 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi Character guifg=CadetBlue2 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi cheat40angle guifg=Firebrick3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cheat40command guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cheat40dblangle guifg=Firebrick3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cheat40descr guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi cheat40header guifg=#009F6F guibg=bg gui=underline  ctermfg=35 ctermbg=bg cterm=underline 
+hi cheat40mode guifg=CadetBlue4 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi cIdentifier guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi cInclude guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi cIncluded guifg=#77996C guibg=bg gui=NONE  ctermfg=101 ctermbg=bg cterm=NONE 
+hi cLabel guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi clojureAnonArg guifg=DarkGrey guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi clojureBoolean guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi clojureDefine guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi clojureDispatch guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi clojureFunction guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi clojureMacro guifg=DeepSkyBlue guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi clojureMeta guifg=DarkGrey guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi clojureNumber guifg=DarkGrey guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi clojureRegexp guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi clojureRegexpCharClass guifg=DarkGrey guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi clojureRegexpOr guifg=DarkGrey guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi clojureRegexpQuantifier guifg=DarkSeaGreen4 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi clojureRepeat guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi clojureString guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi clojureStringDelimiter guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi clojureSymbol guifg=#8B7FFF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi cMakeOperators guifg=#99C4CC guibg=bg gui=NONE  ctermfg=116 ctermbg=bg cterm=NONE 
+hi cMakeVariableValue guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi cMulti guifg=Red guibg=bg gui=bold  ctermfg=Red ctermbg=bg cterm=bold 
+hi cNumber guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cobolBadLine guifg=Gray60 guibg=#000022 gui=NONE  ctermfg=17 ctermbg=0 cterm=NONE 
+hi cobolLine guifg=Gray60 guibg=#000022 gui=NONE  ctermfg=17 ctermbg=0 cterm=NONE 
+hi cobolMarker guifg=Orchid4 guibg=#001133 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi cobolString guifg=CadetBlue guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi cOctal guifg=#B3AC64 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cOctalZero guifg=#FF8855 guibg=bg gui=NONE  ctermfg=209 ctermbg=bg cterm=NONE 
+hi coffeeBracket guifg=MediumTurquoise guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi coffeeConditional guifg=Khaki guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi coffeeKeyword guifg=Khaki guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi coffeeParen guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi coffeeRepeat guifg=MediumPurple guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi coffeeSpecialVar guifg=Chocolate guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi coffeeStatement guifg=Burlywood3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ColorColumn guifg=#66D999 guibg=#294C44 gui=NONE  ctermfg=78 ctermbg=23 cterm=NONE 
+hi Comment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi conceal guifg=BurlyWood3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Conditional guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi confComment guifg=CadetBlue guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi confFunction guifg=#65C254 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi configComment guifg=CadetBlue guibg=bg gui=italic  ctermfg=184 ctermbg=bg cterm=italic 
+hi configFunction guifg=#65C254 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi configNumber guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi configOperator guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi configString guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi confString guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi confTodo guifg=#CC4455 guibg=#1C3644 gui=underline  ctermfg=167 ctermbg=23 cterm=underline 
+hi conId guifg=#7EB4FF guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi Constant guifg=#C5B5C5 guibg=bg gui=NONE  ctermfg=182 ctermbg=bg cterm=NONE 
+hi cOperator guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi cParen guifg=Red guibg=bg gui=NONE  ctermfg=Red ctermbg=bg cterm=NONE 
+hi cppAccess guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi cppBoolean guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cppCast guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi cppNumber guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi cppOperator guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi cppSTL guifg=#39C1C1 guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi cppSTLtype guifg=SkyBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cppStructure guifg=PaleGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cppType guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi cPreCondit guifg=#3566B8 guibg=bg gui=NONE  ctermfg=61 ctermbg=bg cterm=NONE 
+hi cPreConditMatch guifg=#3566B8 guibg=bg gui=NONE  ctermfg=61 ctermbg=bg cterm=NONE 
+hi cPreProc guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cRepeat guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi cSpecial guifg=#CC5757 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi cSpecialCharacter guifg=RoyalBlue1 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi cssAdvancedProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssAnimationAttr guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssAttr guifg=LightSkyBlue3 guibg=#152933 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi cssAttrComma guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssAttrRegion guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssAuralAttr guifg=PowderBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssAuralProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssBackgroundAttr guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssBackgroundProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssBorderAttr guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssBorderOutlineAttr guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssBorderOutlineProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssBorderProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssBorderVal guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssBoxAttr guifg=Ivory3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssBoxProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssBraceError guifg=IndianRed1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssBraces guifg=SeaGreen3 guibg=#152933 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi cssClassName guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi cssClassNameDot guifg=PowderBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssColor guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi cssColorAttr guifg=Wheat3 guibg=bg gui=NONE  ctermfg=40 ctermbg=bg cterm=NONE 
+hi cssColorProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssComment guifg=#5D6B9C guibg=bg gui=NONE  ctermfg=61 ctermbg=bg cterm=NONE 
+hi cssCommonAttr guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssCommonProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssCommonVal guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssDefineBlock guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssDefinition guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssDeprecated guifg=Gray65 guibg=bg gui=italic  ctermfg=17 ctermbg=bg cterm=italic 
+hi cssError guifg=IndianRed1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssFontAttr guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssFontDescriptor guifg=AntiqueWhite3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssFontDescriptorAttr guifg=AntiqueWhite3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssFontDescriptorFunction guifg=AntiqueWhite3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssFontDescriptorProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssFontProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssFontVal guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssFunction guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssFunctionComma guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssFunctionName guifg=#73A3B9 guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi cssGeneratedContentAttr guifg=Ivory3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssGeneratedContentProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssIdentifier guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssImportant guifg=#FF30AD guibg=bg gui=NONE  ctermfg=205 ctermbg=bg cterm=NONE 
+hi cssInclude guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssListProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssMarginProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssMedia guifg=SeaGreen3 guibg=#152933 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi cssMediaComma guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssMediaKeyword guifg=SeaGreen3 guibg=#152933 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi cssMediaType guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssNoise guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssPaddingProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssPagingAttr guifg=Ivory3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssPagingProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssPositioningAttr guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssPositioningProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssPseudo guifg=#29AA29 guibg=#152933 gui=NONE  ctermfg=34 ctermbg=17 cterm=NONE 
+hi cssPseudoClass guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi cssPseudoClassFn guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi cssPseudoClassId guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi cssPseudoClassLang guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi cssRenderAttr guifg=Ivory3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssRenderProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssRuleProp guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssSelector guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi cssSelectorOp guifg=Gray50 guibg=bg gui=NONE  ctermfg=17 ctermbg=bg cterm=NONE 
+hi cssSelectorOp2 guifg=LightYellow3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssString guifg=#AAAC9C guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi cssStringQ guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi cssStringQQ guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi cssStyle guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssTableAttr guifg=Ivory3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssTableProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssTagName guifg=#21AB3B guibg=#152933 gui=NONE  ctermfg=35 ctermbg=17 cterm=NONE 
+hi cssTextAttr guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssTextProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssUIattr guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssUIProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssUnicodeEscape guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi cssUnicodeRange guifg=DarkSeaGreen2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi cssUnitDecorators guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssURL guifg=#2FBBA6 guibg=bg gui=underline  ctermfg=37 ctermbg=bg cterm=underline 
+hi cssValueAngle guifg=LightSkyBlue3 guibg=#152933 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi cssValueFrequency guifg=LightSkyBlue3 guibg=#152933 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi cssValueInteger guifg=LightSkyBlue3 guibg=#152933 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi cssValueLength guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi cssValueNumber guifg=#29AA29 guibg=#152933 gui=NONE  ctermfg=34 ctermbg=17 cterm=NONE 
+hi cssValueTime guifg=LightSkyBlue3 guibg=#152933 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi cssVendor guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cssVisualProp guifg=#B7A669 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi cssVisualVal guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cStatement guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi cStorageClass guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi cString guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi cStructure guifg=SeaGreen3 guibg=#152933 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi csvColumnEven guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi csvColumnHeaderEven guifg=Green3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi csvColumnHeaderOdd guifg=#DB2929 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi csvColumnOdd guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi csvComment guifg=#73A3B9 guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi csvCurrentColumn guifg=#66AAFF guibg=#060906 gui=NONE  ctermfg=75 ctermbg=0 cterm=NONE 
+hi csvDelimiter guifg=Green3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi cTodo guifg=Plum3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi ctrlPBookmark guifg=Cyan3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ctrlPBufName guifg=DarkOliveGreen3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi ctrlpLinePre guifg=CadetBlue3 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi ctrlPMatch guifg=#90CFB3 guibg=bg gui=NONE  ctermfg=115 ctermbg=bg cterm=NONE 
+hi ctrlPMode1 guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi ctrlPNoEntries guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi ctrlPPrtBase guifg=#90CFB3 guibg=bg gui=NONE  ctermfg=115 ctermbg=bg cterm=NONE 
+hi ctrlPPrtCursor guifg=#71D3B4 guibg=bg gui=underline  ctermfg=79 ctermbg=bg cterm=underline 
+hi ctrlPqfLineCol guifg=Green3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi ctrlPTabExtra guifg=CadetBlue3 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi ctrlPTagKind guifg=Orange2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ctrlSpaceFound guifg=#FFAADD guibg=Gray20 gui=NONE  ctermfg=218 ctermbg=0 cterm=NONE 
+hi ctrlSpaceNormal guifg=#71D3B4 guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi ctrlSpaceSearch guifg=#CC4455 guibg=bg gui=underline  ctermfg=167 ctermbg=bg cterm=underline 
+hi ctrlSpaceSelected guifg=#6FB16F guibg=#193835 gui=NONE  ctermfg=71 ctermbg=23 cterm=NONE 
+hi ctrlSpaceStatus guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi cType guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi Cursor guifg=Black guibg=#55D5E3 gui=underline  ctermfg=34 ctermbg=80 cterm=underline 
+hi CursorColumn guifg=beige guibg=#574AAB gui=NONE  ctermfg=124 ctermbg=61 cterm=NONE 
+hi cursorIM guifg=Gray90 guibg=FireBrick gui=NONE  ctermfg=18 ctermbg=0 cterm=NONE 
+hi CursorLine guifg=#FFC8AD guibg=#800045 gui=NONE  ctermfg=223 ctermbg=89 cterm=NONE 
+hi CursorLineNr guifg=VioletRed1 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi cUserFunction guifg=#98B3AD guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi cUserFunctionPointer guifg=SpringGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi cUserLabel guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi dbgBreakPt guifg=fg guibg=FireBrick gui=NONE  ctermfg=fg ctermbg=0 cterm=NONE 
+hi dbgCurrent guifg=Tomato guibg=#573d8c gui=NONE  ctermfg=0 ctermbg=60 cterm=NONE 
+hi debChangeLogCloses guifg=#885FFF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi debChangeLogEmail guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi debChangeLogEntry guifg=#7EA79C guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi debChangeLogFooter guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi debChangeLogHeader guifg=LightBlue3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi debChangeLogLP guifg=SandyBrown guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi debChangeLogName guifg=AquaMarine guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Debug guifg=#88CB35 guibg=bg gui=NONE  ctermfg=113 ctermbg=bg cterm=NONE 
+hi DebugSpecial guifg=HoneyDew4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi DebugString guifg=#DAA099 guibg=bg gui=NONE  ctermfg=180 ctermbg=bg cterm=NONE 
+hi DebugType guifg=LimeGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Decorator guifg=#57d700 guibg=bg gui=NONE  ctermfg=76 ctermbg=bg cterm=NONE 
+hi Define guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Definition guifg=#f8ed97 guibg=bg gui=NONE  ctermfg=228 ctermbg=bg cterm=NONE 
+hi defKeywords guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi Delimiter guifg=#77BBB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi diffAdd guifg=#21A43B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi diffAdded guifg=#21A43B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi diffBDiffer guifg=SteelBlue3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi diffChange guifg=CadetBlue4 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi diffChanged guifg=CadetBlue4 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi diffComment guifg=#77996C guibg=bg gui=NONE  ctermfg=101 ctermbg=bg cterm=NONE 
+hi diffCommon guifg=SteelBlue3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi diffDelete guifg=LightBlue4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi diffDiffer guifg=Green3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi diffFile guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi diffIdentical guifg=Green3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi diffIsA guifg=SteelBlue3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi diffLine guifg=#2FC2AC guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi diffNewFile guifg=#66D999 guibg=bg gui=NONE  ctermfg=78 ctermbg=bg cterm=NONE 
+hi diffNoEOL guifg=SteelBlue3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi diffOldFile guifg=Plum3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi diffOldLine guifg=Gray30 guibg=bg gui=NONE  ctermfg=17 ctermbg=bg cterm=NONE 
+hi diffOnly guifg=Green3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi diffRemoved guifg=HotPink3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi diffSubname guifg=#CFAC44 guibg=bg gui=underline  ctermfg=179 ctermbg=bg cterm=underline 
+hi dimmed guifg=#73A3B9 guibg=#193835 gui=NONE  ctermfg=73 ctermbg=23 cterm=NONE 
+hi Directory guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi docbkKeyword guifg=PaleGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi docbkRegion guifg=#A0ACAC guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi docbkTitle guifg=HotPink3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dosIniHeader guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dosIniLabel guifg=#21C43B guibg=bg gui=NONE  ctermfg=41 ctermbg=bg cterm=NONE 
+hi dosIniNumber guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dotBraceEncl guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dotBraceErr guifg=Khaki2 guibg=VioletRed4 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi dotBrackEncl guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dotBrackErr guifg=Khaki2 guibg=VioletRed4 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi dotIdentifier guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi dotKeyChar guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dotKeyword guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dotParEncl guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dotParErr guifg=Khaki2 guibg=VioletRed4 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi dotString guifg=#99ad6a guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi dottedName guifg=#57d700 guibg=bg gui=NONE  ctermfg=76 ctermbg=bg cterm=NONE 
+hi dotTodo guifg=LemonChiffon3 guibg=Maroon4 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi dotType guifg=PaleGreen2 guibg=DarkSlateGray gui=NONE  ctermfg=0 ctermbg=160 cterm=NONE 
+hi dtALocale guifg=LightSkyBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dtBooleanKey guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi dtBooleanValue guifg=PowderBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dtComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi dtdConstant guifg=#C5B5C5 guibg=bg gui=NONE  ctermfg=182 ctermbg=bg cterm=NONE 
+hi dtDelim guifg=#5DDD9C guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi dtdEntity guifg=#E191A1 guibg=bg gui=NONE  ctermfg=175 ctermbg=bg cterm=NONE 
+hi dtdFunction guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dtdParamEntityDPunct guifg=Bisque3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dtdParamEntityPunct guifg=Coral3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dtdString guifg=#A1B1A1 guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi dtdTag guifg=#D84DD8 guibg=bg gui=NONE  ctermfg=170 ctermbg=bg cterm=NONE 
+hi dtdTagName guifg=#CDA839 guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi dtExecKey guifg=#009F6F guibg=bg gui=underline  ctermfg=35 ctermbg=bg cterm=underline 
+hi dtExecParam guifg=LightSkyBlue2 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi dtGroup guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi dtLocaleKey guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi dtNumericKey guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi dtStringKey guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi dtTypeKey guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi dtTypeValue guifg=PowderBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi dtXAddKey guifg=#009F6F guibg=bg gui=underline  ctermfg=35 ctermbg=bg cterm=underline 
+hi easyMotionShade guifg=DarkGrey guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi EasyMotionTarget guifg=Linen guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi EasyMotionTarget2First guifg=#DF44DF guibg=bg gui=NONE  ctermfg=170 ctermbg=bg cterm=NONE 
+hi EasyMotionTarget2Second guifg=#BF44BF guibg=bg gui=NONE  ctermfg=133 ctermbg=bg cterm=NONE 
+hi ebnfMetaIdentifier guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi endOfBuffer guifg=#003966 guibg=bg gui=NONE  ctermfg=23 ctermbg=bg cterm=NONE 
+hi Entity guifg=#F4E891 guibg=CadetBlue4 gui=NONE  ctermfg=222 ctermbg=184 cterm=NONE 
+hi Error guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi errorMsg guifg=Black guibg=#8B7FFF gui=NONE  ctermfg=34 ctermbg=105 cterm=NONE 
+hi eRubyBlock guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi eRubyDelimiter guifg=CadetBlue4 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi eRubyExpression guifg=#00B780 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi Exception guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ExpectComment guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi ExpectNumber guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi ExpectString guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi extraditeLogId guifg=#5D999C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi extraditeLogName guifg=#99AD6A guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi extraditeLogTag guifg=#009F6F guibg=bg gui=italic  ctermfg=35 ctermbg=bg cterm=italic 
+hi FileBeagleDirectoryEntry guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fileEntry guifg=#70B769 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi filesearchCurrentEntry guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fileSearchSyntaxFileGroupTitle guifg=DarkCyan guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi fileSearchSyntaxUncontextedLineNum guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi filesearchSyntaxUncontextedLineText guifg=PowderBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Float guifg=Aquamarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi FoldColumn guifg=#21C43B guibg=#082926 gui=NONE  ctermfg=41 ctermbg=0 cterm=NONE 
+hi Folded guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi foldedFmrLine guifg=#60801F guibg=bg gui=NONE  ctermfg=64 ctermbg=bg cterm=NONE 
+hi FortranComment guifg=#2D88A2 guibg=bg gui=NONE  ctermfg=31 ctermbg=bg cterm=NONE 
+hi FortranConditional guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi FortranConditionalOb guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi FortranIntrinsic guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi FortranNumber guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi FortranObsolete guifg=Turquoise3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi FortranOperator guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi FortranParen guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi FortranStorageClass guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi FortranString guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi FortranTab guifg=LemonChiffon2 guibg=#061126 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi FortranType guifg=#2AB06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi FortranUnitHeader guifg=#539AC0 guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi fountainActionForced guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fountainBold guifg=DodgerBlue2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi fountainBoldItalic guifg=#FFC8AD guibg=bg gui=italic  ctermfg=223 ctermbg=bg cterm=italic 
+hi fountainBoneyard guifg=LightSalmon4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fountainCentered guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi fountainCharacter guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fountainDialogue guifg=#8ECFBE guibg=bg gui=italic  ctermfg=115 ctermbg=bg cterm=italic 
+hi fountainHeader1 guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi fountainHeader2 guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi fountainHeader3 guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi fountainHeader4 guifg=#5D999C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi fountainHeader5 guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi fountainHeader6 guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi fountainItalic guifg=#C29955 guibg=bg gui=italic  ctermfg=137 ctermbg=bg cterm=italic 
+hi fountainLyric guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fountainNotes guifg=Gray50 guibg=bg gui=NONE  ctermfg=17 ctermbg=bg cterm=NONE 
+hi fountainPageBreak guifg=#556B2F guibg=bg gui=NONE  ctermfg=58 ctermbg=bg cterm=NONE 
+hi fountainParenthetical guifg=Gray50 guibg=bg gui=NONE  ctermfg=17 ctermbg=bg cterm=NONE 
+hi fountainSceneHeading guifg=#CC6688 guibg=bg gui=underline  ctermfg=168 ctermbg=bg cterm=underline 
+hi fountainSceneNumber guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi fountainSection guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi fountainSynopses guifg=CornFlowerBlue guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi fountainTitlePage guifg=DarkSeaGreen4 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi fountainTransition guifg=#CC7755 guibg=bg gui=italic  ctermfg=173 ctermbg=bg cterm=italic 
+hi fountainTransitionForced guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi fountainUnderlined guifg=#21C43B guibg=bg gui=italic  ctermfg=41 ctermbg=bg cterm=italic 
+hi fsComment guifg=#557F8F guibg=bg gui=italic  ctermfg=66 ctermbg=bg cterm=italic 
+hi fsDevice guifg=MediumSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fsDeviceError guifg=IndianRed2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fsDeviceKeyword guifg=MediumSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fsDeviceUUID guifg=#99AD6A guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi fsFreqPassError guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi fsFreqPassNumber guifg=#7DB3FF guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi fsMountPoint guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi fsMountPointError guifg=ForestGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fsMountPointKeyword guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fsOperator guifg=Gray50 guibg=bg gui=NONE  ctermfg=17 ctermbg=bg cterm=NONE 
+hi fsOptions guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi fsOptionsExt2Errors guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi fsOptionsGeneral guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi fsOptionsKeywords guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi fsOptionsNumber guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fsOptionsString guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fsType guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi fsTypeKeyword guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi fsTypeUnknown guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi fugitiveblameAnnotation guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fugitiveblameBoundary guifg=#00B99C guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi fugitiveblameDelimiter guifg=DarkSlateGray4 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi fugitiveblameHash guifg=#00A99C guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi fugitiveblameLineNumber guifg=#5D899C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi fugitiveblameNotCommittedYet guifg=#5D899C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi fugitiveblameOriginalFile guifg=#99AD6A guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi fugitiveblameOriginalLineNumber guifg=Plum4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi fugitiveblameShort guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi fugitiveblameTime guifg=#00A99C guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi fugitiveblameUncommitted guifg=bg guibg=bg gui=NONE  ctermfg=bg ctermbg=16 cterm=NONE 
+hi Function guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitcommitArrow guifg=#9F0096 guibg=bg gui=NONE  ctermfg=126 ctermbg=bg cterm=NONE 
+hi gitcommitBlank guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi gitCommitBranch guifg=HotPink1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitCommitComment guifg=#9F0096 guibg=bg gui=NONE  ctermfg=126 ctermbg=bg cterm=NONE 
+hi gitcommitDiscarded guifg=#9F0096 guibg=bg gui=NONE  ctermfg=126 ctermbg=bg cterm=NONE 
+hi gitcommitDiscardedArrow guifg=#9F0096 guibg=bg gui=NONE  ctermfg=126 ctermbg=bg cterm=NONE 
+hi gitcommitDiscardedFile guifg=CadetBlue2 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi gitcommitDiscardedType guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi gitcommitFile guifg=CadetBlue2 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi gitcommitHeader guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi gitCommitNoBranch guifg=#D788DD guibg=bg gui=NONE  ctermfg=176 ctermbg=bg cterm=NONE 
+hi gitcommitNoChanges guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi gitCommitOnBranch guifg=#D788DD guibg=bg gui=NONE  ctermfg=176 ctermbg=bg cterm=NONE 
+hi gitCommitOverflow guifg=FireBrick3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitcommitSelected guifg=#9F0096 guibg=bg gui=NONE  ctermfg=126 ctermbg=bg cterm=NONE 
+hi gitcommitSelectedArrow guifg=#9F0096 guibg=bg gui=NONE  ctermfg=126 ctermbg=bg cterm=NONE 
+hi gitcommitSelectedFile guifg=CadetBlue2 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi gitcommitSelectedType guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi gitcommitSummary guifg=SpringGreen4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitcommitType guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi gitcommitUnmerged guifg=#18E000 guibg=bg gui=NONE  ctermfg=40 ctermbg=bg cterm=NONE 
+hi gitcommitUnmergedArrow guifg=#18E000 guibg=bg gui=NONE  ctermfg=40 ctermbg=bg cterm=NONE 
+hi gitcommitUnmergedFile guifg=CadetBlue2 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi gitcommitUnmergedType guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi gitcommitUntracked guifg=#9F0096 guibg=bg gui=NONE  ctermfg=126 ctermbg=bg cterm=NONE 
+hi gitcommitUntrackedFile guifg=Plum3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitCommitWarning guifg=OrangeRed guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitDate guifg=Aquamarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitDateHeader guifg=#9F88DD guibg=bg gui=NONE  ctermfg=140 ctermbg=bg cterm=NONE 
+hi gitDiff guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitDiffAdded guifg=#B3AC64 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi gitDiffRemoved guifg=MediumSlateBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitEmail guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi gitEmailDelimiter guifg=#77BBB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi gitFile guifg=#8B7FFF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi gitGutterAdd guifg=Orange guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitGutterChange guifg=DarkOliveGreen2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi gitGutterChangeDelete guifg=FireBrick2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitGutterChangeLineDefault guifg=CornFlowerBlue guibg=Gray20 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi gitGutterDelete guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi gitHash guifg=#D2E000 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi gitHashAbbrev guifg=#D2E000 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi gitHunk guifg=#7F9E8C guibg=bg gui=NONE  ctermfg=108 ctermbg=bg cterm=NONE 
+hi gitIdentity guifg=#99AD6A guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi gitIdentityHeader guifg=#9F88DD guibg=bg gui=NONE  ctermfg=140 ctermbg=bg cterm=NONE 
+hi gitIdentityKeyword guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi gitInfoBranch guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitInfoCommit guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitInfoRepo guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitKeyword guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi gitMode guifg=Aquamarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitNotesHeader guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi gitReference guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitReflogHeader guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi gitReflogMiddle guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gitStage guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi gitTitle guifg=#8B7FFF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi gitType guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goBif guifg=SteelBlue3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi goBlock guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goBoolean guifg=LightSlateBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goBranch guifg=#9ECD00 guibg=bg gui=NONE  ctermfg=148 ctermbg=bg cterm=NONE 
+hi goBuildCommentStart guifg=CadetBlue4 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi goBuildDirectives guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goBuildKeyword guifg=MediumPurple1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goBuiltins guifg=SteelBlue3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi goCall guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goCharacter guifg=CadetBlue2 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi goClause guifg=#A1B191 guibg=bg gui=NONE  ctermfg=144 ctermbg=bg cterm=NONE 
+hi goComment guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi goComplexes guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goConcurrent guifg=#00AC9C guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi goConditional guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goConstant guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi goDecimalInt guifg=SteelBlue3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi goDeclaration guifg=SteelBlue2 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi goDeclType guifg=SteelBlue3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi goDirective guifg=#BB9F9F guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi godocComment guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi godocConst guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi godocDefinition guifg=#1AAEDE guibg=bg gui=NONE  ctermfg=38 ctermbg=bg cterm=NONE 
+hi godocFunction guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi godocMethodName guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi godocMethodRec guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi godocTitle guifg=Chocolate3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi godocType guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi godocVar guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goErr guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi goEscapeBigU guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goEscapeC guifg=DarkSeaGreen guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goEscapeError guifg=BurlyWood1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goEscapeOctal guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goEscapeU guifg=DarkSeaGreen guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goEscapeX guifg=DarkSeaGreen guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goExtraType guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goFloat guifg=Aquamarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goFloats guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goFormatSpecifier guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi goFunction guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goHexadecimalInt guifg=Aquamarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goImaginary guifg=Aquamarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goInt guifg=Aquamarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goInteger guifg=Aquamarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goInterface guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goLabel guifg=DarkCyan guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goLineComment guifg=CadetBlue4 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi goMethod guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goNumber guifg=#A6EE76 guibg=bg gui=NONE  ctermfg=156 ctermbg=bg cterm=NONE 
+hi goNumbers guifg=#A6EE76 guibg=bg gui=NONE  ctermfg=156 ctermbg=bg cterm=NONE 
+hi goNumbersCom guifg=#A6EE76 guibg=bg gui=NONE  ctermfg=156 ctermbg=bg cterm=NONE 
+hi goOct guifg=Aquamarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goOctalError guifg=BurlyWood1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goOctalInt guifg=Aquamarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goOctZero guifg=Aquamarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goOperator guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi goPackageComment guifg=CadetBlue4 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi goParen guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goRawString guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi goRepeat guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goSignedInts guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goSpaceError guifg=BurlyWood1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goSpecial guifg=OliveDrab4 guibg=bg gui=NONE  ctermfg=21 ctermbg=bg cterm=NONE 
+hi goSpecialString guifg=OliveDrab4 guibg=bg gui=NONE  ctermfg=21 ctermbg=bg cterm=NONE 
+hi goStatement guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goString guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi goStruct guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goStructDef guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goTitle guifg=SeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goTodo guifg=Tomato3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi goTplAction guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goTplComment guifg=#5D7BA0 guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi goTplControl guifg=#2AA070 guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi goTplFunctions guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi goTplVariable guifg=#63A393 guibg=bg gui=NONE  ctermfg=72 ctermbg=bg cterm=NONE 
+hi goType guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goUnsignedInts guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi goValue guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi GrayMsg guifg=#507080 guibg=#001020 gui=NONE  ctermfg=60 ctermbg=0 cterm=NONE 
+hi GrayMsg2 guifg=#507080 guibg=Black gui=NONE  ctermfg=60 ctermbg=34 cterm=NONE 
+hi GrayMsg3 guifg=#507080 guibg=bg gui=NONE  ctermfg=60 ctermbg=bg cterm=NONE 
+hi groovyScopeDecl guifg=ForestGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gtkRcComment guifg=#5B8999 guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi gtkRcInclude guifg=#63AD9C guibg=bg gui=italic  ctermfg=73 ctermbg=bg cterm=italic 
+hi gtkRcKeyword guifg=#7fa2e6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi gtkRcNumber guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi gtkRcRGBColor guifg=#7fA2E6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi gtkRcStateName guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi gtkRcString guifg=#7fA2E6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi gtkRcStyleKeyword guifg=#7fA2E6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi gtkRcTop guifg=#7fA2E6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi gundoCurrentLocation guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi gundoHelp guifg=#3399FF guibg=bg gui=NONE  ctermfg=69 ctermbg=bg cterm=NONE 
+hi gundoNumber guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi gundoNumberField guifg=#14A076 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi helpBacktick guifg=DodgerBlue guibg=NONE gui=NONE  ctermfg=0 ctermbg=NONE cterm=NONE 
+hi helpBar guifg=FireBrick1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi helpBox1 guifg=#00B780 guibg=NONE gui=NONE  ctermfg=36 ctermbg=NONE cterm=NONE 
+hi helpBox2 guifg=#00B780 guibg=NONE gui=NONE  ctermfg=36 ctermbg=NONE cterm=NONE 
+hi helpBox3 guifg=#00B780 guibg=NONE gui=NONE  ctermfg=36 ctermbg=NONE cterm=NONE 
+hi helpBox4 guifg=#00B780 guibg=NONE gui=NONE  ctermfg=36 ctermbg=NONE cterm=NONE 
+hi helpBox5 guifg=#00B780 guibg=NONE gui=NONE  ctermfg=36 ctermbg=NONE cterm=NONE 
+hi helpCommand guifg=DodgerBlue guibg=NONE gui=NONE  ctermfg=0 ctermbg=NONE cterm=NONE 
+hi helpExample guifg=#77AAAD guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi helpExampleItem guifg=#C29999 guibg=bg gui=underline  ctermfg=138 ctermbg=bg cterm=underline 
+hi helpExCmdHdr guifg=#44AA22 guibg=bg gui=NONE  ctermfg=70 ctermbg=bg cterm=NONE 
+hi helpHeader guifg=#00B780 guibg=NONE gui=NONE  ctermfg=36 ctermbg=NONE cterm=NONE 
+hi helpHeadline guifg=#009953 guibg=NONE gui=italic  ctermfg=29 ctermbg=NONE cterm=italic 
+hi helpHypertextEntry guifg=#41827E guibg=NONE gui=NONE  ctermfg=66 ctermbg=NONE cterm=NONE 
+hi helpHypertextJump guifg=DodgerBlue guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi helpIgnore guifg=bg guibg=bg gui=NONE  ctermfg=bg ctermbg=16 cterm=NONE 
+hi helpNote guifg=DodgerBlue guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi helpNotVi guifg=SteelBlue2 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi helpOption guifg=Tomato guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi helpSection guifg=SkyBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi helpSectionDelim guifg=#00B780 guibg=NONE gui=NONE  ctermfg=36 ctermbg=NONE cterm=NONE 
+hi helpSectionNmbr guifg=#5D8B9C guibg=bg gui=italic  ctermfg=67 ctermbg=bg cterm=italic 
+hi helpSectionTitle guifg=#2AC0CB guibg=bg gui=italic  ctermfg=38 ctermbg=bg cterm=italic 
+hi helpSpecial guifg=#5D999C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi helpStar guifg=#38996C guibg=bg gui=NONE  ctermfg=65 ctermbg=bg cterm=NONE 
+hi helpTitle guifg=DodgerBlue guibg=NONE gui=NONE  ctermfg=0 ctermbg=NONE cterm=NONE 
+hi helpTodo guifg=#7EB49C guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi helpURL guifg=MediumSlateBlue guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi helpVim guifg=BurlyWood3 guibg=bg gui=italic,underline  ctermfg=0 ctermbg=bg cterm=italic,underline 
+hi hsComment guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi hsConditional guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi hsConSym guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi hsDelimiter guifg=#00AB55 guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi hsImport guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi hsImportMod guifg=#5785AB guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi hsLineComment guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi hsModule guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi hsNumber guifg=DarkGrey guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi hsPragma guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi hsSpecialChar guifg=#7CAD73 guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi hsStatement guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi hsString guifg=#77BBB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi hsStructure guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi hsVarSym guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi htmlArg guifg=LightSkyBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi htmlBold guifg=SkyBlue3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi htmlBoldItalic guifg=SkyBlue2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi htmlBoldUnderline guifg=Aquamarine3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi htmlBoldUnderlineItalic guifg=Aquamarine3 guibg=bg gui=italic,underline  ctermfg=0 ctermbg=bg cterm=italic,underline 
+hi htmlComment guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi htmlCommentError guifg=#CC9E65 guibg=bg gui=italic  ctermfg=179 ctermbg=bg cterm=italic 
+hi htmlCommentPart guifg=Tomato4 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi htmlEndTag guifg=#876BC1 guibg=bg gui=NONE  ctermfg=97 ctermbg=bg cterm=NONE 
+hi htmlError guifg=#AAAA88 guibg=bg gui=bold  ctermfg=144 ctermbg=bg cterm=bold 
+hi htmlEvent guifg=LightCyan3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi htmlEventDQ guifg=DodgerBlue2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi htmlH1 guifg=Chocolate3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi htmlH2 guifg=PaleGreen3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi htmlH3 guifg=Azure3 guibg=bg gui=italic  ctermfg=20 ctermbg=bg cterm=italic 
+hi htmlH4 guifg=White guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi htmlH5 guifg=AquaMarine2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi htmlH6 guifg=Khaki guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi htmlItalic guifg=PowderBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi htmlLink guifg=#A18855 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi htmlNone guifg=fg guibg=bg gui=NONE  ctermfg=fg ctermbg=bg cterm=NONE 
+hi htmlNoneItalic guifg=fg guibg=bg gui=italic  ctermfg=fg ctermbg=bg cterm=italic 
+hi htmlNoneUnderlineItalic guifg=fg guibg=bg gui=underline,italic  ctermfg=fg ctermbg=bg cterm=underline,italic 
+hi htmlScriptTag guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi htmlSpecialChar guifg=LightSkyBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi htmlSpecialTagName guifg=#999A88 guibg=bg gui=NONE  ctermfg=102 ctermbg=bg cterm=NONE 
+hi htmlString guifg=#559DAD guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi htmlTag guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi htmlTagError guifg=OrangeRed guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi htmlTagN guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi htmlTagName guifg=SlateGray4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi htmlTitle guifg=LimeGreen guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi htmlUnderline guifg=PowderBlue guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi iCursor guifg=darkred guibg=#76FFFF gui=NONE  ctermfg=160 ctermbg=123 cterm=NONE 
+hi Identifier guifg=#00A66F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi Ignore guifg=Gray24 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Import guifg=#cda869 guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi Include guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi incSearch guifg=Red4 guibg=#6AFFB0 gui=NONE  ctermfg=40 ctermbg=85 cterm=NONE 
+hi indentGuidesEven guifg=fg guibg=#3D2B6B gui=NONE  ctermfg=fg ctermbg=53 cterm=NONE 
+hi indentGuidesOdd guifg=fg guibg=#1c3644 gui=NONE  ctermfg=fg ctermbg=23 cterm=NONE 
+hi infoSHA1 guifg=#A7AFB2 guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi iniComment guifg=#558F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi iniRule guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi iniSection guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Integer guifg=Aquamarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaAnnotation guifg=#8870FF guibg=bg gui=italic  ctermfg=99 ctermbg=bg cterm=italic 
+hi javaAssert guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaBoolean guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaBraces guifg=#579CCC guibg=bg gui=NONE  ctermfg=74 ctermbg=bg cterm=NONE 
+hi javaBranch guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaC_ guifg=Salmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaC_java guifg=Salmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaC_javaLang guifg=Salmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaCharacter guifg=#009ACD guibg=bg gui=NONE  ctermfg=32 ctermbg=bg cterm=NONE 
+hi javaClassDecl guifg=#00B880 guibg=bg gui=underline  ctermfg=36 ctermbg=bg cterm=underline 
+hi javaComment guifg=#5B8999 guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi javaComment2String guifg=#5B8999 guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi javaCommentCharacter guifg=SlateBlue3 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi javaCommentStar guifg=AquaMarine4 guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi javaCommentString guifg=#5B8999 guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi javaCommentTitle guifg=SteelBlue3 guibg=bg gui=italic  ctermfg=10 ctermbg=bg cterm=italic 
+hi javaConditional guifg=#00AF6F guibg=NONE gui=NONE  ctermfg=35 ctermbg=NONE cterm=NONE 
+hi javaConstant guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi javaDebug guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi javaDebugBoolean guifg=#63B3A0 guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi javaDebugCharacter guifg=#DAA099 guibg=bg gui=NONE  ctermfg=180 ctermbg=bg cterm=NONE 
+hi javaDebugNumber guifg=DarkSeaGreen4 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi javaDebugParen guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi javaDebugSpecial guifg=Magenta4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaDebugSpecialCharacter guifg=Magenta3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaDebugString guifg=Chartreuse3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaDebugStringError guifg=Plum3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaDebugType guifg=Burlywood3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaDocComment guifg=#5B8999 guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi javaDocParam guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaDocSeeTagParam guifg=Sienna3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaDocTags guifg=SteelBlue3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi javaE_ guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaE_java guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaE_javaLang guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaError guifg=Red guibg=bg gui=NONE  ctermfg=Red ctermbg=bg cterm=NONE 
+hi javaError1 guifg=#32C5B0 guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi javaError2 guifg=#32C5B0 guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi javaExceptions guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaExternal guifg=Snow3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaFold guifg=#FFD1FA guibg=bg gui=bold  ctermfg=225 ctermbg=bg cterm=bold 
+hi javaFuncBody guifg=PaleGreen2 guibg=DarkSlateGray gui=NONE  ctermfg=0 ctermbg=160 cterm=NONE 
+hi javaFuncDef guifg=Turquoise2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaInParen guifg=#7EAA9C guibg=NONE gui=NONE  ctermfg=109 ctermbg=NONE cterm=NONE 
+hi javaLabel guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaLambdaDef guifg=SkyBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaLangObject guifg=#00AA6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi javaLineComment guifg=#5B8999 guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi javaMethodDecl guifg=Aquamarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaNumber guifg=#7DB3FF guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi javaOperator guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaParen guifg=#7EB49C guibg=NONE gui=NONE  ctermfg=109 ctermbg=NONE cterm=NONE 
+hi javaParenError guifg=#7EB49C guibg=NONE gui=NONE  ctermfg=109 ctermbg=NONE cterm=NONE 
+hi javaParenT guifg=#A6A069 guibg=NONE gui=NONE  ctermfg=143 ctermbg=NONE cterm=NONE 
+hi javaR_ guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaR_java guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaR_javaLang guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaRepeat guifg=SeaGreen3 guibg=NONE gui=underline  ctermfg=0 ctermbg=NONE cterm=underline 
+hi javaScopeDecl guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi javascript guifg=SteelBlue3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi javaScriptAjaxMethods guifg=SeaGreen1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaScriptAjaxObjects guifg=#F4E891 guibg=bg gui=NONE  ctermfg=222 ctermbg=bg cterm=NONE 
+hi javaScriptAjaxProperties guifg=#65C254 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi javascriptBoolean guifg=#A8B0AA guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi javascriptBraces guifg=#8FB4E0 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi javaScriptBranch guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaScriptBrowserObjects guifg=#2B9920 guibg=bg gui=NONE  ctermfg=28 ctermbg=bg cterm=NONE 
+hi javaScriptCharacter guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaScriptComment guifg=#77996C guibg=bg gui=NONE  ctermfg=101 ctermbg=bg cterm=NONE 
+hi javaScriptCommentSkip guifg=#99AD6A guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi javascriptCommentTodo guifg=#C6B6FE guibg=#345FA8 gui=underline  ctermfg=183 ctermbg=61 cterm=underline 
+hi javascriptConditional guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi javaScriptCssStyles guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaScriptCvsTag guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi javaScriptDeprecated guifg=Gray65 guibg=bg gui=underline  ctermfg=17 ctermbg=bg cterm=underline 
+hi javaScriptDocComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi javaScriptDocParam guifg=#009F6F guibg=bg gui=underline  ctermfg=35 ctermbg=bg cterm=underline 
+hi javaScriptDocSeeTag guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi javaScriptDocTags guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi javaScriptDomElemAttrs guifg=SkyBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaScriptDomElemFuncs guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi javaScriptDomErrNo guifg=#CC4455 guibg=bg gui=bold  ctermfg=167 ctermbg=bg cterm=bold 
+hi javaScriptDOMMethods guifg=#14B076 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi javaScriptDomNodeConsts guifg=SkyBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaScriptDOMObjects guifg=#4490FF guibg=bg gui=NONE  ctermfg=69 ctermbg=bg cterm=NONE 
+hi javaScriptDOMProperties guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi javaScriptEndColons guifg=DodgerBlue2 guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi javaScriptError guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi javaScriptEventListenerKeywords guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaScriptExceptions guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaScriptExpression guifg=#339933 guibg=bg gui=NONE  ctermfg=65 ctermbg=bg cterm=NONE 
+hi javaScriptFloat guifg=#A8C0AA guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi javaScriptFuncComma guifg=#00CF6F guibg=bg gui=NONE  ctermfg=41 ctermbg=bg cterm=NONE 
+hi javascriptFuncDef guifg=SteelBlue2 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi javascriptFuncEq guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javascriptFuncExp guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javascriptFuncKeyword guifg=#00B8BF guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaScriptFuncName guifg=LimeGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javascriptFunction guifg=LimeGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javascriptGlobal guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi javaScriptGlobalObjects guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi javaScriptHtmlElemAttrs guifg=PaleGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaScriptHtmlElemFuncs guifg=PaleGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaScriptHtmlElemProperties guifg=#2BB777 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi javaScriptHtmlEvents guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javascriptIdentifier guifg=#00B8BF guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaScriptLabel guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaScriptLineComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi javaScriptLogicSymbols guifg=#2b9999 guibg=bg gui=NONE  ctermfg=30 ctermbg=bg cterm=NONE 
+hi javascriptMember guifg=DodgerBlue2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi javascriptMessage guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javascriptNull guifg=CadetBlue3 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi javaScriptNumber guifg=#A8C0AA guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi javascriptOperator guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaScriptOpSymbols guifg=#6CE6A2 guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi javaScriptParens guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaScriptParensErrA guifg=bg guibg=#5FD75F gui=NONE  ctermfg=bg ctermbg=77 cterm=NONE 
+hi javaScriptParensErrB guifg=bg guibg=#5FD75F gui=NONE  ctermfg=bg ctermbg=77 cterm=NONE 
+hi javaScriptParensErrC guifg=bg guibg=#5FD75F gui=NONE  ctermfg=bg ctermbg=77 cterm=NONE 
+hi javaScriptParensError guifg=bg guibg=#5FD75F gui=NONE  ctermfg=bg ctermbg=77 cterm=NONE 
+hi javaScriptProprietaryObjects guifg=#99AD6A guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi javaScriptPrototype guifg=SkyBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javascriptRegexpString guifg=CadetBlue3 guibg=#152933 gui=NONE  ctermfg=184 ctermbg=17 cterm=NONE 
+hi javascriptRepeat guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi javaScriptReserved guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi javaScriptSource guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi javascriptSpecial guifg=#7697d6 guibg=bg gui=NONE  ctermfg=104 ctermbg=bg cterm=NONE 
+hi javascriptStatement guifg=#00B8BF guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javascriptString guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javascriptStringD guifg=#7FA2E6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi javascriptStringS guifg=#8B78E5 guibg=bg gui=NONE  ctermfg=104 ctermbg=bg cterm=NONE 
+hi javascriptType guifg=#00B780 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi javaScriptValue guifg=CadetBlue2 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi javaSpaceError guifg=IndianRed3 guibg=Gray20 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi javaSpecial guifg=OliveDrab2 guibg=bg gui=NONE  ctermfg=21 ctermbg=bg cterm=NONE 
+hi javaSpecialChar guifg=#009ACD guibg=bg gui=NONE  ctermfg=32 ctermbg=bg cterm=NONE 
+hi javaSpecialCharError guifg=Bisque3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaSpecialError guifg=BurlyWood3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaStatement guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaStorageClass guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi javaString guifg=#7EB49C guibg=NONE gui=NONE  ctermfg=109 ctermbg=NONE cterm=NONE 
+hi javaStringError guifg=BurlyWood3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaTodo guifg=Tomato3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi javaType guifg=#7EB49C guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi javaTypeDef guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi javaUserLabel guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaUserLabelRef guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi javaVarArg guifg=#C262CC guibg=bg gui=NONE  ctermfg=134 ctermbg=bg cterm=NONE 
+hi javaX_ guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaX_java guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi javaX_javaLang guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi jinjaArgument guifg=#54A3BF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi jinjaAttribute guifg=BlueViolet guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi jinjaFilter guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi jinjaOperator guifg=BlueViolet guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi jinjaStatement guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi jinjaTagBlock guifg=RoyalBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi jinjaVarBlock guifg=#3399E1 guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi jinjaVariable guifg=BlueViolet guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi jPropertiesComment guifg=#5D8B9C guibg=bg gui=italic  ctermfg=67 ctermbg=bg cterm=italic 
+hi jPropertiesDelimiter guifg=#25CCC3 guibg=bg gui=NONE  ctermfg=43 ctermbg=bg cterm=NONE 
+hi jPropertiesIdentifier guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi jPropertiesSpecial guifg=#869BCC guibg=bg gui=NONE  ctermfg=104 ctermbg=bg cterm=NONE 
+hi jPropertiesSpecialChar guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi jPropertiesString guifg=PowderBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi jsExpression guifg=#339933 guibg=bg gui=NONE  ctermfg=65 ctermbg=bg cterm=NONE 
+hi jsonBoolean guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi jsonBraces guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi jsonCommentError guifg=#C4285D guibg=bg gui=NONE  ctermfg=161 ctermbg=bg cterm=NONE 
+hi jsonEscape guifg=#C29955 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi jsonKeyword guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi jsonKeywordMatch guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi jsonKeywordRegion guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi jsonMissingCommaError guifg=Tomato guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi jsonNoise guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi jsonNoQuotesError guifg=#FF66AA guibg=bg gui=NONE  ctermfg=205 ctermbg=bg cterm=NONE 
+hi jsonNumber guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi jsonNumError guifg=Tomato guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi jsonQuotesError guifg=#FF66AA guibg=bg gui=NONE  ctermfg=205 ctermbg=bg cterm=NONE 
+hi jsonSemicolonError guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi jsonString guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi jsonStringSQError guifg=Tomato guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi jsonTrailingCommaError guifg=Tomato guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi jsonTripleQuotesError guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi jspTag guifg=#C28985 guibg=bg gui=NONE  ctermfg=138 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeArray guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeBasic guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeC guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeDict guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeDisplay guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeError guifg=Brown2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeFact guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeIO guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeIter guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeNum guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeOther guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeProcess guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeRandom guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeRange guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeRegex guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeRound guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeSet guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeSort guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeSpecial guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeString guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBaseTypeTime guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaBeginBlock guifg=#00B66F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi juliabigString guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi juliaBlKeyword guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi juliaBool guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi juliabString guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi juliaCatch guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaChar guifg=CadetBlue2 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi juliaCharacter guifg=CadetBlue2 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi juliaColon guifg=#00A8CC guibg=bg gui=NONE  ctermfg=38 ctermbg=bg cterm=NONE 
+hi juliaComment guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi juliaCommentDelim guifg=DeepSkyBlue4 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi juliaCommentL guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi juliaCommentM guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi juliaComplexUnit guifg=#6B8FCC guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaComprehensionFor guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi juliaComprehensionIf guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi juliaConditional guifg=#DD4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi juliaConditionalBlock guifg=#B79669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi juliaConditionalEIBlock guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaConstBool guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi juliaConstC guifg=#6B8FCC guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaConstEnv guifg=#6B8FCC guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaConstGeneric guifg=#6B8FCC guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaConstIO guifg=#6B8FCC guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaConstLimits guifg=#6B8FCC guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaConstNum guifg=#6B8FCC guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaCTransOperator guifg=#0077CC guibg=bg gui=NONE  ctermfg=32 ctermbg=bg cterm=NONE 
+hi juliaCurBraBlock guifg=#E18FA1 guibg=bg gui=NONE  ctermfg=175 ctermbg=bg cterm=NONE 
+hi juliaDeclAbstract guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi juliaDeclaration guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi juliaDeclType guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi juliaDirective guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaDoBlock guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi juliaDocString guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi juliaDollarPar guifg=#B79669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi juliaDollarVar guifg=#558ADA guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaElse guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaError guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi juliaErrorCatch guifg=DarkOliveGreen3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi juliaErrorElse guifg=DarkOliveGreen3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi juliaErrorEnd guifg=DarkOliveGreen3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi juliaErrorFinally guifg=DarkOliveGreen3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi juliaErrorPar guifg=DarkOliveGreen3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi juliaErrorPrintfFmt guifg=DarkOliveGreen3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi juliaErrorSemicol guifg=DarkOliveGreen3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi juliaException guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi juliaFloat guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaFloatSpecial guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaFunction guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi juliaFunctionBlock guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaHexEscapeChar guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaIdentifierSpecial guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi juliaIf guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaImmutableBlock guifg=#86D986 guibg=bg gui=NONE  ctermfg=114 ctermbg=bg cterm=NONE 
+hi juliaIn guifg=SpringGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaipString guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi juliaKeyword guifg=#14B044 guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi juliaLetBlock guifg=#3494A8 guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi juliaMacro guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaMacroBlock guifg=#F660E5 guibg=bg gui=NONE  ctermfg=206 ctermbg=bg cterm=NONE 
+hi juliaMacroCall guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaMIMEString guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi juliaMiscBlock guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaModule guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi juliaModuleBlock guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaNumber guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi juliaOctalEscapeChar guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaOperator guifg=#AABFBB guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi juliaParBlock guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaParBlockInRange guifg=#E18FA1 guibg=bg gui=NONE  ctermfg=175 ctermbg=bg cterm=NONE 
+hi juliaParDelim guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi juliaPrintfFmt guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaPrintfParBlock guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaPrintfString guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi juliaQParDelim guifg=#558ADA guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaQuoteBlock guifg=Gray80 guibg=bg gui=NONE  ctermfg=18 ctermbg=bg cterm=NONE 
+hi juliaQuotedQMark guifg=#0077CC guibg=bg gui=NONE  ctermfg=32 ctermbg=bg cterm=NONE 
+hi juliaQuotedQMarkPar guifg=#558ADA guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaQuotedQMarkParS guifg=#558ADA guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaQuoteParBlock guifg=Gray80 guibg=bg gui=NONE  ctermfg=18 ctermbg=bg cterm=NONE 
+hi juliaRangeEnd guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi juliaRangeOperator guifg=#0077CC guibg=bg gui=NONE  ctermfg=32 ctermbg=bg cterm=NONE 
+hi juliaRegEx guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi juliaRepeat guifg=#FF48AA guibg=bg gui=NONE  ctermfg=205 ctermbg=bg cterm=NONE 
+hi juliaRepeatBlock guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi juliaRepKeyword guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi juliarString guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi juliaSemicolon guifg=DarkSeaGreen3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi juliaShellString guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi juliaSpecialChar guifg=SlateBlue1 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi juliaSqBraBlock guifg=Tan3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliasString guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi juliaStatement guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi juliaString guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi juliaStringDelim guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi juliaStringVarDelim guifg=#558ADA guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaStringVarsPar guifg=BurlyWood3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaStringVarsPla guifg=#558ADA guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaSymbol guifg=#558ADA guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaSymbolS guifg=#558ADA guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi juliaTernaryOperator guifg=#2ACACA guibg=bg gui=NONE  ctermfg=44 ctermbg=bg cterm=NONE 
+hi juliaTernaryRegion guifg=#2ACACA guibg=bg gui=NONE  ctermfg=44 ctermbg=bg cterm=NONE 
+hi juliaTodo guifg=MediumSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaTripleString guifg=#008C9C guibg=bg gui=NONE  ctermfg=31 ctermbg=bg cterm=NONE 
+hi juliaTry guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaType guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi juliaTypeAlias guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi juliaTypeBlock guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaTypedef guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi juliaUniCharLarge guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliaUniCharSmall guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi juliavString guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi Keyword guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi Label guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi LanguageToolCmd guifg=#2D88A2 guibg=bg gui=NONE  ctermfg=31 ctermbg=bg cterm=NONE 
+hi LanguageToolErrorCount guifg=Brown2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi LanguageToolGrammarError guifg=LightGoldenRod guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi LanguageToolLabel guifg=#C29955 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi LanguageToolSpellingError guifg=#FF77AA guibg=bg gui=NONE  ctermfg=211 ctermbg=bg cterm=NONE 
+hi LanguageToolUrl guifg=SlateGray3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi lbnfString guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi lCursor guifg=Tan1 guibg=#8C4840 gui=NONE  ctermfg=0 ctermbg=95 cterm=NONE 
+hi LdifAttribute guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi LdifBase64Value guifg=#8B7FFF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi LdifComment guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi LdifPunctuation guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi LdifStringValue guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi Level16 guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Level16c guifg=#25CCC3 guibg=bg gui=NONE  ctermfg=43 ctermbg=bg cterm=NONE 
+hi lineNr guifg=DarkSeaGreen4 guibg=#0C2628 gui=NONE  ctermfg=160 ctermbg=0 cterm=NONE 
+hi lispAtom guifg=#00B780 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi lispAtomList guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi lispComment guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi lispDecl guifg=#21B434 guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi lispEscapeSpecial guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi lispFunc guifg=SkyBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi lispKey guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi lispMark guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi lispNumber guifg=#25CCC3 guibg=bg gui=NONE  ctermfg=43 ctermbg=bg cterm=NONE 
+hi lispParenError guifg=black guibg=#5FD75F gui=bold  ctermfg=34 ctermbg=77 cterm=bold 
+hi lispString guifg=#00A5DB guibg=bg gui=NONE  ctermfg=38 ctermbg=bg cterm=NONE 
+hi lispSymbol guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi lispTodo guifg=Tomato3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi listmaps_filename guifg=#CBD234 guibg=#564227 gui=NONE  ctermfg=185 ctermbg=58 cterm=NONE 
+hi listmaps_underline guifg=#CBD234 guibg=#564227 gui=NONE  ctermfg=185 ctermbg=58 cterm=NONE 
+hi log4jDate guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi log4jErrorlevel guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi log4jLogger guifg=#779DB2 guibg=bg gui=underline  ctermfg=109 ctermbg=bg cterm=underline 
+hi log4jProcessid guifg=Turquoise2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi logError guifg=Tomato guibg=gray20 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi logGreen guifg=PaleGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi logHeading guifg=SpringGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi logModule guifg=#7E9F8E guibg=bg gui=NONE  ctermfg=108 ctermbg=bg cterm=NONE 
+hi logRed guifg=Red guibg=bg gui=NONE  ctermfg=Red ctermbg=bg cterm=NONE 
+hi logYellow guifg=Khaki3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi lsDir guifg=LemonChiffon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi lsExe guifg=Brown2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi lsTag guifg=#8870FF guibg=bg gui=italic  ctermfg=99 ctermbg=bg cterm=italic 
+hi lsVim guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi luaBlock guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi luaComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi luaCond guifg=#2FDBA6 guibg=bg gui=NONE  ctermfg=43 ctermbg=bg cterm=NONE 
+hi luaConstant guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi luaElse guifg=#2FDBA6 guibg=bg gui=NONE  ctermfg=43 ctermbg=bg cterm=NONE 
+hi luaFunc guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi luaFunction guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi luaNumber guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi luaOperator guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi luaParen guifg=Red guibg=bg gui=NONE  ctermfg=Red ctermbg=bg cterm=NONE 
+hi luaRepeat guifg=#2FBFBB guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi luaSpecial guifg=AquaMarine4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi luaStatement guifg=#2FBFBB guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi luaString guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi luaTable guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi luaTableBlock guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi luaTodo guifg=Wheat2 guibg=#345FA8 gui=underline  ctermfg=40 ctermbg=61 cterm=underline 
+hi lv1 guifg=CadetBlue3 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi lv1c guifg=CadetBlue3 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi lv2 guifg=Salmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi lv2c guifg=Salmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi lv3 guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi lv3c guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi lv4 guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi lv4c guifg=#25CCC3 guibg=bg gui=NONE  ctermfg=43 ctermbg=bg cterm=NONE 
+hi lv5 guifg=BurlyWood3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi lv5c guifg=#5B4DB3 guibg=bg gui=NONE  ctermfg=61 ctermbg=bg cterm=NONE 
+hi lv6 guifg=PaleGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi lv6c guifg=#25CCC3 guibg=bg gui=NONE  ctermfg=43 ctermbg=bg cterm=NONE 
+hi m4Command guifg=#29A629 guibg=bg gui=NONE  ctermfg=34 ctermbg=bg cterm=NONE 
+hi m4Comment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi m4Function guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi m4Paren guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi m4Preproc guifg=SeaGreen3 guibg=#152933 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi m4Special guifg=#65C254 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi m4Statement guifg=SlateGray2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi m4String guifg=LightSteelBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi m4Type guifg=SkyBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi m4Variable guifg=#29A629 guibg=bg gui=NONE  ctermfg=34 ctermbg=bg cterm=NONE 
+hi Macro guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi makeBstring guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi makeCmdNextLine guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi makeCommandError guifg=Tan2 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi makeCommands guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi makeComment guifg=#77996C guibg=bg gui=NONE  ctermfg=101 ctermbg=bg cterm=NONE 
+hi makeConfig guifg=#7FA2E6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi makeDefine guifg=#21A43B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi makeDstring guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi makeIdent guifg=Aquamarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi makeNextLine guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi makePreCondit guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi makeSpecial guifg=MediumSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi makeSString guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi makeTarget guifg=#21C43B guibg=bg gui=underline  ctermfg=41 ctermbg=bg cterm=underline 
+hi manBQSQString guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi manBQString guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi manBullet guifg=CadetBlue2 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi manCFuncDefinition guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi manDQString guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi manLongOptionDesc guifg=CadetBlue2 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi manLongOptionDesc guifg=DarkSeaGreen3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi manOptionDesc guifg=#8B7FFF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi manOptionWord guifg=#8B7FFF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi manReference guifg=SkyBlue2 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi manSectionHeading guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi manSectionNumber guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi manSectionTitle guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi manSQString guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi manSubHeading guifg=Green2 guibg=bg gui=italic  ctermfg=10 ctermbg=bg cterm=italic 
+hi manSubSection guifg=SeaGreen guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi manSubSectionStart guifg=#CC6688 guibg=bg gui=NONE  ctermfg=168 ctermbg=bg cterm=NONE 
+hi manSubTitle guifg=Cyan guibg=Blue gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi manTitle guifg=Brown2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi manUnderline guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi markdownAutomaticLink guifg=Turquoise3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi markdownBlockquote guifg=DarkSeaGreen guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi markdownBlockquoteDelimiter guifg=DarkSeaGreen guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi markdownBold guifg=#9F92CC guibg=bg gui=NONE  ctermfg=140 ctermbg=bg cterm=NONE 
+hi markdownBoldItalic guifg=#9F92CC guibg=bg gui=italic  ctermfg=140 ctermbg=bg cterm=italic 
+hi markdownCode guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi markdownCodeBlock guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi markdownCodeDelimiter guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi markdownEmoticonKeyword guifg=FireBrick1 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi markdownError guifg=BurlyWood3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi markdownEscape guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi markdownH1 guifg=Salmon guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi markdownH2 guifg=#21C43B guibg=bg gui=NONE  ctermfg=41 ctermbg=bg cterm=NONE 
+hi markdownH3 guifg=#44B6ED guibg=bg gui=NONE  ctermfg=75 ctermbg=bg cterm=NONE 
+hi markdownH4 guifg=#CFA000 guibg=bg gui=NONE  ctermfg=178 ctermbg=bg cterm=NONE 
+hi markdownH5 guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi markdownH6 guifg=VioletRed2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi markdownHeadingDelimiter guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi markdownHeadingRule guifg=SlateBlue1 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi markdownId guifg=CornFlowerBlue guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi markdownIdDeclaration guifg=CornFlowerBlue guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi markdownInlineCode guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi markdownItalic guifg=#9F92CC guibg=bg gui=italic  ctermfg=140 ctermbg=bg cterm=italic 
+hi markdownItemDelimiter guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi markdownLineBreak guifg=Wheat2 guibg=bg gui=NONE  ctermfg=40 ctermbg=bg cterm=NONE 
+hi markdownLinkDelimiter guifg=CadetBlue4 guibg=bg gui=italic  ctermfg=184 ctermbg=bg cterm=italic 
+hi markdownLinkReference guifg=CadetBlue guibg=bg gui=italic  ctermfg=184 ctermbg=bg cterm=italic 
+hi markdownLinkText guifg=#73A3B9 guibg=#193835 gui=NONE  ctermfg=73 ctermbg=23 cterm=NONE 
+hi markdownLinkTextDelimiter guifg=CadetBlue4 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi markdownLinkUrl guifg=CadetBlue guibg=bg gui=italic  ctermfg=184 ctermbg=bg cterm=italic 
+hi markdownListMarker guifg=#799B27 guibg=bg gui=bold  ctermfg=100 ctermbg=bg cterm=bold 
+hi markdownOrderedListMarker guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi markdownRule guifg=Gray50 guibg=bg gui=italic  ctermfg=17 ctermbg=bg cterm=italic 
+hi markdownUrl guifg=CadetBlue guibg=bg gui=italic  ctermfg=184 ctermbg=bg cterm=italic 
+hi markdownUrlDelimiter guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi markdownUrlTitle guifg=Turquoise3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi markdownUrlTitleDelimiter guifg=#779DB2 guibg=bg gui=italic  ctermfg=109 ctermbg=bg cterm=italic 
+hi markdownValid guifg=#C6B6FE guibg=bg gui=NONE  ctermfg=183 ctermbg=bg cterm=NONE 
+hi MarkologyHLl guifg=#21D434 guibg=#0E2628 gui=NONE  ctermfg=41 ctermbg=0 cterm=NONE 
+hi MarkologyHLline guifg=LimeGreen guibg=#442200 gui=NONE  ctermfg=0 ctermbg=52 cterm=NONE 
+hi MarkologyHlm guifg=Violet guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi MarkologyHLo guifg=#88A8A0 guibg=#0E2628 gui=NONE  ctermfg=109 ctermbg=0 cterm=NONE 
+hi MarkologyHLu guifg=#8B8BFF guibg=#0E2628 gui=NONE  ctermfg=105 ctermbg=0 cterm=NONE 
+hi MarksignLine guifg=LimeGreen guibg=#1C3644 gui=NONE  ctermfg=0 ctermbg=23 cterm=NONE 
+hi MarksignLowercase guifg=#21D434 guibg=#0E2628 gui=NONE  ctermfg=41 ctermbg=0 cterm=NONE 
+hi MarksignSpecial guifg=#88A8A0 guibg=#0E2628 gui=NONE  ctermfg=109 ctermbg=0 cterm=NONE 
+hi MarksignUppercase guifg=#8B8BFF guibg=#0E2628 gui=NONE  ctermfg=105 ctermbg=0 cterm=NONE 
+hi matchmaker guifg=#8B3050 guibg=Gray80 gui=NONE  ctermfg=95 ctermbg=18 cterm=NONE 
+hi matchParen guifg=Red2 guibg=#0000BB gui=bold  ctermfg=40 ctermbg=19 cterm=bold 
+hi matchtag guifg=Sienna2 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi mavenGroup guifg=#4F9FFF guibg=bg gui=NONE  ctermfg=75 ctermbg=bg cterm=NONE 
+hi mavenList guifg=#24EE88 guibg=bg gui=NONE  ctermfg=48 ctermbg=bg cterm=NONE 
+hi mavenManagement guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi mavenOther guifg=#C27BCC guibg=bg gui=NONE  ctermfg=140 ctermbg=bg cterm=NONE 
+hi mavenSet guifg=#9ED935 guibg=bg gui=NONE  ctermfg=149 ctermbg=bg cterm=NONE 
+hi mavenSpecial guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi mavenStatement guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi mavenString guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi messagesError guifg=Chocolate3 guibg=#0E2628 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi mkdBlockCode guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi mkdBlockquote guifg=DarkSeaGreen guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi mkdCode guifg=SlateGray3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi mkdDelimiter guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi mkdID guifg=FireBrick1 guibg=Black gui=NONE  ctermfg=0 ctermbg=34 cterm=NONE 
+hi mkdLineBreak guifg=Gray50 guibg=bg gui=bold  ctermfg=17 ctermbg=bg cterm=bold 
+hi mkdLineContinue guifg=Gray50 guibg=bg gui=italic  ctermfg=17 ctermbg=bg cterm=italic 
+hi mkdLink guifg=#71D3B4 guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi mkdLinkDef guifg=FireBrick1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi mkdLinkDefTarget guifg=CadetBlue guibg=bg gui=italic  ctermfg=184 ctermbg=bg cterm=italic 
+hi mkdLinkTitle guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi mkdListCode guifg=#00B780 guibg=bg gui=italic  ctermfg=36 ctermbg=bg cterm=italic 
+hi mkdListItem guifg=AquaMarine2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi mkdRule guifg=Gray50 guibg=bg gui=italic  ctermfg=17 ctermbg=bg cterm=italic 
+hi mkdString guifg=DarkSeaGreen guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi mkdURL guifg=CadetBlue guibg=bg gui=italic  ctermfg=184 ctermbg=bg cterm=italic 
+hi modeMsg guifg=Red4 guibg=#6AFFB0 gui=NONE  ctermfg=40 ctermbg=85 cterm=NONE 
+hi moreMsg guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi n3ClassName guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi n3Declaration guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi n3EndStatement guifg=RosyBrown guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi n3Prefix guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi n3PropertyName guifg=#65C254 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi n3Separator guifg=Red1 guibg=bg gui=bold  ctermfg=40 ctermbg=bg cterm=bold 
+hi n3String guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi n3StringDelim guifg=DodgerBlue2 guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi n3URI guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi neocomplcacheexpandsnippets guifg=BurlyWood3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nerdtreeBookmark guifg=#8B7FFF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi nerdtreeBookmarkName guifg=SkyBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi NERDtreeBookmarksHeader guifg=fg guibg=#3D2B6B gui=italic  ctermfg=fg ctermbg=53 cterm=italic 
+hi nerdtreeClosable guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi nerdtreeCwd guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nerdtreeDir guifg=#77996C guibg=#0e2628 gui=NONE  ctermfg=101 ctermbg=0 cterm=NONE 
+hi nerdtreeDirSlash guifg=#77996C guibg=bg gui=NONE  ctermfg=101 ctermbg=bg cterm=NONE 
+hi nerdtreeExecFile guifg=#E32A2A guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi nerdtreeFile guifg=#2F88A6 guibg=bg gui=NONE  ctermfg=31 ctermbg=bg cterm=NONE 
+hi nerdtreeFlag guifg=#5D999C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi nerdtreeHelp guifg=#749BB3 guibg=bg gui=NONE  ctermfg=103 ctermbg=bg cterm=NONE 
+hi NERDtreeHelpCommand guifg=SkyBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nerdtreeHelpKey guifg=#77996C guibg=bg gui=NONE  ctermfg=101 ctermbg=bg cterm=NONE 
+hi nerdtreeHelpTitle guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi nerdtreeLink guifg=Gray70 guibg=bg gui=italic  ctermfg=17 ctermbg=bg cterm=italic 
+hi nerdtreeLinkDir guifg=#AA88BB guibg=bg gui=NONE  ctermfg=139 ctermbg=bg cterm=NONE 
+hi nerdtreeLinkFile guifg=Salmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nerdtreeLinkTarget guifg=#5F6CCC guibg=bg gui=italic  ctermfg=62 ctermbg=bg cterm=italic 
+hi nerdtreeOpenable guifg=MediumSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nerdtreePart guifg=LightSlateGray guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nerdtreePartFile guifg=LightSlateGray guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nerdtreeRO guifg=#2F88A6 guibg=bg gui=NONE  ctermfg=31 ctermbg=bg cterm=NONE 
+hi nerdtreeToggleOff guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nerdtreeToggleOn guifg=#2FBBA6 guibg=bg gui=bold,underline  ctermfg=37 ctermbg=bg cterm=bold,underline 
+hi nerdtreeUp guifg=LightSlateGray guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi netrwBak guifg=#63559C guibg=bg gui=NONE  ctermfg=61 ctermbg=bg cterm=NONE 
+hi netrwClassify guifg=Salmon4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi netrwCmdNote guifg=SlateBlue3 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi netrwCmdSep guifg=Purple4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi netrwComma guifg=#1C8844 guibg=bg gui=NONE  ctermfg=29 ctermbg=bg cterm=NONE 
+hi netrwComment guifg=#887788 guibg=bg gui=NONE  ctermfg=102 ctermbg=bg cterm=NONE 
+hi netrwCompress guifg=#5F6CCC guibg=bg gui=NONE  ctermfg=62 ctermbg=bg cterm=NONE 
+hi netrwCoreDump guifg=OrangeRed3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi netrwData guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi netrwDateSep guifg=#77BBB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi netrwDir guifg=#778877 guibg=bg gui=NONE  ctermfg=102 ctermbg=bg cterm=NONE 
+hi netrwDoc guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi netrwExe guifg=#CC5588 guibg=bg gui=NONE  ctermfg=168 ctermbg=bg cterm=NONE 
+hi netrwHdr guifg=#2F87A6 guibg=bg gui=NONE  ctermfg=31 ctermbg=bg cterm=NONE 
+hi netrwHelpCmd guifg=Green4 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi netrwHide guifg=#1C8844 guibg=bg gui=NONE  ctermfg=29 ctermbg=bg cterm=NONE 
+hi netrwHidePat guifg=Orange3 guibg=Gray20 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi netrwHideSep guifg=#1C8844 guibg=bg gui=NONE  ctermfg=29 ctermbg=bg cterm=NONE 
+hi netrwLex guifg=#6377AA guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi netrwLib guifg=#009953 guibg=bg gui=NONE  ctermfg=29 ctermbg=bg cterm=NONE 
+hi netrwLink guifg=#068826 guibg=bg gui=NONE  ctermfg=28 ctermbg=bg cterm=NONE 
+hi netrwList guifg=FireBrick3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi netrwMakefile guifg=#63999C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi netrwMarkFile guifg=#CC5588 guibg=bg gui=underline  ctermfg=168 ctermbg=bg cterm=underline 
+hi netrwObj guifg=#066626 guibg=bg gui=NONE  ctermfg=22 ctermbg=bg cterm=NONE 
+hi netrwPlain guifg=#2F88A6 guibg=bg gui=NONE  ctermfg=31 ctermbg=bg cterm=NONE 
+hi netrwQHtopic guifg=Purple4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi netrwQuickHelp guifg=SlateBlue3 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi netrwSpecial guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi netrwSymlink guifg=#63BB9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi netrwTags guifg=#889988 guibg=bg gui=NONE  ctermfg=102 ctermbg=bg cterm=NONE 
+hi netrwTilde guifg=DarkSeaGreen4 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi netrwTimeSep guifg=#77BBB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi netrwTmp guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi netrwTreeBar guifg=Purple4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi netrwVersion guifg=#006666 guibg=bg gui=NONE  ctermfg=23 ctermbg=bg cterm=NONE 
+hi netrwYacc guifg=#2F77A6 guibg=bg gui=NONE  ctermfg=31 ctermbg=bg cterm=NONE 
+hi netrwZip guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Noise guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nonText guifg=LightSalmon4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nroffComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi nroffCond guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi nroffEscape guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nroffEscCharArg guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi nroffEscRegArg guifg=#77BBB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi nroffIdent guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi nroffNumBlock guifg=#278700 guibg=bg gui=NONE  ctermfg=28 ctermbg=bg cterm=NONE 
+hi nroffReqArg guifg=SkyBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nroffReqLeader guifg=LimeGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nroffReqName guifg=SkyBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nroffRequest guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi nroffSpecialChar guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi nroffUnit guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Number guifg=Aquamarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ocamlAnyVar guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ocamlComment guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi ocamlConstructor guifg=CadetBlue3 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi ocamlFloat guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi ocamlFullMod guifg=PowderBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ocamlFunDef guifg=Plum3 guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi ocamlKeyChar guifg=Plum3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ocamlKeyword guifg=#32C5B0 guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi ocamlLabel guifg=#2DB3A0 guibg=bg gui=underline  ctermfg=37 ctermbg=bg cterm=underline 
+hi ocamlLCIdentifier guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi ocamlModPath guifg=LightCyan3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ocamlModule guifg=PowderBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ocamlNone guifg=Plum2 guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi ocamlNumber guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi ocamlOperator guifg=Plum3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ocamlScript guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi ocamlSig guifg=Plum2 guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi ocamlString guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi ocamlType guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi ocComment guifg=#2D9D44 guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi ocLiteral guifg=DeepSkyBLue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi ocNumber guifg=#AAB0A0 guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi op_lv2 guifg=Salmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi op_lv2c guifg=Salmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi op_lv3 guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Operator guifg=SpringGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Other guifg=Black guibg=#345FA8 gui=NONE  ctermfg=34 ctermbg=61 cterm=NONE 
+hi otlTab0 guifg=#77EEFF guibg=bg gui=underline  ctermfg=123 ctermbg=bg cterm=underline 
+hi otlTab1 guifg=#86D897 guibg=bg gui=underline  ctermfg=114 ctermbg=bg cterm=underline 
+hi otlTab2 guifg=#22CA99 guibg=bg gui=underline  ctermfg=42 ctermbg=bg cterm=underline 
+hi otlTab3 guifg=#558F66 guibg=bg gui=underline  ctermfg=65 ctermbg=bg cterm=underline 
+hi otlTab4 guifg=#8688FF guibg=bg gui=underline  ctermfg=105 ctermbg=bg cterm=underline 
+hi otlTab5 guifg=#22CAFF guibg=bg gui=underline  ctermfg=45 ctermbg=bg cterm=underline 
+hi otlTab6 guifg=#558FC7 guibg=bg gui=underline  ctermfg=68 ctermbg=bg cterm=underline 
+hi otlTab7 guifg=#22CABB guibg=bg gui=underline  ctermfg=43 ctermbg=bg cterm=underline 
+hi otlTab8 guifg=#86D897 guibg=bg gui=underline  ctermfg=114 ctermbg=bg cterm=underline 
+hi otlTab9 guifg=#8666BB guibg=bg gui=underline  ctermfg=97 ctermbg=bg cterm=underline 
+hi otlTagDef guifg=CornFlowerBlue guibg=#193835 gui=NONE  ctermfg=0 ctermbg=23 cterm=NONE 
+hi otlTagRef guifg=LightBlue3 guibg=#1E3B31 gui=NONE  ctermfg=0 ctermbg=23 cterm=NONE 
+hi otlTodo guifg=MediumSeaGreen guibg=#1E3B31 gui=underline  ctermfg=0 ctermbg=23 cterm=underline 
+hi OutlawHeadI guifg=MediumAquamarine guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi OutlawHeadII guifg=MediumPurple1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi OutlawHeadIII guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi OutlawHeadIV guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi OutlawHeadIX guifg=MediumAquamarine guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi OutlawHeadV guifg=MediumAquamarine guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi OutlawHeadVI guifg=MediumPurple1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi OutlawHeadVII guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi OutlawHeadVIII guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi OutlawHeadX guifg=MediumPurple1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi OutlawKeyword guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi p6attention guifg=DeepSkyBlue2 guibg=Gray10 gui=NONE  ctermfg=160 ctermbg=0 cterm=NONE 
+hi p6Comment guifg=#63567A guibg=bg gui=NONE  ctermfg=60 ctermbg=bg cterm=NONE 
+hi p6Conditional guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi p6DeclareRoutine guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi p6Escape guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi p6Exception guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi p6Float guifg=#ABA560 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi p6FlowControl guifg=#C595C5 guibg=bg gui=NONE  ctermfg=176 ctermbg=bg cterm=NONE 
+hi p6hexSequence guifg=MediumAquamarine guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi p6HyperOp guifg=#38BBB6 guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi p6include guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi p6Match guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi p6MatchStartEnd guifg=#009999 guibg=bg gui=NONE  ctermfg=30 ctermbg=bg cterm=NONE 
+hi p6module guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi p6normal guifg=#6889B4 guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi p6number guifg=#A19B5B guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi p6Operator guifg=#63B09C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi p6podName guifg=Thistle3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi p6podPrefix guifg=Thistle3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi p6podType guifg=Thistle3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi p6property guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi p6quote guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi p6reduceop guifg=Orchid3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi p6regexName guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi p6Repeat guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi p6routine guifg=#63AD9C guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi p6rxAssertion guifg=SkyBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi p6rxGroup guifg=#D363B9 guibg=bg gui=NONE  ctermfg=169 ctermbg=bg cterm=NONE 
+hi p6rxMeta guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi p6String guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi p6string guifg=#54A3BF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi p6StringAngle guifg=#99B966 guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi p6StringDQ guifg=#5489BF guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi p6StringSpecial guifg=#88B0FF guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi p6StringSQ guifg=#5489BF guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi p6StringStartEnd guifg=#54B3BF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi p6StringUnexpanded guifg=SkyBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi p6SubstitutionGQQ guifg=#44A404 guibg=bg gui=NONE  ctermfg=70 ctermbg=bg cterm=NONE 
+hi p6SubstitutionSQ guifg=#44A404 guibg=bg gui=NONE  ctermfg=70 ctermbg=bg cterm=NONE 
+hi p6Twigil guifg=#9EDA29 guibg=bg gui=NONE  ctermfg=148 ctermbg=bg cterm=NONE 
+hi p6type guifg=#66B999 guibg=bg gui=NONE  ctermfg=72 ctermbg=bg cterm=NONE 
+hi p6TypeConstraint guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi p6variable guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi p6varName guifg=#6DA2F1 guibg=bg gui=NONE  ctermfg=75 ctermbg=bg cterm=NONE 
+hi p6varStorage guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi p6version guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi p6versionnum guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi PaleMsg guifg=PaleVioletRed4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi paramName guifg=#5f87d7 guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi pdfNumber guifg=MediumSlateBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pdfReference guifg=#8B7FFF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi pdfStream guifg=Gray40 guibg=bg gui=NONE  ctermfg=17 ctermbg=bg cterm=NONE 
+hi perlBraces guifg=#409A7A guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi perlComment guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi perlConditional guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi perlControl guifg=SkyBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi perlData guifg=#CC4455 guibg=bg gui=italic  ctermfg=167 ctermbg=bg cterm=italic 
+hi perlFileDescRead guifg=#009944 guibg=bg gui=NONE  ctermfg=29 ctermbg=bg cterm=NONE 
+hi perlFileDescStatement guifg=#008899 guibg=bg gui=underline  ctermfg=30 ctermbg=bg cterm=underline 
+hi perlFloat guifg=#7fA2E6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi perlFunction guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi perlFunctionName guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi perlIdentifier guifg=#B3BB64 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi perlLabel guifg=Plum2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi perlMatch guifg=#8898FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi perlMatchStartEnd guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi perlMethod guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi perlNumber guifg=#ABA560 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi perlOperator guifg=#AAAFBB guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi perlPackageDecl guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi perlPackageRef guifg=#7FBBE6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi perlPod guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi perlRepeat guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi perlSharpBang guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi perlSpecialMatch guifg=#C27B66 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi perlSpecialString guifg=#7399B9 guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi perlStatement guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi perlStatementControl guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi perlStatementFileDesc guifg=#009899 guibg=bg gui=NONE  ctermfg=30 ctermbg=bg cterm=NONE 
+hi perlStatementFiles guifg=#009899 guibg=bg gui=NONE  ctermfg=30 ctermbg=bg cterm=NONE 
+hi perlStatementFlow guifg=#009899 guibg=bg gui=NONE  ctermfg=30 ctermbg=bg cterm=NONE 
+hi perlStatementInclude guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi perlStatementIndirObjWrap guifg=#2AB66B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi perlStatementList guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi perlStatementScalar guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi perlStatementSocket guifg=RoyalBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi perlStatementStorage guifg=#009988 guibg=bg gui=NONE  ctermfg=30 ctermbg=bg cterm=NONE 
+hi perlString guifg=#00A399 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi perlStringStartEnd guifg=#54B3BF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi perlStringUnexpanded guifg=#54A3BF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi perlSubName guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi perlSubPrototype guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi perlSubstitutionGQQ guifg=#44A404 guibg=bg gui=NONE  ctermfg=70 ctermbg=bg cterm=NONE 
+hi perlSubstitutionSQ guifg=#44A404 guibg=bg gui=NONE  ctermfg=70 ctermbg=bg cterm=NONE 
+hi perlTodo guifg=LemonChiffon3 guibg=#345FA8 gui=NONE  ctermfg=0 ctermbg=61 cterm=NONE 
+hi perltype guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi perlVarMember guifg=#8898FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi perlVarPlain guifg=#009098 guibg=bg gui=NONE  ctermfg=30 ctermbg=bg cterm=NONE 
+hi perlVarPlain2 guifg=RoyalBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi perlVarSimpleMember guifg=#008899 guibg=bg gui=NONE  ctermfg=30 ctermbg=bg cterm=NONE 
+hi perlVarSimpleMemberName guifg=#7399B9 guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi perlVarSlash guifg=#00BA44 guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi phpArrayPair guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi phpBoolean guifg=MediumSlateBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi phpConditional guifg=MediumSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi phpFunctions guifg=#85B2FE guibg=#152933 gui=NONE  ctermfg=111 ctermbg=17 cterm=NONE 
+hi phpIdentifier guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi phpKeyword guifg=MediumPurple guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi phpMemberSelector guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi phpMethodsVar guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi phpNull guifg=MediumSlateBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi phpNumber guifg=#649CCE guibg=bg gui=NONE  ctermfg=74 ctermbg=bg cterm=NONE 
+hi phpOperator guifg=#14B476 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi phpParent guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi phpQuoteDouble guifg=#8CA854 guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi phpQuoteSingle guifg=#8CA854 guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi phpRegion guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi phpRelation guifg=#14B476 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi phpRepeat guifg=#D39ED3 guibg=bg gui=NONE  ctermfg=182 ctermbg=bg cterm=NONE 
+hi phpStatement guifg=SteelBlue3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi phpStringDouble guifg=#54A3BF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi phpStringSingle guifg=#008C9C guibg=bg gui=NONE  ctermfg=31 ctermbg=bg cterm=NONE 
+hi phpSuperGlobal guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi phpType guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi phpVarSelector guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi pl1attribute guifg=#B77969 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi pl1booleanliteral guifg=RoyalBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pl1charliteral guifg=cadetblue3 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi pl1comment guifg=#2D88A2 guibg=bg gui=NONE  ctermfg=31 ctermbg=bg cterm=NONE 
+hi pl1conditional guifg=seagreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pl1floatliteral guifg=cadetblue3 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi pl1function guifg=turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pl1garbage guifg=#B8A433 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi pl1identifier guifg=slategray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pl1intliteral guifg=cadetblue3 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi pl1operator guifg=#00AD99 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi pl1other guifg=#66a888 guibg=bg gui=NONE  ctermfg=72 ctermbg=bg cterm=NONE 
+hi pl1paren guifg=#54A3BF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi pl1repeat guifg=seagreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pl1statement guifg=#00aa6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi pl1storage guifg=dodgerblue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pl1stringliteral guifg=#54A3BF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi pl1symbol guifg=slategray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi plantUMLDirectedOrVerticalArrowRL guifg=Green2 guibg=bg gui=bold  ctermfg=10 ctermbg=bg cterm=bold 
+hi plantUMLHorizontalArrow guifg=Orange guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi plantUMLKeyword guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi plantUMLSpecialString guifg=CadetBlue3 guibg=bg gui=bold  ctermfg=184 ctermbg=bg cterm=bold 
+hi plantUMLString guifg=#7FA2E6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi plantUMLText guifg=PaleGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi plantUMLTypeKeyword guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi plibuiltin guifg=steelblue2 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi plidelimiter guifg=red guibg=bg gui=NONE  ctermfg=red ctermbg=bg cterm=NONE 
+hi plioperator guifg=#50AA1F guibg=bg gui=NONE  ctermfg=70 ctermbg=bg cterm=NONE 
+hi plsqlAttribute guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi plsqlBooleanLiteral guifg=#2FBBA6 guibg=#152933 gui=NONE  ctermfg=37 ctermbg=17 cterm=NONE 
+hi plsqlComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi plsqlCommentL guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi plsqlConditional guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi plsqlErrInBracket guifg=#2F9933 guibg=bg gui=NONE  ctermfg=29 ctermbg=bg cterm=NONE 
+hi plsqlErrInParen guifg=#7EB49C guibg=bg gui=bold  ctermfg=109 ctermbg=bg cterm=bold 
+hi plsqlFloatLiteral guifg=#D49690 guibg=bg gui=NONE  ctermfg=174 ctermbg=bg cterm=NONE 
+hi plsqlFunction guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi plsqlGarbage guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi plsqlHostIdentifier guifg=#7EB49C guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi plsqlIdentifier guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi plsqlIntLiteral guifg=#D49690 guibg=bg gui=NONE  ctermfg=174 ctermbg=bg cterm=NONE 
+hi plsqlKeyword guifg=Plum3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi plsqlOperator guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi plsqlPseudo guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi plsqlRepeat guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi plsqlSQLKeyword guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi plsqlSQLKeyword2 guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi plsqlSQLKeyword3 guifg=#7EB49C guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi plsqlSQLKeyword4 guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi plsqlSQLTypeAttribute guifg=DodgerBlue2 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi plsqlStorage guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi plsqlStringError guifg=LemonChiffon2 guibg=DodgerBlue3 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi plsqlStringLiteral guifg=CadetBlue guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi plsqlSymbol guifg=#8870FF guibg=bg gui=bold  ctermfg=99 ctermbg=bg cterm=bold 
+hi pMenu guifg=#73A3B9 guibg=#193835 gui=NONE  ctermfg=73 ctermbg=23 cterm=NONE 
+hi pMenuSbar guifg=fg guibg=#061126 gui=NONE  ctermfg=fg ctermbg=0 cterm=NONE 
+hi pMenuSel guifg=Brown2 guibg=#061126 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi pMenuThumb guifg=fg guibg=Brown2 gui=NONE  ctermfg=fg ctermbg=0 cterm=NONE 
+hi podBold guifg=SkyBlue3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi podBoldAlternativeDelim guifg=Aquamarine3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi podBoldAlternativeDelimOpen guifg=Aquamarine3 guibg=bg gui=italic,underline  ctermfg=0 ctermbg=bg cterm=italic,underline 
+hi podBoldItalic guifg=SkyBlue2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi podBoldOpen guifg=PowderBlue guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi podCmdText guifg=Thistle3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi podCommand guifg=Thistle3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi podEscape guifg=DodgerBlue2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi podEscape2 guifg=DodgerBlue2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi podForKeywd guifg=Tan3 guibg=#1E3B31 gui=NONE  ctermfg=0 ctermbg=23 cterm=NONE 
+hi podFormat guifg=#E19FA1 guibg=bg gui=NONE  ctermfg=181 ctermbg=bg cterm=NONE 
+hi podIndex guifg=BurlyWood3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi podIndexAlternativeDelim guifg=BurlyWood3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi podItalic guifg=#21C43B guibg=bg gui=italic  ctermfg=41 ctermbg=bg cterm=italic 
+hi podItalicAlternativeDelim guifg=#21C43B guibg=bg gui=underline  ctermfg=41 ctermbg=bg cterm=underline 
+hi podItalicAlternativeDelimOpen guifg=#21C43B guibg=bg gui=italic,underline  ctermfg=41 ctermbg=bg cterm=italic,underline 
+hi podItalicBold guifg=#21C43B guibg=bg gui=italic  ctermfg=41 ctermbg=bg cterm=italic 
+hi podItalicOpen guifg=#21C43B guibg=bg gui=underline  ctermfg=41 ctermbg=bg cterm=underline 
+hi podNoSpace guifg=LightBlue3 guibg=#1E3B31 gui=NONE  ctermfg=0 ctermbg=23 cterm=NONE 
+hi podNoSpaceAlternativeDelim guifg=#4BBBB2 guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi podOverIndent guifg=DarkGrey guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi podSpecial guifg=#77996C guibg=bg gui=NONE  ctermfg=101 ctermbg=bg cterm=NONE 
+hi podVerbatimLine guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi postScrConditional guifg=#009F6F guibg=bg gui=bold  ctermfg=35 ctermbg=bg cterm=bold 
+hi postScrConstant guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi postScrDSCcomment guifg=#A08FF5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi postScrFloat guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi postScrIdentifier guifg=Aquamarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi postScrInteger guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi postScrL2Operator guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi postScrOperator guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi postScrRepeat guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi preciseJumpTarget guifg=LemonChiffon2 guibg=LightPink4 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi preCondit guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi preProc guifg=#E19FA1 guibg=bg gui=NONE  ctermfg=181 ctermbg=bg cterm=NONE 
+hi pyNiceStatement guifg=Gold2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonArithmetic guifg=#00BB6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi pythonAssignment guifg=#00BB6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi pythonAsync guifg=SpringGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonBinError guifg=Tomato guibg=#1B5958 gui=NONE  ctermfg=0 ctermbg=23 cterm=NONE 
+hi pythonBinNumber guifg=#0F9944 guibg=bg gui=NONE  ctermfg=29 ctermbg=bg cterm=NONE 
+hi pythonBoolean guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi pythonBrackets guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonBuiltin guifg=MediumTurquoise guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonBuiltinFunc guifg=RoyalBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonBuiltinLogic guifg=#729FCF guibg=bg gui=NONE  ctermfg=74 ctermbg=bg cterm=NONE 
+hi pythonBuiltinObj guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi pythonBuiltinType guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonBytes guifg=Salmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonBytesContent guifg=Salmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonBytesError guifg=DarkOliveGreen2 guibg=bg gui=underline  ctermfg=160 ctermbg=bg cterm=underline 
+hi pythonBytesEscape guifg=DarkSlateGray4 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi pythonBytesEscapeError guifg=DarkOliveGreen2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi pythonCalOperator guifg=#af5f00 guibg=bg gui=NONE  ctermfg=130 ctermbg=bg cterm=NONE 
+hi pythonClass guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonClassDef guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonClassName guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonClassParameters guifg=#00A9D9 guibg=bg gui=NONE  ctermfg=38 ctermbg=bg cterm=NONE 
+hi pythonCoding guifg=SlateGray3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi pythonComment guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi pythonComparison guifg=#2FCCA6 guibg=bg gui=NONE  ctermfg=43 ctermbg=bg cterm=NONE 
+hi pythonConditional guifg=#00AAAA guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonDecorator guifg=#21C43B guibg=bg gui=NONE  ctermfg=41 ctermbg=bg cterm=NONE 
+hi pythonDecoratorFunction guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi pythonDecoratorName guifg=#8680BF guibg=bg gui=NONE  ctermfg=103 ctermbg=bg cterm=NONE 
+hi pythonDefaultAssignment guifg=#7FC090 guibg=bg gui=NONE  ctermfg=108 ctermbg=bg cterm=NONE 
+hi pythonDocstring guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi pythonDocTest guifg=#6D8C63 guibg=bg gui=NONE  ctermfg=65 ctermbg=bg cterm=NONE 
+hi pythonDocTest2 guifg=#6D8C63 guibg=bg gui=NONE  ctermfg=65 ctermbg=bg cterm=NONE 
+hi pythonDocTestValue guifg=#00A8AA guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonDot guifg=SlateGray3 guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi pythonDottedName guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi pythonError guifg=DeepSkyBlue guibg=Gray30 gui=NONE  ctermfg=160 ctermbg=17 cterm=NONE 
+hi pythonEscape guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonEscapeError guifg=Khaki2 guibg=VioletRed4 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi pythonException guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonExceptions guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonExClass guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonExtraOperator guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi pythonExtraPseudoOperator guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonFloat guifg=SkyBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonFunc guifg=#A191F5 guibg=bg gui=NONE  ctermfg=141 ctermbg=bg cterm=NONE 
+hi pythonFuncDef guifg=#85CCFE guibg=bg gui=NONE  ctermfg=117 ctermbg=bg cterm=NONE 
+hi pythonFuncName guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi pythonFuncParams guifg=Red guibg=bg gui=NONE  ctermfg=Red ctermbg=bg cterm=NONE 
+hi pythonFunction guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi pythonHexError guifg=Tomato guibg=#1B5958 gui=NONE  ctermfg=0 ctermbg=23 cterm=NONE 
+hi pythonHexNumber guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonImport guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi pythonInclude guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi pythonIndentError guifg=DarkSlateGray guibg=#0C2628 gui=underline  ctermfg=160 ctermbg=0 cterm=underline 
+hi pythonLambdaError guifg=Khaki2 guibg=VioletRed4 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi pythonLambdaExpr guifg=#66AC66 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi pythonNumber guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi pythonNumberError guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi pythonObjFunction guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi pythonOctError guifg=Tomato guibg=#1B5958 gui=NONE  ctermfg=0 ctermbg=23 cterm=NONE 
+hi pythonOctNumber guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonOperator guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonParam guifg=RoyalBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonParamDefault guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonParameters guifg=#00A9D9 guibg=bg gui=NONE  ctermfg=38 ctermbg=bg cterm=NONE 
+hi pythonParamName guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi pythonPreCondit guifg=#00B780 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi pythonQuotes guifg=#54AABF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi pythonRawBytes guifg=LightSkyBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonRawString guifg=#7FA2E6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi pythonRepeat guifg=#00AF6F guibg=bg gui=underline  ctermfg=35 ctermbg=bg cterm=underline 
+hi pythonRun guifg=SlateGray3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi pythonSelf guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonSpaceError guifg=LemonChiffon2 guibg=#442926 gui=NONE  ctermfg=0 ctermbg=52 cterm=NONE 
+hi pythonStatement guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi pythonStrFormat guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi pythonStrFormatting guifg=RoyalBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonString guifg=#54A3BF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi pythonStrTemplate guifg=PowderBlue guibg=#264040 gui=italic  ctermfg=0 ctermbg=23 cterm=italic 
+hi pythonSuperclass guifg=#99AD6A guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi pythonSync guifg=IndianRed guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi PythonTodo guifg=MediumSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi pythonTripleQuotes guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi pythonUniEscape guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi pythonUniEscapeError guifg=Khaki2 guibg=VioletRed4 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi pythonUniRawEscape guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi pythonUniRawEscapeError guifg=Khaki2 guibg=VioletRed4 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi pythonUniRawString guifg=#7FA2E6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi pythonUniString guifg=SlateBlue3 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi qfError guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi qfFileName guifg=#73A3B9 guibg=#193835 gui=NONE  ctermfg=73 ctermbg=23 cterm=NONE 
+hi qfLineNr guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi qfSeparator guifg=DarkSeaGreen4 guibg=bg gui=bold  ctermfg=160 ctermbg=bg cterm=bold 
+hi question guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi quickfixsignsMarksTexthl guifg=#55B5E3 guibg=bg gui=underline  ctermfg=74 ctermbg=bg cterm=underline 
+hi Quote guifg=#8F9FD9 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi rcInclude guifg=#65C254 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi rcString guifg=#7FA2E6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi regionDelimiter guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi Repeat guifg=SeaGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rexxLineContinue guifg=#65C254 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi rlLiteral guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi rlNumber guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi rlTypeRegion guifg=SlateBlue1 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi rqKeyword guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rqQiRiRef guifg=#B78669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi rqQNamePrefix guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rqVar guifg=#00B06F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi rstCitation guifg=#9A85FF guibg=bg gui=italic  ctermfg=105 ctermbg=bg cterm=italic 
+hi rstCitationReference guifg=DarkSeaGreen3 guibg=#152933 gui=NONE  ctermfg=160 ctermbg=17 cterm=NONE 
+hi rstCodeBlock guifg=#99ad6a guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi rstComment guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rstDelimiter guifg=#2DEEA0 guibg=bg gui=NONE  ctermfg=49 ctermbg=bg cterm=NONE 
+hi rstDirective guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rstEmphasis guifg=Purple2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rstExDirective guifg=#00B780 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi rstExplicitMarkup guifg=Orange guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rstFootNote guifg=#9A85FF guibg=bg gui=italic  ctermfg=105 ctermbg=bg cterm=italic 
+hi rstHyperLinkReference guifg=seagreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rstInlineLiteral guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi rstInterpretedTextOrHyperlinkReference guifg=#C29099 guibg=bg gui=NONE  ctermfg=138 ctermbg=bg cterm=NONE 
+hi rstLiteralBlock guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi rstSections guifg=#71D3B4 guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi rstSimpleTable guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi rstSimpleTableLines guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rstSphinxType guifg=#998799 guibg=bg gui=NONE  ctermfg=102 ctermbg=bg cterm=NONE 
+hi rstStandaloneHyperlink guifg=CadetBlue2 guibg=bg gui=underline  ctermfg=184 ctermbg=bg cterm=underline 
+hi rstStrongEmphasis guifg=DarkSlateGray2 guibg=#1E4959 gui=NONE  ctermfg=160 ctermbg=23 cterm=NONE 
+hi rstSubstitutionReference guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi rstTable guifg=#FF88AA guibg=bg gui=NONE  ctermfg=211 ctermbg=bg cterm=NONE 
+hi rstTodo guifg=Tomato3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi rstTransition guifg=#71D3B4 guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi rubyAccess guifg=#85B2FE guibg=#152933 gui=NONE  ctermfg=111 ctermbg=17 cterm=NONE 
+hi rubyArrayDelimiter guifg=#4A77FF guibg=bg gui=NONE  ctermfg=69 ctermbg=bg cterm=NONE 
+hi rubyAttribute guifg=SkyBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyBlock guifg=#00BF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi rubyBlockExpression guifg=#96AFC2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi rubyBlockParameter guifg=Orchid3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyBlockParameterList guifg=#AE6EEE guibg=bg gui=NONE  ctermfg=135 ctermbg=bg cterm=NONE 
+hi rubyCaseExpression guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi rubyClass guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi rubyClassVariable guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi rubyComment guifg=#5B8999 guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi rubyConditional guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyConditionalExpression guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi rubyConditionalModifier guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi rubyConstant guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi rubyControl guifg=VioletRed3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyCurlyBlock guifg=#978CCC guibg=bg gui=NONE  ctermfg=104 ctermbg=bg cterm=NONE 
+hi rubyCurlyBlockDelimiter guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyDefine guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi rubyDoBlock guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi rubyException guifg=VioletRed guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyExceptional guifg=LightCyan3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyFloat guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyFunction guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi rubyGlobalVariable guifg=SkyBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyIdentifier guifg=#C6B6Fe guibg=bg gui=NONE  ctermfg=183 ctermbg=bg cterm=NONE 
+hi rubyInclude guifg=#9C9E9E guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi rubyInstanceVariable guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi rubyInteger guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi rubyInterpolation guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi rubyInterpolationDelimiter guifg=Tan3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyKeyword guifg=#00B780 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi rubyKeywordAsMethod guifg=#9C9E9E guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi rubyLocalVariableOrMethod guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi rubyMethodBlock guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi rubyModule guifg=LightCyan3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi rubyOptionalDoLine guifg=PaleGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyPredefinedConstant guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi rubyPredefinedIdentifier guifg=#DE5577 guibg=bg gui=NONE  ctermfg=168 ctermbg=bg cterm=NONE 
+hi rubyPredefinedVariable guifg=PaleGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyPseudoVariable guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi rubyRegexp guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi rubyRegexpAnchor guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi rubyRegexpCharClass guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi rubyRegexpDelimiter guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyRegexpEscape guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi rubyRegexpQuantifier guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi rubyRegexpSpecial guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi rubyRepeat guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi rubyRepeatExpression guifg=#978CCC guibg=bg gui=NONE  ctermfg=104 ctermbg=bg cterm=NONE 
+hi rubySharpBang guifg=#C74448 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi rubyString guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyStringDelimiter guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi rubyStringEscape guifg=#99AD6a guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi rubySymbol guifg=#9C9E9E guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi rubyTodo guifg=Tomato3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi sassClass guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi sassClassChar guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi sassControl guifg=Turquoise2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sassCssAttribute guifg=LightSkyBlue3 guibg=Gray20 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi sassDefault guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi sassDefinition guifg=LightSkyBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sassFunction guifg=SpringGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sassId guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sassIdChar guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sassInclude guifg=Turquoise2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi sassMixin guifg=Turquoise2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sassMixing guifg=Turquoise2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sassProperty guifg=#FF7B7F guibg=bg gui=NONE  ctermfg=210 ctermbg=bg cterm=NONE 
+hi sasStatement guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi sassVariable guifg=#63AD9C guibg=#1C3644 gui=NONE  ctermfg=73 ctermbg=23 cterm=NONE 
+hi scalaClassDecl guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi scalaFunction guifg=Aquamarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi scalaLangClass guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi scalaLineComment guifg=#78B37A guibg=bg gui=NONE  ctermfg=108 ctermbg=bg cterm=NONE 
+hi scalaScopeDecl guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi scalaStorageClass guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi scalaType guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi scalaTypeDef guifg=CadetBlue2 guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi schemeComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi schemeError guifg=FireBrick3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi schemeFunc guifg=#2DC3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi schemeNumber guifg=#25ACC3 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi schemeOther guifg=#2FAB66 guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi schemeString guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi schemeStruct guifg=PaleGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi schemeSyntax guifg=#21C43B guibg=bg gui=NONE  ctermfg=41 ctermbg=bg cterm=NONE 
+hi scrollbar guifg=DarkCyan guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi Search guifg=#FF88AA guibg=bg gui=underline  ctermfg=211 ctermbg=bg cterm=underline 
+hi SectionTitle guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi sedACI guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sedAddress guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sedBranch guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi sedComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi sedError guifg=#A1FFAF guibg=bg gui=italic  ctermfg=157 ctermbg=bg cterm=italic 
+hi sedFlag guifg=#8B7FFF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi sedFunction guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi sedLabel guifg=RoyalBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sedLineCont guifg=#CC5555 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi sedRegexp119 guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi sedRegexp126 guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi sedRegExp47 guifg=FireBrick2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sedRegexpMeta guifg=IndianRed3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sedReplacement119 guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi sedReplacement126 guifg=SteelBlue2 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi sedReplacement44 guifg=#65C254 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi sedReplacement47 guifg=#44BA00 guibg=bg gui=NONE  ctermfg=70 ctermbg=bg cterm=NONE 
+hi sedReplacement58 guifg=#65C254 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi sedReplaceMeta guifg=#44BA00 guibg=bg gui=NONE  ctermfg=70 ctermbg=bg cterm=NONE 
+hi sedSemicolon guifg=RosyBrown guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sedSpecial guifg=#73A3B9 guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi sedST guifg=SteelBlue2 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi shAlias guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi shArithmetic guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi shCase guifg=#A476A2 guibg=bg gui=NONE  ctermfg=139 ctermbg=bg cterm=NONE 
+hi shCaseBar guifg=LimeGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi shCaseDoubleQuote guifg=#B76669 guibg=bg gui=NONE  ctermfg=131 ctermbg=bg cterm=NONE 
+hi shCaseEsac guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi shCaseIn guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi shCaseRange guifg=#C75666 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi shCaseSingleQuote guifg=#B76669 guibg=bg gui=NONE  ctermfg=131 ctermbg=bg cterm=NONE 
+hi shCmdParenRegion guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi shCmdSubregion guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi shColon guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi shCommandSub guifg=#88B4CC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi shComment guifg=#697DB0 guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi shConditional guifg=#21B43B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi shCtrlSeq guifg=#B76969 guibg=bg gui=NONE  ctermfg=131 ctermbg=bg cterm=NONE 
+hi shDblBrace guifg=#00BB6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi shDblParen guifg=#00BB6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi shDerefOp guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi shDeRefPattern guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi shDeRefPPSleft guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi shDeRefPPSright guifg=CadetBlue guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi shDeRefSimple guifg=DarkOrchid3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi shDeRefVar guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi shDerefWordError guifg=#9CCB3B guibg=Gray20 gui=NONE  ctermfg=149 ctermbg=0 cterm=NONE 
+hi shDo guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi shDoubleQuote guifg=#9A7F99 guibg=bg gui=NONE  ctermfg=102 ctermbg=bg cterm=NONE 
+hi shebang guifg=#5D7D9D guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi shEscape guifg=#00A06F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi shExpr guifg=#A19FA0 guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi shFor guifg=Aquamarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi shFunction guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi shFunctionKey guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi shFunctionOne guifg=#21B43B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi shFunctionTwo guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi shIf guifg=#21943B guibg=bg gui=NONE  ctermfg=29 ctermbg=bg cterm=NONE 
+hi shIfError guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi shInError guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi shLoop guifg=#21B43B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi shNoQuote guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi shNumber guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi shOperator guifg=VioletRed2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi shOption guifg=Plum3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi shParen guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi shParenError guifg=black guibg=#779DB2 gui=NONE  ctermfg=34 ctermbg=109 cterm=NONE 
+hi shQuote guifg=#77ABB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi shRange guifg=#81AAC0 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi shRedir guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi shRepeat guifg=#9B91F6 guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi shSet guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi shSetIdentifier guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi shSetList guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi shSingleQuote guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi shSnglCase guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi shSource guifg=PowderBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi shSpecial guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi shStatement guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi shString guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi shSubShRegion guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi shTestOpr guifg=VioletRed2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi shTestPattern guifg=#96966F guibg=bg gui=NONE  ctermfg=101 ctermbg=bg cterm=NONE 
+hi shTodo guifg=Brown3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi shVarAssign guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi shVariable guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi shWrapLineOperator guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi signColor guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi signColumn guifg=PaleGoldenrod guibg=#0E2628 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi smlEnd guifg=#779DB2 guibg=bg gui=bold  ctermfg=109 ctermbg=bg cterm=bold 
+hi smlKeyChar guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi smlLCIdentifier guifg=#9A85FF guibg=bg gui=italic  ctermfg=105 ctermbg=bg cterm=italic 
+hi smlNumber guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi smlString guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi snipAction guifg=CadetBlue guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi snipCommand guifg=RoyalBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi snipCommandDelim guifg=#DD4455 guibg=bg gui=bold  ctermfg=167 ctermbg=bg cterm=bold 
+hi snipComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi snipContext guifg=CadetBlue guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi snipEscape guifg=DarkSeaGreen4 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi snipExtends guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi snipGlobalHeaderKeyword guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi snipGlobalPBody guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi snipKeyword guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi snipLeadingSpaces guifg=CadetBlue4 guibg=Gray10 gui=underline  ctermfg=184 ctermbg=0 cterm=underline 
+hi snipMirror guifg=#44CBFF guibg=bg gui=NONE  ctermfg=81 ctermbg=bg cterm=NONE 
+hi snippetComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi snippetEval guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi snippetExpand guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi snippetKeyword guifg=SkyBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi snippetName guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi snippetWord guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi snipPriorityValue guifg=Aquamarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi snipPythonCommand guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi snipPythonCommandP guifg=#FF4455 guibg=bg gui=NONE  ctermfg=203 ctermbg=bg cterm=NONE 
+hi snipSnippetBody guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi snipSnippetContext guifg=DarkSeaGreen4 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi snipSnippetContextP guifg=DarkSeaGreen3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi snipSnippetDocContextString guifg=#5DCC9C guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi snipSnippetDocString guifg=#5DCC9C guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi snipSnippetHeaderKeyword guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi snipSnippetOptionFlag guifg=#66E699 guibg=bg gui=NONE  ctermfg=78 ctermbg=bg cterm=NONE 
+hi snipSnippetOptions guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi snipSnippetTrigger guifg=#85A6FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi snipSnippetTriggerInvalid guifg=IndianRed2 guibg=Gray10 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi snipStart guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi snipString guifg=#54A3BF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi snipTabStop guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi snipTabStopDefault guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi snipTODO guifg=Plum3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi snipTransformation guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi snipTransformationOptions guifg=SteelBlue1 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi snipTransformationPattern guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi snipTransformationPatternDelim guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi snipTransformationReplace guifg=#44AA00 guibg=bg gui=NONE  ctermfg=70 ctermbg=bg cterm=NONE 
+hi snipVar guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi snipVarExpansion guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi snipVarPythonCommand guifg=Tomato guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi snipVimLCommand guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi snipVimLCommandV guifg=#FF4455 guibg=bg gui=NONE  ctermfg=203 ctermbg=bg cterm=NONE 
+hi Special guifg=#63AD9C guibg=NONE gui=NONE  ctermfg=73 ctermbg=NONE cterm=NONE 
+hi SpecialChar guifg=#88CB35 guibg=bg gui=NONE  ctermfg=113 ctermbg=bg cterm=NONE 
+hi SpecialComment guifg=LightBlue3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi SpecialKey guifg=#2C6A47 guibg=bg gui=NONE  ctermfg=23 ctermbg=bg cterm=NONE 
+hi sqlFold guifg=#00B39B guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi sqlHibSnippet guifg=Turquoise2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sqlKeyword guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi sqlNumber guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi sqlOperator guifg=#00AF88 guibg=bg gui=underline  ctermfg=36 ctermbg=bg cterm=underline 
+hi sqlSnippet guifg=PaleGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi sqlSpecial guifg=#00B37D guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi sqlStatement guifg=#8FBFDC guibg=bg gui=underline  ctermfg=110 ctermbg=bg cterm=underline 
+hi sqlString guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi sqlTodo guifg=Wheat2 guibg=#345FA8 gui=underline  ctermfg=40 ctermbg=61 cterm=underline 
+hi sqlType guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi stashEntry guifg=#99AD6A guibg=bg gui=NONE  ctermfg=107 ctermbg=bg cterm=NONE 
+hi Statement guifg=#00A86F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi StatusLine guifg=#C29955 guibg=#442200 gui=NONE  ctermfg=137 ctermbg=52 cterm=NONE 
+hi StatusLineModified guifg=LemonChiffon2 guibg=#1E3B31 gui=NONE  ctermfg=0 ctermbg=23 cterm=NONE 
+hi StatusLineModifiedNC guifg=LemonChiffon2 guibg=#1E3B31 gui=NONE  ctermfg=0 ctermbg=23 cterm=NONE 
+hi StatusLineNC guifg=LightBlue3 guibg=#1E3B31 gui=NONE  ctermfg=0 ctermbg=23 cterm=NONE 
+hi storageClass guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi String guifg=#008C9C guibg=bg gui=NONE  ctermfg=31 ctermbg=bg cterm=NONE 
+hi stringDelimiter guifg=#008C9C guibg=bg gui=NONE  ctermfg=31 ctermbg=bg cterm=NONE 
+hi Structure guifg=#8FBFDC guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi superclass guifg=#6A84AD guibg=#FFD1FA gui=reverse  ctermfg=67 ctermbg=225 cterm=reverse 
+hi syntasticErrorSign guifg=Tomato guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi syntasticStyleErrorSign guifg=Tomato guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi syntasticStyleWarningSign guifg=LightGray guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi syntasticWarningSign guifg=MediumPurple4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi tabLine guifg=CornflowerBlue guibg=Gray26 gui=bold  ctermfg=0 ctermbg=16 cterm=bold 
+hi tabLineClose guifg=CornflowerBlue guibg=Gray26 gui=NONE  ctermfg=0 ctermbg=16 cterm=NONE 
+hi tabLineFill guifg=CornflowerBlue guibg=Gray20 gui=underline  ctermfg=0 ctermbg=16 cterm=underline 
+hi tabLineNumber guifg=#3CEEB3 guibg=bg gui=NONE  ctermfg=85 ctermbg=bg cterm=NONE 
+hi tabLineSel guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi tabManAtv guifg=#CC4455 guibg=bg gui=italic  ctermfg=167 ctermbg=bg cterm=italic 
+hi tabManCurTName guifg=LightSeaGreen guibg=bg gui=italic,undercurl  ctermfg=0 ctermbg=bg cterm=italic,undercurl 
+hi tabManHelp guifg=#8FBFDC guibg=bg gui=italic  ctermfg=110 ctermbg=bg cterm=italic 
+hi tabManHKey guifg=LimeGreen guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi tabManHSpecial guifg=LightSeaGreen guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi tabManLead guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi tabManTName guifg=LightSeaGreen guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi Tag guifg=Plum3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi tagbarAccessPrivate guifg=#FF7755 guibg=bg gui=NONE  ctermfg=209 ctermbg=bg cterm=NONE 
+hi tagbarAccessProtected guifg=#77BB77 guibg=bg gui=NONE  ctermfg=108 ctermbg=bg cterm=NONE 
+hi tagbarAccessPublic guifg=#00BBBB guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi tagbarFoldIcon guifg=Brown2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi tagbarHelp guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi tagbarHelpKey guifg=IndianRed guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi tagbarHelpTitle guifg=LightSkyBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi tagbarHighlight guifg=#88AAFF guibg=bg gui=underline  ctermfg=111 ctermbg=bg cterm=underline 
+hi tagbarKind guifg=SkyBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi tagbarNestedKind guifg=#29BB29 guibg=bg gui=NONE  ctermfg=34 ctermbg=bg cterm=NONE 
+hi tagbarPseudoID guifg=#008666 guibg=bg gui=NONE  ctermfg=29 ctermbg=bg cterm=NONE 
+hi tagbarScope guifg=#66D999 guibg=bg gui=NONE  ctermfg=78 ctermbg=bg cterm=NONE 
+hi tagbarSignature guifg=#00A5AB guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi tagbarType guifg=#29BB29 guibg=bg gui=underline  ctermfg=34 ctermbg=bg cterm=underline 
+hi taglistComment guifg=RoyalBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi taglistFileName guifg=DeepSkyBlue3 guibg=#1C3644 gui=NONE  ctermfg=160 ctermbg=23 cterm=NONE 
+hi taglistTagScope guifg=CadetBlue guibg=bg gui=NONE  ctermfg=184 ctermbg=bg cterm=NONE 
+hi taglistTitle guifg=SkyBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi TarComment guifg=DeepSkyBlue3 guibg=#1C3644 gui=NONE  ctermfg=160 ctermbg=23 cterm=NONE 
+hi TarDirectory guifg=DeepSkyBlue1 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi TaskDoneIcon guifg=#5D8B9C guibg=bg gui=bold  ctermfg=67 ctermbg=bg cterm=bold 
+hi TaskDoneItem guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi TaskKeyword guifg=CornFlowerBlue guibg=Gray20 gui=underline  ctermfg=0 ctermbg=16 cterm=underline 
+hi TaskQuestionIcon guifg=PaleGoldenRod guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi TaskQuestionItem guifg=PaleGoldenRod guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi TaskUrgentIcon guifg=IndianRed2 guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi TaskUrgentItem guifg=IndianRed2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi TaskWorkingIcon guifg=#8B7FFF guibg=bg gui=bold  ctermfg=105 ctermbg=bg cterm=bold 
+hi TaskWorkingItem guifg=#8B7FFF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi termCursor guifg=black guibg=#77D099 gui=NONE  ctermfg=34 ctermbg=114 cterm=NONE 
+hi termCursorNC guifg=#C29955 guibg=#1E3B31 gui=NONE  ctermfg=137 ctermbg=23 cterm=NONE 
+hi Test guifg=#88AEB2 guibg=bg gui=italic  ctermfg=109 ctermbg=bg cterm=italic 
+hi texBegin guifg=#00BB6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi texBeginEndName guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi texCmdArgs guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi texCmdBody guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi texComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi texDefParm guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi texDelimiter guifg=IndianRed3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi texDocType guifg=#00CC80 guibg=bg gui=italic  ctermfg=42 ctermbg=bg cterm=italic 
+hi texDocZone guifg=#85B2FE guibg=#152933 gui=NONE  ctermfg=111 ctermbg=17 cterm=NONE 
+hi texEnd guifg=#00BB6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi texMatcherNM guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi texMathOper guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi texMathZone guifg=#8888FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi texMathZoneV guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi texMathZoneW guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi texOnlyMath guifg=VioletRed2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi texSection guifg=#00B780 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi texSectionName guifg=#BE22CC guibg=bg gui=NONE  ctermfg=128 ctermbg=bg cterm=NONE 
+hi texSectionZone guifg=PowderBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi texSpecialChar guifg=#00AC9C guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi texStatement guifg=#B79669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi texSubscripts guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi texSuperscripts guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi texTitle guifg=PaleGreen2 guibg=#254859 gui=NONE  ctermfg=0 ctermbg=23 cterm=NONE 
+hi textSnipTex guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Title guifg=Brown2 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi Titled guifg=PaleTurquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi titleEntry guifg=#36A366 guibg=bg gui=italic  ctermfg=71 ctermbg=bg cterm=italic 
+hi titleSign guifg=#60801F guibg=bg gui=NONE  ctermfg=64 ctermbg=bg cterm=NONE 
+hi tkWidget guifg=LightSalmon guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi tlComment guifg=#77996C guibg=bg gui=NONE  ctermfg=101 ctermbg=bg cterm=NONE 
+hi tlIdentifier guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi Todo guifg=LemonChiffon2 guibg=DeepSkyBlue4 gui=NONE  ctermfg=0 ctermbg=160 cterm=NONE 
+hi tooltip guifg=Gainsboro guibg=#5D009C gui=italic  ctermfg=0 ctermbg=55 cterm=italic 
+hi TtodoDate guifg=SlateGray4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi TtodoDone guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi TtodoDue guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi TtodoHidden guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi TtodoKeyword guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi TtodoList guifg=#00AA6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi TtodoOverdue guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi TtodoPri guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi TtodoPriA guifg=VioletRed2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi TtodoPriB guifg=#00AACF guibg=bg gui=NONE  ctermfg=38 ctermbg=bg cterm=NONE 
+hi TtodoPriC guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi TtodoTag guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi TtodoTime guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi txlComment guifg=#667999 guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi txlFormat guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi txlKeyword guifg=AquaMarine3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi txlLiteral guifg=#00A86F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi txlNotLiteral guifg=SlateGray2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi txlPreprocessor guifg=PaleGreen3 guibg=#152933 gui=NONE  ctermfg=0 ctermbg=17 cterm=NONE 
+hi Type guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi Typedef guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi typeKeywords guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi Underlined guifg=SkyBlue2 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi undotreeHead guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi undotreeSavedBig guifg=Azure3 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi UtlTag guifg=RoyalBlue1 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi UtlURL guifg=#8870FF guibg=bg gui=underline  ctermfg=99 ctermbg=bg cterm=underline 
+hi varCapture guifg=#8fbfdc guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi varId guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vertSplit guifg=#55E5D3 guibg=#082926 gui=bold  ctermfg=80 ctermbg=0 cterm=bold 
+hi vimAbb guifg=#B7A969 guibg=bg gui=NONE  ctermfg=143 ctermbg=bg cterm=NONE 
+hi vimAddress guifg=#9CAE9E guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi vimAuGroup guifg=#1A99DE guibg=bg gui=NONE  ctermfg=32 ctermbg=bg cterm=NONE 
+hi vimAugroupKey guifg=Chocolate guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimAutoCmd guifg=Chocolate guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimAutoCmdSfxList guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi vimAutoevent guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi vimAutoeventList guifg=#21A43B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimBehave guifg=#1AAEDE guibg=bg gui=NONE  ctermfg=38 ctermbg=bg cterm=NONE 
+hi vimBehaveError guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi vimBehaveModel guifg=LightBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimBracket guifg=#7EB49C guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimBufnrWarn guifg=PaleGoldenRod guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi vimCmdSep guifg=#00FF33 guibg=bg gui=NONE  ctermfg=47 ctermbg=bg cterm=NONE 
+hi vimCmplxRepeat guifg=#C6B6FE guibg=bg gui=NONE  ctermfg=183 ctermbg=bg cterm=NONE 
+hi vimCollClassErr guifg=OrangeRed guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimCommand guifg=#9CC7CC guibg=bg gui=NONE  ctermfg=152 ctermbg=bg cterm=NONE 
+hi vimCommanderFile guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi vimCommanderPath guifg=Green2 guibg=#1E4959 gui=italic  ctermfg=10 ctermbg=23 cterm=italic 
+hi vimComment guifg=#5D4C9C guibg=bg gui=NONE  ctermfg=61 ctermbg=bg cterm=NONE 
+hi vimCommentString guifg=#5D4C9C guibg=bg gui=NONE  ctermfg=61 ctermbg=bg cterm=NONE 
+hi vimCommentTitle guifg=#6A9CAD guibg=bg gui=italic  ctermfg=73 ctermbg=bg cterm=italic 
+hi vimContinue guifg=#66B9D9 guibg=bg gui=NONE  ctermfg=74 ctermbg=bg cterm=NONE 
+hi vimCtrlChar guifg=Green guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi vimEcho guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimEchoHL guifg=#00A84F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimEchoHLNone guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimElseif guifg=#00A84F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimElseIferr guifg=PowderBlue guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi vimEmbedError guifg=OrangeRed guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimEnvVar guifg=#85B2FE guibg=#152933 gui=NONE  ctermfg=111 ctermbg=17 cterm=NONE 
+hi vimError guifg=Red guibg=bg gui=NONE  ctermfg=Red ctermbg=bg cterm=NONE 
+hi vimErrSetting guifg=Red guibg=bg gui=NONE  ctermfg=Red ctermbg=bg cterm=NONE 
+hi vimExecute guifg=#9CB7CC guibg=bg gui=NONE  ctermfg=146 ctermbg=bg cterm=NONE 
+hi vimFBvar guifg=#D92B98 guibg=bg gui=NONE  ctermfg=162 ctermbg=bg cterm=NONE 
+hi vimFgBgAttrib guifg=#8CA8BF guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimFiletype guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimFilter guifg=DodgerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimFirstChar guifg=Orange guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimFold guifg=Gray50 guibg=bg gui=NONE  ctermfg=17 ctermbg=bg cterm=NONE 
+hi vimFTCmd guifg=#00A84F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimFTError guifg=DarkOrange2 guibg=bg gui=underline  ctermfg=160 ctermbg=bg cterm=underline 
+hi vimFTOption guifg=#779DB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimFunc guifg=LightBlue4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimFuncBody guifg=#2FBB66 guibg=NONE gui=NONE  ctermfg=35 ctermbg=NONE cterm=NONE 
+hi vimFuncKey guifg=SlateGray3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi vimFuncName guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi vimFuncNameTag guifg=#77AAB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimFuncSID guifg=#AE6EEE guibg=bg gui=NONE  ctermfg=135 ctermbg=bg cterm=NONE 
+hi vimFunction guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimFunctionError guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi vimFuncVar guifg=Coral3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi vimGroup guifg=#99BB99 guibg=bg gui=NONE  ctermfg=108 ctermbg=bg cterm=NONE 
+hi vimGroupAdd guifg=Orange3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimGroupList guifg=#7EB49C guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimGroupName guifg=#7EB49C guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimGroupRem guifg=Orange3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimGroupSpecial guifg=#7EB49C guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimHiAttrib guifg=#8CA8BF guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimHiAttribList guifg=#FF77AA guibg=bg gui=NONE  ctermfg=211 ctermbg=bg cterm=NONE 
+hi vimHiBang guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimHiClear guifg=#5FA222 guibg=bg gui=NONE  ctermfg=70 ctermbg=bg cterm=NONE 
+hi vimHiCterm guifg=DarkSlateGray3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimHiCtermColor guifg=SteelBlue1 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi vimHiCtermError guifg=#E19FA1 guibg=bg gui=italic  ctermfg=181 ctermbg=bg cterm=italic 
+hi vimHiCtermFgBg guifg=DarkSlateGray3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimHighLight guifg=IndianRed2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimHiGroup guifg=#00B955 guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimHiGui guifg=DarkSlateGray3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimHiGuiFgBg guifg=DarkSlateGray3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimHiGuiFont guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi vimHiGuiRGB guifg=SteelBlue1 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi vimHiKeyError guifg=#E19FA1 guibg=bg gui=italic  ctermfg=181 ctermbg=bg cterm=italic 
+hi vimHiKeyList guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi vimHiNmbr guifg=#8CA8BF guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimHiStartStop guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi vimHiTerm guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimHLGroup guifg=#99BB99 guibg=#1C3644 gui=NONE  ctermfg=108 ctermbg=23 cterm=NONE 
+hi vimHLMod guifg=Pink2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimInsert guifg=#886488 guibg=bg gui=NONE  ctermfg=96 ctermbg=bg cterm=NONE 
+hi vimIsCommand guifg=#3285B0 guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi vimIskSep guifg=#88A888 guibg=bg gui=NONE  ctermfg=108 ctermbg=bg cterm=NONE 
+hi vimKeyCode guifg=LightGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimKeyCodeError guifg=Tan2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimKeyword guifg=MediumOrchid1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimLastChar guifg=Orange guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimLet guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi vimLineComment guifg=#5D7C9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi vimLineComment guifg=#5D7C9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi vimMap guifg=Chocolate guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimMapBang guifg=#3388E6 guibg=bg gui=NONE  ctermfg=68 ctermbg=bg cterm=NONE 
+hi vimMapLHS guifg=#54A3DC guibg=bg gui=NONE  ctermfg=74 ctermbg=bg cterm=NONE 
+hi vimMapMod guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi vimMapModErr guifg=Beige guibg=bg gui=underline  ctermfg=124 ctermbg=bg cterm=underline 
+hi vimMapModKey guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi vimMapRHS guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimMark guifg=#9CAE9E guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi vimMarker guifg=Aquamarine1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimMarkNumber guifg=#9CAE9E guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi vimMenuLHS guifg=SeaGreen4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimMenuMod guifg=#0066FF guibg=bg gui=NONE  ctermfg=27 ctermbg=bg cterm=NONE 
+hi vimMenuName guifg=#85B2FE guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi vimMenuNameMore guifg=#85B2FE guibg=bg gui=bold  ctermfg=111 ctermbg=bg cterm=bold 
+hi vimMenuRHS guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimMtchComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi vimNorm guifg=#9C9E9E guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi vimNormCmds guifg=#00BB55 guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimNotation guifg=LightSlateGray guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimNotFunc guifg=#9CC7CC guibg=bg gui=NONE  ctermfg=152 ctermbg=bg cterm=NONE 
+hi vimNotFunction guifg=#9CC7CC guibg=bg gui=NONE  ctermfg=152 ctermbg=bg cterm=NONE 
+hi vimNotPatSep guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi vimNumber guifg=#649CCE guibg=bg gui=NONE  ctermfg=74 ctermbg=bg cterm=NONE 
+hi vimOper guifg=#14B476 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi vimOperError guifg=#12A86B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimOperParen guifg=#2FBB66 guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimOption guifg=#9CAE9E guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi vimParenSep guifg=#77AAB2 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimPatOneOrMore guifg=red guibg=bg gui=NONE  ctermfg=red ctermbg=bg cterm=NONE 
+hi vimPatRegionClose guifg=#32DDB0 guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi vimPatRegionOpen guifg=#32DDB0 guibg=bg gui=NONE  ctermfg=79 ctermbg=bg cterm=NONE 
+hi vimPatSep guifg=#33BF47 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi vimPatSepErr guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi vimPatSepR guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi vimPatSepZ guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi vimPatSepZone guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimPattern guifg=DarkGoldenRod guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimPerlRegion guifg=#88AAA6 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimPlainMark guifg=OliveDrab3 guibg=bg gui=NONE  ctermfg=21 ctermbg=bg cterm=NONE 
+hi vimPlainRegister guifg=Chocolate3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimPythonRegion guifg=#88AAA6 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimRegister guifg=#C6B6FE guibg=bg gui=NONE  ctermfg=183 ctermbg=bg cterm=NONE 
+hi vimRubyRegion guifg=#88AAA6 guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimScriptDelim guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi vimscriptFuncNameTag guifg=#2FBBA6 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi vimSearch guifg=DeepSkyBlue3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimSearchDelim guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimSep guifg=#9999CC guibg=bg gui=NONE  ctermfg=104 ctermbg=bg cterm=NONE 
+hi vimSet guifg=#9CAE9E guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi vimSetEqual guifg=#9CAE9E guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi vimSetMod guifg=#9CAE9E guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi vimSetSep guifg=#9CAE9E guibg=bg gui=bold  ctermfg=145 ctermbg=bg cterm=bold 
+hi vimSetString guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimSpecFile guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimSpecFileMod guifg=LightGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimSpecial guifg=#7FA2E6 guibg=bg gui=NONE  ctermfg=110 ctermbg=bg cterm=NONE 
+hi vimStatement guifg=MediumOrchid1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimString guifg=#54A3BF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi vimStringCont guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimSubst guifg=Plum3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimSubst1 guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimSubstDelim guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimSubstFlagErr guifg=SteelBlue1 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi vimSubstFlags guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimSubstPat guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi vimSubstRep4 guifg=#44AA00 guibg=bg gui=NONE  ctermfg=70 ctermbg=bg cterm=NONE 
+hi vimSubstSubstr guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimSubstTwoBS guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimSynCase guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi vimSynCaseError guifg=LightGoldenRod guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi vimSyncC guifg=#C28955 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi vimSyncError guifg=LightGoldenRod guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi vimSyncGroup guifg=#7EB49C guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimSyncGroupName guifg=#7EB49C guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi vimSyncKey guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimSyncLines guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimSyncMatch guifg=#90CFB3 guibg=bg gui=NONE  ctermfg=115 ctermbg=bg cterm=NONE 
+hi vimSyncNone guifg=#C28955 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi vimSynContains guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimSynError guifg=#2FBBA6 guibg=bg gui=undercurl  ctermfg=37 ctermbg=bg cterm=undercurl 
+hi vimSynKeyContainedin guifg=Yellow4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimSynKeyOpt guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi vimSynKeyRegion guifg=#8880FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi vimSynMtchGrp guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimSynMtchOpt guifg=#C27055 guibg=bg gui=NONE  ctermfg=131 ctermbg=bg cterm=NONE 
+hi vimSynNextGroup guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimSynNotPatRange guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi vimSynOption guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimSynPatMod guifg=#6B9999 guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi vimSynPatRange guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimSynReg guifg=#C28955 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi vimSynRegion guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi vimSynRegOpt guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi vimSynRegPat guifg=#8870FF guibg=bg gui=NONE  ctermfg=99 ctermbg=bg cterm=NONE 
+hi vimSyntax guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimSynType guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimTodo guifg=#7E9F8E guibg=bg gui=italic  ctermfg=108 ctermbg=bg cterm=italic 
+hi vimUnmap guifg=LightCyan3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimUserAttrb guifg=#1A7EDE guibg=bg gui=NONE  ctermfg=32 ctermbg=bg cterm=NONE 
+hi vimUserAttrbCmplt guifg=#00C733 guibg=bg gui=italic  ctermfg=41 ctermbg=bg cterm=italic 
+hi vimUserAttrbCmpltFunc guifg=#00C733 guibg=bg gui=italic  ctermfg=41 ctermbg=bg cterm=italic 
+hi vimUserAttrbError guifg=OrangeRed guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimUserAttrbKey guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimUserCmd guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimUserCmdError guifg=Beige guibg=bg gui=underline  ctermfg=124 ctermbg=bg cterm=underline 
+hi vimUserCommand guifg=IndianRed3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimUserFunc guifg=#D556F2 guibg=bg gui=NONE  ctermfg=171 ctermbg=bg cterm=NONE 
+hi vimVar guifg=#00B955 guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimWarn guifg=Wheat3 guibg=bg gui=underline  ctermfg=40 ctermbg=bg cterm=underline 
+hi vimWikiBold guifg=SkyBlue3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi vimWikiBoldChar guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiBoldCharT guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiBoldItalic guifg=SkyBlue2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi vimWikiBoldItalicChar guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiBoldItalicCharT guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiBoldItalicT guifg=SkyBlue2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi vimWikiBoldT guifg=SkyBlue3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi vimWikiCellSeparator guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiCheckBoxDone guifg=MistyRose4 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiCode guifg=LightPink3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiCodeChar guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiCodeCharT guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiCodeT guifg=LightPink3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi vimWikiDelText guifg=Tan3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiDelTextChar guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiDelTextCharT guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiDelTextT guifg=Tan3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiEmoticons guifg=LightPink3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiEqIn guifg=LightSalmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiEqInChar guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiEqInCharT guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiEqInT guifg=LightSalmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiH1Folding guifg=#21A43B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimWikiH2Folding guifg=#21A43B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimWikiH3Folding guifg=#21A43B guibg=#112A33 gui=NONE  ctermfg=35 ctermbg=17 cterm=NONE 
+hi vimWikiH4Folding guifg=#21A43B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimWikiH5Folding guifg=#21A43B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimWikiH6Folding guifg=#21A43B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimWikiHeader1 guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi vimWikiHeader2 guifg=Green3 guibg=bg gui=NONE  ctermfg=10 ctermbg=bg cterm=NONE 
+hi vimWikiHeader3 guifg=#71D3B4 guibg=#112A33 gui=NONE  ctermfg=79 ctermbg=17 cterm=NONE 
+hi vimWikiHeader4 guifg=#7FAAF2 guibg=bg gui=NONE  ctermfg=111 ctermbg=bg cterm=NONE 
+hi vimWikiHeader5 guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi vimWikiHeader6 guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiHeaderChar guifg=#C29944 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi vimWikiHeaderCharT guifg=#C29944 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi vimWikiHR guifg=#25BF42 guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimWikiHTMLtag guifg=PaleGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiItalic guifg=DarkOliveGreen3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiItalicBold guifg=SkyBlue2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi vimWikiItalicBoldChar guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiItalicBoldCharT guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiItalicBoldT guifg=SkyBlue2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi vimWikiItalicChar guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiItalicCharT guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiItalicT guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimWikiLink guifg=SkyBlue2 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi vimWikiLinkChar guifg=#8C4840 guibg=bg gui=underline  ctermfg=95 ctermbg=bg cterm=underline 
+hi vimWikiLinkCharT guifg=SkyBlue2 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi vimWikiLinkT guifg=SkyBlue2 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi vimWikiList guifg=#00AF6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimWikiListTodo guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimWikiMarkers guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiMath guifg=LightSalmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiMathT guifg=LightSalmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiNoExistsLink guifg=Khaki3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiNoExistsLinkCharT guifg=Khaki3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiNoExistsLinkT guifg=Khaki3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiPlaceholder guifg=#2CAA47 guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi vimWikiPlaceholderParam guifg=#B77669 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi vimWikiPre guifg=LightPink3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiPreT guifg=LightPink3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiSubScript guifg=LightSalmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiSubScriptChar guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiSubScriptCharT guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiSubScriptT guifg=LightSalmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiSuperScript guifg=LightSalmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiSuperScriptChar guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiSuperScriptCharT guifg=DarkOrchid2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi vimWikiSuperScriptT guifg=LightSalmon3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi vimWikiTableRow guifg=#437CAB guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi vimWikiTodo guifg=VioletRed3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi vimWikiUnderline guifg=DarkOliveGreen3 guibg=bg gui=underline  ctermfg=160 ctermbg=bg cterm=underline 
+hi Visual guifg=Navy guibg=#55D5E3 gui=NONE  ctermfg=0 ctermbg=80 cterm=NONE 
+hi visualNOS guifg=SlateGray3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi w3mAnchor guifg=#009F6F guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi w3mBracket1 guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi w3mBracket2 guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi w3mBracket3 guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi w3mCopylight guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi w3mCopyright guifg=#2AC06B guibg=bg gui=NONE  ctermfg=35 ctermbg=bg cterm=NONE 
+hi w3mDate guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi w3mHitAHint guifg=#65C254 guibg=bg gui=NONE  ctermfg=71 ctermbg=bg cterm=NONE 
+hi w3mInput guifg=#54A3BF guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi w3mLink guifg=Turquoise3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi w3mLinkHover guifg=SlateBlue4 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi w3mMark guifg=#FF88AA guibg=bg gui=NONE  ctermfg=211 ctermbg=bg cterm=NONE 
+hi w3mNumber guifg=Aquamarine2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi w3mSubmit guifg=#78B37A guibg=bg gui=NONE  ctermfg=108 ctermbg=bg cterm=NONE 
+hi w3mTitle guifg=#C59F6F guibg=bg gui=NONE  ctermfg=179 ctermbg=bg cterm=NONE 
+hi w3mUrl guifg=SlateGray3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi warningMsg guifg=OrangeRed guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi warnMsg guifg=FireBrick1 guibg=#112A33 gui=underline  ctermfg=0 ctermbg=17 cterm=underline 
+hi warnMsg0 guifg=#9B91F6 guibg=bg gui=italic  ctermfg=105 ctermbg=bg cterm=italic 
+hi warnMsg1 guifg=bg guibg=#2F99A6 gui=NONE  ctermfg=bg ctermbg=31 cterm=NONE 
+hi warnMsg10 guifg=SlateBlue2 guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi warnMsg11 guifg=DarkSeaGreen3 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi warnMsg12 guifg=#C29955 guibg=bg gui=NONE  ctermfg=137 ctermbg=bg cterm=NONE 
+hi warnMsg2 guifg=#5FD75F guibg=#1C4F4F gui=NONE  ctermfg=77 ctermbg=23 cterm=NONE 
+hi warnMsg2u guifg=#5FD75F guibg=#1C4F4F gui=underline  ctermfg=77 ctermbg=23 cterm=underline 
+hi warnMsg3 guifg=DarkSeaGreen3 guibg=Gray26 gui=NONE  ctermfg=160 ctermbg=0 cterm=NONE 
+hi warnMsg3u guifg=DarkSeaGreen3 guibg=Gray26 gui=underline  ctermfg=160 ctermbg=0 cterm=underline 
+hi warnMsg4 guifg=#5FD75F guibg=#003366 gui=NONE  ctermfg=77 ctermbg=23 cterm=NONE 
+hi warnMsg4u guifg=#5FD75F guibg=#003366 gui=underline  ctermfg=77 ctermbg=23 cterm=underline 
+hi warnMsg5 guifg=PaleGreen2 guibg=Black gui=NONE  ctermfg=0 ctermbg=34 cterm=NONE 
+hi warnMsg6 guifg=#5FD75F guibg=bg gui=NONE  ctermfg=77 ctermbg=bg cterm=NONE 
+hi warnMsg7 guifg=#CC5588 guibg=bg gui=NONE  ctermfg=168 ctermbg=bg cterm=NONE 
+hi warnMsg8 guifg=PaleGreen2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi warnMsg9 guifg=SlateBlue2 guibg=#0A0A4E gui=NONE  ctermfg=20 ctermbg=17 cterm=NONE 
+hi wildMenu guifg=Black guibg=LimeGreen gui=NONE  ctermfg=34 ctermbg=0 cterm=NONE 
+hi xmlAttrib guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi xmlAttribPunct guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi xmlCDATA guifg=#4593B3 guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi xmlCDATAcdata guifg=#CC44FF guibg=bg gui=underline  ctermfg=171 ctermbg=bg cterm=underline 
+hi xmlCDATAend guifg=#CC4FFF guibg=bg gui=NONE  ctermfg=171 ctermbg=bg cterm=NONE 
+hi xmlCDATAstart guifg=DarkOrchid guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi xmlComment guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi xmlCommentError guifg=Tomato guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi xmlCommentPart guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi xmlCommentStart guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi xmlDocType guifg=#CDA8C9 guibg=bg gui=italic  ctermfg=182 ctermbg=bg cterm=italic 
+hi xmlDocTypeDecl guifg=#A1B1A1 guibg=bg gui=NONE  ctermfg=145 ctermbg=bg cterm=NONE 
+hi xmlDocTypeKeyword guifg=SlateGray3 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi xmlEndTag guifg=#007E80 guibg=bg gui=NONE  ctermfg=30 ctermbg=bg cterm=NONE 
+hi xmlEntity guifg=#D88DD8 guibg=bg gui=NONE  ctermfg=176 ctermbg=bg cterm=NONE 
+hi xmlEntityPunct guifg=VioletRed guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi xmlEqual guifg=#00B780 guibg=bg gui=bold  ctermfg=36 ctermbg=bg cterm=bold 
+hi xmlHref guifg=#7EB49C guibg=bg gui=NONE  ctermfg=109 ctermbg=bg cterm=NONE 
+hi xmlNameSpace guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi xmlProcessingDelim guifg=#CC4455 guibg=bg gui=NONE  ctermfg=167 ctermbg=bg cterm=NONE 
+hi xmlRegion guifg=#73A3B9 guibg=bg gui=NONE  ctermfg=73 ctermbg=bg cterm=NONE 
+hi xmlStartTagHook guifg=#9A85FF guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi xmlString guifg=#869BCC guibg=bg gui=NONE  ctermfg=104 ctermbg=bg cterm=NONE 
+hi xmlTag guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi xmlTagName guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi xmlValue guifg=Navy guibg=#BDCA51 gui=italic  ctermfg=0 ctermbg=149 cterm=italic 
+hi xmlXmlns guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi xxdAddress guifg=#09BA85 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi xxdAscii guifg=#9B91F6 guibg=bg gui=NONE  ctermfg=105 ctermbg=bg cterm=NONE 
+hi xxdDot guifg=SlateGray2 guibg=bg gui=bold,underline  ctermfg=0 ctermbg=bg cterm=bold,underline 
+hi xxdSep guifg=#009F6F guibg=bg gui=bold  ctermfg=35 ctermbg=bg cterm=bold 
+hi yamlAlias guifg=RosyBrown guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi yamlAnchor guifg=#8870FF guibg=bg gui=underline  ctermfg=99 ctermbg=bg cterm=underline 
+hi yamlBlockCollectionItemStart guifg=#249124 guibg=bg gui=bold  ctermfg=28 ctermbg=bg cterm=bold 
+hi yamlBlockMappingKey guifg=#2DB3A0 guibg=bg gui=NONE  ctermfg=37 ctermbg=bg cterm=NONE 
+hi yamlComment guifg=#5D8B9C guibg=bg gui=NONE  ctermfg=67 ctermbg=bg cterm=NONE 
+hi yamlConstant guifg=DodgerBlue2 guibg=bg gui=italic  ctermfg=0 ctermbg=bg cterm=italic 
+hi yamlDocumentEnd guifg=Tomato2 guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi yamlDocumentStart guifg=LimeGreen guibg=bg gui=bold  ctermfg=0 ctermbg=bg cterm=bold 
+hi yamlFloat guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi yamlFlowIndicator guifg=LightSeaGreen guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi yamlFlowMappingKey guifg=#00ACE6 guibg=bg gui=NONE  ctermfg=38 ctermbg=bg cterm=NONE 
+hi yamlFlowString guifg=DeepSkyBlue2 guibg=bg gui=NONE  ctermfg=160 ctermbg=bg cterm=NONE 
+hi yamlFlowStringDelimiter guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi yamlInteger guifg=DodgerBlue2 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi yamlKeyValueDelimiter guifg=#2DCCA0 guibg=bg gui=NONE  ctermfg=43 ctermbg=bg cterm=NONE 
+hi yamlNodeTag guifg=SkyBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi yamlPlainScalar guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi yamlString guifg=SlateGray3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi yamlTimestamp guifg=DodgerBlue1 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi yamlTodo guifg=Tomato3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi yankringHeaders guifg=OliveDrab guibg=bg gui=NONE  ctermfg=21 ctermbg=bg cterm=NONE 
+hi yankringHelp guifg=SeaGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi yankringItemNumber guifg=SlateBlue guibg=bg gui=NONE  ctermfg=20 ctermbg=bg cterm=NONE 
+hi yankringKey guifg=PaleGreen3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi yankringTitle guifg=MediumOrchid guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi zimbuBasicType guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi zimbuComment guifg=#557F8F guibg=bg gui=NONE  ctermfg=66 ctermbg=bg cterm=NONE 
+hi zimbuCompType guifg=#00B880 guibg=bg gui=NONE  ctermfg=36 ctermbg=bg cterm=NONE 
+hi zimbuMethod guifg=RoyalBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi zimbuString guifg=DodgerBlue3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi zimbuTodo guifg=Tomato3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
+hi zimbuType guifg=RoyalBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi zoneDomain guifg=#A8C2EF guibg=bg gui=NONE  ctermfg=147 ctermbg=bg cterm=NONE 
+hi zoneRRtype guifg=#A8C2EF guibg=bg gui=NONE  ctermfg=147 ctermbg=bg cterm=NONE 
+hi zoneTTL guifg=#A8C2EF guibg=bg gui=NONE  ctermfg=147 ctermbg=bg cterm=NONE 
+hi zoneUnknown guifg=#A8C2EF guibg=bg gui=NONE  ctermfg=147 ctermbg=bg cterm=NONE 
+hi zshCommands guifg=CornFlowerBlue guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi zshKeyword guifg=Sienna3 guibg=bg gui=NONE  ctermfg=0 ctermbg=bg cterm=NONE 
+hi zshTodo guifg=Tomato3 guibg=bg gui=underline  ctermfg=0 ctermbg=bg cterm=underline 
 
+" GUI cursor  [[[1
+if !has('gui_running') && &t_Co < 256
+    set guicursor+=i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150
 endif
 
-
-" Utility Functions:                                                                      {{{1
-
-" Function: s:GetUserOptions(): Get User Options                                          {{{2
-function! s:GetUserOptions()
-    " check/correct all the user input options (parameters in dict g:briofita_parms)
-    " if a numeric parm does not exist in the options sequence, try the next existing one
-    " wrongly set parameters (less than zero, greater than the limit, etc.) get corrected(0)
-    " valid settings are copied into the internal dict s:dic_cf_options
-
-    if exists("g:briofita_parms")
-        if !empty(g:briofita_parms)
-            let parmkeys = keys(g:briofita_parms)
-            let ix = index(parmkeys, 'localcursorline')
-            if ix < 0
-                " a required key must exist: creating it...
-                let g:briofita_parms['localcursorline'] = 0
-                call add (parmkeys, 'localcursorline')
-            endif
-            for pkey in parmkeys
-                if has_key(s:dic_cf_options, pkey)
-                    execute 'let tval  = g:briofita_parms.' . pkey
-                    execute 'let limit = s:dic_cf_options.' . pkey . '[1]'
-                    let correctit = 0
-                    if type(tval) != type(0)
-                        let correctit  = 1
-                    else
-                        if (tval < 0)
-                            let correctit = 1
-                        endif
-                        if (limit >= 0) && (tval > limit)
-                            let correctit = 1
-                        endif
-                    endif
-                    if correctit
-                        let tval = 0
-                        execute 'let g:briofita_parms.' . pkey    . ' = ' . tval
-                    endif " if correct it
-                    let keyhasoptions = 0
-                    execute 'let keyhasoptions = has_key(s:dic_hi_options,"' . pkey . '")'
-                    if keyhasoptions
-                        let dictexpression = 's:dic_hi_options.' . pkey
-                        let letcmd2        = 'let hasnumkey = has_key(' . dictexpression . ', ' . tval . ')'
-                        try
-                            execute letcmd2
-                        catch
-                            let tval = 0
-                        endtry
-                        if (! hasnumkey) && (tval != 0) && ((pkey!='colorcolumn')&&(tval!=1))
-                            " fix: skip dict's non-existing value
-                            if (limit > 1)
-                                " TODO check performance at this branch (user parm wrongly set)
-                                execute 'let lstdkeys = keys(s:dic_hi_options.' . pkey . ')'
-                                " TODO review below uses of hardcoded constant "3"
-                                if len(lstdkeys) >= 3
-                                    " TODO review the need of below copy()
-                                    let dickeys = copy(lstdkeys)
-                                    let correctit = 0
-                                    " TODO review below hardcoded constant "3"
-                                    if len(dickeys) >= 3
-                                        " TODO review below try/catch usage performance concerns
-                                        try
-                                            let lstkeys = sort(dickeys)
-                                        catch /^Vim\%((\a\+)\)\=:E/
-                                            let correctit = 1
-                                        endtry
-                                        " TODO review below use of printf in filtering device
-                                        let filterexpr = printf('(v:val > %d)&&(v:val > 0)',
-                                                       \ tval)
-                                        try
-                                            call filter(lstkeys, filterexpr)
-                                        catch /^Vim\%((\a\+)\)\=:E/
-                                            let correctit = 1
-                                        endtry
-                                        if len(lstkeys) > 0
-                                            " the 1st one brings us an increased value
-                                            let tval = lstkeys[0]
-                                        else   " cannot increase value, goback to default zero
-                                            let correctit = 1
-                                        endif
-                                    else
-                                        let correctit = 1
-                                    endif
-                                    if correctit
-                                        let tval = 0
-                                    endif " if correct it
-                                else
-                                    let tval = 0
-                                endif
-                            else
-                                " TODO: re-check: boolean (with options?) falling here?
-                                let tval = 0
-                            endif
-                            execute 'let g:briofita_parms.' . pkey    . ' = ' . tval
-                        endif
-                    endif
-                    execute 'let s:dic_cf_options.'  . pkey  . ' = ' .
-                           \        "[" . tval . ',' . limit . ']'
-                endif  " if it has the same key
-            endfor
-        endif
-    endif
-endfunction
-
-function! s:SetNormalIfCleared()
-    " checks if the "Normal" highlight is cleared
-    " rationale: before any further action, we need to get assured of such BASIC highlight item
-    " --------------------------------------------------------------------------------------------------------
-    " NOTE: The below code circumvents some "weird, unlikely errors" detected while debugging the colorscheme.
-    " NOTE: The cause of these errors is yet undetermined; but, surely, it is triggered by something outside
-    " NOTE: the colorscheme's scope of action (interference from extraneous redir? Vim 7.3/7.4 bug?).
-    " NOTE: Without this circumvention I sometimes got the below Vim message:
-    " "Error detected while processing function <SNR>206_HighlightPerOptionsDic..<SNR>206_SetNormalIfCleared:"
-    "     "line ...:" (here comes a line number inside the scope of the below redir command)
-    "        "E121: Undefined variable: ..." (here comes a variable name which is NOT used in the colorscheme)
-    " --------------------------------------------------------------------------------------------------------
-    let s:verbfile = ''
-    if exists('+verbosefile')
-       let s:verbfile = &verbosefile
-       " rationale: colorscheme internals should not be exported
-       set verbosefile=
-    endif
-    try
-        " TODO: check: should the below redir var be function-local instead of script-local?
-        " TODO: check: should the below redir variable be replaced by a register?
-        let s:briofita_normal_state=''
-        silent! redir => s:briofita_normal_state
-            silent! hi normal
-        redir END
-        if exists("s:briofita_normal_state")
-            if     s:briofita_normal_state =~ 'cleared'
-                silent! highlight Normal  guifg=PowderBlue guibg=#062926 gui=NONE
-            endif
-        endif
-    catch
-        silent! highlight Normal  guifg=PowderBlue guibg=#062926 gui=NONE
-    endtry
-    if len(s:verbfile) > 0
-        " NOTE: an obvious guard, but sometimes debug've shown us many weird things...
-        if !exists('+verbosefile')
-            silent! execute 'set verbosefile=' . s:verbfile
-        endif
-    endif
-endfunction
-
-
-" Function: s:HighlightPerOptionsDic(.): Highlight Item Per Options Dictionary            {{{1
-function!   s:HighlightPerOptionsDic(item1)
-    " example: parm1 (item1): 'conceal'
-
-    if s:check_cleared_normal_highlight
-        silent call s:SetNormalIfCleared()
-    endif
-
-    " TODO merge this special case with the source branch following it?
-    "if ((s:dic_cf_options.localcursorline[0] || g:briofita_parms.localcursorline))
-        if has_key(s:dic_cf_options,'cursorline')
-            if  (exists('t:briofita_cursorline'))
-                "if t:briofita_cursorline >= s:dic_cf_options.cursorline[1]
-                if  t:briofita_cursorline > s:dic_cf_options.cursorline[1]
-                    let t:briofita_cursorline = 0
-                endif
-            endif
-        endif
-    "endif
-
-    if exists("s:dic_hi_options")
-        if has_key(s:dic_cf_options,a:item1)
-            execute 'let dictmax = s:dic_cf_options.' . a:item1 . '[1]'
-            if dictmax >= 0
-                if (a:item1 == 'cursorline')
-                     if  (exists('t:briofita_cursorline'))
-                        " local coupled highlights
-                        if    (t:briofita_cursorline >  dictmax) ||
-                           \  (t:briofita_cursorline <  0)
-                           " correct it
-                           let t:briofita_cursorline = 0
-                        endif
-                     endif
-                     if ((s:dic_cf_options.localcursorline[0] ||
-                      \  g:briofita_parms.localcursorline))   &&
-                      \  (exists('t:briofita_cursorline'))
-                            " get current value from the local variable
-                            let curdickey = t:briofita_cursorline
-                     else
-                            execute 'let curdickey = s:dic_cf_options.' . a:item1 . '[0]'
-                     endif
-                else
-                    execute 'let curdickey = s:dic_cf_options.' . a:item1 . '[0]'
-                endif
-                if (curdickey > dictmax)
-                    " correct global dict value
-                    execute 's:dic_cf_options.' . a:item1 . '[0] = 0'
-                    let curdickey = 0
-                endif
-                execute 'let dicLstLst = s:dic_hi_options["' . a:item1 . '"]'
-                if dictmax != 1  " if non-boolean option
-                    if ! has_key(dicLstLst,curdickey)
-                        if (curdickey == 0)
-                            " internal dict construction error: default should always exist!
-                            if (has_key(s:dic_cf_options,'warnlevel') && s:dic_cf_options.warnlevel == 1)
-                                echomsg "Briofita colorscheme: WARN: " .
-                                      \ "internal dict for entry(" . a:item1 .
-                                      \ ") missing default(0) key; got alternate highlight"
-                            endif
-                            " alternate highlight used in case of errors
-                            execute 'highlight ' . a:item1 . ' guifg=#71D3B4 guibg=#062926'
-                            return
-                        endif
-                        " NOTE: return(below) allows the item to NOT have a specific key,
-                        " NOTE: so that that it might be processed by another entry (like cc=1).
-                        return
-                    endif
-                else
-                    " (max EQ 1) ---> (boolean option)
-                    if ! has_key(dicLstLst, 0)
-                        if (curdickey == 0)
-                            " internal dict construction error: default should always exist!
-                            if (has_key(s:dic_cf_options,'warnlevel') && s:dic_cf_options.warnlevel == 1)
-                                echomsg "Briofita colorscheme: WARN: " .
-                                      \ "internal dict for boolean option " . a:item1 .
-                                      \ ") missing default(0) key; got alternate highlight"
-                            endif
-                            " alternate highlight used in case of errors
-                            execute 'highlight ' . a:item1 . ' guifg=#71D3B4 guibg=#062926'
-                            return
-                        endif
-                        " NOTE: return(below) allows the item to NOT have a specific key,
-                        " NOTE: so that that it might be processed by another entry (like cc=1).
-                        return
-                    endif
-                endif
-                if (curdickey >= 0)  " when < 0 it is not processed here
-
-                    if dictmax != 1  " if non-boolean option
-                        let lstLst = dicLstLst[curdickey]
-                    else " boolean option
-                        let lstLst = dicLstLst[0]
-                    endif
-                    for [grpname, hifg, hibg, guiattr] in lstLst
-                        " prevent dict formatting errors: trim blanks
-                        let hifg = substitute(hifg, '^\s\+','','')
-                        let hifg = substitute(hifg, '\s\+$','','')
-                        let hibg = substitute(hibg, '^\s\+','','')
-                        let hibg = substitute(hibg, '\s\+$','','')
-                        let guiattr = substitute(guiattr, '^\s\+','','')
-                        let guiattr = substitute(guiattr, '\s\+$','','')
-
-                        if len(grpname) > 0
-                            let groupname = grpname
-                        else
-                            let groupname = a:item1
-                        endif
-                        if len(hifg) == 0
-                            let hifg='fg'
-                        endif
-                        if len(hibg) == 0
-                            let hibg='bg'
-                        endif
-                        if len(guiattr) == 0
-                            let guiattr='NONE'
-                        endif
-                        if (a:item1 == 'cursorline') && (grpname=='cursorline')
-                            if has_key(s:dic_cf_options,"colorcolumn")
-                                if     s:dic_cf_options.colorcolumn[0]==1
-                                    " special case: coupled cc
-                                    let cmd = 'highlight ColorColumn '   .
-                                           \  'guifg=NONE'         . ' ' .
-                                           \  'guibg='     . hibg  . ' ' .
-                                           \  'gui=NONE'
-                                    execute cmd
-                                    " special case: coupled nontext
-                                    highlight NonText gui=NONE guifg=#197019 guibg=bg
-                                endif
-                            endif
-                        endif
-                        let cmd = 'highlight ' . groupname . ' ' .
-                             \    'guifg='     . hifg      . ' ' .
-                             \    'guibg='     . hibg      . ' ' .
-                             \    'gui='       . guiattr
-                        execute cmd
-                        " special case: if normal bg=black then set black bg, too, for the below highlight
-                        " FIXME shouldn't this trick be done via options dictionary?
-                        if (tolower(groupname)=='normal' && tolower(hibg)=='black')
-                            hi foldColumn guibg=Black
-                        endif
-                    endfor
-                endif
-            endif
-        endif
-    endif
-endfunction
-
-
-" Color Dictionary Parsing Functions:                                                     {{{1
-
-" Function: s:ColorDictParser(.): Color Dictionaries Parser                               {{{2
-function!   s:ColorDictParser(color_dict)
-    " Color Dictionary Parser: sets all the color highlights specified in the dictionaries
-    for [strgroup, lstcolors] in items(a:color_dict)
-            exec 'highlight ' . strgroup
-                \ . (! empty(lstcolors[0])? ' guifg='             . lstcolors[0]: '')
-                \ . (! empty(lstcolors[1])? ' guibg='             . lstcolors[1]: '')
-                \ . (  empty(lstcolors[2])? ' gui=NONE' : ' gui=' . lstcolors[2])
-    endfor
-endfunction
-
-" Function: s:ParseAllSyntaxes(.): Parse the color dictionaries for All Syntaxes          {{{2
-function!   s:ParseAllSyntaxes(listOfDicts)
-    " sets the highlights for all syntaxes used
-    for langdict in a:listOfDicts
-        call s:ColorDictParser(langdict)
-    endfor
-endfunction
-
-" Color Dictionaries Initialization:                                                      {{{1
-" Covers most non-optional highlights.
-" NOTE: Design criteria:
-" NOTE:   1. Use as few highlight links as possible (until we get to a final stable release).
-" NOTE:   2. Harmony of highlights within a syntax prevails over inter-syntax uniformity.
-"       |-------------------|-----------|-------------|-----------------|
-"       | Highlight group   |Foreground |Background   |   Attributes    |
-"       |-------------------|-----------|-------------|-----------------|
-" Asciidoc                                                                                {{{2
-if !exists("s:dict_hi_asciidoc")
-        let s:dict_hi_asciidoc = {
-            \   "asciidocAdmonition"              : [ "DeepSkyBlue3",  "",        ""],
-            \   "asciidocAdmonitionNote"	      : [ "#85B2FE",       "",        ""],
-            \   "asciidocAdmonitionWarn"	      : [ "DodgerBlue",    "",        ""],
-            \   "asciidocAnchorMacro"             : [ "SlateGray3",    "",        ""],
-            \   "asciidocAttributeEntry"          : [ "DarkSeaGreen4", "", ""],
-            \   "asciidocAttributeList"           : [ "BurlyWood4", "",  ""],
-            \   "asciidocAttributeMacro"          : [ "DodgerBlue2", "",  "italic"],
-            \   "asciidocAttributeRef"            : [ "#9A85FF", "#152933", "italic"],
-            \   "asciidocBackslash"               : [ "Aquamarine2", "",  ""],
-            \   "asciidocBiblio"	              : [ "#2DB3A0", "", "bold,italic"],
-            \   "asciidocCallout"                 : [ "SeaGreen2", "",  ""],
-            \   "asciidocCommentBlock"            : [ "#8B7F4C", "",  "italic"],
-            \   "asciidocCommentLine"             : [ "#5D8B9C", "",  ""],
-            \   "asciidocDoubleDollarPassthrough" : [ "DodgerBlue2", "",  ""],
-            \   "asciidocEmail"                   : [ "SkyBlue2", "",  "underline"],
-            \   "asciidocEntityRef"               : [ "#8fbfdc", "",  ""],
-            \   "asciidocExampleBlockDelimiter"   : [ "SlateGray4", "", "bold"],
-            \   "asciidocFilterBlock"             : [ "DeepSkyBlue2", "",  ""],
-            \   "asciidocFootnote"	              : [ "CornflowerBlue", "Gray26",  "italic"],
-            \   "asciidocGlossary"	              : [ "#00B780", "",  "underline"],
-            \   "asciidocHLabel"                  : [ "SeaGreen2", "",  ""],
-            \   "asciidocHyphenInterpolation"     : [ "#9FE846", "#573D8C", ""],
-            \   "asciidocIdMarker"                : [ "SpringGreen2", "",  ""],
-            \   "asciidocInclude"	              : [ "#A191F5", "",  ""],
-            \   "asciidocIndexTerm"               : [ "#7FA2E6", "",  ""],
-            \   "asciidocLineBreak"               : [ "Red", "",  ""],
-            \   "asciidocLink"	                  : [ "#8870FF", "",  "bold,underline"],
-            \   "asciidocList"                    : [ "#00B780", "",  ""],
-            \   "asciidocListBullet"              : [ "SpringGreen2", "",  ""],
-            \   "asciidocListContinuation"        : [ "Gray50", "",  "italic"],
-            \   "asciidocListingBlock"            : [ "DeepSkyBlue2", "",  ""],
-            \   "asciidocListLabel"               : [ "MediumSeaGreen", "", ""],
-            \   "asciidocListNumber"              : [ "SpringGreen2", "",  ""],
-            \   "asciidocLiteralBlock"            : [ "#2FBBA6", "",  "italic"],
-            \   "asciidocLiteralParagraph"        : [ "#00B780", "",  ""],
-            \   "asciidocMacro"                   : [ "#7FAAF2", "#152933", "italic"],
-            \   "asciidocMacroAttributes"         : [ "#6885BD","","italic"],
-            \   "asciidocNonAsciidocBar"          : [ "Maroon4", "",  "bold"],
-            \   "asciidocOddnumberedTableCol"     : [ "#9FE846", "#473273", ""],
-            \   "asciidocOpenBlockDelimiter"      : [ "#779DB2", "",  ""],
-            \   "asciidocPagebreak"               : [ "CadetBlue2", "",  ""],
-            \   "asciidocQuestion"	              : [ "#00B780", "",  "underline"],
-            \   "asciidocQuoteBlockDelimiter"     : [ "DeepSkyBlue2", "",  ""],
-            \   "asciidocQuotedAttributeList"     : [ "#9A85FF", "",  "italic"],
-            \   "asciidocQuotedboldAttributeList" : [ "Gray50", "",  "italic"],
-            \   "asciidocQuotedDoubleQuoted"      : [ "SeaGreen3", "#1E4959",  "italic"],
-            \   "asciidocQuotedMonospaced"        : [ "Khaki3",  "#1E4959",  "italic"],
-            \   "asciidocQuotedMonospaced2"       : [ "#A08FF5", "",         ""],
-            \   "asciidocQuotedSubscript"         : [ "SlateGray3", "", "italic"],
-            \   "asciidocQuotedUnconstrainedMonospaced" : [ "Khaki3", "#1E4959",  ""],
-            \   "asciidocReference"	              : [ "#A191F5", "",  ""],
-            \   "asciidocRefMacro"                : [ "LightSlateGray", "",  "italic"],
-            \   "asciidocReplacements"	          : [ "DeepSkyBlue2", "",  ""],
-            \   "asciidocRevisionInfo"	          : [ "DodgerBlue2", "",  ""],
-            \   "asciidocRuler"                   : [ "DeepSkyBlue2", "",  ""],
-            \   "asciidocSect0"                   : [ "FireBrick1", "#112A33", "bold,italic,underline"],
-            \   "asciidocSect0Old"                : [ "#9B91F6", "",  "bold,italic"],
-            \   "asciidocSect1Old"	              : [ "#9B91F6", "",  "bold"],
-            \   "asciidocSect2Old"	              : [ "#5FD75F", "#1C4F4F",  ""],
-            \   "asciidocSect3Old"	              : [ "DarkSeaGreen3", "Gray26",  ""],
-            \   "asciidocSect4Old"	              : [ "#5FD75F", "#003366",  ""],
-            \   "asciidocSidebarDelimiter"        : [ "#009F6F", "MidnightBlue",  "italic,underline"],
-            \   "asciidocSource"	              : [ "#c59f6f", "",  ""],
-            \   "asciidocTableDelimiter"          : [ "Maroon4",  "",  "bold"],
-            \   "asciidocTableDelimiter2"         : [ "#779DB2", "",  ""],
-            \   "asciidocToDo"                    : [ "LemonChiffon3", "#345FA8",  ""],
-            \   "asciidocTriplePlusPassthrough"   : [ "#88CB35", "",  ""],
-            \   "asciidocTripplePlusPassthrough"  : [ "#A191F5", "",  ""],
-            \   "asciidocURL"                     : [ "Turquoise", "", "italic"],
-            \ }
-endif
-
-" Awk                                                                                     {{{2
-if !exists("s:dict_hi_awk")
-        let s:dict_hi_awk = {
-            \   "awkArrayElement"         : [ "AquaMarine3", "", ""],
-            \   "awkComma"                : [ "#009F6F","",""],
-            \   "awkFieldVars"            : [ "#009F6F","",""],
-            \   "awkFunction"             : [ "#2FBBA6", "", ""],
-            \   "awkParen"                : [ "Red", "",  ""],
-            \   "awkPatterns"             : [ "PaleGreen2", "", ""],
-            \   "awkRegExp"               : [ "#009F6F","",""],
-            \   "awkSearch"               : [ "#009F6F","",""],
-            \   "awkSpecialCharacter"     : [ "Red", "", ""],
-            \   "awkSpecialPrintf"        : [ "#9FCBD0", "DarkSlateGrey", ""],
-            \   "awkStatement"            : [ "PowderBlue", "#152933", ""],
-            \   "awkString"				  : [ "#9A85FF", "",  ""],
-            \   "awkVariables"            : [ "#8870FF","",""],
-                    \ }
-endif
-
-" Buffergator, Buffersaurus, ls/DirList (Vim plugin)                                      {{{2
-if !exists("s:dict_hi_plugin_bufX")
-        let s:dict_hi_plugin_bufX = {
-    \   "bufferGatorBufferNr"                   : [ "#5D8B9C", "",  ""],
-    \   "bufferGatorModifiedFileName"           : [ "Tomato", "",  "italic"],
-    \   "bufferGatorTabpageLine"                : [ "SlateGray3", "", ""],
-    \   "bufferGatorUnmodifiedFileName"         : [ "#00b880", "",  ""],
-    \   "bufferGatorUnmodifiedFileSyntaxKey"    : [ "#5D8B9C", "",  ""],
-    \   "BufferSaurusCurrentEntry"              : [ "", "", "reverse"],
-    \   "BufferSaurusSyntaxContextedKeyDesc"    : [ "#779DB2", "", "italic,undercurl"],
-    \   "bufferSaurusSyntaxContextedKeyFilename": [ "#808080", "",  ""],
-    \   "BufferSaurusSyntaxContextedKeyLines"   : [ "#808080", "",  ""],
-    \   "BufferSaurusSyntaxContextedKeyRow"     : [ "#808080", "",  "italic"],
-    \   "BufferSaurusSyntaxContextLineNum"      : [ "#808080", "",  ""],
-    \   "BufferSaurusSyntaxContextLineText"     : [ "#77996C", "",  "italic"],
-    \   "BufferSaurusSyntaxFileGroupTitle"      : [ "#009F6F", "", "bold,italic"],
-    \   "bufferSaurusSyntaxKey"                 : [ "#CC4455",      "",  ""],
-    \   "BufferSaurusSyntaxMatchedLineNum"      : [ "#2FBBA6", "bg", ""],
-    \   "BufferSaurusSyntaxMatchedLineText"     : [ "#D6B883", "bg", "italic"],
-    \   "BufferSaurusSyntaxUncontextedLineNum"  : [ "#2FBBA6", "", ""],
-    \   "BufferSaurusSyntaxUncontextedLineText" : [ "#C6B6FE", "bg", ""],
-    \   "lsDir"                                 : [ "LemonChiffon3", "",  ""],
-    \   "lsExe"                                 : [ "Brown2", "",  "italic"],
-    \   "lsTag"                                 : [ "#8870FF", "", "italic"],
-    \   "lsVim"                                 : [ "#009F6F", "", ""],
-            \ }
-endif
-
-" C adn C++                                                                               {{{2
-if !exists("s:dict_hi_c_cpp")
-        let s:dict_hi_c_cpp = {
-            \   "_Block"                : [ "#009F6F","","bold"],
-            \   "_Bracket"              : [ "#B89467", "",  ""],
-            \   "_Comment"              : [ "#5D8B9C", "",  ""],
-            \   "cAnsiFunction"         : [ "#2DB3A0", "", ""],
-            \   "cAnsiName"             : [ "#009F6F", "",  "italic"],
-            \   "cBlock"                : [ "seagreen3", "",  ""],
-            \   "cBoolean"              : [ "CadetBlue2", "",  ""],
-            \   "cBraces"               : [ "#779DB2", "",  "italic"],
-            \   "cBracket"              : [ "Green","",""],
-            \   "cCharacter"            : [ "#5780CC","","bold,italic"],
-            \   "cComment"              : [ "Gray50","","italic"],
-            \   "cConditional"          : [ "#00B880","","bold"],
-            \   "cConstant"             : [ "#6B8FCC","",""],
-            \   "cCppString"            : [ "#9A85FF", "", "italic"],
-            \   "cDefine"               : [ "#00B880","",""],
-            \   "cDefined"              : [ "#00B880", "",  "italic"],
-            \   "cDelimiter"            : [ "#779DB2", "",  "italic"],
-            \   "cDoxygenComment"       : [ "LightSeaGreen","","italic"],
-            \   "cFloat"                : [ "AquaMarine2", "", ""],
-            \   "cFunction"             : [ "#C6B6FE", "",  ""],
-            \   "cIdentifier"           : [ "#009F6F", "",  "italic"],
-            \   "cInclude"              : [ "#00B880","",""],
-            \   "cIncluded"             : [ "#77996C", "",  ""],
-            \   "cLabel"                : [ "PaleGreen3","",""],
-            \   "cMakeOperators"        : [ "#99C4CC", "",  ""],
-            \   "cMakeVariableValue"    : [ "DeepSkyBlue2", "",  ""],
-            \   "cMulti"                : [ "Red","","bold"],
-            \   "cNumber"               : [ "#8870FF", "", ""],
-            \   "cOperator"             : [ "LightSeaGreen", "",  "bold"],
-            \   "cParen"                : [ "Red","",""],
-            \   "cppAccess"             : [ "PaleGreen3", "",  "italic"],
-            \   "cppBoolean"            : [ "#8870FF", "", "bold"],
-            \   "cppCast"               : [ "#CC4455","",""],
-            \   "cppOperator"           : [ "#00B880", "", ""],
-            \   "cppSTL"                : [ "#009F6F","","bold"],
-            \   "cppSTLtype"            : [ "SkyBlue2", "",  "underline"],
-            \   "cppStructure"          : [ "PaleGreen3","","underline"],
-            \   "cppType"               : [ "#00B880", "", ""],
-            \   "cPreCondit"            : [ "PaleGreen3","","italic"],
-            \   "cPreConditMatch"       : [ "PaleGreen3","","italic"],
-            \   "cPreProc"              : [ "#00B880","",""],
-            \   "cSpecial"              : [ "#8870FF", "", "italic"],
-            \   "cSpecialCharacter"     : [ "RoyalBlue", "", "italic"],
-            \   "cStorageClass"         : [ "#00B880","","bold"],
-            \   "cString"               : [ "#9A85FF", "", ""],
-            \   "cStructure"            : [ "SeaGreen3",  "#152933",  ""],
-            \   "cTodo"                 : [ "LemonChiffon3", "#345FA8",  "italic"],
-            \   "cType"                 : [ "#00B880","",""],
-            \   "cUserFunction"         : [ "RoyalBlue","",""],
-            \   "cUserFunctionPointer"  : [ "RoyalBlue2", "",  ""],
-            \   "cUserLabel"            : [ "PaleGreen3","",""],
-                    \ }
-endif
-
-" CSS                                                                                     {{{2
-if !exists("s:dict_hi_css")
-        let s:dict_hi_css = {
-            \   "cssAnimationAttr"          : [ "#8870FF", "",  ""],
-            \   "cssAttrRegion"             : [ "#8870FF", "",  ""],
-            \   "cssAuralAttr"              : [ "PowderBlue", "",  "italic"],
-            \   "cssAuralProp"              : [ "#C59F6F", "",  ""],
-            \   "cssBackgroundAttr"         : [ "#8870FF", "",  ""],
-            \   "cssBorderAttr"             : [ "#8870FF", "",  "italic"],
-            \   "cssBorderOutlineAttr"      : [ "#8870FF", "",  "italic"],
-            \   "cssBorderOutlineProp"      : [ "#C59F6F", "",  ""],
-            \   "cssBoxProp"                : [ "#C59F6F", "",  ""],
-            \   "cssClassName"              : [ "SeaGreen3",  "#152933",  "bold,italic"],
-            \   "cssColor"                  : [ "#9A85FF", "",  "italic"],
-            \   "cssColorProp"              : [ "#C59F6F","","italic"],
-            \   "cssComment"                : [ "#5D8B9C", "",  "italic"],
-            \   "cssCommonAttr"             : [ "#8870FF", "",  "italic"],
-            \   "cssDefinition"             : [ "PowderBlue", "",  "italic"],
-            \   "cssDeprecated"             : [ "Gray65", "", "bold,italic"],
-            \   "cssFontAttr"               : [ "#8870FF", "",  "italic"],
-            \   "cssFontDescriptorProp"     : [ "#C59F6F", "",  ""],
-            \   "cssFontProp"               : [ "#C59F6F", "",  "italic"],
-            \   "cssFunction"               : [ "#8870FF", "",  ""],
-            \   "cssFunctionName"           : [ "SpringGreen2", "",  "underline"],
-            \   "cssGeneratedContentProp"   : [ "#C59F6F", "",  ""],
-            \   "cssIdentifier"             : [ "SeaGreen3", "",  ""],
-            \   "cssImportant"              : [ "#8870FF", "",  ""],
-            \   "cssInclude"                : [ "Turquoise3", "",  ""],
-            \   "cssMarginProp"             : [ "#C59F6F", "",  ""],
-            \   "cssMedia"                  : [ "SeaGreen3",  "#152933",  "bold,italic"],
-            \   "cssMediaType"              : [ "SeaGreen2","","italic"],
-            \   "cssPaddingProp"            : [ "#C59F6F", "",  ""],
-            \   "cssPagingProp"             : [ "#C59F6F", "",  ""],
-            \   "cssPositioningAttr"        : [ "#8870FF", "",  ""],
-            \   "cssPositioningProp"        : [ "#C59F6F", "",  ""],
-            \   "cssPseudoClassId"          : [ "SeaGreen3",  "#152933",  "italic"],
-            \   "cssRenderProp"             : [ "#C59F6F", "",  ""],
-            \   "cssSelectorOp"             : [ "Gray50", "",  ""],
-            \   "cssStringQ"                : [ "#9A85FF", "",  "italic"],
-            \   "cssStringQQ"               : [ "#9A85FF", "",  "italic"],
-            \   "cssStyle"                  : [ "#c59f6f", "",  ""],
-            \   "cssTableProp"              : [ "#C59F6F", "",  ""],
-            \   "cssTagName"                : [ "SeaGreen3",  "#152933",  "italic"],
-            \   "cssTextAttr"               : [ "#8870FF", "",  "italic"],
-            \   "cssTextProp"               : [ "#C59F6F", "",  "italic"],
-            \   "cssUIattr"                 : [ "#C59F6F", "",  ""],
-            \   "cssUIProp"                 : [ "#C59F6F", "",  ""],
-            \   "cssUnitDecorators"         : [ "#8870FF", "",  ""],
-            \   "cssURL"                    : [ "SlateGray3", "",  "bold,underline"],
-            \   "cssValueLength"            : [ "#8870FF", "",  ""],
-            \   "cssValueNumber"            : [ "#8870FF", "",  ""],
-            \   "cssVendor"                 : [ "#C59F6F", "",  ""],
-                    \ }
-endif
-"
-" GTK or '.desktop' files                                                                 {{{2
-if !exists("s:dict_hi_desktop")
-        let s:dict_hi_desktop = {
-            \   "dtALocale"                 : [ "LightSkyBlue3", "",  ""],
-            \   "dtBooleanKey"              : [ "#009F6F", "",  ""],
-            \   "dtBooleanValue"            : [ "PowderBlue", "",  ""],
-            \   "dtComment"                 : [ "#5D8B9C", "",  ""],
-            \   "dtDelim"                   : [ "#5DDD9C", "",  ""],
-            \   "dtExecKey"                 : [ "#009F6F", "",  "underline"],
-            \   "dtExecParam"               : [ "#5DDD9C", "",  "bold"],
-            \   "dtGroup"                   : [ "#FF0044", "Black",  ""],
-            \   "dtLocaleKey"               : [ "#009F6F", "",  ""],
-            \   "dtNumericKey"              : [ "#009F6F", "",  ""],
-            \   "dtStringKey"               : [ "#009F6F", "",  ""],
-            \   "dtTypeKey"                 : [ "#009F6F", "",  ""],
-            \   "dtTypeValue"               : [ "PowderBlue", "",  ""],
-            \   "gtkRcInclude"              : [ "#009F6F", "",  "italic"],
-            \   "gtkRcString"               : [ "#7fa2e6", "",  "italic"],
-            \ }
-endif
-
-" Unix / Debian / network / FSTAB etc                                                     {{{2
-if !exists("s:dict_hi_unixtools")
-        let s:dict_hi_unixtools = {
-            \   "debChangeLogCloses"    : [ "#8870FF", "",  "italic"],
-            \   "debChangeLogEmail"     : [ "SlateGray3", "",  "italic"],
-            \   "debChangeLogEntry"     : [ "#7EB49C", "", ""],
-            \   "debChangeLogFooter"    : [ "#009F6F", "",  ""],
-            \   "debChangeLogHeader"    : [ "#A8C2EF", "DarkSlateGrey",  "italic"],
-            \   "debChangeLogLP"        : [ "#8870FF", "",  ""],
-            \   "debChangeLogName"      : [ "AquaMarine", "#880C0E",  ""],
-            \   "fsDevice"              : [ "MediumSeaGreen", "",  ""],
-            \   "fsDeviceError"         : [ "IndianRed2", "",  ""],
-            \   "fsDeviceKeyword"       : [ "MediumSeaGreen", "",  ""],
-            \   "fsDeviceUUID"          : [ "#99AD6A", "",  ""],
-            \   "fsFreqPassError"       : [ "#A191F5", "", ""],
-            \   "fsFreqPassNumber"      : [ "#7DB3FF", "", ""],
-            \   "fsMountPoint"          : [ "#009F6F", "",  ""],
-            \   "fsMountPointError"     : [ "ForestGreen", "",  ""],
-            \   "fsMountPointKeyword"   : [ "AquaMarine3", "",  ""],
-            \   "fsOperator"            : [ "Gray50", "",  ""],
-            \   "fsOptions"             : [ "#9A85FF", "",  ""],
-            \   "fsOptionsExt2Errors"   : [ "#9A85FF", "",  ""],
-            \   "fsOptionsGeneral"      : [ "#9A85FF", "",  ""],
-            \   "fsOptionsKeywords"     : [ "#9A85FF", "",  ""],
-            \   "fsOptionsNumber"       : [ "AquaMarine3", "",  ""],
-            \   "fsType"                : [ "#C59F6F", "",  ""],
-            \   "fsTypeKeyword"         : [ "#C59F6F", "",  ""],
-            \   "zoneDomain"            : [ "#A8C2EF",  "",  ""],
-            \   "zoneRRtype"            : [ "#A8C2EF",  "",  ""],
-            \   "zoneTTL"               : [ "#A8C2EF",  "",  ""],
-            \   "zoneUnknown"           : [ "#A8C2EF",  "",  ""],
-            \ }
-endif
-
-"
-" Haskell                                                                                 {{{2
-if !exists("s:dict_hi_haskell")
-        let s:dict_hi_haskell = {
-            \   "hsStatement"           : [ "DarkSlateGray2", "SeaGreen",  ""],
-            \   "hsStructure"           : [ "DarkSlateGray2", "SeaGreen",  ""],
-            \   "hsVarSym"              : [ "red", "",  ""],
-            \ }
-endif
-
-" Ruby                                                                                    {{{2
-if !exists("s:dict_hi_ruby")
-        let s:dict_hi_ruby = {
-            \   "eRubyBlock"                  : [ "#8870FF","","italic"],
-            \   "eRubyDelimiter"              : [ "CadetBlue4", "",  ""],
-            \   "eRubyExpression"             : [ "#00B780","","bold,italic"],
-            \   "rubyAccess"                  : [ "#7EB49C", "", "italic"],
-            \   "rubyBlock"                   : [ "#009F6F","",""],
-            \   "rubyBlockParameter"          : [ "PaleGreen3", "#152933", ""],
-            \   "rubyBlockParameterList"      : [ "", "#152933", "bold"],
-            \   "rubyCaseExpression"          : [ "#8870FF", "",  "italic"],
-            \   "rubyClass"                   : [ "#CC4455","","bold"],
-            \   "rubyComment"                 : [ "#5B8999", "", "italic"],
-            \   "rubyConditional"             : [ "PaleGreen3", "", "bold"],
-            \   "rubyConditionalModifier"     : [ "#CC4455", "", ""],
-            \   "rubyConditionalExpression"   : [ "#009F6F", "", ""],
-            \   "rubyConstant"                : [ "#779DB2", "",  ""],
-            \   "rubyControl"                 : [ "#CC4455", "", "underline"],
-            \   "rubyCurlyBlock"              : [ "#978CCC", "",  "bold"],
-            \   "rubyDefine"                  : [ "#85B2FE", "", "italic"],
-            \   "rubyDoBlock"                 : [ "#009F6F","",""],
-            \   "rubyExceptional"             : [ "LightCyan3", "bg",  "bold"],
-            \   "rubyFloat"                   : [ "AquaMarine3", "", ""],
-            \   "rubyFunction"                : [ "#85B2FE", "#152933", "italic"],
-            \   "rubyGlobalVariable"          : [ "SkyBlue3", "",  ""],
-            \   "rubyIdentifier"              : [ "#c6b6fe", "",  ""],
-            \   "rubyInclude"                 : [ "LightCyan3", "bg",  "bold"],
-            \   "rubyInstanceVariable"        : [ "#2DB3A0", "", ""],
-            \   "rubyInteger"				  : [ "#85B2FE", "",  ""],
-            \   "rubyInterpolation"           : [ "#CC4455",      "",  ""],
-            \   "rubyInterpolationDelimiter"  : [ "FireBrick2", "",  ""],
-            \   "rubyKeyword"				  : [ "#00B780", "", ""],
-            \   "rubyLocalVariableOrMethod"   : [ "SeaGreen3","","bold,italic"],
-            \   "rubyMethodBlock"             : [ "SeaGreen3","",""],
-            \   "rubyModule"                  : [ "LightCyan3", "",  "underline"],
-            \   "rubyOptionalDoLine"          : [ "PaleGreen3", "", ""],
-            \   "rubyPredefinedConstant"      : [ "#009F6F", "",  ""],
-            \   "rubyPredefinedIdentifier"    : [ "#de5577", "",  ""],
-            \   "rubyPredefinedVariable"      : [ "PaleGreen3", "",  ""],
-            \   "rubyPseudoVariable"          : [ "#8870FF", "",  ""],
-            \   "rubyRegexp"                  : [ "#2DB3A0", "",  ""],
-            \   "rubyRegexpAnchor"            : [ "#2DB3A0", "",  ""],
-            \   "rubyRegexpCharClass"         : [ "#c59f6f", "",  "bold"],
-            \   "rubyRegexpDelimiter"         : [ "SlateGray3", "", ""],
-            \   "rubyRegexpEscape"            : [ "#2DB3A0", "",  ""],
-            \   "rubyRegexpQuantifier"        : [ "#c59f6f", "",  ""],
-            \   "rubyRegexpSpecial"           : [ "#2DB3A0", "",  "bold"],
-            \   "rubyRepeat"                  : [ "#2FBBA6", "",  ""],
-            \   "rubyRepeatExpression"        : [ "#978CCC", "",  "italic"],
-            \   "rubySharpBang"               : [ "#C73648", "", "bold,italic"],
-            \   "rubyString"                  : [ "#9A85FF", "",  ""],
-            \   "rubyStringDelimiter"         : [ "#85B2FE", "",  ""],
-            \   "rubyStringEscape"            : [ "#99AD6a", "",  ""],
-            \   "rubySymbol"                  : [ "#6E8CBF", "",  ""],
-            \   "rubyTodo"                    : [ "LemonChiffon3", "#345FA8",  ""],
-                    \ }
-endif
-
-" Help (Vim Help)                                                                         {{{2
-if !exists("s:dict_hi_vimhelp")
-        let s:dict_hi_vimhelp = {
-            \   "helpBar"				: [ "FireBrick1",     "#880C0E",  ""],
-            \   "helpExample"           : [ "#99AD6A",        "",         ""],
-            \   "helpIgnore"			: [ "bg",             "",         ""],
-            \   "helpNote"              : [ "DodgerBlue",     "Gray10",   "underline"],
-            \   "helpSpecial"           : [ "#65C254",        "",         "underline"],
-            \   "helpStar"				: [ "FireBrick1",     "#880C0E",  ""],
-            \   "helpTodo"				: [ "#7EB49C",        "",         ""],
-            \   "helpURL"               : [ "#8870FF",        "",         "underline"],
-            \   "helpVim"               : [ "BurlyWood3",     "",         "italic,underline"],
-                    \ }
-endif
-
-" Html                                                                                    {{{2
-if !exists("s:dict_hi_html")
-        let s:dict_hi_html = {
-            \   "htmlArg"                : [ "AquaMarine3", "",  ""],
-            \   "htmlBold"               : [ "SkyBlue2", "",  "italic"],
-            \   "htmlComment"            : [ "#CC4455",      "",  "italic"],
-            \   "htmlCommentError"       : [ "#DED5CC",      "",  "italic,underline"],
-            \   "htmlEndTag"             : [ "SlateGray4", "", "bold"],
-            \   "htmlEvent"              : [ "LightCyan3", "bg",  "bold,italic"],
-            \   "htmlEventDQ"            : [ "Green3",  "#1C3644",  "italic"],
-            \   "htmlH1"                 : [ "FireBrick1", "", "bold,italic"],
-            \   "htmlH2"                 : [ "PaleGreen3", "",  "bold,italic"],
-            \   "htmlH3"                 : [ "Azure3","", "bold,italic"],
-            \   "htmlH4"                 : [ "White",         "",  "italic"],
-            \   "htmlH5"                 : [ "Aquamarine2","",  "italic"],
-            \   "htmlH6"                 : [ "Khaki",    "",  "italic"],
-            \   "htmlLink"               : [ "#A191F5", "", "bold,italic"],
-            \   "htmlSpecialTagName"     : [ "SeaGreen2", "",  ""],
-            \   "htmlString"             : [ "#38ACAD", "", ""],
-            \   "htmlTag"                : [ "LightCyan3", "bg",  ""],
-            \   "htmlTagN"               : [ "DarkSeaGreen3", "#1C3644", "italic"],
-                    \ }
-endif
-
-" Java / JVM / Scala, and related tools                                                   {{{2
-if !exists("s:dict_hi_javatools")
-        let s:dict_hi_javatools = {
-            \   "javaAnnotation"          : [ "#8870FF","","italic"],
-            \   "javaAssert"              : [ "SeaGreen2", "",  ""],
-            \   "javaBoolean"             : [ "#2DB3A0", "",  "bold"],
-            \   "javaBranch"              : [ "#2DB3A0", "",  ""],
-            \   "javaCharacter"           : [ "#009ACD", "",  ""],
-            \   "javaClassDecl"           : [ "#00B880","","underline"],
-            \   "javaComment"             : [ "#5B8999", "",  "italic"],
-            \   "javaComment2String"      : [ "#5B8999","",""],
-            \   "javaCommentCharacter"    : [ "blue","",""],
-            \   "javaCommentStar"         : [ "AquaMarine4","","bold,italic"],
-            \   "javaCommentString"       : [ "#5B8999","",""],
-            \   "javaCommentTitle"        : [ "SteelBlue3", "",  "italic"],
-            \   "javaConstant"            : [ "MediumSlateBlue","",""],
-            \   "javaDocComment"          : [ "#5B8999", "",  "italic"],
-            \   "javaDocParam"            : [ "SlateGray3", "",  ""],
-            \   "javaDocTags"             : [ "SteelBlue3", "",  ""],
-            \   "javaError"               : [ "Red", "",  "bold"],
-            \   "javaExceptions"          : [ "#2DB3A0","",""],
-            \   "javaExternal"            : [ "LightCyan3", "bg",  ""],
-            \   "javaFold"                : [ "#FFD1FA","","bold"],
-            \   "javaFuncBody"            : [ "PaleGreen2", "DarkSlateGray",  ""],
-            \   "javaFuncDef"             : [ "Turquoise2", "",  ""],
-            \   "javaLabel"               : [ "SeaGreen2", "",  ""],
-            \   "javaLangObject"          : [ "#7F9D90", "", "" ],
-            \   "javaLineComment"         : [ "#5B8999", "", "italic"],
-            \   "javaMethodDecl"          : [ "Aquamarine3", "",  ""],
-            \   "javaNumber"              : [ "#7DB3FF", "", ""],
-            \   "javaOperator"            : [ "#7EB49C", "",  "bold"],
-            \   "javaParenT"              : [ "GoldenRod", "",  "bold"],
-            \   "javaScopeDecl"           : [ "#009F6F","","bold"],
-            \   "javaSpecial"             : [ "OliveDrab2",    "",  ""],
-            \   "javaSpecialChar"         : [ "#009ACD",    "",  ""],
-            \   "javaSpecialCharError"    : [ "Bisque3",       "",  "italic"],
-            \   "javaSpecialError"        : [ "PaleGoldenRod", "",  "undercurl"],
-            \   "javaStatement"           : [ "#2DB3A0", "",  ""],
-            \   "javaStorageClass"        : [ "#00B880", "", "italic"],
-            \   "javaStringError"         : [ "PaleGoldenRod", "",  "undercurl"],
-            \   "javaTodo"                : [ "LemonChiffon3", "#345FA8",  "italic"],
-            \   "javaType"                : [ "#7EB49C","",""],
-            \   "javaTypeDef"             : [ "#009F6F","",""],
-            \   "javaUserLabel"           : [ "SeaGreen2", "",  ""],
-            \   "javaUserLabelRef"        : [ "SeaGreen2", "",  ""],
-            \   "jPropertiesDelimiter"    : [ "#A191F5", "",  ""],
-            \   "jPropertiesSpecial"      : [ "#869BCC", "",  "bold"],
-            \   "jPropertiesSpecialChar"  : [ "#A191F5", "",  ""],
-            \   "jPropertiesString"       : [ "PowderBlue", "",  ""],
-            \   "log4jDate"               : [ "DeepSkyBlue2", "",  "bold"],
-            \   "log4jErrorlevel"         : [ "SeaGreen2", "",  "italic,underline"],
-            \   "log4jLogger"             : [ "#779DB2", "",  "underline"],
-            \   "log4jProcessid"          : [ "Turquoise2", "",  "bold,italic"],
-            \   "scalaClassDecl"          : [ "#c59f6f", "",  ""],
-            \   "scalaFunction"           : [ "Aquamarine3", "",  "bold,italic"],
-            \   "scalaLineComment"        : [ "#78B37A", "",  ""],
-            \   "scalaStorageClass"       : [ "#c59f6f", "",  "italic"],
-            \   "scalaTypeDef"            : [ "Turquoise2", "",  ""],
-                    \ }
-endif
-
-" Javascript                                                                              {{{2
-if !exists("s:dict_hi_jscript")
-        let s:dict_hi_jscript = {
-            \   "javascript"                      : [ "#669F6F", "", ""],
-            \   "javaScriptAjaxMethods"           : [ "SeaGreen1", "",  ""],
-            \   "javaScriptAjaxObjects"           : [ "#F4E891", "",  "italic"],
-            \   "javaScriptAjaxProperties"        : [ "#65C254", "",  ""],
-            \   "javascriptBoolean"               : [ "#8870FF", "",  "italic"],
-            \   "javascriptBraces"                : [ "#009F6F","",""],
-            \   "javaScriptBranch"                : [ "#2FBBA6", "",  ""],
-            \   "javaScriptBrowserObjects"        : [ "CadetBlue3", "",  "bold"],
-            \   "javaScriptCharacter"             : [ "SeaGreen2", "",  ""],
-            \   "javaScriptComment"               : [ "#77996C", "",  "italic"],
-            \   "javascriptCommentTodo"           : [ "#C6B6FE", "#345FA8",  "italic"],
-            \   "javascriptConditional"           : [ "SeaGreen2","","italic"],
-            \   "javaScriptCssStyles"             : [ "#2DB3A0", "",  ""],
-            \   "javaScriptCvsTag"                : [ "#85B2FE", "",  "italic"],
-            \   "javaScriptDeprecated"            : [ "Gray65", "",  "bold,italic"],
-            \   "javaScriptDocComment"            : [ "#5D8B9C", "",  "italic"],
-            \   "javaScriptDocParam"              : [ "#009F6F", "",  "bold"],
-            \   "javaScriptDocSeeTag"             : [ "#A191F5", "",  "italic"],
-            \   "javaScriptDocTags"               : [ "#A191F5", "",  "italic"],
-            \   "javaScriptDomElemAttrs"          : [ "SkyBlue1", "",  "italic"],
-            \   "javaScriptDomElemFuncs"          : [ "#A191F5", "",  "italic"],
-            \   "javaScriptDomErrNo"              : [ "#CC4455", "",  "bold"],
-            \   "javaScriptDOMMethods"            : [ "Aquamarine3", "",  "italic"],
-            \   "javaScriptDomNodeConsts"         : [ "SkyBlue2", "",  ""],
-            \   "javaScriptDOMObjects"            : [ "CadetBlue2", "",  "italic"],
-            \   "javaScriptDOMProperties"         : [ "#00B880", "",  ""],
-            \   "javaScriptEndColons"             : [ "#7575FA", "",  "bold"],
-            \   "javaScriptError"                 : [ "Red", "",  "bold"],
-            \   "javaScriptEventListenerKeywords" : [ "SeaGreen2", "",  ""],
-            \   "javaScriptExceptions"            : [ "#2FBBA6", "",  "italic"],
-            \   "javaScriptFloat"                 : [ "#7FA2E6", "",  ""],
-            \   "javaScriptFuncName"              : [ "LimeGreen", "",  "italic"],
-            \   "javascriptFunction"              : [ "LimeGreen", "", "italic"],
-            \   "javascriptGlobal"                : [ "#009F6F","","italic"],
-            \   "javaScriptGlobalObjects"         : [ "#009F6F", "",  ""],
-            \   "javaScriptHtmlElemAttrs"         : [ "PaleGreen3", "",  "italic"],
-            \   "javaScriptHtmlElemFuncs"         : [ "PaleGreen3", "",  "bold"],
-            \   "javaScriptHtmlElemProperties"    : [ "Aquamarine3", "",  ""],
-            \   "javaScriptHtmlEvents"            : [ "SlateGray3", "",  "bold"],
-            \   "javascriptIdentifier"            : [ "#2DB3A0", "",  "italic"],
-            \   "javaScriptLabel"                 : [ "PaleGreen3", "",  ""],
-            \   "javaScriptLineComment"           : [ "#5D8B9C", "",  ""],
-            \   "javaScriptLogicSymbols"          : [ "CadetBlue2", "",  ""],
-            \   "javascriptMember"                : [ "SeaGreen3","","italic"],
-            \   "javascriptMessage"               : [ "SlateGray3", "",  "underline"],
-            \   "javascriptNull"                  : [ "CadetBlue3","",""],
-            \   "javaScriptNumber"                : [ "#85B2FE", "",  ""],
-            \   "javascriptOperator"              : [ "#2DB3A0","",""],
-            \   "javaScriptOpSymbols"             : [ "PaleGreen3", "",  "bold"],
-            \   "javaScriptParens"                : [ "#A191F5", "",  "italic"],
-            \   "javaScriptParensErrA"            : [ "Navy", "#5FD75F",  "undercurl"],
-            \   "javaScriptParensErrB"            : [ "Navy", "#5FD75F",  "undercurl"],
-            \   "javaScriptParensErrC"            : [ "Navy", "#5FD75F",  "undercurl"],
-            \   "javaScriptParensError"           : [ "Navy", "#5FD75F",  "undercurl"],
-            \   "javaScriptProprietaryObjects"    : [ "#99AD6A", "",  ""],
-            \   "javaScriptPrototype"             : [ "SkyBlue1", "",  ""],
-            \   "javascriptRegexpString"          : [ "CadetBlue3", "#152933", "italic"],
-            \   "javascriptRepeat"                : [ "SeaGreen3",  "#152933",  "italic"],
-            \   "javaScriptReserved"              : [ "#8FBFDC", "",  ""],
-            \   "javaScriptSource"                : [ "#779DB2", "",  ""],
-            \   "javascriptSpecial"               : [ "#7697d6", "",  "italic"],
-            \   "javascriptStatement"             : [ "SeaGreen2",  "",  ""],
-            \   "javascriptStringD"               : [ "#7fa2e6", "",  "italic"],
-            \   "javascriptStringS"               : [ "CadetBlue", "", "italic"],
-            \   "javascriptType"                  : [ "#00B780","","bold"],
-            \   "javaScriptValue"                 : [ "CadetBlue2", "",  ""],
-            \   }
-endif
-"
-" Lisp and Scheme                                                                         {{{2
-if !exists("s:dict_hi_lisp")
-        let s:dict_hi_lisp = {
-            \   "lispAtom"                        : [ "#00B780", "",  ""],
-            \   "lispAtomList"                    : [ "#8870FF", "",  "bold"],
-            \   "lispComment"                     : [ "#5D8B9C", "",  "italic"],
-            \   "lispDecl"                        : [ "#009F6F","","bold"],
-            \   "lispEscapeSpecial"               : [ "#779DB2", "",   ""],
-            \   "lispFunc"                        : [ "SkyBlue2", "",  ""],
-            \   "lispKey"                         : [ "#009F6F", "",  "italic"],
-            \   "lispMark"                        : [ "#779DB2", "",  "bold"],
-            \   "lispNumber"                      : [ "#85B2FE", "",  ""],
-            \   "lispParenError"                  : [ "Navy", "#5FD75F",  "undercurl"],
-            \   "lispString"                      : [ "#9A85FF", "",  ""],
-            \   "lispSymbol"                      : [ "#2DB3A0", "", "italic"],
-            \   "lispTodo"                        : [ "LemonChiffon3", "#345FA8",  ""],
-            \   "schemeComment"                   : [ "#5D8B9C", "",  "italic"],
-            \   "schemeError"                     : [ "Red", "",  "bold"],
-            \   "schemeFunc"                      : [ "#2DB3A0", "", ""],
-            \   "schemeOther"                     : [ "AquaMarine3", "",  ""],
-            \   "schemeString"                    : [ "#9A85FF","",""],
-            \   "schemeStruct"                    : [ "PaleGreen3","",""],
-            \   "schemeSyntax"                    : [ "SkyBlue2", "",  ""],
-            \   }
-endif
-
-" Markdown plugins                                                                        {{{2
-if !exists("s:dict_hi_markdown")
-        let s:dict_hi_markdown = {
-            \   "markdownAutomaticLink"       : [ "SlateGray2", "", "italic"],
-            \   "markdownBlockquote"          : [ "DarkSeaGreen", "",  ""],
-            \   "markdownBold"                : [ "#9F92CC","",  "" ],
-            \   "markdownBoldItalic"          : [ "#9F92CC", "", "italic"],
-            \   "markdownCode"                : [ "LightSeaGreen", "",  ""],
-            \   "markdownCodeBlock"           : [ "SeaGreen3", "",  ""],
-            \   "markdownError"               : [ "Firebrick2", "",  ""],
-            \   "markdownEscape"              : [ "DodgerBlue2", "",  ""],
-            \   "markdownH1"                  : [ "FireBrick1", "",  "italic"],
-            \   "markdownH2"                  : [ "SlateBlue2", "",  "italic"],
-            \   "markdownH3"                  : [ "CornFlowerBlue","",  "italic"],
-            \   "markdownH4"                  : [ "CornFlowerBlue", "", "italic"],
-            \   "markdownH5"                  : [ "CornFlowerBlue", "",  ""],
-            \   "markdownH6"                  : [ "SteelBlue3",     "",  ""],
-            \   "markdownHeadingDelimiter"    : [ "SlateBlue3", "",  "italic"],
-            \   "markdownHeadingRule"         : [ "Gray50", "",  "italic"],
-            \   "markdownId"                  : [ "CornFlowerBlue", "", "italic,underline"],
-            \   "markdownIdDeclaration"       : [ "CornFlowerBlue", "", "italic"],
-            \   "markdownItalic"              : [ "#9F92CC", "",  "italic"],
-            \   "markdownLineBreak"           : [ "Wheat2", "",  ""],
-            \   "markdownLinkDelimiter"       : [ "CadetBlue4", "",  "italic"],
-            \   "markdownLinkTextDelimiter"   : [ "CadetBlue4", "",  "italic"],
-            \   "markdownListMarker"          : [ "SlateBlue2", "",  "bold"],
-            \   "markdownRule"                : [ "Gray50", "",  "italic"],
-            \   "markdownUrl"                 : [ "CadetBlue", "", "italic"],
-            \   "markdownUrlDelimiter"        : [ "#779DB2", "",  ""],
-            \   "markdownUrlTitle"            : [ "Turquoise3", "", "italic"],
-            \   "markdownUrlTitleDelimiter"   : [ "#779DB2",   "", "italic"],
-            \   "markdownValid"               : [ "#C6B6FE", "bg",  ""],
-            \   "mkdBlockCode"                : [ "SeaGreen2", "",  ""],
-            \   "mkdBlockquote"               : [ "DarkSeaGreen", "",  ""],
-            \   "mkdCode"                     : [ "SlateGray3", "",  "italic"],
-            \   "mkdDelimiter"                : [ "#779DB2", "",  ""],
-            \   "mkdID"                       : [ "FireBrick1", "Black", ""],
-            \   "mkdLineBreak"                : [ "Gray50", "",  "bold"],
-            \   "mkdLineContinue"             : [ "Gray50", "",  "italic"],
-            \   "mkdLink"                     : [ "#71D3B4", "",  ""],
-            \   "mkdLinkDef"                  : [ "FireBrick1", "", ""],
-            \   "mkdLinkDefTarget"            : [ "CadetBlue", "", "italic"],
-            \   "mkdLinkTitle"                : [ "SeaGreen2", "",  ""],
-            \   "mkdListCode"                 : [ "#00B780", "",  "italic"],
-            \   "mkdListItem"                 : [ "AquaMarine2", "", "italic"],
-            \   "mkdRule"                     : [ "Gray50", "",  "italic"],
-            \   "mkdString"                   : [ "DarkSeaGreen", "",  ""],
-            \   "mkdURL"                      : [ "CadetBlue", "", "italic"],
-                    \ }
-endif
-
-" RDF and/or Graph tools                                                                  {{{2
-if !exists("s:dict_hi_rdf_and_graphs")
-        let s:dict_hi_rdf_and_graphs = {
-            \   "n3ClassName"                           : [ "DeepSkyBlue2", "",  ""],
-            \   "n3Declaration"                         : [ "#009F6F", "", ""],
-            \   "n3EndStatement"                        : [ "RosyBrown", "",  "bold"],
-            \   "n3Prefix"                              : [ "#009F6F", "",  ""],
-            \   "n3PropertyName"                        : [ "#65C254", "",  ""],
-            \   "n3Separator"                           : [ "Red1","","bold"],
-            \   "n3String"                              : [ "DodgerBlue2", "",  ""],
-            \   "n3StringDelim"                         : [ "DodgerBlue2", "",  "bold"],
-            \   "n3URI"                                 : [ "DeepSkyBlue2", "",  ""],
-            \   "plantUMLDirectedOrVerticalArrowRL"     : [ "Green2", "",  "bold"],
-            \   "plantUMLHorizontalArrow"               : [ "Orange", "",  "bold"],
-            \   "plantUMLKeyword"                       : [ "#00B880","",""],
-            \   "plantUMLSpecialString"                 : [ "CadetBlue3", "",  "bold,italic"],
-            \   "plantUMLString"                        : [ "#7fa2e6", "",  "italic"],
-            \   "plantUMLText"                          : [ "PaleGreen3", "",  ""],
-            \   "plantUMLTypeKeyword"                   : [ "#009F6F", "", ""],
-                    \ }
-endif
-
-" NERDTree, NERDCommenter, Netrw etc.                                                     {{{2
-if !exists("s:dict_hi_nerds")
-        let s:dict_hi_nerds = {
-            \   "nerdtreeClosable"       : [ "SkyBlue2",         "",  "bold"],
-            \   "nerdtreeCwd"            : [ "", "#3D2B6B",      "bold"],
-            \   "nerdtreeExecFile"       : [ "#E32A2A",       "",  ""],
-            \   "nerdtreeFlag"           : [ "#5D8B9C",          "",  ""],
-            \   "nerdtreeHelp"           : [ "#8fbfdc",          "",  ""],
-            \   "nerdtreeHelpKey"        : [ "#00B880",          "",  ""],
-            \   "nerdtreeHelpTitle"      : [ "AquaMarine2",      "#880C0E",  ""],
-            \   "nerdtreeLink"           : [ "Gray70",           "",  "italic"],
-            \   "nerdtreePart"           : [ "LightSlateGray",   "", "bold"],
-            \   "nerdtreePartFile"       : [ "LightSlateGray",   "", "bold"],
-            \   "nerdtreeRO"             : [ "SkyBlue3",         "",     ""],
-            \   "nerdtreeToggleOff"      : [ "SlateGray3",       "",  "bold"],
-            \   "nerdtreeToggleOn"       : [ "SlateGray3",       "",  "bold,underline"],
-            \   "nerdtreeUp"             : [ "LightSlateGray",   "","bold"],
-            \   "netrwClassify"          : [ "DodgerBlue",       "",  ""],
-            \   "netrwCmdNote"           : [ "Wheat",            "#2D7067",  ""],
-            \   "netrwCmdSep"            : [ "AquaMarine",       "#880C0E",  ""],
-            \   "netrwDir"               : [ "SkyBlue2",         "",  ""],
-            \   "netrwHelpCmd"           : [ "AquaMarine",       "#880C0E",  "bold"],
-            \   "netrwPlain"             : [ "#00B880",          "",""],
-            \   "netrwQuickHelp"         : [ "AquaMarine",       "#880C0E",  ""],
-            \   "netrwSymLink"           : [ "SkyBlue2",         "",  "italic"],
-            \   "netrwVersion"           : [ "#2D7067",          "",  ""],
-                    \ }
-endif
-
-" Ocaml, Dot, SML                                                                         {{{2
-if !exists("s:dict_hi_ocaml")
-        let s:dict_hi_ocaml = {
-            \   "dotBraceEncl"             : [ "SeaGreen2", "",  ""],
-            \   "dotBraceErr"              : [ "Khaki2", "VioletRed4",  ""],
-            \   "dotBrackEncl"             : [ "SeaGreen2", "",  ""],
-            \   "dotBrackErr"              : [ "Khaki2", "VioletRed4",  ""],
-            \   "dotIdentifier"            : [ "#009F6F", "",  ""],
-            \   "dotKeyChar"               : [ "SeaGreen2", "",  ""],
-            \   "dotKeyword"               : [ "SeaGreen2", "",  ""],
-            \   "dotParEncl"               : [ "SeaGreen2", "",  ""],
-            \   "dotParErr"                : [ "Khaki2", "VioletRed4",  ""],
-            \   "dotString"                : [ "#99ad6a", "",  ""],
-            \   "dottedName"               : [ "#57d700", "",  ""],
-            \   "dotTodo"                  : [ "LemonChiffon3", "Maroon4",  ""],
-            \   "dotType"                  : [ "PaleGreen2", "DarkSlateGray",  ""],
-            \   "ocamlAnyVar"              : [ "DodgerBlue", "", ""],
-            \   "ocamlComment"             : [ "#5D8B9C", "",  "italic"],
-            \   "ocamlConstructor"         : [ "CadetBlue3", "",  ""],
-            \   "ocamlFloat"               : [ "#009F6F","",""],
-            \   "ocamlFullMod"             : [ "PowderBlue", "", ""],
-            \   "ocamlFunDef"              : [ "DodgerBlue", "", "bold"],
-            \   "ocamlKeyChar"             : [ "SlateGray3", "",  ""],
-            \   "ocamlKeyword"             : [ "#32C5B0", "", ""],
-            \   "ocamlLabel"               : [ "#2DB3A0", "",  "underline"],
-            \   "ocamlLCIdentifier"        : [ "#9A85FF", "", ""],
-            \   "ocamlModPath"             : [ "LightCyan3", "",  ""],
-            \   "ocamlModule"              : [ "PowderBlue", "", ""],
-            \   "ocamlNumber"              : [ "#009F6F", "", ""],
-            \   "ocamlOperator"            : [ "DodgerBlue", "", ""],
-            \   "ocamlScript"              : [ "LightSeaGreen", "", ""],
-            \   "ocamlSig"                 : [ "OrangeRed", "", ""],
-            \   "ocamlString"              : [ "#9A85FF","",""],
-            \   "ocamlType"                : [ "#2DB3A0", "", ""],
-            \   "smlEnd"                   : [ "#779DB2", "",   "bold"],
-            \   "smlKeyChar"               : [ "SlateGray3", "",  ""],
-            \   "smlLCIdentifier"          : [ "#9A85FF", "",  "italic"],
-            \   "smlString"                : [ "#8870FF", "",  ""],
-                    \ }
-endif
-
-" Perl                                                                                    {{{2
-if !exists("s:dict_hi_perl")
-        let s:dict_hi_perl = {
-            \   "perlComment"               : [ "#5D8B9C", "",  "italic"],
-            \   "perlConditional"           : [ "SeaGreen3",  "#152933",  "italic"],
-            \   "perlControl"               : [ "SkyBlue", "DarkSlateGrey", "bold"],
-            \   "perlData"                  : [ "#CC4455", "", "italic"],
-            \   "perlFileDescRead"          : [ "#A08EF8", "",  ""],
-            \   "perlFileDescStatement"     : [ "#A08EF8", "",  ""],
-            \   "perlFloat"                 : [ "#7fa2e6", "", ""],
-            \   "perlFunction"              : [ "#32C5B0", "", "bold"],
-            \   "perlFunctionName"          : [ "Aquamarine3", "",  ""],
-            \   "perlIdentifier"            : [ "OliveDrab3", "",  "underline"],
-            \   "perlLabel"                 : [ "PaleGreen2", "DarkSlateGray",  "italic"],
-            \   "perlMatch"                 : [ "#8870FF", "",  ""],
-            \   "perlMatchStartEnd"         : [ "#8870FF", "",  ""],
-            \   "perlMethod"                : [ "#8870FF", "#152933", ""],
-            \   "perlNumber"                : [ "#7fa2e6", "",  ""],
-            \   "perlOperator"              : [ "SpringGreen3", "",  "bold"],
-            \   "perlPackageDecl"           : [ "#8870FF", "",  ""],
-            \   "perlPackageRef"            : [ "#7fa2e6", "",  "bold"],
-            \   "perlPod"                   : [ "#77996C", "",  ""],
-            \   "perlRepeat"                : [ "SeaGreen3",  "#152933",  "bold,italic"],
-            \   "perlSharpBang"             : [ "DeepSkyBlue2", "",  "italic"],
-            \   "perlSpecialMatch"          : [ "#7fa2e6", "",  "italic"],
-            \   "perlSpecialString"         : [ "#CC4455", "",  ""],
-            \   "perlStatementControl"      : [ "Aquamarine3", "",  "italic"],
-            \   "perlStatementFileDesc"     : [ "Aquamarine3", "",  ""],
-            \   "perlStatementFiles"        : [ "Aquamarine3", "",  ""],
-            \   "perlStatementFlow"         : [ "SeaGreen3",  "#152933",  "italic"],
-            \   "perlStatementList"         : [ "seagreen3", "",  ""],
-            \   "perlStatementScalar"       : [ "#00CC8A", "",  ""],
-            \   "perlStatementStorage"      : [ "#00CC8A", "",  ""],
-            \   "perlString"                : [ "#7fa2e6", "",  ""],
-            \   "perlStringStartEnd"        : [ "#009F6F","",""],
-            \   "perlStringUnexpanded"      : [ "#00BA83","",""],
-            \   "perlSubName"               : [ "#32C5B0", "",  ""],
-            \   "perlSubPrototype"          : [ "#CC4455", "",  ""],
-            \   "perlTodo"                  : [ "LemonChiffon3", "#345FA8",  "italic"],
-            \   "perlVarPlain"              : [ "#00BA83","",""],
-            \   "perlVarPlain2"             : [ "#2DB3A0", "",  ""],
-            \   "perlVarSimpleMember"       : [ "#8870FF", "",  ""],
-            \   "perlVarSlash"              : [ "#41E7B5", "",  "bold"],
-            \   "podCommand"                : [ "DarkGrey", "",  ""],
-            \   "podCmdText"                : [ "DarkGrey", "",  ""],
-            \   "podFormat"                 : [ "#5D8B9C", "",  ""],
-            \   "podOverIndent"             : [ "DarkGrey", "",  ""],
-            \   "podSpecial"                : [ "#77996C", "",  "italic"],
-            \   "podVerbatimLine"           : [ "#5D8B9C", "",  "italic"],
-            \ }
-endif
-
-" PL/SQL and SQL plugins                                                                  {{{2
-if !exists("s:dict_hi_sql")
-        let s:dict_hi_sql = {
-            \   "plsqlAttribute"            : [ "CornFlowerBlue", "", ""],
-            \   "plsqlBooleanLiteral"       : [ "SlateBlue1", "#152933", ""],
-            \   "plsqlComment"              : [ "#5D8B9C", "",  "italic"],
-            \   "plsqlCommentL"             : [ "#5D8B9C", "",  ""],
-            \   "plsqlConditional"          : [ "PowderBlue","",""],
-            \   "plsqlErrInBracket"         : [ "RosyBrown", "",  ""],
-            \   "plsqlErrInParen"           : [ "#7EB49C", "", "bold"],
-            \   "plsqlFloatLiteral"         : [ "DodgerBlue", "",  ""],
-            \   "plsqlFunction"             : [ "#CC4455", "",  ""],
-            \   "plsqlGarbage"              : [ "#7EB49C", "", ""],
-            \   "plsqlHostIdentifier"       : [ "#7EB49C", "", ""],
-            \   "plsqlIdentifier"           : [ "#2FBBA6","",""],
-            \   "plsqlIntLiteral"           : [ "#7FAAF2", "#152933", ""],
-            \   "plsqlKeyword"              : [ "PowderBlue","",""],
-            \   "plsqlPseudo"               : [ "SlateBlue2", "",  ""],
-            \   "plsqlRepeat"               : [ "CornFlowerBlue", "#1c3644",  ""],
-            \   "plsqlSQLKeyword2"          : [ "#2FBBA6", "bg", ""],
-            \   "plsqlSQLKeyword3"          : [ "#7EB49C", "bg", ""],
-            \   "plsqlSQLKeyword4"          : [ "#009F6F", "bg", "" ],
-            \   "plsqlStorage"              : [ "CornFlowerBlue","",""],
-            \   "plsqlStringError"          : [ "LemonChiffon2","DodgerBlue3",""],
-            \   "plsqlStringLiteral"        : [ "Aquamarine3", "",  "italic"],
-            \   "plsqlSymbol"               : [ "#8870FF","","bold"],
-            \   "sqlHibSnippet"             : [ "bg", "#7FAAF2", "bold"],
-            \   "sqlKeyword"                : [ "#8FBFDC", "", ""],
-            \   "sqlNumber"                 : [ "#85B2FE", "#152933", "italic"],
-            \   "sqlOperator"               : [ "#99AD6A", "",  ""],
-            \   "sqlSnippet"                : [ "PaleGreen3", "",  ""],
-            \   "sqlSpecial"                : [ "#99AD6A", "",  ""],
-            \   "sqlStatement"              : [ "PaleGreen3","","underline"],
-            \   "sqlString"                 : [ "#009F6F","",""],
-            \   "sqlTodo"                   : [ "Wheat2", "#345FA8",  "italic"],
-            \   "sqlType"                   : [ "#00B880","",""],
-                    \ }
-endif
-
-" Python                                                                                  {{{2
-if !exists("s:dict_hi_python")
-        let s:dict_hi_python = {
-            \   "pyNiceStatement"              : [ "Gold2", "",  ""],
-            \   "pythonArithmetic"             : [ "#009F6F","","bold"],
-            \   "pythonAssignment"             : [ "#009F6F","","bold"],
-            \   "pythonBinError"               : [ "Tomato", "#1B5958",  ""],
-            \   "pythonBinNumber"              : [ "Aquamarine2", "",  ""],
-            \   "pythonBoolean"                : [ "#8870FF", "",  ""],
-            \   "pythonBuiltin"                : [ "MediumTurquoise", "",  "underline"],
-            \   "pythonBuiltinFunc"            : [ "MediumTurquoise", "",  ""],
-            \   "pythonBuiltinLogic"           : [ "#729FCF", "",  ""],
-            \   "pythonBuiltinObj"             : [ "#009F6F","",""],
-            \   "pythonBytes"                  : [ "Salmon3", "",  ""],
-            \   "pythonBytesContent"           : [ "Salmon3", "",  ""],
-            \   "pythonBytesError"             : [ "Red", "",  "bold"],
-            \   "pythonBytesEscape"            : [ "DarkSlateGray4", "",  "bold"],
-            \   "pythonBytesEscapeError"       : [ "Red", "",  "bold"],
-            \   "pythonCalOperator"            : [ "#af5f00", "",  ""],
-            \   "pythonClass"                  : [ "#A191F5",    "",  ""],
-            \   "pythonClassDef"               : [ "#2FBBA6",  "",  "bold"],
-            \   "pythonClassName"              : [ "#2FBBA6",  "",  ""],
-            \   "pythonCoding"                 : [ "SlateGray3", "",  "bold,italic"],
-            \   "pythonComment"                : [ "#557F8F", "",  ""],
-            \   "pythonComparison"             : [ "#2FBBA6", "",  "bold"],
-            \   "pythonConditional"            : [ "#2FBBA6", "",  ""],
-            \   "pythonDecorator"              : [ "#85B2FE", "",  "italic"],
-            \   "pythonDecoratorFunction"      : [ "#85B2FE", "",  "bold,italic"],
-            \   "pythonDefaultAssignment"      : [ "#7FC090", "",  "bold"],
-            \   "pythonDocstring"              : [ "#5D8B9C", "",  "italic"],
-            \   "pythonDottedName"             : [ "#009F6F","",""],
-            \   "pythonError"                  : [ "Red", "",  "bold"],
-            \   "pythonEscape"                 : [ "DodgerBlue2", "",  ""],
-            \   "pythonEscapeError"            : [ "Khaki2", "VioletRed4",  ""],
-            \   "pythonException"              : [ "#2FBBA6", "",  ""],
-            \   "pythonExceptions"             : [ "#2FBBA6", "",  ""],
-            \   "pythonExClass"                : [ "#2FBBA6", "",  ""],
-            \   "pythonFloat"                  : [ "SkyBlue2", "",  ""],
-            \   "pythonFunc"                   : [ "#A191F5", "",  ""],
-            \   "pythonFuncDef"                : [ "#85B2FE", "", "bold"],
-            \   "pythonFuncName"               : [ "#85B2FE", "", ""],
-            \   "pythonFuncParams"             : [ "Red", "", ""],
-            \   "pythonFunction"               : [ "SpringGreen3","",""],
-            \   "pythonHexError"               : [ "Tomato", "#1B5958",  ""],
-            \   "pythonHexNumber"              : [ "Aquamarine2", "",  ""],
-            \   "pythonInclude"                : [ "#009F6F", "",  ""],
-            \   "pythonNumber"                 : [ "#85B2FE", "",  ""],
-            \   "pythonNumberError"            : [ "#CC4455", "",  ""],
-            \   "pythonObjFunction"            : [ "#009F6F", "",  ""],
-            \   "pythonOctError"               : [ "Tomato", "#1B5958",  ""],
-            \   "pythonOctNumber"              : [ "Aquamarine2", "",  ""],
-            \   "pythonOperator"               : [ "#2FBBA6", "",  "bold"],
-            \   "pythonParamDefault"           : [ "SeaGreen2", "",  ""],
-            \   "pythonParamName"              : [ "#99AD6A", "",  ""],
-            \   "pythonPreCondit"              : [ "#00B780", "", ""],
-            \   "pythonRawBytes"               : [ "LightSkyBlue3", "",  ""],
-            \   "pythonRawString"              : [ "#7fa2e6", "",  "italic"],
-            \   "pythonRepeat"                 : [ "#009F6F", "",  "bold,underline"],
-            \   "pythonRun"                    : [ "SlateGray3", "",  "bold,italic"],
-            \   "pythonStrFormat"              : [ "#8870FF", "",  ""],
-            \   "pythonStrFormatting"          : [ "#9FCBD0", "#264040", ""],
-            \   "pythonString"                 : [ "#9A85FF", "",  ""],
-            \   "pythonStrTemplate"            : [ "PowderBlue", "#264040", "italic"],
-            \   "pythonSuperclass"             : [ "#99AD6A",  "", ""],
-            \   "pythonSync"                   : [ "IndianRed","", "italic"],
-            \   "PythonTodo"                   : [ "MediumSeaGreen", "", ""],
-            \   "pythonUniEscape"              : [ "#CC4455", "",  ""],
-            \   "pythonUniEscapeError"         : [ "Khaki2", "VioletRed4",  ""],
-            \   "pythonUniRawEscape"           : [ "#CC4455", "",  ""],
-            \   "pythonUniRawEscapeError"      : [ "Khaki2", "VioletRed4",  ""],
-            \   "pythonUniRawString"           : [ "#7fa2e6", "",  ""],
-            \   "pythonUniString"              : [ "#99ad6a", "",  ""],
-            \ }
-endif
-
-" Rst -- Restructured Text                                                                {{{2
-if !exists("s:dict_hi_rst")
-        let s:dict_hi_rst = {
-            \   "rstCitation"                             : [ "#9A85FF", "", "italic"],
-            \   "rstCitationReference"                    : [ "DarkSeaGreen3", "#152933", ""],
-            \   "rstCodeBlock"                            : [ "#99ad6a", "",  "italic"],
-            \   "rstComment"                              : [ "DodgerBlue2", "",  ""],
-            \   "rstDelimiter"                            : [ "#2DB3A0", "", "bold"],
-            \   "rstDirective"                            : [ "AquaMarine3", "", "italic"],
-            \   "rstEmphasis"                             : [ "", "#1E4959", ""],
-            \   "rstExDirective"                          : [ "#00B780", "", ""],
-            \   "rstExplicitMarkup"                       : [ "Orange", "", ""],
-            \   "rstFootNote"                             : [ "#9A85FF", "", "italic"],
-            \   "rstHyperLinkReference"                   : [ "seagreen3", "",  ""],
-            \   "rstInlineLiteral"                        : [ "#9A85FF", "",  "italic"],
-            \   "rstInterpretedTextOrHyperlinkReference"  : [ "#9A85FF", "#14332C", "italic"],
-            \   "rstLiteralBlock"                         : [ "#2DB3A0", "",  ""],
-            \   "rstSections"                             : [ "#71D3B4", "",  ""],
-            \   "rstSimpleTable"                          : [ "#c59f6f", "",  ""],
-            \   "rstSimpleTableLines"                     : [ "LightSeaGreen", "",  ""],
-            \   "rstStandaloneHyperlink"                  : [ "CadetBlue2", "",  "underline"],
-            \   "rstStrongEmphasis"                       : [ "DarkSlateGray2","#1E4959", ""],
-            \   "rstSubstitutionReference"                : [ "#8870FF", "",  ""],
-            \   "rstTable"                                : [ "#FF88AA", "#573D8C", ""],
-            \   "rstTodo"                                 : [ "LightBlue", "DarkGreen", ""],
-            \   "rstTransition"                           : [ "#71D3B4", "", ""],
-            \ }
-endif
-
-" Sed                                                                                     {{{2
-if !exists("s:dict_hi_sed")
-        let s:dict_hi_sed = {
-            \   "sedACI"                     : [ "LightSeaGreen","",""],
-            \   "sedAddress"                 : [ "LightSeaGreen", "", ""],
-            \   "sedBranch"                  : [ "SlateGray3", "",  "bold,italic"],
-            \   "sedComment"                 : [ "#5D8B9C", "",  "italic"],
-            \   "sedError"                   : [ "Red", "",  "bold"],
-            \   "sedFlag"                    : [ "#8fbfdc", "",  "bold,italic"],
-            \   "sedFunction"                : [ "#CC4455","","italic"],
-            \   "sedLabel"                   : [ "RoyalBlue", "", "italic,bold,underline"],
-            \   "sedLineCont"                : [ "#CC4455","","bold"],
-            \   "sedRegexp119"               : [ "#CC4455", "",  ""],
-            \   "sedRegExp47"                : [ "#869BCC", "", ""],
-            \   "sedRegexpMeta"              : [ "#869BCC", "", ""],
-            \   "sedReplacement119"          : [ "#CC4455", "",  "bold"],
-            \   "sedReplacement44"           : [ "#65C254", "",  ""],
-            \   "sedReplacement47"           : [ "#869BCC", "", ""],
-            \   "sedReplacement58"           : [ "#65C254", "",  ""],
-            \   "sedReplaceMeta"             : [ "SlateGray3", "",  ""],
-            \   "sedSemicolon"               : [ "RosyBrown", "",  "bold"],
-            \   "sedSpecial"                 : [ "SlateGray3", "", "bold"],
-            \   "sedST"                      : [ "SlateGray2","",""],
-            \ }
-endif
-
-" Todo (http://www.cdsoft.fr/todo) and task plugins (https://github.com/samsonw/vim-task)     " {{{2
-if !exists("s:dict_hi_todo")
-        let s:dict_hi_todo = {
-            \   "SectionTitle"                 : [ "DeepSkyBlue2", "",  ""],
-            \   "TaskDoneItem"                 : [ "MediumSeaGreen", "",  ""],
-            \   "TaskDoneIcon"                 : [ "Gold", "",  ""],
-            \   "TaskKeyword"                  : [ "Turquoise", "",  ""],
-            \   "TaskQuestionItem"             : [ "SlateGray3", "",  ""],
-            \   "TaskQuestionIcon"             : [ "Gold", "",  ""],
-            \   "TaskUrgentItem"               : [ "IndianRed2", "",  ""],
-            \   "TaskUrgentIcon"               : [ "Gold", "",  ""],
-            \   "TaskWorkingIcon"              : [ "Gold", "",  ""],
-            \ }
-endif
-
-" Shellscripts and Bash                                                                   {{{2
-if !exists("s:dict_hi_sh")
-        let s:dict_hi_sh = {
-            \   "bashStatement"           : [ "#8870FF", "",  "italic"],
-            \   "shAlias"                 : [ "#009F6F", "",  ""],
-            \   "shArithmetic"            : [ "SlateGray3", "",  ""],
-            \   "shCase"                  : [ "PaleGreen3", "",  "italic"],
-            \   "shCaseDoubleQuote"       : [ "#A8C2EF", "DarkSlateGrey",  ""],
-            \   "shCaseEsac"              : [ "#009F6F", "",  "italic"],
-            \   "shCaseRange"             : [ "#8870FF", "",  ""],
-            \   "shCmdParenRegion"        : [ "DodgerBlue3", "",  "italic"],
-            \   "shCmdSubregion"          : [ "#8870FF", "",  "italic"],
-            \   "shColon"                 : [ "AquaMarine3", "",  ""],
-            \   "shCommandSub"            : [ "#88B4CC", "",  "italic"],
-            \   "shComment"               : [ "#699DB0", "",  "italic"],
-            \   "shDblBrace"              : [ "#009F6F", "", "bold"],
-            \   "shDblParen"              : [ "#009F6F", "", "bold"],
-            \   "shDerefOp"               : [ "#2DB3A0", "",  ""],
-            \   "shDeRefPattern"          : [ "#2DB3A0", "",  ""],
-            \   "shDeRefPPSleft"          : [ "#99AD6A", "",  "italic"],
-            \   "shDeRefPPSright"         : [ "#99AD6A", "",  "italic"],
-            \   "shDeRefSimple"           : [ "AquaMarine3",    "", "italic"],
-            \   "shDeRefVar"              : [ "#9B91F6", "",  "italic"],
-            \   "shDerefWordError"        : [ "DarkSeaGreen1","#990024", ""],
-            \   "shDo"                    : [ "#8FBFDC", "",  "italic"],
-            \   "shDoubleQuote"           : [ "#2DB3A0", "",  "italic"],
-            \   "shEscape"                : [ "#C59F6F", "",  "bold"],
-            \   "shFor"                   : [ "Aquamarine3", "",  "italic"],
-            \   "shFunction"              : [ "#009F6F","", "bold"],
-            \   "shFunctionKey"           : [ "#009F6F","", "bold"],
-            \   "shFunctionOne"           : [ "#9CC7CC", "",  "italic"],
-            \   "shFunctionTwo"           : [ "SlateBlue2", "", ""],
-            \   "shIf"                    : [ "#9A85FF", "",  "bold,italic"],
-            \   "shIfError"               : [ "#C59F6F", "", "italic"],
-            \   "shInError"               : [ "#C59F6F", "", "italic"],
-            \   "shLoop"                  : [ "#89AEB3", "",  "bold,italic"],
-            \   "shNumber"                : [ "#009F6F", "", ""],
-            \   "shOperator"              : [ "#C59F6F", "",  "italic"],
-            \   "shOption"				  : [ "#779DB2", "",   "bold"],
-            \   "shParen"                 : [ "#009F6F","","bold,italic"],
-            \   "shParenError"            : [ "Red", "Gray35",  ""],
-            \   "shQuote"                 : [ "#88B4CC", "",  "bold,italic"],
-            \   "shRange"                 : [ "#81AAC0", "",  "bold,italic"],
-            \   "shRedir"                 : [ "#C59F6F", "",  "bold"],
-            \   "shRepeat"                : [ "#9B91F6", "",  "bold,italic"],
-            \   "shSet"                   : [ "#009F6F", "",  "bold"],
-            \   "shSetIdentifier"         : [ "#009F6F", "",  "bold"],
-            \   "shSetList"               : [ "#2DB3A0", "",  ""],
-            \   "shSingleQuote"			  : [ "#9A85FF", "",  ""],
-            \   "shSource"                : [ "PowderBlue", "",  "bold"],
-            \   "shSpecial"				  : [ "#2DB3A0", "",  "italic"],
-            \   "shStatement"             : [ "#2FBBA6", "",  "italic"],
-            \   "shString"				  : [ "#9A85FF", "",  ""],
-            \   "shTestOpr"               : [ "#C59F6F", "",  ""],
-            \   "shTestPattern"           : [ "#99ad6a", "",  "bold"],
-            \   "shTodo"                  : [ "Brown2",  "bg","underline,italic"],
-            \   "shVariable"              : [ "PaleGreen3", "", "italic"],
-            \   }
-endif
-
-" Tex and Postscript                                                                      {{{2
-if !exists("s:dict_hi_tex")
-        let s:dict_hi_tex = {
-            \   "postScrConditional"     : [ "#009F6F", "", "bold"],
-            \   "postScrConstant"        : [ "#85B2FE", "",  ""],
-            \   "postScrDSCcomment"      : [ "#A08FF5", "",  ""],
-            \   "postScrFloat"           : [ "AquaMarine3", "",  ""],
-            \   "postScrIdentifier"      : [ "Aquamarine3", "",  ""],
-            \   "postScrInteger"         : [ "AquaMarine3", "",  ""],
-            \   "postScrL2Operator"      : [ "#85B2FE", "",  ""],
-            \   "postScrOperator"        : [ "#85B2FE", "",  ""],
-            \   "postScrRepeat"          : [ "#85B2FE", "",  ""],
-            \   "texBegin"               : [ "#009F6F","","bold"],
-            \   "texBeginEndName"        : [ "#009F6F","","bold"],
-            \   "texComment"             : [ "#78B37A", "",  "italic"],
-            \   "texDelimiter"           : [ "Red", "", ""],
-            \   "texDocType"             : [ "#00B780","","bold,italic"],
-            \   "texDocZone"             : [ "#85B2FE", "#152933", ""],
-            \   "texEnd"                 : [ "#009F6F","","bold"],
-            \   "texMathOper"            : [ "DodgerBlue", "",  ""],
-            \   "texMathZone"            : [ "#8870FF", "",  "bold"],
-            \   "texMathZoneV"           : [ "DodgerBlue", "",  ""],
-            \   "texMathZoneW"           : [ "DodgerBlue", "",  ""],
-            \   "texOnlyMath"            : [ "PowderBlue", "",  ""],
-            \   "texSection"             : [ "#00B780","","italic"],
-            \   "texSectionName"         : [ "#BE00CC",  "", "bold"],
-            \   "texSectionZone"         : [ "PowderBlue", "", ""],
-            \   "texSpecialChar"         : [ "SlateGray2", "",  ""],
-            \   "texStatement"           : [ "#c59f6f", "",  "italic"],
-            \   "texSubscripts"          : [ "DodgerBlue", "",  ""],
-            \   "texSuperscripts"        : [ "DodgerBlue", "",  ""],
-            \   "texTitle"               : [ "PaleGreen2", "#254859", ""],
-            \ }
-endif
-
-" program transformation tools: TXL, Kelbt, Ragel, COLM etc.                              {{{2
-if !exists("s:dict_hi_pgtransform")
-        let s:dict_hi_pgtransform = {
-            \   "cflTypeRegion"            : [ "#779DB2", "",  "italic"],
-            \   "defKeywords"              : [ "#009F6F","","bold"],
-            \   "regionDelimiter"          : [ "Red", "",  ""],
-            \   "rlLiteral"                : [ "#9A85FF","","italic"],
-            \   "rlNumber"                 : [ "#9A85FF","",""],
-            \   "rlTypeRegion"             : [ "SlateBlue1", "",  ""],
-            \   "tlComment"                : [ "#77996C", "",  ""],
-            \   "tlIdentifier"             : [ "#00B880", "",  ""],
-            \   "txlComment"               : [ "CadetBlue", "",  "italic"],
-            \   "txlFormat"                : [ "#c59f6f", "",  ""],
-            \   "txlKeyword"               : [ "AquaMarine3", "",  ""],
-            \   "txlLiteral"               : [ "#8870FF","",  "bold"],
-            \   "txlPreprocessor"          : [ "PaleGreen3", "#152933", "italic"],
-            \   "typeKeywords"             : [ "#00B880","",""],
-            \   "varCapture"               : [ "#8fbfdc", "",  ""],
-            \ }
-endif
-
-" Vim Features: diff,folding,hex,quickfix etc.                                            {{{2
-" NOTE: part of the diff settings are defined under the 'diff' global dict key options
-if !exists("s:dict_hi_vimfeat")
-        let s:dict_hi_vimfeat = {
-            \   "diffBDiffer"           : [ "SteelBlue3",    "",        ""],
-            \   "diffCommon"            : [ "SteelBlue3",    "",        ""],
-            \   "diffDiffer"            : [ "Green3",         "",       ""],
-            \   "diffIdentical"         : [ "Green3",         "",       ""],
-            \   "diffIsA"               : [ "SteelBlue3",    "",        ""],
-            \   "diffNoEOL"             : [ "SteelBlue3",    "",        ""],
-            \   "diffOldFile"           : [ "Plum3",         "",        ""],
-            \   "diffOnly"              : [ "Green3",        "",        ""],
-            \   "iCursor"               : [ "white",         "red",     ""],
-            \   "qfFileName"			: [ "Aquamarine2",   "",        ""],
-            \   "qfLineNr"				: [ "#5D8B9C",       "",        ""],
-            \   "qfSeparator"			: [ "RosyBrown",     "",        ""],
-            \   "xxdAddress"            : [ "#09BA85",       "",        ""],
-            \   "xxdAscii"              : [ "#9B91F6",       "",        ""],
-            \   "xxdDot"                : [ "SlateGray2",    "",        "bold,underline"],
-            \   "xxdSep"                : [ "#009F6F",       "",        "bold"],
-                    \ }
-endif
-
-" VimL -- Vim script, Vim Language                                                        {{{2
-if !exists("s:dict_hi_vimlang")
-        let s:dict_hi_vimlang = {
-            \   "vimAddress"                  : [ "#9FC7FF", "",  ""],
-            \   "vimAuGroup"                  : [ "SlateBlue2", "",  ""],
-            \   "vimAugroupKey"               : [ "SkyBlue2", "",  "italic,underline"],
-            \   "vimAutoCmd"                  : [ "#32C5B0", "",  ""],
-            \   "vimAutoCmdSfxList"           : [ "#32C5B0", "",  ""],
-            \   "vimAutoevent"                : [ "#9A85FF", "",  ""],
-            \   "vimAutoeventList"            : [ "#32C5B0", "",  ""],
-            \   "vimBracket"                  : [ "#7EB49C", "",  ""],
-            \   "vimCmdSep"                   : [ "RosyBrown", "",  "bold"],
-            \   "vimCmplxRepeat"              : [ "#C6B6FE", "bg",  ""],
-            \   "vimComment"                  : [ "#5D8B9C", "",  "italic"],
-            \   "vimCommentString"            : [ "#5D8B9C", "",  "italic"],
-            \   "vimCommentTitle"             : [ "#8B7F4C", "",  "italic"],
-            \   "vimContinue"                 : [ "SlateBlue2", "",  "bold"],
-            \   "vimCtrlChar"                 : [ "Green", "", ""],
-            \   "vimEcho"                     : [ "PaleGreen3", "",  "bold"],
-            \   "vimElseIferr"                : [ "PowderBlue", "",  "underline"],
-            \   "vimEnvVar"                   : [ "#85B2FE", "#152933", "italic"],
-            \   "vimError"                    : [ "Red", "",  "bold"],
-            \   "vimExecute"                  : [ "SkyBlue", "", "italic"],
-            \   "vimFBvar"                    : [ "SteelBlue2", "",  "italic"],
-            \   "vimFgBgAttrib"               : [ "DeepSkyBlue3", "", ""],
-            \   "vimFiletype"                 : [ "#779DB2", "",   "italic"],
-            \   "vimFirstChar"                : [ "Orange", "",  ""],
-            \   "vimFTError"                  : [ "DodgerBlue3", "",   "bold"],
-            \   "vimFTOption"                 : [ "#779DB2", "",   "italic"],
-            \   "vimFunc"                     : [ "White", "",   "bold"],
-            \   "vimFuncKey"                  : [ "LightCyan3", "", "bold"],
-            \   "vimFuncName"                 : [ "#2FBBA6", "", "underline,italic"],
-            \   "vimFuncSID"                  : [ "PowderBlue", "",  ""],
-            \   "vimFunction"                 : [ "LightCyan2","", ""],
-            \   "vimFunctionError"            : [ "#2FBBA6","", ""],
-            \   "vimFuncVar"                  : [ "SteelBlue3", "",  "underline,italic"],
-            \   "vimGroup"                    : [ "SeaGreen3", "#1C3644", ""],
-            \   "vimGroupList"                : [ "#7EB49C", "", "italic"],
-            \   "vimGroupName"                : [ "#7EB49C", "", ""],
-            \   "vimGroupSpecial"             : [ "#7EB49C", "", "italic"],
-            \   "vimHiAttrib"				  : [ "DeepSkyBlue3", "", ""],
-            \   "vimHiClear"                  : [ "#A8C2EF",    "DarkSlateGrey", ""],
-            \   "vimHiCterm"                  : [ "DeepSkyBlue3", "", ""],
-            \   "vimHiCtermColor"             : [ "SteelBlue1",   "DarkSlateGrey", ""],
-            \   "vimHiCtermFgBg"              : [ "DodgerBlue2", "",  ""],
-            \   "vimHighLight"                : [ "SeaGreen3", "#1C3644", ""],
-            \   "vimHiGroup"                  : [ "SeaGreen3", "#1C3644", ""],
-            \   "vimHiGui"                    : [ "DeepSkyBlue3", "", ""],
-            \   "vimHiGuiFgBg"                : [ "DodgerBlue2", "",  ""],
-            \   "vimHiGuiRGB"                 : [ "SteelBlue1",    "DarkSlateGrey",  ""],
-            \   "vimHiKeyList"                : [ "#2DB3A0", "",  ""],
-            \   "vimHiTerm"                   : [ "DeepSkyBlue3", "", ""],
-            \   "vimLastChar"                 : [ "Orange", "",  ""],
-            \   "vimLet"                      : [ "PowderBlue", "",  ""],
-            \   "vimMap"                      : [ "LightCyan3", "",  ""],
-            \   "vimMapLHS"                   : [ "SkyBlue2", "",  ""],
-            \   "vimMapMod"                   : [ "#2DB3A0", "", ""],
-            \   "vimMapModKey"                : [ "#2DB3A0", "",  "italic"],
-            \   "vimMarker"                   : [ "Aquamarine1", "",  "bold"],
-            \   "vimMenuLHS"                  : [ "SeaGreen4", "",  ""],
-            \   "vimMenuName"                 : [ "#85B2FE", "",  ""],
-            \   "vimMenuRHS"                  : [ "#85B2FE", "",  "italic"],
-            \   "vimNormCmds"                 : [ "#2FBBA6", "",  ""],
-            \   "vimNotation"                 : [ "#7EB49C", "", ""],
-            \   "vimNotFunc"                  : [ "PowderBlue", "",  ""],
-            \   "vimOper"                     : [ "#7fa2e6", "",  "bold"],
-            \   "vimOperError"                : [ "SteelBlue2", "",  ""],
-            \   "vimOperParen"                : [ "#7fa2e6", "",  ""],
-            \   "vimParenSep"                 : [ "#779DB2", "",   "bold"],
-            \   "vimPatOneOrMore"             : [ "red", "",  ""],
-            \   "vimPatRegionClose"           : [ "#32C5B0", "",  "bold"],
-            \   "vimPatRegionOpen"            : [ "#32C5B0", "",  "bold"],
-            \   "vimPatSep"                   : [ "#30B38C", "",  ""],
-            \   "vimPatSepErr"                : [ "#CC4455", "",  ""],
-            \   "vimPatSepR"                  : [ "#CC4455",        "",  ""],
-            \   "vimPatSepZ"                  : [ "#CC4455",        "",  ""],
-            \   "vimPerlRegion"               : [ "#C59F6F", "", "" ],
-            \   "vimPythonRegion"             : [ "#C59F6F", "", "" ],
-            \   "vimRegister"                 : [ "#C6B6FE", "bg",  ""],
-            \   "vimRubyRegion"               : [ "#C59F6F", "", "" ],
-            \   "vimScriptDelim"              : [ "#76B286", "", "underline"],
-            \   "vimSearch"                   : [ "Gray50", "",  "italic"],
-            \   "vimSearchDelim"              : [ "Gray50", "",  "italic"],
-            \   "vimSep"                      : [ "SlateBlue2", "", ""],
-            \   "vimSpecFile"                 : [ "CornFlowerBlue", "",  "italic"],
-            \   "vimSpecial"                  : [ "#7FA2E6", "",  ""],
-            \   "vimSubst"                    : [ "DeepSkyBlue2", "",  ""],
-            \   "vimSubst1"                   : [ "#93BBBF", "",  ""],
-            \   "vimSubstDelim"               : [ "#57D700", "",  ""],
-            \   "vimSubstFlagErr"             : [ "Turquoise3", "",  ""],
-            \   "vimSubstFlags"               : [ "#009F6F","","bold,italic"],
-            \   "vimSubstPat"                 : [ "PaleGreen3", "",  ""],
-            \   "vimSubstRep4"                : [ "SteelBlue2","",""],
-            \   "vimSubstSubstr"              : [ "SkyBlue3", "",  ""],
-            \   "vimSynCase"                  : [ "#009F6F","","bold"],
-            \   "vimSyncKey"                  : [ "#009F6F","",""],
-            \   "vimSyncLines"                : [ "#009F6F","",""],
-            \   "vimSyncMatch"                : [ "#90CFB3","",""],
-            \   "vimSynContains"              : [ "#009F6F","",""],
-            \   "vimSynError"                 : [ "#2FBBA6", "", "italic,undercurl"],
-            \   "vimSynKeyOpt"                : [ "#8870FF","",""],
-            \   "vimSynKeyRegion"             : [ "SkyBlue2","",""],
-            \   "vimSynMtchGrp"               : [ "#009F6F","",""],
-            \   "vimSynMtchOpt"               : [ "#8870FF","",""],
-            \   "vimSynNextGroup"             : [ "#009F6F","","italic"],
-            \   "vimSynOption"                : [ "#009F6F","","italic"],
-            \   "vimSynPatMod"                : [ "#6B9999", "",  "underline"],
-            \   "vimSynRegion"                : [ "#8870FF","",""],
-            \   "vimSynRegOpt"                : [ "#8870FF","",""],
-            \   "vimSynRegPat"                : [ "#8870FF","",""],
-            \   "vimSyntax"                   : [ "#009F6F","","bold"],
-            \   "vimSynType"                  : [ "#009F6F","",""],
-            \   "vimUserAttrbCmpltFunc"       : [ "#7FA2E6", "",  "underline"],
-            \   "vimUserAttrbKey"             : [ "#32C5B0", "",  "italic"],
-            \   "vimUserCmd"                  : [ "#CC4455", "", "bold"],
-            \   "vimUserCmdError"             : [ "PaleGreen3","#1C4F4F", ""],
-            \   "vimUserFunc"                 : [ "#32C5B0", "", "italic"],
-            \   "vimVar"                      : [ "#2FBBA6", "", "italic"],
-            \ }
-endif
-
-" Vim Plugins:  plugins with few customized highlights, come into this bucket           {{{2
-if !exists("s:dict_hi_other_plugins")
-        let s:dict_hi_other_plugins = {
-            \   "ctrlpLinePre"                 : [ "CadetBlue3", "bg", ""],
-            \   "ctrlPBookmark"                : [ "Cyan3", "bg", ""],
-            \   "ctrlPTabExtra"                : [ "CadetBlue3", "bg", ""],
-            \   "ctrlPTagKind"                 : [ "Yellow3", "bg", ""],
-            \   "ctrlPBufName"                 : [ "DarkOliveGreen3", "bg", ""],
-            \   "ctrlPqfLineCol"               : [ "Green3", "bg", ""],
-            \   "ctrlSpaceFound"               : [ "Black", "Gold", "bold"],
-            \   "ctrlSpaceNormal"              : [ "#00B780", "#0A2450", ""],
-            \   "ctrlSpaceSelected"            : [ "FireBrick2", "bg", "bold"],
-            \   "dbgBreakPt"                   : [ "", "FireBrick",  ""],
-            \   "dbgCurrent"                   : [ "Tomato", "#573d8c",  ""],
-            \   "dosIniHeader"                 : [ "SkyBlue2", "",  "bold"],
-            \   "dosIniLabel"                  : [ "Plum3", "",  ""],
-            \   "dosIniNumber"                 : [ "SlateGray3", "",  ""],
-            \   "easyMotionShade"              : [ "DarkGrey", "",  ""],
-            \   "fileSearchSyntaxFileGroupTitle":[ "DarkCyan", "", "italic"],
-            \   "fileSearchSyntaxUncontextedLineNum":[ "#CC4455", "", ""],
-            \   "FilesearchSyntaxUncontextedLineText":[ "PowderBlue", "", ""],
-            \   "FilesearchCurrentEntry"       : [ "CornFlowerBlue", "",  "bold"],
-            \   "fountainBold"                 : [ "LightCyan3", "#573D8C", ""],
-            \   "fountainCentered"             : [ "#E7F56B", "", ""  ],
-            \   "fountainCharacter"            : [ "BurlyWood3", "", ""],
-            \   "fountainDialogue"             : [ "#8ecfbe", "", "italic"],
-            \   "fountainPageBreak"            : [ "#556b2f", "", ""],
-            \   "fountainParenthetical"        : [ "Gray50", "", ""],
-            \   "fountainSceneHeading"         : [ "#65C254", "",  "bold"],
-            \   "fountainTitlePage"            : [ "#bfaf69", "", "bold"],
-            \   "fountainTransition"           : [ "#BAB585", "", ""],
-            \   "indentGuidesEven"             : [ "", "#3D2B6B", ""],
-            \   "indentGuidesOdd"              : [ "", "#1c3644", ""],
-            \   "listmaps_filename"			   : [ "#CBD234", "#564227",  ""],
-            \   "listmaps_underline"		   : [ "#CBD234", "#564227",  ""],
-            \   "neocomplcacheexpandsnippets"  : [ "PaleGoldenRod", "",  ""],
-            \   "quickfixsignsMarksTexthl"     : [ "White", "#3A5022", ""],
-            \   "snipKeyword"                  : [ "#2FBBA6", "",  ""],
-            \   "snippetComment"               : [ "SlateGray3", "",  "italic"],
-            \   "snippetEval"                  : [ "PowderBlue",  "#152933",  "italic"],
-            \   "snippetExpand"                : [ "#779DB2", "",   "italic"],
-            \   "snippetKeyword"               : [ "#2FBBA6", "",  "underline"],
-            \   "snippetName"                  : [ "#2FBBA6", "",  ""],
-            \   "snippetWord"                  : [ "#78B37A", "", ""],
-            \   "snipPythonCommand"            : [ "SlateBlue3", "",  ""],
-            \   "snipStart"                    : [ "SeaGreen2", "",  ""],
-            \   "snipString"                   : [ "#2FBBA6", "",  "italic"],
-            \   "snipVar"                      : [ "DeepSkyBlue2", "",  ""],
-            \   "snipVarExpansion"             : [ "DeepSkyBlue1", "",  ""],
-            \   "snipVarPythonCommand"         : [ "Tomato", "",  ""],
-            \   "syntasticErrorSign"           : [ "Tomato", "",  ""],
-            \   "syntasticStyleErrorSign"      : [ "Tomato", "", "italic"],
-            \   "syntasticStyleWarningSign"    : [ "LightGray", "", "italic"],
-            \   "tabLine"                      : [ "CornflowerBlue", "Gray26",  "italic"],
-            \   "tabLineClose"                 : [ "CornflowerBlue",    "Gray26",           "bold"],
-            \   "tabLineFill"                  : [ "CornflowerBlue", "Gray20",  "underline"],
-            \   "tabLineNumber"                : [ "#3CEEB3",    "Gray26",           "bold"],
-            \   "tabLineSel"                   : [ "RoyalBlue", "bg",  "bold,italic"],
-            \   "tabManAtv"                    : [ "#CC4455", "",  "bold,italic"],
-            \   "tabManHelp"                   : [ "#8FBFDC", "",  "italic"],
-            \   "tabManHKey"                   : [ "LimeGreen", "", "italic"],
-            \   "tabManLead"                   : [ "LightSeaGreen", "", ""],
-            \   "tabManHSpecial"               : [ "LightSeaGreen", "",  "italic"],
-            \   "tabManCurTName"               : [ "LightSeaGreen", "", "italic,undercurl"],
-            \   "tabManTName"                  : [ "LightSeaGreen", "",  "italic"],
-            \   "tagListComment"               : [ "LightSlateGray", "",  ""],
-            \   "tagListFileName"              : [ "RoyalBlue", "", "bold,italic"],
-            \   "tagListTagScope"              : [ "CadetBlue",  "",  ""],
-            \   "tagListTitle"                 : [ "SkyBlue2",  "",  "bold,italic"],
-            \   "vimCommanderFile"             : [ "#00B880",  "",  ""],
-            \   "vimCommanderPath"             : [ "Green2", "#1E4959",  "italic"],
-            \ }
-endif
-
-" XML and DTD                                                                             {{{2
-if !exists("s:dict_hi_xml")
-        let s:dict_hi_xml = {
-            \   "dtdFunction"                : [ "SlateGray4",  "",               "bold"],
-            \   "dtdTag"                     : [ "#CDA8C9",     "",               "italic"],
-            \   "xmlAttrib"                  : [ "#7EB49C",     "",               ""],
-            \   "xmlAttribPunct"             : [ "ForestGreen", "",               ""],
-            \   "xmlCDATA"                   : [ "DarkKhaki",   "DarkSlateGrey",  "italic"],
-            \   "xmlCDATAcdata"              : [ "Khaki4",      "DarkSlateGrey",  "italic"],
-            \   "xmlCDATAend"                : [ "Khaki4",      "DarkSlateGrey",  "bold,italic"],
-            \   "xmlCDATAstart"              : [ "Khaki4",      "DarkSlateGrey",  "bold,italic"],
-            \   "xmlComment"                 : [ "#CC4455",     "",               "italic"],
-            \   "xmlCommentStart"            : [ "#CC4455",     "",               "italic"],
-            \   "xmlDocType"                 : [ "#CDA8C9",     "",               "italic"],
-            \   "xmlDocTypeDecl"             : [ "SlateGray3",  "",               ""],
-            \   "xmlDocTypeKeyword"          : [ "SlateGray3",  "",               "italic"],
-            \   "xmlEndTag"                  : [ "SlateGray4",  "",               "bold"],
-            \   "xmlEntityPunct"             : [ "#00B880",     "",               ""],
-            \   "xmlNameSpace"               : [ "#00B880",     "",               "italic"],
-            \   "xmlProcessingDelim"         : [ "#CC4455",     "",               ""],
-            \   "xmlString"                  : [ "#7C9DD4",     "",               "italic"],
-            \   "xmlTag"                     : [ "SlateGray3",  "",               ""],
-            \   "xmlTagName"                 : [ "SlateGray3",  "",               ""],
-            \   "xmlValue"                   : [ "Navy",        "#BDCA51",        "italic"],
-            \ }
-endif
-
-" YAML                                                                                    {{{2
-if !exists("s:dict_hi_yaml")
-        let s:dict_hi_yaml = {
-            \   "yamlAlias"                      : [ "#8870FF", "",  "italic,underline"],
-            \   "yamlAnchor"                     : [ "#8870FF", "",  "italic"],
-            \   "yamlBlockCollectionItemStart"   : [ "SeaGreen2", "",  "bold"],
-            \   "yamlBlockMappingKey"            : [ "#2DB3A0", "",  ""],
-            \   "yamlDocumentStart"              : [ "Red1", "",  "bold"],
-            \   "yamlFlowIndicator"              : [ "SeaGreen2", "",  ""],
-            \   "yamlFlowMappingKey"             : [ "seagreen3", "",  ""],
-            \   "yamlInteger"                    : [ "#8870FF", "",  ""],
-            \   "yamlKeyValueDelimiter"          : [ "RosyBrown", "",  "bold"],
-            \   "yamlPlainScalar"                : [ "SeaGreen2", "",  ""],
-            \   "yamlTimestamp"                  : [ "#8870FF", "",  ""],
-            \ }
-endif
-
-" Manpages and nroff                                                                      {{{2
-if !exists("s:dict_hi_manpage")
-        let s:dict_hi_manpage = {
-            \   "manReference"              : [ "PaleGreen1", "",  "underline"],
-            \   "manSectionHeading"         : [ "LimeGreen",  "",  "italic"],
-            \   "manSubHeading"             : [ "Green2",     "",   "italic"],
-            \   "manTitle"                  : [ "Brown2",     "",  "italic"],
-            \   "nroffComment"				: [ "#5D8B9C","","italic"],
-            \   "nroffEscape"				: [ "#00B880","","bold"],
-            \   "nroffEscRegArg"			: [ "#71D3B4", "",  ""],
-            \   "nroffIdent"				: [ "#C59F6F", "",  ""],
-            \   "nroffReqLeader"			: [ "LimeGreen", "",  "bold"],
-            \   "nroffRequest"				: [ "SeaGreen3", "",  ""],
-            \   "nroffSpecialChar"			: [ "DeepSkyBlue2", "",  ""],
-            \   }
-endif
-
-" Lua                                                                                     {{{2
-if !exists("s:dict_hi_lua")
-        let s:dict_hi_lua = {
-            \   "luaConstant"             : [ "#85B2FE", "",  ""],
-            \   "luaFunc"                 : [ "#009F6F", "", "bold,italic"],
-            \   "luaFunction"             : [ "#85B2FE", "", "bold"],
-            \   "luaNumber"               : [ "#85B2FE", "",  ""],
-            \   "luaOperator"             : [ "PaleGreen3","","bold,underline"],
-            \   "luaParen"                : [ "Red", "",  ""],
-            \   "luaRepeat"               : [ "SeaGreen2", "",  "underline"],
-            \   "luaSpecial"              : [ "AquaMarine4", "",  "bold"],
-            \   "luaStatement"            : [ "SeaGreen2", "",  ""],
-            \   "luaString"               : [ "#9A85FF", "",  ""],
-            \   "luaTable"                : [ "#00B880","","bold"],
-            \   "luaTodo"                 : [ "Wheat2", "#345FA8",  "italic"],
-            \   }
-        endif
-
-" Make, config and similar build tools                                                    {{{2
-if !exists("s:dict_hi_build_tools")
-        let s:dict_hi_build_tools = {
-            \   "aapCommand"                  : [ "#65C254", "",  ""],
-            \   "automakeClean"               : [ "AquaMarine2", "", ""],
-            \   "automakeComment1"            : [ "#77996C", "",  "italic"],
-            \   "automakeConditional"         : [ "Aquamarine3","","bold,italic"],
-            \   "automakeExtra"               : [ "AquaMarine2", "", "italic"],
-            \   "automakeMakeBString"         : [ "#9A85FF","","italic"],
-            \   "automakeSecondary"           : [ "#009F6F","",""],
-            \   "automakeSubDirs"             : [ "#00B880","",""],
-            \   "CfgComment"                  : [ "#7EB49C", "", "italic"],
-            \   "CfgOnOff"                    : [ "Aquamarine3", "",  "bold"],
-            \   "CfgSection"                  : [ "#7EB49C", "", "italic"],
-            \   "CfgString"                   : [ "#65C254", "", "italic"],
-            \   "CfgValues"                   : [ "SkyBlue1", "",  ""],
-            \   "confComment"                 : [ "CadetBlue", "",  "italic"],
-            \   "configFunction"              : [ "#65C254", "",  ""],
-            \   "configString"                : [ "#9A85FF", "",  ""],
-            \   "confTodo"                    : [ "Wheat2", "#345FA8",  "italic"],
-            \   "m4Command"                   : [ "#29A629", "",  ""],
-            \   "m4Comment"                   : [ "#557F8F", "",  ""],
-            \   "m4Function"                  : [ "DeepSkyBlue2", "",  ""],
-            \   "m4Preproc"                   : [ "SeaGreen3",  "#152933",  ""],
-            \   "m4Special"                   : [ "#65C254", "",  ""],
-            \   "m4Statement"                 : [ "SlateGray2", "",  ""],
-            \   "m4String"                    : [ "LightSteelBlue2","",""],
-            \   "m4Type"                      : [ "Turquoise2", "",  ""],
-            \   "m4Variable"                  : [ "SeaGreen2", "", ""],
-            \   "makeBstring"                 : [ "Turquoise3", "",  ""],
-            \   "makeCmdNextLine"             : [ "#CC4455", "",  ""],
-            \   "makeCommandError"            : [ "Red", "",  "bold"],
-            \   "makeComment"                 : [ "#77996C", "",  "italic"],
-            \   "makeConfig"                  : [ "#7FA2E6", "",  ""],
-            \   "makeDstring"                 : [ "#9A85FF", "",  ""],
-            \   "makeIdent"                   : [ "Aquamarine3", "",  ""],
-            \   "makeNextLine"                : [ "#CC4455", "",  ""],
-            \   "makePreCondit"               : [ "#8870FF", "",  "italic"],
-            \   "makeSpecial"                 : [ "MediumSeaGreen", "",  ""],
-            \   "makeSString"                 : [ "#9A85FF", "",  ""],
-            \   "makeTarget"                  : [ "#00B880","","underline"],
-            \ }
-endif
-
-" PHP                                                                                     {{{2
-if !exists("s:dict_hi_php")
-        let s:dict_hi_php = {
-            \   "phpArrayPair"          : [ "#2DB3A0", "",  "italic"],
-            \   "phpBoolean"            : [ "MediumSlateBlue","",""],
-            \   "phpFunctions"          : [ "#85B2FE", "#152933", ""],
-            \   "phpNull"               : [ "MediumSlateBlue","",""],
-            \   "phpQuoteDouble"        : [ "#8CA854", "",  ""],
-            \   "phpQuoteSingle"        : [ "#8CA854", "",  ""],
-            \   "phpSuperGlobal"        : [ "#2DB3A0", "",  "bold,italic"],
-            \ }
-endif
-
-" OTHER syntactical items                                                                 {{{2
-if !exists("s:dict_hi_other")
-        let s:dict_hi_other = {
-            \   "adaAssignment"                : [ "Red", "",  ""],
-            \   "adaAttribute"                 : [ "DodgerBlue3", "",  "italic"],
-            \   "adaSpecial"                   : [ "RosyBrown", "",  "bold"],
-            \   "Assignment"                   : [ "#F3DB8E", "",  ""],
-            \   "Boolean"                      : [ "#8870FF", "", ""],
-            \   "builtinFunc"                  : [ "#dad085", "",  "underline"],
-            \   "builtinObj"                   : [ "#7F9D90", "", "" ],
-            \   "calOperator"                  : [ "#af5f00", "",  ""],
-            \   "Character"                    : [ "CadetBlue2", "",  ""],
-            \   "cobolLine"                    : [ "DodgerBlue2", "",  ""],
-            \   "cobolString"                  : [ "CadetBlue", "", "italic"],
-            \   "Comment"                      : [ "Gray50", "",  "italic"],
-            \   "Conditional"                  : [ "SeaGreen2", "",  ""],
-            \   "Constant"                     : [ "CadetBlue2", "",  ""],
-            \   "Cursor"                       : [ "#8700ff", "orange",  "italic,bold"],
-            \   "cursorIM"                     : [ "Black", "OrangeRed",  ""],
-            \   "Debug"                        : [ "#88CB35", "",  ""],
-            \   "Decorator"                    : [ "#57d700", "",  ""],
-            \   "Define"                       : [ "DodgerBlue2", "",  ""],
-            \   "Definition"                   : [ "#f8ed97", "",  ""],
-            \   "Delimiter"                    : [ "#779DB2", "",  "bold"],
-            \   "Directory"                    : [ "DarkOliveGreen2", "",  "bold"],
-            \   "Entity"                       : [ "#F4E891",   "CadetBlue4",  ""],
-            \   "Exception"                    : [ "SeaGreen2", "",  ""],
-            \   "Float"                        : [ "Aquamarine2", "",  ""],
-            \   "Function"                     : [ "Turquoise3", "",  ""],
-            \   "Identifier"                   : [ "#009F6F", "",  "italic"],
-            \   "Ignore"                       : [ "Gray24", "",  ""],
-            \   "Import"                       : [ "#cda869", "",  ""],
-            \   "Include"                      : [ "DodgerBlue2", "",  ""],
-            \   "incSearch"                    : [ "Firebrick3", "Black",  "bold"],
-            \   "Keyword"                      : [ "SeaGreen2", "",  ""],
-            \   "Label"                        : [ "#009F6F", "", ""],
-            \   "Macro"                        : [ "DodgerBlue2", "",  ""],
-            \   "Number"                       : [ "Aquamarine2", "",  ""],
-            \   "Operator"                     : [ "SpringGreen2", "", ""],
-            \   "paramName"                    : [ "#5f87d7", "",  ""],
-            \   "plibuiltin"                   : [ "steelblue2", "", ""],
-            \   "plidelimiter"                 : [ "red", "", ""],
-            \   "pMenu"                        : [ "BurlyWood1", "Gray30",  ""],
-            \   "pMenuSbar"                    : [ "LightSeaGreen", "Gray20",  ""],
-            \   "pMenuSel"                     : [ "Red", "Black",  "bold"],
-            \   "pMenuThumb"                   : [ "Turquoise", "Gray10",  ""],
-            \   "preciseJumpTarget"            : [ "#8700ff", "orange",  ""],
-            \   "preCondit"                    : [ "DodgerBlue2", "",  ""],
-            \   "preProc"                      : [ "#A191F5", "",  ""],
-            \   "Question"                     : [ "#65C254", "",  ""],
-            \   "rcInclude"                    : [ "#65C254", "",  ""],
-            \   "rcString"                     : [ "#7fa2e6", "",  "italic"],
-            \   "Repeat"                       : [ "SeaGreen2", "",  ""],
-            \   "rexxLineContinue"             : [ "#65C254", "",  ""],
-            \   "sasStatement"                 : [ "#009F6F", "", ""],
-            \   "signColor"                    : [ "#C59F6F", "bg", "" ],
-            \   "signColumn"                   : [ "PaleGoldenrod", "#0e2628",  ""],
-            \   "specialChar"                  : [ "#88CB35", "",  ""],
-            \   "SpecialComment"               : [ "LightBlue3", "",  "italic"],
-            \   "specialKey"                   : [ "#869BCC", "",  "italic"],
-            \   "Statement"                    : [ "#009F6F", "", ""],
-            \   "storageClass"                 : [ "#c59f6f", "",  ""],
-            \   "String"                       : [ "#99ad6a", "",  ""],
-            \   "stringDelimiter"              : [ "#8CA854", "",  ""],
-            \   "Structure"                    : [ "#8fbfdc", "",  ""],
-            \   "superclass"                   : [ "#6A84AD", "#FFD1FA",  "reverse"],
-            \   "Tag"                          : [ "#88CB35", "",  ""],
-            \   "Test"                         : [ "#88AEB2", "",  "italic"],
-            \   "Title"                        : [ "#009F6F", "", "bold,italic"],
-            \   "Todo"                         : [ "LemonChiffon2", "DeepSkyBlue4",  ""],
-            \   "Type"                         : [ "DeepSkyBlue2", "",  ""],
-            \   "Typedef"                      : [ "DeepSkyBlue2", "",  ""],
-            \   "Underlined"                   : [ "SkyBlue2", "",  "underline"],
-            \   "UtlTag"                       : [ "RoyalBlue", "",  "italic"],
-            \   "UtlURL"                       : [ "#8870FF",  "",  "underline"],
-            \   "Visual"                       : [ "Navy", "DarkSeaGreen3", "bold"],
-            \   "visualNOS"                    : [ "SlateGray3", "",  "bold,underline"],
-            \   "warningMsg"                   : [ "Gold", "",  ""],
-            \   "wildMenu"                     : [ "Black", "LimeGreen",  "bold"],
-            \ }
-endif
-
-" Grouping The Non Optional Highlight Groups In A LIST                                    {{{1
-if !exists("s:lst_dict_hi")
-        let s:lst_dict_hi = [
-                \  s:dict_hi_asciidoc,
-                \  s:dict_hi_awk,
-                \  s:dict_hi_build_tools,
-                \  s:dict_hi_c_cpp,
-                \  s:dict_hi_css,
-                \  s:dict_hi_desktop,
-                \  s:dict_hi_haskell,
-                \  s:dict_hi_html,
-                \  s:dict_hi_javatools,
-                \  s:dict_hi_jscript,
-                \  s:dict_hi_lisp,
-                \  s:dict_hi_lua,
-                \  s:dict_hi_manpage,
-                \  s:dict_hi_markdown,
-                \  s:dict_hi_nerds,
-                \  s:dict_hi_ocaml,
-                \  s:dict_hi_other,
-                \  s:dict_hi_other_plugins,
-                \  s:dict_hi_perl,
-                \  s:dict_hi_pgtransform,
-                \  s:dict_hi_php,
-                \  s:dict_hi_plugin_bufX,
-                \  s:dict_hi_python,
-                \  s:dict_hi_rdf_and_graphs,
-                \  s:dict_hi_rst,
-                \  s:dict_hi_ruby,
-                \  s:dict_hi_sed,
-                \  s:dict_hi_sh,
-                \  s:dict_hi_sql,
-                \  s:dict_hi_tex,
-                \  s:dict_hi_todo,
-                \  s:dict_hi_unixtools,
-                \  s:dict_hi_vimfeat,
-                \  s:dict_hi_vimhelp,
-                \  s:dict_hi_vimlang,
-                \  s:dict_hi_xml,
-                \  s:dict_hi_yaml,
-            \ ]
-endif
-
-" A Few Items Defined Outside Of The Color Dictionaries:                                  {{{1
-" the items below have UNDERCURL highlight
-highlight SpellBad             guifg=fg         guibg=bg      gui=undercurl      guisp=Yellow
-highlight SpellCap             guifg=fg         guibg=bg      gui=undercurl      guisp=#CCFFCC
-highlight SpellLocal           guifg=fg         guibg=bg      gui=undercurl      guisp=fg
-highlight SpellRare            guifg=fg         guibg=bg      gui=undercurl      guisp=#C59F6F
-highlight SyntasticError       guifg=fg         guibg=bg      gui=undercurl      guisp=Tomato
-highlight SyntasticWarning     guifg=fg         guibg=bg      gui=undercurl      guisp=LightGray
-
-" special case
-"highlightnetrwList            guifg=FireBrick3 guibg=NONE    gui=undercurl      guisp=LightRed
-highlight netrwList            guifg=FireBrick3 guibg=NONE    gui=NONE           guisp=LightRed
-
-
-
-" Begin Main Flow:                                                                              {{{1
-
-if exists("g:briofita_parms")
-    if  has_key(g:briofita_parms,'localcursorline')
-        if g:briofita_parms.localcursorline
-            if  (exists('t:briofita_cursorline'))
-                "if t:briofita_cursorline != g:briofita_parms.cursorline
-                    if has_key(s:dic_cf_options,'cursorline')
-                        if t:briofita_cursorline != s:dic_cf_options.cursorline[0]
-                            " local setting prevails
-                            let g:briofita_parms.cursorline = t:briofita_cursorline
-                        endif
-                    endif
-                "endif
-            else
-                " correcting user error: the t:var HAS TO exist in this case
-                " so, we here move the corresponding g:var into the t:var;
-                " when there is no corresponding g:var, default(0) is moved
-                if !has_key(g:briofita_parms,'cursorline')
-                        let g:briofita_parms['cursorline'] = 0
-                endif
-                let t:briofita_cursorline = g:briofita_parms.cursorline
-            endif
-        endif
-    endif
-endif
-
-call s:ParseAllSyntaxes(s:lst_dict_hi)
-
-" get the options set by the user (external parameters)
-call s:GetUserOptions()
-
-" Set Common Highlights:                                                                  {{{1
-
-" Set each highlight per options dictionary
-for key in keys(s:dic_hi_options)
-    if  has_key(s:dic_cf_options,key)
-        execute 'let maxix  = s:dic_cf_options.' . key . '[1]'
-        execute 'let kvalue = s:dic_cf_options.' . key . '[0]'
-        if (maxix == 1)     " first case: "boolean" options
-            if (kvalue != 0)
-                call s:HighlightPerOptionsDic(key)
-                continue
-            endif
-        endif
-        if (maxix > 1)
-            " TODO check if it can excepted the case where cc=1 (cul/cuc would've set it?)
-            call s:HighlightPerOptionsDic(key)
-        endif
-    endif
-endfor
-
-"
-" Restore Cpo And Set Guicursor:                                                          {{{1
-let &cpo = save_cpo
-unlet save_cpo
-
-" ICursor: set here to avoid a noxious hidden cursor I sometimes get with other colorschemes
-set guicursor+=i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150
-
-"----------------------------------------------------------------------------
-"
-" Modeline:                                                                               {{{1
-"
-" vim: et:ts=4:sw=4:fdm=marker:fdl=0:ft=vim:
+" Modeline:       [[[1
+" vim: et:ts=4:sw=4:ft=vim:
+" vim: fmr=[[[,]]]:fdm=marker:fdl=0:

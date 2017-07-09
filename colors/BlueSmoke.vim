@@ -70,6 +70,7 @@ hi Statement       guifg=Blue3 gui=None
 hi StorageClass    guifg=Blue3
 hi Identifier      guifg=Magenta4
 hi Function        guifg=Magenta4
+hi Keyword         guifg=Orange
 
 hi csClassOrStruct guifg=Blue3
 hi Type            guifg=Blue3 gui=None

@@ -2,7 +2,7 @@
 
 " base16-vim (https://github.com/chriskempson/base16-vim)
 " by Chris Kempson (http://chriskempson.com)
-" Chalk scheme by Chris Kempson (http://chriskempson.com)
+" Classic Light scheme by Jason Heeris (http://heeris.id.au)
 
 " This enables the coresponding base16-shell script to run so that
 " :colorscheme works in terminals supported by base16-shell scripts
@@ -10,27 +10,27 @@
 "   let g:base16_shell_path=base16-builder/output/shell/
 if !has('gui_running')
   if exists("g:base16_shell_path")
-    execute "silent !/bin/sh ".g:base16_shell_path."/base16-chalk.sh"
+    execute "silent !/bin/sh ".g:base16_shell_path."/base16-classic-light.sh"
   endif
 endif
 
 " GUI color definitions
-let s:gui00 = "151515"
-let s:gui01 = "202020"
-let s:gui02 = "303030"
-let s:gui03 = "505050"
-let s:gui04 = "b0b0b0"
-let s:gui05 = "d0d0d0"
-let s:gui06 = "e0e0e0"
-let s:gui07 = "f5f5f5"
-let s:gui08 = "fb9fb1"
-let s:gui09 = "eda987"
-let s:gui0A = "ddb26f"
-let s:gui0B = "acc267"
-let s:gui0C = "12cfc0"
-let s:gui0D = "6fc2ef"
-let s:gui0E = "e1a3ee"
-let s:gui0F = "deaf8f"
+let s:gui00 = "F5F5F5"
+let s:gui01 = "E0E0E0"
+let s:gui02 = "D0D0D0"
+let s:gui03 = "B0B0B0"
+let s:gui04 = "505050"
+let s:gui05 = "303030"
+let s:gui06 = "202020"
+let s:gui07 = "151515"
+let s:gui08 = "AC4142"
+let s:gui09 = "D28445"
+let s:gui0A = "F4BF75"
+let s:gui0B = "90A959"
+let s:gui0C = "75B5AA"
+let s:gui0D = "6A9FB5"
+let s:gui0E = "AA759F"
+let s:gui0F = "8F5536"
 
 " Terminal color definitions
 let s:cterm00 = "00"
@@ -61,22 +61,22 @@ endif
 
 " Neovim terminal colours
 if has("nvim")
-  let g:terminal_color_0 =  "#151515"
-  let g:terminal_color_1 =  "#fb9fb1"
-  let g:terminal_color_2 =  "#acc267"
-  let g:terminal_color_3 =  "#ddb26f"
-  let g:terminal_color_4 =  "#6fc2ef"
-  let g:terminal_color_5 =  "#e1a3ee"
-  let g:terminal_color_6 =  "#12cfc0"
-  let g:terminal_color_7 =  "#d0d0d0"
-  let g:terminal_color_8 =  "#505050"
-  let g:terminal_color_9 =  "#eda987"
-  let g:terminal_color_10 = "#202020"
-  let g:terminal_color_11 = "#303030"
-  let g:terminal_color_12 = "#b0b0b0"
-  let g:terminal_color_13 = "#e0e0e0"
-  let g:terminal_color_14 = "#deaf8f"
-  let g:terminal_color_15 = "#f5f5f5"
+  let g:terminal_color_0 =  "#F5F5F5"
+  let g:terminal_color_1 =  "#AC4142"
+  let g:terminal_color_2 =  "#90A959"
+  let g:terminal_color_3 =  "#F4BF75"
+  let g:terminal_color_4 =  "#6A9FB5"
+  let g:terminal_color_5 =  "#AA759F"
+  let g:terminal_color_6 =  "#75B5AA"
+  let g:terminal_color_7 =  "#303030"
+  let g:terminal_color_8 =  "#B0B0B0"
+  let g:terminal_color_9 =  "#D28445"
+  let g:terminal_color_10 = "#E0E0E0"
+  let g:terminal_color_11 = "#D0D0D0"
+  let g:terminal_color_12 = "#505050"
+  let g:terminal_color_13 = "#202020"
+  let g:terminal_color_14 = "#8F5536"
+  let g:terminal_color_15 = "#151515"
   let g:terminal_color_background = g:terminal_color_0
   let g:terminal_color_foreground = g:terminal_color_7
   if &background == "light"
@@ -88,7 +88,7 @@ endif
 " Theme setup
 hi clear
 syntax reset
-let g:colors_name = "base16-chalk"
+let g:colors_name = "base16-classic-light"
 
 " Highlighting function
 fun <sid>hi(group, guifg, guibg, ctermfg, ctermbg, attr, guisp)

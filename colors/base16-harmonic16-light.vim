@@ -59,6 +59,32 @@ else
   let s:cterm0F = "14"
 endif
 
+" Neovim terminal colours
+if has("nvim")
+  let g:terminal_color_0 =  "#f7f9fb"
+  let g:terminal_color_1 =  "#bf8b56"
+  let g:terminal_color_2 =  "#56bf8b"
+  let g:terminal_color_3 =  "#8bbf56"
+  let g:terminal_color_4 =  "#8b56bf"
+  let g:terminal_color_5 =  "#bf568b"
+  let g:terminal_color_6 =  "#568bbf"
+  let g:terminal_color_7 =  "#405c79"
+  let g:terminal_color_8 =  "#aabcce"
+  let g:terminal_color_9 =  "#bfbf56"
+  let g:terminal_color_10 = "#e5ebf1"
+  let g:terminal_color_11 = "#cbd6e2"
+  let g:terminal_color_12 = "#627e99"
+  let g:terminal_color_13 = "#223b54"
+  let g:terminal_color_14 = "#bf5656"
+  let g:terminal_color_15 = "#0b1c2c"
+  let g:terminal_color_background = g:terminal_color_0
+  let g:terminal_color_foreground = g:terminal_color_7
+  if &background == "light"
+    let g:terminal_color_background = g:terminal_color_7
+    let g:terminal_color_foreground = g:terminal_color_2
+  endif
+endif
+
 " Theme setup
 hi clear
 syntax reset
@@ -87,6 +113,7 @@ fun <sid>hi(group, guifg, guibg, ctermfg, ctermbg, attr, guisp)
 endfun
 
 " Vim editor colors
+call <sid>hi("Normal",        s:gui05, s:gui00, s:cterm05, s:cterm00, "", "")
 call <sid>hi("Bold",          "", "", "", "", "bold", "")
 call <sid>hi("Debug",         s:gui08, "", s:cterm08, "", "", "")
 call <sid>hi("Directory",     s:gui0D, "", s:cterm0D, "", "", "")
@@ -98,7 +125,7 @@ call <sid>hi("Folded",        s:gui03, s:gui01, s:cterm03, s:cterm01, "", "")
 call <sid>hi("IncSearch",     s:gui01, s:gui09, s:cterm01, s:cterm09, "none", "")
 call <sid>hi("Italic",        "", "", "", "", "none", "")
 call <sid>hi("Macro",         s:gui08, "", s:cterm08, "", "", "")
-call <sid>hi("MatchParen",    s:gui00, s:gui03, "", s:cterm03,  "", "")
+call <sid>hi("MatchParen",    "", s:gui03, "", s:cterm03,  "", "")
 call <sid>hi("ModeMsg",       s:gui0B, "", s:cterm0B, "", "", "")
 call <sid>hi("MoreMsg",       s:gui0B, "", s:cterm0B, "", "", "")
 call <sid>hi("Question",      s:gui0D, "", s:cterm0D, "", "", "")
@@ -114,7 +141,6 @@ call <sid>hi("Title",         s:gui0D, "", s:cterm0D, "", "none", "")
 call <sid>hi("Conceal",       s:gui0D, s:gui00, s:cterm0D, s:cterm00, "", "")
 call <sid>hi("Cursor",        s:gui00, s:gui05, s:cterm00, s:cterm05, "", "")
 call <sid>hi("NonText",       s:gui03, "", s:cterm03, "", "", "")
-call <sid>hi("Normal",        s:gui05, s:gui00, s:cterm05, s:cterm00, "", "")
 call <sid>hi("LineNr",        s:gui03, s:gui01, s:cterm03, s:cterm01, "", "")
 call <sid>hi("SignColumn",    s:gui03, s:gui01, s:cterm03, s:cterm01, "", "")
 call <sid>hi("StatusLine",    s:gui04, s:gui02, s:cterm04, s:cterm02, "none", "")
@@ -124,8 +150,9 @@ call <sid>hi("ColorColumn",   "", s:gui01, "", s:cterm01, "none", "")
 call <sid>hi("CursorColumn",  "", s:gui01, "", s:cterm01, "none", "")
 call <sid>hi("CursorLine",    "", s:gui01, "", s:cterm01, "none", "")
 call <sid>hi("CursorLineNr",  s:gui04, s:gui01, s:cterm04, s:cterm01, "", "")
-call <sid>hi("PMenu",         s:gui04, s:gui01, s:cterm04, s:cterm01, "none", "")
-call <sid>hi("PMenuSel",      s:gui01, s:gui04, s:cterm01, s:cterm04, "", "")
+call <sid>hi("QuickFixLine",  "", s:gui01, "", s:cterm01, "none", "")
+call <sid>hi("PMenu",         s:gui05, s:gui01, s:cterm05, s:cterm01, "none", "")
+call <sid>hi("PMenuSel",      s:gui01, s:gui05, s:cterm01, s:cterm05, "", "")
 call <sid>hi("TabLine",       s:gui03, s:gui01, s:cterm03, s:cterm01, "none", "")
 call <sid>hi("TabLineFill",   s:gui03, s:gui01, s:cterm03, s:cterm01, "none", "")
 call <sid>hi("TabLineSel",    s:gui0B, s:gui01, s:cterm0B, s:cterm01, "none", "")
@@ -221,6 +248,22 @@ call <sid>hi("htmlTag",     s:gui05, "", s:cterm05, "", "", "")
 call <sid>hi("javaScript",        s:gui05, "", s:cterm05, "", "", "")
 call <sid>hi("javaScriptBraces",  s:gui05, "", s:cterm05, "", "", "")
 call <sid>hi("javaScriptNumber",  s:gui09, "", s:cterm09, "", "", "")
+" pangloss/vim-javascript highlighting
+call <sid>hi("jsOperator",          s:gui0D, "", s:cterm0D, "", "", "")
+call <sid>hi("jsStatement",         s:gui0E, "", s:cterm0E, "", "", "")
+call <sid>hi("jsReturn",            s:gui0E, "", s:cterm0E, "", "", "")
+call <sid>hi("jsThis",              s:gui08, "", s:cterm08, "", "", "")
+call <sid>hi("jsClassDefinition",   s:gui0A, "", s:cterm0A, "", "", "")
+call <sid>hi("jsFunction",          s:gui0E, "", s:cterm0E, "", "", "")
+call <sid>hi("jsFuncName",          s:gui0D, "", s:cterm0D, "", "", "")
+call <sid>hi("jsFuncCall",          s:gui0D, "", s:cterm0D, "", "", "")
+call <sid>hi("jsClassFuncName",     s:gui0D, "", s:cterm0D, "", "", "")
+call <sid>hi("jsClassMethodType",   s:gui0E, "", s:cterm0E, "", "", "")
+call <sid>hi("jsRegexpString",      s:gui0C, "", s:cterm0C, "", "", "")
+call <sid>hi("jsGlobalObjects",     s:gui0A, "", s:cterm0A, "", "", "")
+call <sid>hi("jsGlobalNodeObjects", s:gui0A, "", s:cterm0A, "", "", "")
+call <sid>hi("jsExceptions",        s:gui0A, "", s:cterm0A, "", "", "")
+call <sid>hi("jsBuiltins",          s:gui0A, "", s:cterm0A, "", "", "")
 
 " Mail highlighting
 call <sid>hi("mailQuoted1",  s:gui0A, "", s:cterm0A, "", "", "")
@@ -250,6 +293,8 @@ call <sid>hi("phpParent",          s:gui05, "", s:cterm05, "", "", "")
 " Python highlighting
 call <sid>hi("pythonOperator",  s:gui0E, "", s:cterm0E, "", "", "")
 call <sid>hi("pythonRepeat",    s:gui0E, "", s:cterm0E, "", "", "")
+call <sid>hi("pythonInclude",   s:gui0E, "", s:cterm0E, "", "", "")
+call <sid>hi("pythonStatement", s:gui0E, "", s:cterm0E, "", "", "")
 
 " Ruby highlighting
 call <sid>hi("rubyAttribute",               s:gui0D, "", s:cterm0D, "", "", "")

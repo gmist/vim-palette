@@ -608,20 +608,6 @@ fun! s:HL(group, fg, bg, attr)
   call add(s:highlightings, [a:group, l:highlight])
 endfun
 
-fun! s:Load_Settings_Override(custom)
-  if has_key(a:custom, 'cursorline')
-    let s:cursorline = [a:custom['cursorline'], '' . s:to_256(a:custom['cursorline'])]
-  endif
-  if has_key(a:custom, 'background')
-    let s:background = [a:custom['background'], '' . s:to_256(a:custom['background'])]
-  endif
-  if has_key(a:custom, 'matchparen')
-    let s:matchparen = [a:custom['matchparen'], '' . s:to_256(a:custom['matchparen'])]
-  endif
-  if has_key(a:custom, 'comment')
-    let s:comment = [a:custom['comment'], '' . s:to_256(a:custom['comment'])]
-  endif
-endfun
 " }}}
 
 " 256-COLOR TO HEX TABLE: {{{
@@ -723,9 +709,6 @@ fun! s:set_color_variables()
   " Array format [<GUI COLOR/HEX >, <256-Base>, <16-Base>]
   " 16-Base is terminal's native color palette that can be alternated through
   " the terminal settings. The 16-color names are according to `:h cterm-colors`
-  " Use 16: targetcolor[-1]
-  " Use 256: targetcolor[-2] " GUI can be omitted
-  " Use GUI: targetcolor[0] " 256 can be ommitted
 
   " BASIC COLORS:
   " color00-15 are required by all themes.
@@ -1660,6 +1643,31 @@ fun! s:set_highlightings_variable()
   call s:HL("cucumberExamples", s:aqua, "", "")
   call s:HL("cucumberTags", s:aqua, "", "")
   call s:HL("cucumberPlaceholder", s:aqua, "", "")
+
+  " Ada Highlighting
+  call s:HL("adaInc", s:aqua, "", s:bold)
+  call s:HL("adaSpecial", s:aqua, "", s:bold)
+  call s:HL("adaKeyword", s:pink, "", "")
+  call s:HL("adaBegin", s:pink, "", "")
+  call s:HL("adaEnd", s:pink, "", "")
+  call s:HL("adaTypedef", s:navy, "", s:bold)
+  call s:HL("adaAssignment", s:aqua, "", s:bold)
+  call s:HL("adaAttribute", s:green, "", "")
+
+  " COBOL Highlighting
+  call s:HL("cobolMarker", s:comment, s:cursorline, "")
+  call s:HL("cobolLine", s:foreground, "", "")
+  call s:HL("cobolReserved", s:blue, "", "")
+  call s:HL("cobolDivision", s:pink, "", s:bold)
+  call s:HL("cobolDivisionName", s:pink, "", s:bold)
+  call s:HL("cobolSection", s:navy, "", s:bold)
+  call s:HL("cobolSectionName", s:navy, "", s:bold)
+  call s:HL("cobolParagraph", s:purple, "", "")
+  call s:HL("cobolParagraphName", s:purple, "", "")
+  call s:HL("cobolDeclA", s:purple, "", "")
+  call s:HL("cobolDecl", s:green, "", "")
+  call s:HL("cobolCALLs", s:aqua, "", s:bold)
+  call s:HL("cobolEXECs", s:aqua, "", s:bold)
   " }}}
 
   " Plugin: Netrw

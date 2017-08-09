@@ -9,23 +9,21 @@
   if exists("syntax_on")
     syntax reset
   endif
-let g:colors_name="OceanicNext"
+  let g:colors_name="OceanicNext"
 " }}}
-" setup italics {{{
- let s:italic = ""
- if exists('g:oceanic_next_terminal_italic')
-   let s:italic = "italic"
-
- endif
- let g:oceanic_next_terminal_italic = get(g:, 'oceanic_next_terminal_italic', 0)
+" {{{ Italics
+  let g:oceanic_next_terminal_italic = get(g:, 'oceanic_next_terminal_italic', 0)
+  let s:italic = ""
+  if g:oceanic_next_terminal_italic == 1
+    let s:italic = "italic"
+  endif
 "}}}
-" setup bold {{{
- let s:bold = ""
- if exists('g:oceanic_next_terminal_bold')
+" {{{ Bold
+  let g:oceanic_next_terminal_bold = get(g:, 'oceanic_next_terminal_bold', 0)
+  let s:bold = ""
+  if g:oceanic_next_terminal_bold == 1
    let s:bold = "bold"
-
- endif
- let g:oceanic_next_terminal_bold = get(g:, 'oceanic_next_terminal_bold', 0)
+  endif
 "}}}
 " {{{ Colors
   let s:base00=['#1b2b34', '235']
@@ -45,6 +43,7 @@ let g:colors_name="OceanicNext"
   let s:base0E=['#c594c5', '176']
   let s:base0F=['#ab7967', '137']
   let s:base10=['#ffffff', '15']
+  let s:none=['NONE', 'NONE']
 " }}}
 " {{{ Highlight function
 function! <sid>hi(group, fg, bg, attr, attrsp)
@@ -66,15 +65,14 @@ function! <sid>hi(group, fg, bg, attr, attrsp)
   endif
 endfunction
 " }}}
-
-" call s:hi(group, fg, bg, gui, guisp)
+" {{{ call <sid>:hi(group, fg, bg, gui, guisp)
 call <sid>hi('Bold',                       '',       '',       'bold',      '')
 call <sid>hi('Debug',                      s:base08, '',       '',          '')
 call <sid>hi('Directory',                  s:base0D, '',       '',          '')
 call <sid>hi('ErrorMsg',                   s:base08, s:base00, '',          '')
 call <sid>hi('Exception',                  s:base08, '',       '',          '')
 call <sid>hi('FoldColumn',                 s:base0D, s:base00, '',          '')
-call <sid>hi('Folded',                     s:base03, s:base00, s:italic,    '')
+call <sid>hi('Folded',                     s:base03, s:base01, s:italic,    '')
 call <sid>hi('IncSearch',                  s:base01, s:base09, '',          '')
 call <sid>hi('Italic',                     '',       '',       s:italic,    '')
 
@@ -97,7 +95,6 @@ call <sid>hi('Cursor',                     s:base00, s:base05, '',          '')
 call <sid>hi('NonText',                    s:base03, '',       '',          '')
 call <sid>hi('Normal',                     s:base05, s:base00, '',          '')
 call <sid>hi('LineNr',                     s:base03, s:base00, '',          '')
-call <sid>hi('CursorLineNR',               s:base00, s:base00, '',          '')
 call <sid>hi('SignColumn',                 s:base00, s:base00, '',          '')
 call <sid>hi('StatusLine',                 s:base01, s:base03, '',          '')
 call <sid>hi('StatusLineNC',               s:base03, s:base01, '',          '')
@@ -105,9 +102,10 @@ call <sid>hi('VertSplit',                  s:base00, s:base02, '',          '')
 call <sid>hi('ColorColumn',                '',       s:base01, '',          '')
 call <sid>hi('CursorColumn',               '',       s:base01, '',          '')
 call <sid>hi('CursorLine',                 '',       s:base01, '',          '')
+call <sid>hi('CursorLineNR',               s:base00, s:base00, '',          '')
 call <sid>hi('CursorLineNr',               s:base03, s:base01, '',          '')
 call <sid>hi('PMenu',                      s:base04, s:base01, '',          '')
-call <sid>hi('PMenuSel',                   s:base01, s:base04, '',          '')
+call <sid>hi('PMenuSel',                   s:base10, s:base0D, '',          '')
 call <sid>hi('PmenuSbar',                  '',       s:base02, '',          '')
 call <sid>hi('PmenuThumb',                 '',       s:base07, '',          '')
 call <sid>hi('TabLine',                    s:base03, s:base01, '',          '')
@@ -248,7 +246,7 @@ call <sid>hi('GitGutterChangeDelete',      s:base0E, s:base00, s:bold,      '')
 call <sid>hi('xmlTag',                     s:base0C, '',       '',          '')
 call <sid>hi('xmlTagName',                 s:base05, '',       '',          '')
 call <sid>hi('xmlEndTag',                  s:base0C, '',       '',          '')
-
+" }}}
 
 let g:terminal_color_0=s:base00[0]
 let g:terminal_color_1=s:base08[0]

@@ -1,6 +1,6 @@
-" Vim color file
+" Vim color file (satori)
 " Maintainer: Ruda Moura <ruda.moura@gmail.com>
-" Last Change: Tue Mar 25 19:26:02 BRT 2014
+" Last Change: Fri Jul 28 22:50:47 BRT 2017
 
 highlight clear Normal
 set background&
@@ -27,6 +27,8 @@ highlight Search     ctermfg=NONE     ctermbg=NONE cterm=Underline
 highlight MatchParen ctermfg=NONE     ctermbg=NONE cterm=Inverse
 highlight Error      ctermfg=Red      ctermbg=NONE cterm=Standout
 highlight Todo       ctermfg=DarkCyan ctermbg=NONE cterm=Inverse
+highlight Pmenu      ctermfg=NONE     ctermbg=DarkCyan cterm=NONE
+highlight PmenuSel   ctermfg=NONE     ctermbg=NONE cterm=Inverse
 
 " Vim monochrome
 highlight Normal     term=NONE
@@ -55,5 +57,7 @@ highlight Search     guifg=NONE     guibg=NONE gui=Underline
 highlight MatchParen guifg=NONE     guibg=NONE gui=Bold
 highlight Error      guifg=Red      guibg=NONE gui=Standout
 highlight Todo       guifg=DarkCyan guibg=NONE gui=Inverse
+highlight Pmenu      guifg=NONE     guibg=DarkCyan gui=NONE
+highlight PmenuSel   guifg=NONE     guibg=NONE gui=Inverse
 
 " vim: tabstop=8 expandtab shiftwidth=2 softtabstop=2

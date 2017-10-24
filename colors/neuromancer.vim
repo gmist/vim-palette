@@ -8,21 +8,18 @@ endif
 
 let g:colors_name = "neuromancer"
 let s:colors = {
-    \ "dark_blue": "#63ABD3",
-    \ "turquoise": "#6AFFB7",
-    \ "pop_purple": "#DC91DC",
-    \ "dark_purple": "#8C77F0",
-    \ "light_purple": "#858EED",
+    \ "dark_blue": "#54C9FF",
+    \ "turquoise": "#65F2F2",
+    \ "dark_purple": "#121424",
+    \ "light_purple": "#A2A0DF",
     \ "dark_gray": "#7E7E7E",
-    \ "orange": "#f5d639",
+    \ "orange": "#FDA549",
     \ "red": "#ff586b",
-    \ "pink": "#f72358",
-    \ "light_pink": "#DE347A",
     \ "hot_pink": "#E9729F",
     \ "black": "#050809",
-    \ "white": "#FFFFFF",
-    \ "green": "#36D977",
-    \ "yellow": "#FFF313",
+    \ "white": "#F7F9F9",
+    \ "green": "#37CFC4",
+    \ "yellow": "#F4DE68",
 \ }
 
 function! Hi(name, guifg, guibg, gui)
@@ -30,9 +27,9 @@ function! Hi(name, guifg, guibg, gui)
     exe l:cmd
 endfunc
 
-call Hi("Normal", s:colors["white"], s:colors["black"], "NONE")
+call Hi("Normal", s:colors["white"], s:colors["dark_purple"], "NONE")
 call Hi("ColorColumn", "NONE", s:colors["hot_pink"],"NONE")
-call Hi("LineNr", s:colors["light_purple"], "NONE", "NONE")
+call Hi("LineNr", s:colors["white"], "NONE", "NONE")
 call Hi("CursorLineNr", s:colors["white"], "NONE", "NONE")
 call Hi("Conditional", s:colors["light_purple"], "NONE", "NONE")
 call Hi("Function", s:colors["hot_pink"], "NONE", "NONE")
@@ -40,35 +37,33 @@ call Hi("Constant", s:colors["hot_pink"], "NONE", "NONE")
 call Hi("Statement", s:colors["dark_blue"], "NONE", "NONE")
 call Hi("Comment", s:colors["dark_gray"], "NONE", "NONE")
 call Hi("PreProc", s:colors["orange"], "NONE", "NONE")
-call Hi("String", s:colors["turquoise"], "NONE", "NONE")
-call Hi("Number", s:colors["dark_purple"], "NONE", "NONE")
+call Hi("String", s:colors["yellow"], "NONE", "NONE")
+call Hi("Number", s:colors["light_purple"], "NONE", "NONE")
 call Hi("Float", s:colors["dark_purple"], "NONE", "NONE")
 call Hi("Repeat", s:colors["red"], "NONE", "NONE")
 call Hi("Operator", s:colors["red"], "NONE", "NONE")
 
-""""""""""""""""""""""""""""""
-"    SQL specific settings   "
-"                            "
-""""""""""""""""""""""""""""""
-hi link sqlType String
-hi link sqlKeyword Conditional
-
+call Hi("sqlType", s:colors["yellow"], "NONE", "NONE")
+call Hi("sqlKeyword", s:colors["light_purple"], "NONE", "NONE")
+call Hi("sqlSpecial", s:colors["orange"], "NONE", "NONE")
 
 """"""""""""""""""""""""""""""
 "   HTML specific settings   "
 "                            "
 """"""""""""""""""""""""""""""
-hi htmlTitle guifg=#DC91DC guibg=NONE gui=underline cterm=underline
-hi link htmlTag Normal
-hi link htmlEndTag Normal
-hi link htmlTagName Statement
-hi link htmlArg Function
-hi link htmlH1 htmlTitle
-hi link htmlH2 htmlTitle
-hi link htmlH3 htmlTitle
-hi link htmlH4 htmlTitle
-hi link htmlH5 htmlTitle
-hi link htmlH6 htmlTitle
+
+call Hi("htmlTitle", s:colors["light_purple"], "NONE", "underline")
+call Hi("htmlH1", s:colors["light_purple"], "NONE", "underline")
+call Hi("htmlH2", s:colors["light_purple"], "NONE", "underline")
+call Hi("htmlH3", s:colors["light_purple"], "NONE", "underline")
+call Hi("htmlH4", s:colors["light_purple"], "NONE", "underline")
+call Hi("htmlH5", s:colors["light_purple"], "NONE", "underline")
+call Hi("htmlH6", s:colors["light_purple"], "NONE", "underline")
+
+call Hi("htmlTag", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("htmlEndTag", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("htmlTagName", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("htmlArg", s:colors["hot_pink"], "NONE", "NONE")
 
 """"""""""""""""""""""""""""""
 "  Python specific settings  "
@@ -77,206 +72,306 @@ hi link htmlH6 htmlTitle
 
 " lighten up orange
 
-hi link pythonImport Function
-hi link pythonRepeat Conditional
-hi link pythonOperator pythonRepeat
-hi link pythonException Conditional
-hi link pythonExClass Repeat
-hi link pythonStrFormat PreProc
-hi link pythonStrFormatting pythonStrFormat
-hi link pythonConditional Conditional
-hi link pythonBoolean Function
-hi link pythonBuiltinObj Repeat
-hi pythonRun guifg=#575758 guibg=NONE gui=NONE
+call Hi("pythonImport", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("pythonRepeat", s:colors["light_purple"], "NONE", "NONE")
+call Hi("pythonOperator", s:colors["light_purple"], "NONE", "NONE")
+call Hi("pythonException", s:colors["light_purple"], "NONE", "NONE")
+call Hi("pythonExClass", s:colors["orange"], "NONE", "NONE")
+call Hi("pythonStrFormat", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("pythonStrFormatting", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("pythonConditional", s:colors["light_purple"], "NONE", "NONE")
+call Hi("pythonBoolean", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("pythonBuiltinObj", s:colors["green"], "NONE", "NONE")
+call Hi("pythonRun", "#575758", "NONE", "NONE")
 
 """"""""""""""""""""""""""""""
 "   Vim specific settings    "
 "                            "
 """"""""""""""""""""""""""""""
-hi link vimFunction Function
-hi link vimUserFunc Function
-hi link vimOperParen Normal
-hi link vimParenSep Function
-hi link vimFuncVar Conditional
-hi link vimHiLink Function
-hi link vimHiGroup Function
-hi link vimGroup String
-hi link vimHiKeyList LineNr
-hi link vimHiGuiFgBg LineNr
-hi link vimHiGui LineNr
-hi link vimHiGuiRgb String
-hi link vimSynType String
-hi link vimHiClear String
-hi link vimOption Conditional
-hi link vimVar LineNr
-hi link vimOper Normal
-hi link vimHiCTerm Conditional
-hi link vimHiCTermFgBg Conditional
-hi link vimAutoEventList Function
-hi link vimAutoEvent Function
-hi link vimMapMod Function
-hi link vimMapModKey Function
-hi link vimNotation String
-hi link vimBracket String
+
+call Hi("vimFunction", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("vimUserFunc", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("vimParenSep", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("vimHiLink", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("vimAutoEventList", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("vimAutoEvent", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("vimMapMod", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("vimMapModKey", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("vimHiGroup", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("vimGroup", s:colors["yellow"], "NONE", "NONE")
+call Hi("vimHiGuiRgb", s:colors["yellow"], "NONE", "NONE")
+call Hi("vimSynType", s:colors["yellow"], "NONE", "NONE")
+call Hi("vimHiClear", s:colors["yellow"], "NONE", "NONE")
+call Hi("vimNotation", s:colors["yellow"], "NONE", "NONE")
+call Hi("vimBracket", s:colors["yellow"], "NONE", "NONE")
+call Hi("vimOperParen", s:colors["white"], "NONE", "NONE")
+call Hi("vimHiKeyList", s:colors["white"], "NONE", "NONE")
+call Hi("vimHiGuiFgBg", s:colors["white"], "NONE", "NONE")
+call Hi("vimHiGui", s:colors["white"], "NONE", "NONE")
+call Hi("vimVar", s:colors["white"], "NONE", "NONE")
+call Hi("vimOper", s:colors["white"], "NONE", "NONE")
+call Hi("vimFuncVar", s:colors["light_purple"], "NONE", "NONE")
+call Hi("vimOption", s:colors["light_purple"], "NONE", "NONE")
+call Hi("vimHiCTerm", s:colors["light_purple"], "NONE", "NONE")
+call Hi("vimHiCTermFgBg", s:colors["light_purple"], "NONE", "NONE")
 
 """"""""""""""""""""""""""""""
 " Markdown specific settings "
 "                            "
 """"""""""""""""""""""""""""""
-hi link markdownH1 Function
-hi link markdownH2 markdownH1
-hi link markdownH3 markdownH1
-hi link markdownH4 markdownH1
-hi link markdownH5 markdownH1
-hi link markdownH6 markdownH1
+call Hi("markdownH1", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("markdownH2", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("markdownH3", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("markdownH4", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("markdownH5", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("markdownH6", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("markdownHeadingDelimiter", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("mardownHeadingRule", "#575859", "NONE", "NONE")
+call Hi("markdownBold", s:colors["yellow"], "NONE", "bold")
+call Hi("markdownBoldDelimiter", s:colors["yellow"], "NONE", "bold")
+call Hi("markdownLinkText", s:colors["light_purple"], "NONE", "NONE")
+call Hi("markdownUrl", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("markdownId", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("markdownUrlTitle", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("markdownUrlTitleDelimiter", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("markdownItalic", s:colors["green"], "NONE", "italic")
+call Hi("markdownItalicDelimiter", s:colors["green"], "NONE", "italic")
+call Hi("markdownCodeDelimiter", s:colors["turquoise"], "NONE", "italic")
 
-hi link markdownHeadingDelimiter Statement
-hi link markdownHeadingRule pythonRun
-hi link markdownBoldDelimiter markdownBold
-hi link markdownUrl LineNr
-hi link markdownUrlTitle pythonExClass
-hi link markdownUrlTitleDelimiter pythonExClass
-
-hi markdownBold guifg=#f5d639 guibg=NONE gui=bold cterm=bold
-hi markdownItalic guifg=#36d977 guibg=NONE gui=italic cterm=italic
-
-hi markdownLinkText guifg=#ff2449 guibg=NONE gui=NONE cterm=underline
 
 """"""""""""""""""""""""""""""
 " NERDTree specific settings "
 "                            "
 """"""""""""""""""""""""""""""
-hi link NERDTreeOpenable Function
-hi link NERDTreeClosable Function
-hi link NERDTreeDirSlash Function
-hi link NERDTreeDir Function
-hi link NERDTreeCWD pythonConditional
+call Hi("NERDTreeOpenable", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("NERDTreeClosable", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("NERDTreeDirSlash", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("NERDTreeDir", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("NERDTreeCWD", s:colors["light_purple"], "NONE", "NONE")
 
 """"""""""""""""""""""""""""""""
 " Javascript specific settings "
 "                              "
 """"""""""""""""""""""""""""""""
-hi link javascriptImport Statement
-hi link javascriptExport Statement
-hi link javascriptIdentifierName Normal
-hi link javascriptVariable Conditional
-hi link javascriptNodeGlobal Function
-hi link javascriptBOMWindowMethod Function
-hi link javascriptTry Conditional
-hi link javascript_asserter Repeat
-hi link javascriptOperator Statement
-hi link javascriptBOMWindowProp Function
 
+call Hi("javascriptIdentifierName", s:colors["white"], "NONE", "NONE")
+call Hi("javascript_asserter", s:colors["red"], "NONE", "NONE")
+call Hi("javascriptVariable", s:colors["light_purple"], "NONE", "NONE")
+call Hi("javascriptTry", s:colors["light_purple"], "NONE", "NONE")
+call Hi("javascriptExceptions", s:colors["light_purple"], "NONE", "NONE")
+call Hi("javascriptImport", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("javascriptExport", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("javascriptOperator", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("javascriptBOMWindowProp", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("javascriptBOMWindowMethod", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("javascriptNodeGlobal", s:colors["hot_pink"], "NONE", "NONE")
 call Hi("javascriptFuncArg", s:colors["yellow"], "NONE", "NONE")
 call Hi("javascriptNumber", s:colors["turquoise"], "NONE", "NONE")
-call Hi("javascriptObjectLabel", s:colors["dark_purple"], "NONE", "NONE")
-
-hi link javascriptConditional Conditional
-hi link javascriptEndColons Normal
-hi javascriptParens guifg=NONE guibg=NONE gui=NONE
-hi javascriptBraces guifg=NONE guibg=NONE gui=NONE
-hi link javascriptFuncArg String
-hi link javascriptFuncComma String
-hi link javascriptFuncExp Statement
-hi javascriptOpSymbols guifg=NONE guibg=NONE gui=NONE
-hi javascriptFuncEq guifg=NONE guibg=NONE gui=NONE
-hi javascriptEndColons guifg=NONE guibg=NONE gui=NONE
-hi link javascriptIdentifier LineNr
-hi link javascriptNull pythonBuiltinObj
-hi link javascriptBoolean Conditional
-hi link javascriptExceptions LineNr
-hi link javascriptLogicSymbols javascriptConditional
-hi link javascriptGlobal Function
-hi link javascriptBrowserObjects PreProc
-hi link javascriptMessage LineNr
-hi link javascriptHtmlElemProperties PreProc
-hi link javascriptDOMObjects LineNr
-hi link javascriptHtmlEvents String
-hi link javascriptReserved Statement
-hi link javascriptGlobalObjects LineNr
-hi link javascriptPrototype String
-hi link javascriptEventListenerKeywords Function
-hi link javascriptAjaxMethods Function
-hi link javascriptAjaxProperties Statement
-hi link javascriptDOMMethods Function
-hi link javascriptWebAPI LineNr
-hi link javascriptOperator Statement
-hi link javascriptOpSymbols Function
-hi link javascriptParens Normal
-hi link javascriptTemplateVar PreProc
-hi link javascriptTemplateDelim PreProc
+call Hi("javascriptObjectLabel", s:colors["light_purple"], "NONE", "NONE")
+call Hi("javascriptConditial", s:colors["light_purple"], "NONE", "NONE")
+call Hi("javascriptBoolean", s:colors["light_purple"], "NONE", "NONE")
+call Hi("javascriptLogicSymbols", s:colors["light_purple"], "NONE", "NONE")
+call Hi("javascriptNull", s:colors["orange"], "NONE", "NONE")
+call Hi("javascriptOpSymbol", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("javascriptOpSymbols", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("javascriptIdentifier", s:colors["light_purple"], "NONE", "NONE")
+call Hi("javascriptFuncKeyword", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("javascriptFuncArg", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("javascriptRepeat", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("javascriptForOperator", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("javascriptFuncComma", s:colors["white"], "NONE", "NONE")
+call Hi("javascriptHtmlEvents", s:colors["yellow"], "NONE", "NONE")
+call Hi("javascriptPrototype", s:colors["yellow"], "NONE", "NONE")
+call Hi("javascriptFuncExp", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("javascriptReserved", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("javascriptAjaxProperties", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("javascriptOperator", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("javascriptGlobalMethod", s:colors["light_purple"], "NONE", "NONE")
+call Hi("javascriptIdentifier", s:colors["light_purple"], "NONE", "NONE")
+call Hi("javascriptMessage", s:colors["white"], "NONE", "NONE")
+call Hi("javascriptDOMObjects", s:colors["white"], "NONE", "NONE")
+call Hi("javascriptGlobalObjects", s:colors["white"], "NONE", "NONE")
+call Hi("javascriptWebAPI", s:colors["white"], "NONE", "NONE")
+call Hi("javascriptDOMDocMethod", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("javascriptQDimensions", s:colors["yellow"], "NONE", "NONE")
+call Hi("javascriptQEvents", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("javascriptTemplateSubstitution", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("javascriptGlobal", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("javascriptEventListenerKeywords", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("javascriptAjaxMethods", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("javascriptDOMMethods", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("javascriptOpSymbols", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("javascriptParens", "NONE", "NONE", "NONE")
+call Hi("javascriptBraces", "NONE", "NONE", "NONE")
+call Hi("javascriptFuncEq", "NONE", "NONE", "NONE")
+call Hi("javascriptEndColons", "NONE", "NONE", "NONE")
 
 """"""""""""""""""""""""""""""""
 "   Sass specific settings     "
 "                              "
 """"""""""""""""""""""""""""""""
-hi link sassInclude Function
-hi link cssFunctionName Statement
-hi cssStringQ guifg=NONE guibg=NONE gui=NONE
-hi link cssStringQQ String
-hi link sassVariable Statement
-hi link cssColor String
-hi link cssUnitDecorators String
-hi link cssFontAttr Conditional
-hi link sassMixin LineNr
-hi link sassMixing Normal
-hi link sassMixinName String
-hi link sassAmpersand String
-hi link sassMedia String
-hi link sassMediaQuery Function
-hi link cssFunctionName Function
 
-hi link sassClass Function
-hi link sassClassChar Normal
+"""sass settings"""
 
-hi link sassId Statement
-hi link sassIdChar Normal
+call Hi("sassInclude", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("sassMediaQuery", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("sassClass", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("sassFunctionDecl", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("sassControl", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("sassDebug", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("sassWarn", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("sassReturn", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("sassProperty", s:colors["light_purple"], "NONE", "NONE")
+call Hi("sassCssAttribute", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("sassMixinName", s:colors["green"], "NONE", "NONE")
+call Hi("sassAmpersand", s:colors["green"], "NONE", "NONE")
+call Hi("sassMedia", s:colors["yellow"], "NONE", "NONE")
+call Hi("sassPlaceholder", s:colors["yellow"], "NONE", "NONE")
+call Hi("sassVariable", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("sassMixin", s:colors["light_purple"], "NONE", "NONE")
+call Hi("sassMixing", s:colors["white"], "NONE", "NONE")
+call Hi("sassClassChar", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("sassIdChar", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("sassId", s:colors["dark_blue"], "NONE", "NONE")
 
-hi link sassFunctionDecl Function
-hi link sassControl Function
-hi link sassDebug Function
-hi link sassWarn Function
-hi link sassReturn Function
-hi link sassPlaceholder String
+"""css settings"""
+
+call Hi("cssFunctionName", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("cssSelectorOp", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("cssFontAttr", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssStringQ", s:colors["white"], "NONE", "NONE")
+call Hi("cssStringQQ", s:colors["yellow"], "NONE", "NONE")
+call Hi("cssColor", s:colors["yellow"], "NONE", "NONE")
+call Hi("cssUnitDecorator", s:colors["yellow"], "NONE", "NONE")
+call Hi("cssTagName", s:colors["yellow"], "NONE", "NONE")
+call Hi("cssAttrComma", s:colors["white"], "NONE", "NONE")
+call Hi("cssTextProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssBoxProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssIEUIProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssUIProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssPositioningProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssBackgroundProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssPageProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssListProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssFontProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssMultiColumnProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssAuralProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssAnimationProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssTableProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssDimensionProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssBorderProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssTransformProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssTransitionProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssMediaProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssFlexibleBoxProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssColorProp", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssPseudoClassId", s:colors["green"], "NONE", "NONE")
+call Hi("cssTextAttr", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssMultiColumnAttr", s:colors["light_purple"], "NONE", "NONE")
+call Hi("cssValueLength", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("cssValueNumber", s:colors["dark_blue"], "NONE", "NONE")
 
 
-hi link sassProperty LineNr
-hi link cssTextProp  LineNr
-hi link cssBoxProp LineNr
-hi link cssIEUIProp LineNr
-hi link cssUIProp LineNr
-hi link cssPositioningProp LineNr
-hi link cssBackgroundProp LineNr
-hi link cssPageProp LineNr
-hi link cssListProp LineNr
-hi link cssFontProp LineNr
-hi link cssMultiColumnProp LineNr
-hi link cssAuralProp LineNr
-hi link cssAnimationProp LineNr
-hi link cssTableProp LineNr
-hi link cssDimensionProp LineNr
-hi link cssBorderProp LineNr
-hi link cssTransformProp LineNr
-hi link cssTransitionProp LineNr
-hi link cssMediaProp LineNr
-hi link cssFlexibleBoxProp LineNr
-hi link cssColorProp LineNr
+""""""""""""""""""""""""""""""""
+" TypeScript specific settings "
+"                              "
+""""""""""""""""""""""""""""""""
 
-hi link sassCssAttribute cssCommonAttr
-hi link cssPseudoClassId Normal
-hi link cssTextAttr cssCommonAttr
-hi link cssMultiColumnAttr cssCommonAttr
-hi link cssValueLength cssCommonAttr
-hi link cssValueNumber cssCommonAttr
-hi link cssTagName String
-hi link cssAttrComma String
-hi link cssSelectorOp Function
+call Hi("typescriptExceptions", s:colors["red"], "NONE", "NONE")
+call Hi("typescriptIdentifier", s:colors["light_purple"], "NONE", "NONE")
+call Hi("typescriptType", s:colors["green"], "NONE", "NONE")
+call Hi("typescriptNull", s:colors["green"], "NONE", "NONE")
+call Hi("typescriptOperator", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("typescriptNumber", s:colors["green"], "NONE", "NONE")
+call Hi("typescriptStatement", s:colors["light_purple"], "NONE", "NONE")
+call Hi("typescriptLabel", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("typescriptDecorators", s:colors["hot_pink"], "NONE", "NONE")
 
-" separator
-" MatchParen
-" Special
-" Identifier
-" Type
-" Error (currenlty white on red)
-" Todo (currently blue on yellow)
+""""""""""""""""""""""""""""""""
+"   Golang specific settings   "
+"                              "
+""""""""""""""""""""""""""""""""
 
+call Hi("goType", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("goFloats", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("goComplexes", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("goSignedInts", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("goUnsignedInts", s:colors["dark_blue"], "NONE", "NONE")
+
+call Hi("goUnsignedInts", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("goDeclaration", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("goLabel", s:colors["light_purple"], "NONE", "NONE")
+call Hi("goDirective", s:colors["light_purple"], "NONE", "NONE")
+call Hi("goDeclType", s:colors["green"], "NONE", "NONE")
+call Hi("goTypeDecl", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("goBuiltins", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("goFloat", s:colors["light_purple"], "NONE", "NONE")
+call Hi("goTypeName", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("goFunction", s:colors["light_purple"], "NONE", "NONE")
+call Hi("goReceiverType", s:colors["green"], "NONE", "NONE")
+call Hi("goPointerOperator", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("goMethodCall", s:colors["light_purple"], "NONE", "NONE")
+call Hi("goOperator", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("goField", s:colors["turquoise"], "NONE", "NONE")
+call Hi("goFunctionCall", s:colors["dark_blue"], "NONE", "NONE")
+
+
+""""""""""""""""""""""""""""""""
+"    JSON specific settings    "
+"                              "
+""""""""""""""""""""""""""""""""
+
+call Hi("jsonBraces", s:colors["white"], "NONE", "NONE")
+call Hi("jsonNumber", s:colors["light_purple"], "NONE", "NONE")
+call Hi("jsonBoolean", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("jsonNull", s:colors["orange"], "NONE", "NONE")
+call Hi("jsonNoQuotesError", s:colors["white"], s:colors["red"], "NONE")
+
+""""""""""""""""""""""""""""""""
+"   Nginx specific settings    "
+"                              "
+""""""""""""""""""""""""""""""""
+
+call Hi("ngxDirectiveImportant", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("ngxDirective", s:colors["yellow"], "NONE", "NONE")
+call Hi("ngxListenOptions", s:colors["green"], "NONE", "NONE")
+call Hi("ngxIPaddr", s:colors["yellow"], "NONE", "NONE")
+call Hi("ngxInteger", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("ngxDirective", s:colors["light_purple"], "NONE", "NONE")
+
+
+""""""""""""""""""""""""""""""""
+"  Makefile specific settings  "
+"                              "
+""""""""""""""""""""""""""""""""
+
+call Hi("makeIdent", s:colors["turquoise"], "NONE", "NONE")
+call Hi("makePreCondit", s:colors["light_purple"], "NONE", "NONE")
+call Hi("makeStatement", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("makeCommands", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("makeSpecial", s:colors["orange"], "NONE", "NONE")
+
+""""""""""""""""""""""""""""""""
+"    YAML specific settings    "
+"                              "
+""""""""""""""""""""""""""""""""
+
+call Hi("yamlDocumentStart", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("yamlDocumentEnd", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("yamlNodeTag", s:colors["light_purple"], "NONE", "NONE")
+call Hi("yamlBlockMappingKey", s:colors["turquoise"], "NONE", "NONE")
+call Hi("yamlKeyValueDelimiter", s:colors["white"], "NONE", "NONE")
+call Hi("yamlInteger", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("yamlFloat", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("yamlAnchor", s:colors["yellow"], "NONE", "NONE")
+call Hi("yamlAlias", s:colors["light_purple"], "NONE", "NONE")
+call Hi("yamlFlowIndicator", s:colors["hot_pink"], "NONE", "NONE")
+call Hi("yamlFlowMappingKey", s:colors["dark_blue"], "NONE", "NONE")
+"
+""""""""""""""""""""""""""""""""
+"    .ini specific settings    "
+"                              "
+""""""""""""""""""""""""""""""""
+
+call Hi("dosiniHeader", s:colors["dark_blue"], "NONE", "NONE")
+call Hi("dosiniLabel", s:colors["hot_pink"], "NONE", "NONE")

@@ -2,7 +2,7 @@
 
 " base16-vim (https://github.com/chriskempson/base16-vim)
 " by Chris Kempson (http://chriskempson.com)
-" Atelier Savanna scheme by Bram de Haan (http://atelierbramdehaan.nl)
+" XCode Dusk scheme by Elsa Gonsiorowski (https://github.com/gonsie)
 
 " This enables the coresponding base16-shell script to run so that
 " :colorscheme works in terminals supported by base16-shell scripts
@@ -15,22 +15,22 @@ if !has('gui_running')
 endif
 
 " GUI color definitions
-let s:gui00 = "171c19"
-let s:gui01 = "232a25"
-let s:gui02 = "526057"
-let s:gui03 = "5f6d64"
-let s:gui04 = "78877d"
-let s:gui05 = "87928a"
-let s:gui06 = "dfe7e2"
-let s:gui07 = "ecf4ee"
-let s:gui08 = "b16139"
-let s:gui09 = "9f713c"
-let s:gui0A = "a07e3b"
-let s:gui0B = "489963"
-let s:gui0C = "1c9aa0"
-let s:gui0D = "478c90"
-let s:gui0E = "55859b"
-let s:gui0F = "867469"
+let s:gui00 = "282B35"
+let s:gui01 = "3D4048"
+let s:gui02 = "53555D"
+let s:gui03 = "686A71"
+let s:gui04 = "7E8086"
+let s:gui05 = "939599"
+let s:gui06 = "A9AAAE"
+let s:gui07 = "BEBFC2"
+let s:gui08 = "B21889"
+let s:gui09 = "786DC5"
+let s:gui0A = "438288"
+let s:gui0B = "DF0002"
+let s:gui0C = "00A0BE"
+let s:gui0D = "790EAD"
+let s:gui0E = "B21889"
+let s:gui0F = "C77C48"
 
 " Terminal color definitions
 let s:cterm00 = "00"
@@ -61,22 +61,22 @@ endif
 
 " Neovim terminal colours
 if has("nvim")
-  let g:terminal_color_0 =  "#171c19"
-  let g:terminal_color_1 =  "#b16139"
-  let g:terminal_color_2 =  "#489963"
-  let g:terminal_color_3 =  "#a07e3b"
-  let g:terminal_color_4 =  "#478c90"
-  let g:terminal_color_5 =  "#55859b"
-  let g:terminal_color_6 =  "#1c9aa0"
-  let g:terminal_color_7 =  "#87928a"
-  let g:terminal_color_8 =  "#5f6d64"
-  let g:terminal_color_9 =  "#9f713c"
-  let g:terminal_color_10 = "#232a25"
-  let g:terminal_color_11 = "#526057"
-  let g:terminal_color_12 = "#78877d"
-  let g:terminal_color_13 = "#dfe7e2"
-  let g:terminal_color_14 = "#867469"
-  let g:terminal_color_15 = "#ecf4ee"
+  let g:terminal_color_0 =  "#282B35"
+  let g:terminal_color_1 =  "#B21889"
+  let g:terminal_color_2 =  "#DF0002"
+  let g:terminal_color_3 =  "#438288"
+  let g:terminal_color_4 =  "#790EAD"
+  let g:terminal_color_5 =  "#B21889"
+  let g:terminal_color_6 =  "#00A0BE"
+  let g:terminal_color_7 =  "#939599"
+  let g:terminal_color_8 =  "#686A71"
+  let g:terminal_color_9 =  "#786DC5"
+  let g:terminal_color_10 = "#3D4048"
+  let g:terminal_color_11 = "#53555D"
+  let g:terminal_color_12 = "#7E8086"
+  let g:terminal_color_13 = "#A9AAAE"
+  let g:terminal_color_14 = "#C77C48"
+  let g:terminal_color_15 = "#BEBFC2"
   let g:terminal_color_background = g:terminal_color_0
   let g:terminal_color_foreground = g:terminal_color_7
   if &background == "light"

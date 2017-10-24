@@ -2,7 +2,7 @@
 
 " base16-vim (https://github.com/chriskempson/base16-vim)
 " by Chris Kempson (http://chriskempson.com)
-" Atelier Savanna scheme by Bram de Haan (http://atelierbramdehaan.nl)
+" Mellow Purple scheme by gidsi
 
 " This enables the coresponding base16-shell script to run so that
 " :colorscheme works in terminals supported by base16-shell scripts
@@ -15,22 +15,22 @@ if !has('gui_running')
 endif
 
 " GUI color definitions
-let s:gui00 = "171c19"
-let s:gui01 = "232a25"
-let s:gui02 = "526057"
-let s:gui03 = "5f6d64"
-let s:gui04 = "78877d"
-let s:gui05 = "87928a"
-let s:gui06 = "dfe7e2"
-let s:gui07 = "ecf4ee"
-let s:gui08 = "b16139"
-let s:gui09 = "9f713c"
-let s:gui0A = "a07e3b"
-let s:gui0B = "489963"
-let s:gui0C = "1c9aa0"
-let s:gui0D = "478c90"
-let s:gui0E = "55859b"
-let s:gui0F = "867469"
+let s:gui00 = "1e0528"
+let s:gui01 = "1A092D"
+let s:gui02 = "331354"
+let s:gui03 = "320f55"
+let s:gui04 = "873582"
+let s:gui05 = "ffeeff"
+let s:gui06 = "ffeeff"
+let s:gui07 = "f8c0ff"
+let s:gui08 = "00d9e9"
+let s:gui09 = "aa00a3"
+let s:gui0A = "955ae7"
+let s:gui0B = "05cb0d"
+let s:gui0C = "b900b1"
+let s:gui0D = "550068"
+let s:gui0E = "8991bb"
+let s:gui0F = "4d6fff"
 
 " Terminal color definitions
 let s:cterm00 = "00"
@@ -61,22 +61,22 @@ endif
 
 " Neovim terminal colours
 if has("nvim")
-  let g:terminal_color_0 =  "#171c19"
-  let g:terminal_color_1 =  "#b16139"
-  let g:terminal_color_2 =  "#489963"
-  let g:terminal_color_3 =  "#a07e3b"
-  let g:terminal_color_4 =  "#478c90"
-  let g:terminal_color_5 =  "#55859b"
-  let g:terminal_color_6 =  "#1c9aa0"
-  let g:terminal_color_7 =  "#87928a"
-  let g:terminal_color_8 =  "#5f6d64"
-  let g:terminal_color_9 =  "#9f713c"
-  let g:terminal_color_10 = "#232a25"
-  let g:terminal_color_11 = "#526057"
-  let g:terminal_color_12 = "#78877d"
-  let g:terminal_color_13 = "#dfe7e2"
-  let g:terminal_color_14 = "#867469"
-  let g:terminal_color_15 = "#ecf4ee"
+  let g:terminal_color_0 =  "#1e0528"
+  let g:terminal_color_1 =  "#00d9e9"
+  let g:terminal_color_2 =  "#05cb0d"
+  let g:terminal_color_3 =  "#955ae7"
+  let g:terminal_color_4 =  "#550068"
+  let g:terminal_color_5 =  "#8991bb"
+  let g:terminal_color_6 =  "#b900b1"
+  let g:terminal_color_7 =  "#ffeeff"
+  let g:terminal_color_8 =  "#320f55"
+  let g:terminal_color_9 =  "#aa00a3"
+  let g:terminal_color_10 = "#1A092D"
+  let g:terminal_color_11 = "#331354"
+  let g:terminal_color_12 = "#873582"
+  let g:terminal_color_13 = "#ffeeff"
+  let g:terminal_color_14 = "#4d6fff"
+  let g:terminal_color_15 = "#f8c0ff"
   let g:terminal_color_background = g:terminal_color_0
   let g:terminal_color_foreground = g:terminal_color_7
   if &background == "light"

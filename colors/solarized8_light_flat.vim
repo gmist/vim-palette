@@ -122,10 +122,10 @@ else
 endif
 hi! SignColumn cterm=NONE gui=NONE ctermfg=11 guifg=#657b83 ctermbg=NONE guibg=NONE
 hi! Conceal cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=NONE guibg=NONE
-hi! SpellBad cterm=NONE,undercurl gui=NONE,undercurl ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE guisp=#dc322f
-hi! SpellCap cterm=NONE,undercurl gui=NONE,undercurl ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE guisp=#6c71c4
-hi! SpellRare cterm=NONE,undercurl gui=NONE,undercurl ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE guisp=#2aa198
-hi! SpellLocal cterm=NONE,undercurl gui=NONE,undercurl ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE guisp=#b58900
+hi! SpellBad cterm=NONE,undercurl gui=NONE,undercurl ctermfg=5 guifg=#d33682 ctermbg=NONE guibg=NONE guisp=#6c71c4
+hi! SpellCap cterm=NONE,undercurl gui=NONE,undercurl ctermfg=5 guifg=#d33682 ctermbg=NONE guibg=NONE guisp=#6c71c4
+hi! SpellRare cterm=NONE,undercurl gui=NONE,undercurl ctermfg=6 guifg=#2aa198 ctermbg=NONE guibg=NONE guisp=#2aa198
+hi! SpellLocal cterm=NONE,undercurl gui=NONE,undercurl ctermfg=3 guifg=#b58900 ctermbg=NONE guibg=NONE guisp=#b58900
 hi! Pmenu ctermfg=7 guifg=#eee8d5 ctermbg=11 guibg=#657b83 cterm=NONE,reverse gui=NONE,reverse
 hi! PmenuSel ctermfg=14 guifg=#93a1a1 ctermbg=15 guibg=#fdf6e3 cterm=NONE,reverse gui=NONE,reverse
 hi! PmenuSbar ctermfg=7 guifg=#eee8d5 ctermbg=14 guibg=#93a1a1 cterm=NONE,reverse gui=NONE,reverse
@@ -134,6 +134,8 @@ hi! CursorColumn cterm=NONE gui=NONE ctermfg=NONE guifg=NONE ctermbg=7 guibg=#ee
 hi! CursorLine cterm=NONE,underline gui=NONE,underline ctermfg=NONE guifg=NONE ctermbg=15 guibg=#fdf6e3 guisp=#93a1a1
 hi! ColorColumn cterm=NONE gui=NONE ctermfg=NONE guifg=NONE ctermbg=7 guibg=#eee8d5
 hi! link lCursor Cursor
+hi! link StatusLineTerm StatusLine
+hi! link StatusLineTermNC StatusLineNC
 if has('nvim')
   hi! link TermCursor Cursor
   hi! TermCursorNC ctermfg=15 guifg=#fdf6e3 ctermbg=14 guibg=#93a1a1 cterm=NONE gui=NONE
@@ -212,6 +214,8 @@ hi! texMathMatcher ctermfg=3 guifg=#b58900 ctermbg=15 guibg=#fdf6e3 cterm=NONE g
 hi! texMathMatcher ctermfg=3 guifg=#b58900 ctermbg=15 guibg=#fdf6e3 cterm=NONE gui=NONE
 hi! texRefLabel ctermfg=3 guifg=#b58900 ctermbg=15 guibg=#fdf6e3 cterm=NONE gui=NONE
 hi! rubyDefine ctermfg=10 guifg=#586e75 ctermbg=15 guibg=#fdf6e3 cterm=NONE,bold gui=NONE,bold
+hi! link rubySymbol Type
+hi! rubyBoolean  ctermfg=5 guifg=#d33682 ctermbg=15 guibg=#fdf6e3
 hi! cPreCondit ctermfg=9 guifg=#cb4b16 ctermbg=NONE guibg=NONE cterm=NONE gui=NONE
 hi! VarId ctermfg=4 guifg=#268bd2 ctermbg=NONE guibg=NONE cterm=NONE gui=NONE
 hi! ConId ctermfg=3 guifg=#b58900 ctermbg=NONE guibg=NONE cterm=NONE gui=NONE

@@ -1,13 +1,12 @@
 " Vim color file
 " Name:     Garden
-" Date:     Thursday, June 15, 2017
+" Date:     Friday, September 29, 2017
 " Author:   Jak Wings <jakwings@gmail.com>
 " Credits:  Thanks to http://bytefluent.com/vivify/
 
 set background=light
 
 if version > 580
-    hi clear
     if exists('syntax_on')
         syntax reset
     endif

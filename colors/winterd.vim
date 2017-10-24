@@ -1,5 +1,5 @@
 " Name : winterd
-" Version : 0.4
+" Version : 0.5
 " Maintainer : https://www.github.com/smurfd
 " License : The MIT License (MIT)
 "
@@ -7,6 +7,8 @@
 " https://github.com/vim-scripts/vylight
 "
 " Works best for GUI right now
+" for it to work great in a Terminal, add 'set termguicolors' to your ~/.vimrc
+" file
 "                                  
 
 hi clear
@@ -17,7 +19,6 @@ endif
 
 let g:colors_name="winterd"
 
-if &background == "light"
 hi Normal        guifg=#3f3f3f  guibg=#f3f3f3     ctermfg=gray                       gui=none                   
 hi Title         guifg=black    guibg=white       ctermfg=black                      gui=none
 hi Cursor        guifg=white    guibg=#aaaaaa     ctermfg=white     ctermbg=gray     gui=none
@@ -32,22 +33,6 @@ hi ModeMsg       guifg=black    guibg=#bbddff     ctermfg=black     ctermbg=ligh
 hi ErrorMsg      guifg=black    guibg=#ffbbbb     ctermfg=black     ctermbg=lightred  gui=none
 hi Error         guifg=#333333  guibg=white       ctermfg=darkgray  ctermbg=white     gui=none
 hi Folded        guifg=#999999  guibg=#fafafa     ctermfg=gray                        gui=none
-else
-hi Normal        guifg=#f3f3f3  guibg=#3f3f3f     ctermfg=gray                        gui=none
-hi Title         guifg=black    guibg=white       ctermfg=black                       gui=none
-hi Cursor        guifg=white    guibg=#aaaaaa     ctermfg=white     ctermbg=gray      gui=none
-
-hi LineNr        guifg=#c1c1c1  guibg=#f0f0f0     ctermfg=lightblue ctermbg=lightgray gui=none
-hi Visual        guifg=#888888  guibg=#bbddff     ctermfg=darkgray  ctermbg=lightblue gui=none
-hi NonText       guifg=#fafafa  guibg=#fafafa     ctermfg=lightgray ctermbg=lightgray gui=none
-hi StatusLine    guifg=#222222  guibg=#eeeeee     ctermfg=black     ctermbg=white     gui=none
-hi StatusLineNC  guifg=#888888  guibg=#eeeeee     ctermfg=gray      ctermbg=white     gui=none
-hi VertSplit     guifg=#eeeeee  guibg=#eeeeee     ctermfg=white     ctermbg=white     gui=none
-hi ModeMsg       guifg=black    guibg=#bbddff     ctermfg=black     ctermbg=lightblue gui=none
-hi ErrorMsg      guifg=black    guibg=#ffbbbb     ctermfg=black     ctermbg=lightred  gui=none
-hi Error         guifg=#333333  guibg=white       ctermfg=darkgray  ctermbg=white     gui=none
-hi Folded        guifg=#999999  guibg=#fafafa     ctermfg=gray                        gui=none
-endif
 
 "
 " Vim +7.x specific
@@ -71,17 +56,20 @@ endif
 " Syntax highlighting 
 "
 
-hi Comment       guifg=#cccccc                                                       gui=italic   
+hi Comment       guifg=#bbbbbb                                                       gui=italic   
 hi Todo          guifg=#bbddff       guibg=#f3f3f3                                   gui=italic    
 hi Operator      guifg=#1a1a1a                                                       gui=none 
 hi Identifier    guifg=#1a1a1a                                                       gui=none
 hi Statement     guifg=#1a1a1a                                                       gui=none
 hi Type          guifg=#509be8                                                       gui=none
 hi Constant      guifg=#204070                                                       gui=none
-hi Conditional   guifg=#bbddff  
+hi Conditional   guifg=#70aae5  
+"#bbddff  
 hi Delimiter     guifg=#509be8  
-hi PreProc       guifg=#bbddff  
-hi Special       guifg=#bbddff  
+hi PreProc       guifg=#70aae5
+"#bbddff  
+hi Special       guifg=#70aae5
+"bbddff  
 hi Keyword       guifg=#509be8  
 
 hi link Function        Normal

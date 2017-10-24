@@ -59,21 +59,21 @@ hi WildMenu      guibg=Yellow guifg=Black
 
 "Cold hue: #607d8b, #858E8F
 "Warm hue: Grey50
-hi Comment         guifg=#607d8b
-hi String          guifg=Red4
+hi Comment         guifg=Green4
+hi String          guifg=Green4
 hi Constant        guifg=Red4
-hi Operator        guifg=Cyan4
-hi SyntaxChar      guifg=Black gui=None
+hi Operator        guifg=Red4
+hi SyntaxChar      guifg=Cyan4 gui=None
 
 " github #BA1D5D
-hi Statement       guifg=Blue3 gui=None
+hi Statement       guifg=Blue3 gui=Bold
 hi StorageClass    guifg=Blue3
 hi Identifier      guifg=Magenta4
 hi Function        guifg=Magenta4
-hi Keyword         guifg=Orange
+hi Keyword         guifg=Blue3
 
 hi csClassOrStruct guifg=Blue3
-hi Type            guifg=Blue3 gui=None
+hi Type            guifg=Magenta4 gui=None
 hi PreProc         guifg=Magenta4
 
 "Orange3

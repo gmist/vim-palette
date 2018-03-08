@@ -12,24 +12,37 @@ endif
 let g:colors_name="ampresent"
 
 hi Normal          guifg=#000000 guibg=#FFFFFF"{{{
-hi VisualNOS                     guibg=#D0D0B6
-hi Visual                        guibg=#D0D0B6
-hi Cursor          guifg=#000000 guibg=#20BBFC
-hi iCursor         guifg=#000000 guibg=#20BBFC
-hi LineNr          guifg=#909090 guibg=#E2E2E2
-hi CursorLine                    guibg=#C0f5FF
-hi CursorLineNr    guifg=#000000 guibg=#C0f5FF gui=bold
-hi CursorColumn                  guibg=#C0f5FF
 hi ColorColumn                   guibg=#F5F5F5
-hi SignColumn      guifg=#555555 guibg=#E2E2E2
-hi FoldColumn      guifg=#87877D guibg=#E2E2E2
-hi Folded          guifg=#87877D guibg=#C8C8BE   "}}}
+hi LineNr          guifg=#808080 guibg=#EAEAEA
+hi SignColumn      guifg=#555555 guibg=#EAEAEA
+hi FoldColumn      guifg=#606055 guibg=#EAEAEA
+hi VisualNOS                     guibg=#A0E5FF
+hi Visual                        guibg=#A0E5FF
+hi Folded          guifg=#202020 guibg=#C2C2C0  
+hi CursorLine                    guibg=#C0f5FF cterm=none
+hi CursorColumn                  guibg=#C0f5FF cterm=none
+hi CursorLineNr    guifg=#000000 guibg=#C0f5FF gui=bold
+hi Cursor          guifg=#000000 guibg=#20BBFC
+hi CursorIM        guifg=#000000 guibg=#20BBFC
+hi iCursor         guifg=#000000 guibg=#20BBFC
+" hi Scrollbar         
+" hi Tooltip           }}}
 
 hi TabLineFill     guifg=#E0E0E0 guibg=#B0B0B0
-hi TabLine         guibg=#B4B4AA guifg=#808080 gui=none
-hi StatusLine      guifg=#AFFFFF guibg=#005FFF
-hi WildMenu        guifg=#FFFFFF guibg=#005FFF
-hi StatusLineNC    guifg=NONE    guibg=NONE
+hi TabLine         guifg=#404040 guibg=#E0E0E0 gui=none cterm=none
+hi TabLineSel      guifg=#FFFFFF guibg=#005FFF gui=none cterm=none
+
+hi StatusLine      guifg=#005FFF guibg=#AFFFFF gui=none cterm=none
+hi StatusLineNC    guifg=#deded9 guibg=#87877D gui=none cterm=none
+hi User1           guifg=#FFFFFF guibg=#005FFF gui=bold
+hi User2           guifg=#000087 guibg=#00DFFF gui=none cterm=none
+hi User3           guifg=#005FFF guibg=#AFFFFF gui=none cterm=none
+hi User3           guifg=#005FFF guibg=#AFFFFF gui=none cterm=none
+
+hi QuickFixLine    guifg=#000000 guibg=#00DFFF gui=bold
+
+" hi Menu              
+hi WildMenu        guifg=#FFFFFF guibg=#005FFF gui=bold
 hi VertSplit       guifg=#808080 guibg=NONE    gui=bold
 
 hi Delimiter       guifg=#8F8F8F
@@ -40,9 +53,11 @@ hi SpecialKey      guifg=#b5b5b5
 hi SpecialComment  guifg=#b5b5b5               gui=bold
 hi Special         guifg=#0030F0 guibg=bg      gui=bold
 
-hi DiffAdd                       guibg=#c6dca0 
-hi DiffChange                    guibg=#f9ffb0
-hi DiffDelete      guifg=#505050 guibg=#f0c8be
+hi EndOfBuffer     guifg=#808080               gui=NONE
+
+hi DiffAdd                       guibg=#D8F5C8 
+hi DiffChange                    guibg=#F5F0C8
+hi DiffDelete      guifg=#802020 guibg=#F5D8C8
 hi DiffText                      guibg=#FFFFFF gui=italic,bold
 
 hi MatchParen      guifg=#505000 guibg=#F0F050 gui=bold
@@ -60,13 +75,13 @@ hi ModeMsg         guifg=#605000
 hi MoreMsg         guifg=#605000
 hi Question        guifg=#006EB4
 
-hi Pmenu           guifg=#e5e5e4 guibg=#707065
-hi PmenuSel        guifg=#303030 guibg=#C8C8BE
+hi Pmenu           guifg=#F0F0F0 guibg=#808075
+hi PmenuSel        guifg=#FFFFFF guibg=#005FFF gui=bold
 hi PmenuSbar                     guibg=#404035
 hi PmenuThumb      guifg=#006EB4
 
-hi Search          guifg=NONE    guibg=#FFF0A0
-hi IncSearch       guifg=#B0FF20 guibg=#000000
+hi    Search       guifg=#000000 guibg=#E5C5F0 gui=none
+hi IncSearch       guifg=#000000 guibg=#F5F000 gui=none
 
 " spell checking
 if has("spell")
@@ -77,40 +92,73 @@ if has("spell")
 endif
 
 "--------------------------------------------------------------------
-" plugins
+" {{{ plugins
 "--------------------------------------------------------------------
-" signify
+hi Debug           guifg=#BCA3A3               gui=bold
+hi Underlined      guifg=#808080               gui=underline
+hi CleverF         guifg=#D000C0 guibg=#FFE0FF
+
+" yank highlighting
+hi Flashy                  guibg=#FFFF00    ctermbg=228
+hi HighlightedyankRegion   guibg=#FFFF00    ctermbg=228
+
+" indent line plugin
+let g:indentLine_color_term = 253
+let g:indentLine_color_gui = '#D0D0CE'
+
+" braceless plugin indent guide
+hi BracelessIndent guibg=#E5E5E2 ctermbg=253
+" indent guides plugin
+hi IndentGuidesEven guibg=#F5F5F5
+hi IndentGuidesOdd  guibg=#FFFFFF
+
+" bufexplorer
+hi link bufExplorerBufNbr      Number
+hi link bufExplorerMapping     Special
+hi link bufExplorerHelp        Normal
+hi link bufExplorerOpenIn      Identifier
+hi link bufExplorerSortBy      Title
+hi link bufExplorerSplit       NonText
+hi link bufExplorerTitle       NonText
+hi link bufExplorerActBuf      Identifier
+hi link bufExplorerAltBuf      String
+hi link bufExplorerCurBuf      Type
+hi link bufExplorerHidBuf      Normal
+hi link bufExplorerLockedBuf   Special
+hi link bufExplorerModBuf      Exception
+hi link bufExplorerUnlBuf      Comment
+hi link bufExplorerInactBuf    Comment
+  
 " highlight all the lowercase marks
-hi ShowMarksHLl    guifg=#00B619 guibg=#C0FFC0 gui=NONE
+hi ShowMarksHLl    guifg=#00A000 guibg=#C0FFC0 gui=NONE
 " highlight all the uppercase marks
-hi ShowMarksHLu    guifg=#00B619 guibg=#C0FFC0 gui=bold    
+hi ShowMarksHLu    guifg=#00A000 guibg=#C0FFC0 gui=bold    
 " highlight all other marks
 hi ShowMarksHLo    guifg=#006EFF guibg=#D0E0FF gui=NONE
 " when multiple marks are on the same line
 hi ShowMarksHLm    guifg=#C88200 guibg=#FFF0A0 gui=bold"}}}
 
-hi Debug           guifg=#BCA3A3               gui=bold
-hi Underlined      guifg=#808080               gui=underline
-hi CleverF         guifg=#D000C0 guibg=#FFE0FF
-hi Flashy          guibg=#F0F0C0 ctermbg=229
-
-" Syntastic
-hi SyntasticErrorSign         guifg=#D02000 guibg=#E2E2E2 gui=bold 
-hi SyntasticWarningSign       guifg=#DAD520 guibg=#E2E2E2 gui=bold
-hi SyntasticStyleErrorSign    guifg=#D05050 guibg=#E2E2E2 gui=bold
-hi SyntasticStyleWarningSign  guifg=#DAD560 guibg=#E2E2E2 gui=bold
+" ALE (Asynchronous Lint Engine)
+hi ALEErrorSign    guifg=#E00000 guibg=#FFC0C0 gui=bold 
+hi ALEWarningSign  guifg=#906000 guibg=#F5F000 gui=bold
+hi ALEError        guifg=NONE    guibg=#FFC0C0 gui=bold
+hi ALEWarning      guifg=NONE    guibg=#FFFFA0 gui=bold
+hi ALEInfo         guifg=NONE    guibg=#A0FFFF gui=NONE 
+" hi ALEStyleError    guifg=NONE    guibg=#000000 gui=NONE  
+" hi ALEStyleWarning  guifg=NONE    guibg=#000000 gui=NONE 
 
 " GitGutter
-hi GitGutterAdd               guifg=#00E520 guibg=#E2E2E2 gui=bold
-hi GitGutterChange            guifg=#F0B000 guibg=#E2E2E2 gui=bold
-hi GitGutterDelete            guifg=#F00000 guibg=#E2E2E2 gui=bold
-hi GitGutterChangeDelete      guifg=#F00000 guibg=#E2E2E2 gui=bold
+hi GitGutterAdd               guifg=#009000 guibg=#C0F0C0 gui=bold
+hi GitGutterChange            guifg=#906000 guibg=#F5F000 gui=bold
+hi GitGutterDelete            guifg=#E00000 guibg=#FFC0C0 gui=bold
+hi GitGutterChangeDelete      guifg=#E00000 guibg=#FFC0C0 gui=bold
 
 " multi-cursor
 hi multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
 hi link multiple_cursors_visual Visual
 
 " tagbar
+hi link TagbarComment Comment
 " The header of generic 'kinds' like 'functions' and 'variables'.
 hi TagbarKind                  guifg=#000000 gui=bold
 " The 'kind' headers in square brackets inside of scopes.
@@ -129,15 +177,6 @@ hi TagbarVisibilityPublic       guifg=#00E520
 hi TagbarVisibilityProtected    guifg=#F0B000
 hi TagbarVisibilityPrivate      guifg=#F00000
 
-" NERD tree
-" hi NERDTreeHelpCommand
-" hi NERDTreeHelpTitle
-" hi NERDTreeHelpKey
-" hi NERDTreeHelp
-" hi NERDTreeToggleOff
-" hi NERDTreeToggleOn
-" hi NERDTreeDir
-
 " find & replace
 hi FNRFind          guifg=#000000 guibg=#B6F22E gui=NONE
 hi FNRReplace       guifg=#000000 guibg=#FDB01F gui=NONE
@@ -150,8 +189,19 @@ hi FNRActiveReplace guifg=#FDB01F guibg=#76520E gui=bold
 " CtrlP
 hi CtrlPMatch       guifg=#3000F0
 
+" poppy.vim (rainbow parentheses)
+hi PoppyLevel1 guibg=#FFFF90 guifg=#000000 gui=bold
+hi PoppyLevel2 guibg=#B0F080 guifg=#000000 gui=bold
+hi PoppyLevel3 guibg=#FFB0E0 guifg=#000000 gui=bold
+hi PoppyLevel4 guibg=#80C0FF guifg=#000000 gui=bold
+hi PoppyLevel5 guibg=#FDC560 guifg=#000000 gui=bold
+hi PoppyLevel6 guibg=#F0C8BE guifg=#000000 gui=bold
+let g:poppyhigh = ['PoppyLevel1', 'PoppyLevel2', 'PoppyLevel3', 'PoppyLevel4', 'PoppyLevel5', 'PoppyLevel6']
+" }}}
+
+
 "--------------------------------------------------------------------
-" syntax higlighting 
+" {{{ syntax higlighting
 "--------------------------------------------------------------------
 " built-in
 hi Comment         guifg=#A59040
@@ -160,10 +210,11 @@ hi Statement       guifg=#0030F0               gui=bold
 hi Conditional     guifg=#0030F0               gui=bold
 hi Repeat          guifg=#0030F0               gui=bold
 hi Exception       guifg=#0030F0               gui=bold
+hi Loop            guifg=#0030F0               gui=bold
 hi Operator        guifg=#000000
 hi Function        guifg=#000000               gui=bold
 hi Identifier      guifg=#800090
-hi Label           guifg=#A0D000
+hi Label           guifg=#0070D0               gui=bold
 
 hi Constant        guifg=#0030F0               gui=bold
 hi Boolean         guifg=#0030F0               gui=bold,italic
@@ -175,8 +226,8 @@ hi Float           guifg=#D00030
 
 hi Structure       guifg=#0030F0               gui=bold
 hi StorageClass    guifg=#0030F0               gui=bold
-hi Type            guifg=#007000               gui=bold
-hi Typedef         guifg=#007000               gui=bold
+hi Type            guifg=#008000               gui=bold
+hi Typedef         guifg=#008000               gui=bold
 
 hi PreProc         guifg=#A020A0               gui=bold
 hi PreCondit       guifg=#A020A0               gui=bold
@@ -192,32 +243,6 @@ hi link cTypeTag      Type
 hi link cEnumTag      Type
 hi link cPreProcTag   PreProc
 hi link cFunctionTag  Function 
-
-" clighter8
-hi      clighter8Occurrences           guifg=NONE     guibg=#FFFF80
-hi      clighter8TemplateTypeParameter guifg=#CB6C00                 gui=italic
-hi      clighter8ParmDecl              guifg=#007000
-hi      clighter8FieldDecl             guifg=#9000D5
-hi      clighter8EnumConstantDecl      guifg=#9000D5                 gui=italic
-hi      clighter8Namespace             guifg=#6E7D82                 gui=italic
-hi      clighter8NamespaceRef          guifg=#6E7D82                 gui=italic
-hi link clighter8Prepro                PreProc
-hi link clighter8InclusionDirective    cIncluded
-hi link clighter8MacroInstantiation    Constant
-hi link clighter8Decl                  Identifier
-hi link clighter8VarDecl               Identifier
-hi link clighter8FunctionDecl          Function
-hi link clighter8StructDecl            Type
-hi link clighter8UnionDecl             Type
-hi link clighter8ClassDecl             Type
-hi link clighter8EnumDecl              Type
-hi link clighter8TypeRef               Type
-hi link clighter8Ref                   Type
-hi link clighter8TemplateRef           Type
-hi link clighter8DeclRefExprEnum       clighter8EnumConstantDecl
-hi link clighter8DeclRefExprCall       Type
-hi link clighter8MemberRefExprCall     Type
-hi link clighter8MemberRefExprVar      clighter8FieldDecl
 
 " xml
 hi xmlAttrib    guifg=#007000
@@ -264,6 +289,7 @@ hi link mmaBracket      Normal
 hi link mmaTodo         Todo
 hi link mmaMessage      Type
 hi link mmaSlot         Include
+" }}}
 
 
 " --------------------------------------------------------------------
@@ -298,7 +324,6 @@ if &t_Co > 255
     hi Float           ctermfg=160  ctermbg=NONE cterm=NONE
     hi Character       ctermfg=94  ctermbg=NONE cterm=NONE
     hi SpecialChar     ctermfg=130  ctermbg=NONE cterm=NONE
-    hi SpecialKey      ctermfg=129  ctermbg=NONE cterm=NONE
     hi String          ctermfg=160  ctermbg=NONE cterm=NONE
     hi Number          ctermfg=22  ctermbg=NONE cterm=NONE
     hi Conceal         ctermfg=253  ctermbg=255  cterm=NONE
@@ -311,7 +336,7 @@ if &t_Co > 255
     hi Conditional     ctermfg=91  ctermbg=NONE cterm=bold
     hi Keyword         ctermfg=91  ctermbg=NONE cterm=bold
     hi Exception       ctermfg=91  ctermbg=NONE cterm=bold
-    hi Special         ctermfg=91  ctermbg=NONE cterm=bold
+    hi Loop            ctermfg=91  ctermbg=NONE cterm=bold
     hi Constant        ctermfg=91  ctermbg=NONE cterm=bold
     hi Repeat          ctermfg=91  ctermbg=NONE cterm=bold
     hi Statement       ctermfg=91  ctermbg=NONE cterm=bold
@@ -349,9 +374,6 @@ if &t_Co > 255
 endif
 " }}}
 
-" indent line
-let g:indentLine_color_term = 239
-let g:indentLine_color_gui = '#C0C0C0'
 
 if has("win32") || has("win16") || has("win64")
     let &colorcolumn=join(range(81,999),",")

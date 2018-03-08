@@ -105,8 +105,8 @@ fun! s:register_default_theme()
         \       'buftabline_bg':          ['#005f87', '24'],
         \       'buftabline_current_fg':  ['#444444', '238'],
         \       'buftabline_current_bg':  ['#e4e4e4', '254'],
-        \       'buftabline_active_fg': ['#eeeeee', '255'],
-        \       'buftabline_active_bg': ['#005faf', '25'],
+        \       'buftabline_active_fg':   ['#eeeeee', '255'],
+        \       'buftabline_active_bg':   ['#005faf', '25'],
         \       'buftabline_inactive_fg': ['#eeeeee', '255'],
         \       'buftabline_inactive_bg': ['#0087af', '31']
         \     }
@@ -175,11 +175,6 @@ fun! s:register_default_theme()
         \       'folded_bg' : ['#5f005f', '53'],
         \       'wildmenu_fg': ['#1c1c1c', '234'],
         \       'wildmenu_bg': ['#afd700', '148'],
-        \       'tabline_bg':          ['#262626', '235'],
-        \       'tabline_active_fg':   ['#121212', '233'],
-        \       'tabline_active_bg':   ['#00afaf', '37'],
-        \       'tabline_inactive_fg': ['#bcbcbc', '250'],
-        \       'tabline_inactive_bg': ['#585858', '240'],
         \       'spellbad':   ['#5f0000', '52'],
         \       'spellcap':   ['#5f005f', '53'],
         \       'spellrare':  ['#005f00', '22'],
@@ -191,7 +186,19 @@ fun! s:register_default_theme()
         \       'difftext_fg':   ['#5fffff', '87'],
         \       'difftext_bg':   ['#008787', '30'],
         \       'diffchange_fg': ['#d0d0d0', '252'],
-        \       'diffchange_bg': ['#005f5f', '23']
+        \       'diffchange_bg': ['#005f5f', '23'],
+        \       'tabline_bg':          ['#262626', '235'],
+        \       'tabline_active_fg':   ['#121212', '233'],
+        \       'tabline_active_bg':   ['#00afaf', '37'],
+        \       'tabline_inactive_fg': ['#bcbcbc', '250'],
+        \       'tabline_inactive_bg': ['#585858', '240'],
+        \       'buftabline_bg':          ['#262626', '235'],
+        \       'buftabline_current_fg':  ['#121212', '233'],
+        \       'buftabline_current_bg':  ['#00afaf', '37'],
+        \       'buftabline_active_fg':   ['#00afaf', '37'],
+        \       'buftabline_active_bg':   ['#585858', '240'],
+        \       'buftabline_inactive_fg': ['#bcbcbc', '250'],
+        \       'buftabline_inactive_bg': ['#585858', '240']
         \     }
         \   }
 endfun
@@ -226,28 +233,31 @@ fun! s:acquire_theme_data()
     let lowercase_theme_name = tolower(g:PaperColor_Theme)
 
     if lowercase_theme_name !=? 'default'
-      " TODO: Change this to invoke autoload function
-      let theme_variable =  "g:PaperColor_Theme_" . lowercase_theme_name
+      let theme_identifier = 'PaperColor_' . lowercase_theme_name
+      let autoload_function = theme_identifier . '#register'
+
+      call {autoload_function}()
+
+      let theme_variable = 'g:' . theme_identifier
 
       if exists(theme_variable)
         let s:theme_name = lowercase_theme_name
-        " Register custom theme to theme dictionary
         let s:themes[s:theme_name] = {theme_variable}
-      else
-        echom "Cannot find variable " . theme_variable
-        " s:theme_name is still 'default'
       endif
+
     endif
 
   endif
   " }}}
 
   if s:theme_name ==? 'default'
-    " defer loading default theme until now
+    " Either no other theme is specified or they failed to load
+    " Defer loading default theme until now
     call s:register_default_theme()
   endif
 
   let s:selected_theme = s:themes[s:theme_name]
+
   " Get Theme Variant: either dark or light  {{{
   let s:selected_variant = 'dark'
 
@@ -891,7 +901,7 @@ fun! s:set_color_variables()
   " often called helps speeding things up quite a bit. Think of this like macro.
   "
   " If you are familiar with the old code base (v0.9 and ealier), this way of
-  " generate variables dramatically increases the loading speed.
+  " generate variables dramatically reduces the loading speed.
   " None of previous optimization tricks gets anywhere near this.
   if s:mode == s:MODE_GUI_COLOR
     fun! s:create_color_variables(color_name, rich_color, term_color)
@@ -1245,6 +1255,9 @@ fun! s:apply_syntax_highlightings()
   exec 'hi vimOperParen' . s:fg_foreground
   exec 'hi vimSynType' . s:fg_purple
   exec 'hi vimSynReg' . s:fg_pink . s:ft_none
+  exec 'hi vimSynRegion' . s:fg_foreground
+  exec 'hi vimSynMtchGrp' . s:fg_pink
+  exec 'hi vimSynNextgroup' . s:fg_pink
   exec 'hi vimSynKeyRegion' . s:fg_green
   exec 'hi vimSynRegOpt' . s:fg_blue
   exec 'hi vimSynMtchOpt' . s:fg_blue
@@ -1396,6 +1409,18 @@ fun! s:apply_syntax_highlightings()
   exec 'hi shCase' . s:fg_navy
   exec 'hi shSetList' . s:fg_navy
   " @see Dockerfile Highlighting section for more sh*
+
+  " PowerShell Highlighting
+  exec 'hi ps1Type' . s:fg_green . s:ft_bold
+  exec 'hi ps1Variable' . s:fg_navy
+  exec 'hi ps1Boolean' . s:fg_navy . s:ft_bold
+  exec 'hi ps1FunctionInvocation' . s:fg_pink
+  exec 'hi ps1FunctionDeclaration' . s:fg_pink
+  exec 'hi ps1Keyword' . s:fg_blue . s:ft_bold
+  exec 'hi ps1Exception' . s:fg_red
+  exec 'hi ps1Operator' . s:fg_aqua . s:ft_bold
+  exec 'hi ps1CommentDoc' . s:fg_purple
+  exec 'hi ps1CDocParam' . s:fg_orange
 
   " HTML Highlighting
   exec 'hi htmlTitle' . s:fg_green . s:ft_bold
@@ -1922,6 +1947,60 @@ fun! s:apply_syntax_highlightings()
   exec 'hi sedBranch' . s:fg_green . s:ft_bold
   exec 'hi sedLabel' . s:fg_green . s:ft_bold
 
+  " GNU awk highlighting
+  exec 'hi awkPatterns' . s:fg_pink . s:ft_bold
+  exec 'hi awkSearch' . s:fg_pink
+  exec 'hi awkRegExp' . s:fg_blue . s:ft_bold
+  exec 'hi awkCharClass' . s:fg_blue . s:ft_bold
+  exec 'hi awkFieldVars' . s:fg_green . s:ft_bold
+  exec 'hi awkStatement' . s:fg_blue . s:ft_bold
+  exec 'hi awkFunction' . s:fg_blue
+  exec 'hi awkVariables' . s:fg_green . s:ft_bold
+  exec 'hi awkArrayElement' . s:fg_orange
+  exec 'hi awkOperator' . s:fg_foreground
+  exec 'hi awkBoolLogic' . s:fg_foreground
+  exec 'hi awkExpression' . s:fg_foreground
+  exec 'hi awkSpecialPrintf' . s:fg_olive . s:ft_bold
+
+  " Elm highlighting
+  exec 'hi elmImport' . s:fg_navy 
+  exec 'hi elmAlias' . s:fg_aqua
+  exec 'hi elmType' . s:fg_pink
+  exec 'hi elmOperator' . s:fg_aqua . s:ft_bold
+  exec 'hi elmBraces' . s:fg_aqua . s:ft_bold 
+  exec 'hi elmTypedef' . s:fg_blue .  s:ft_bold
+  exec 'hi elmTopLevelDecl' . s:fg_green . s:ft_bold
+
+  " Purescript highlighting
+  exec 'hi purescriptModuleKeyword' . s:fg_navy
+  exec 'hi purescriptImportKeyword' . s:fg_navy
+  exec 'hi purescriptModuleName' . s:fg_pink
+  exec 'hi purescriptOperator' . s:fg_aqua . s:ft_bold
+  exec 'hi purescriptType' . s:fg_pink
+  exec 'hi purescriptTypeVar' . s:fg_navy
+  exec 'hi purescriptStructure' . s:fg_blue . s:ft_bold
+  exec 'hi purescriptLet' . s:fg_blue . s:ft_bold
+  exec 'hi purescriptFunction' . s:fg_green . s:ft_bold
+  exec 'hi purescriptDelimiter' . s:fg_aqua . s:ft_bold
+  exec 'hi purescriptStatement' . s:fg_purple . s:ft_bold
+  exec 'hi purescriptConstructor' . s:fg_pink
+  exec 'hi purescriptWhere' . s:fg_purple . s:ft_bold
+
+  " F# highlighting
+  exec 'hi fsharpTypeName' . s:fg_pink
+  exec 'hi fsharpCoreClass' . s:fg_pink
+  exec 'hi fsharpType' . s:fg_pink
+  exec 'hi fsharpKeyword' . s:fg_blue . s:ft_bold
+  exec 'hi fsharpOperator' . s:fg_aqua . s:ft_bold
+  exec 'hi fsharpBoolean' . s:fg_green . s:ft_bold
+  exec 'hi fsharpFormat' . s:fg_foreground
+  exec 'hi fsharpLinq' . s:fg_blue
+  exec 'hi fsharpKeyChar' . s:fg_aqua . s:ft_bold
+  exec 'hi fsharpOption' . s:fg_orange
+  exec 'hi fsharpCoreMethod' . s:fg_purple
+  exec 'hi fsharpAttrib' . s:fg_orange
+  exec 'hi fsharpModifier' . s:fg_aqua
+  exec 'hi fsharpOpen' . s:fg_red
   " }}}
 
   " Plugin: Netrw

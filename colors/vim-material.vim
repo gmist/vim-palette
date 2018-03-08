@@ -17,7 +17,7 @@ let s:gui.foreground = { 'dark': '#EEFFFF', 'light': '#000000' }
 let s:gui.none       = { 'dark': 'NONE', 'light': 'NONE' }
 let s:gui.selection  = { 'dark': '#455A64', 'light': '#BCBCBC' }
 let s:gui.line       = { 'dark': '#212121', 'light': '#D0D0D0' }
-let s:gui.comment    = { 'dark': '#49656F', 'light': '#5F5F5F' }
+let s:gui.comment    = { 'dark': '#5D818E', 'light': '#5F5F5F' }
 
 let s:gui.red          = { 'dark': '#FF5370', 'light': '#E53935' }
 let s:gui.dark_red     = { 'dark': '#B71C1C', 'light': '#E53935' }
@@ -108,7 +108,7 @@ call s:hi("Operator",    s:gui.cyan,       "",               "", "", "")
 call s:hi("PreProc",     s:gui.blue,       "",               "", "", "")
 call s:hi("Search",      s:gui.none,       s:gui.none,       "", "", "underline")
 call s:hi("InSearch",    s:gui.background, s:gui.foreground, "", "", "")
-call s:hi("Todo",        s:gui.red,        s:gui.none,       "", "", "")
+call s:hi("Todo",        s:gui.red,        s:gui.foreground, "", "", "reverse")
 call s:hi("Special",     s:gui.orange,     "",               "", "", "")
 
 

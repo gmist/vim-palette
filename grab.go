@@ -56,7 +56,7 @@ func init() {
 			log.Fatal(err)
 		}
 	}
-	config.urls.vimOrg = "http://www.vim.org"
+	config.urls.vimOrg = "https://www.vim.org"
 	config.urls.vimSearch = fmt.Sprintf(
 		"%s/scripts/script_search_results.php?&script_type=color%%20scheme&show_me=%d", config.urls.vimOrg, config.maxSchemes)
 }

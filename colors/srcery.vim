@@ -19,10 +19,10 @@ endif
 " Palette {{{
 
 let s:black          = ["#1C1B19", 0]
-let s:red            = ["#FF3128", 1]
+let s:red            = ["#EF2F27", 1]
 let s:green          = ["#519F50", 2]
 let s:yellow         = ["#FBB829", 3]
-let s:blue           = ["#5573A3", 4]
+let s:blue           = ["#2C78BF", 4]
 let s:magenta        = ["#E02C6D", 5]
 let s:cyan           = ["#0AAEB3", 6]
 let s:white          = ["#918175", 7]
@@ -30,12 +30,12 @@ let s:bright_black   = ["#2D2C29", 8]
 let s:bright_red     = ["#F75341", 9]
 let s:bright_green   = ["#98BC37", 10]
 let s:bright_yellow  = ["#FED06E", 11]
-let s:bright_blue    = ["#8EB2F7", 12]
-let s:bright_magenta = ["#E35682", 13]
+let s:bright_blue    = ["#68A8E4", 12]
+let s:bright_magenta = ["#FF5C8F", 13]
 let s:bright_cyan    = ["#53FDE9", 14]
 let s:bright_white   = ["#FCE8C3", 15]
 
-" default xterm colors.
+" xterm colors.
 let s:orange        = ['#D75F00', 166]  
 let s:bright_orange = ['#FF8700', 208]
 let s:hard_black    = ['#080808', 232]
@@ -72,6 +72,10 @@ endif
 
 if !exists('g:srcery_inverse')
   let g:srcery_inverse=1
+endif
+
+if !exists('g:srcery_strong_match_paren')
+  let g:srcery_strong_match_paren=0
 endif
 
 " }}}
@@ -150,12 +154,13 @@ call s:HL('SrceryBlue', s:blue)
 call s:HL('SrceryMagenta', s:magenta)
 call s:HL('SrceryCyan', s:cyan)
 call s:HL('SrceryBlack', s:black)
-call s:HL('SrceryRedbold', s:red, s:none, s:bold)
-call s:HL('SrceryGreenbold', s:green, s:none, s:bold)
-call s:HL('SrceryYellowbold', s:yellow, s:none, s:bold)
-call s:HL('SrceryBluebold', s:blue, s:none, s:bold)
-call s:HL('SrceryMagentabold', s:magenta, s:none, s:bold)
-call s:HL('SrceryCyanbold', s:cyan, s:none, s:bold)
+
+call s:HL('SrceryRedBold', s:red, s:none, s:bold)
+call s:HL('SrceryGreenBold', s:green, s:none, s:bold)
+call s:HL('SrceryYellowBold', s:yellow, s:none, s:bold)
+call s:HL('SrceryBlueBold', s:blue, s:none, s:bold)
+call s:HL('SrceryMagentaBold', s:magenta, s:none, s:bold)
+call s:HL('SrceryCyanBold', s:cyan, s:none, s:bold)
 
 call s:HL('SrceryBrightRed', s:bright_red, s:none)
 call s:HL('SrceryBrightGreen', s:bright_green, s:none)
@@ -168,6 +173,7 @@ call s:HL('SrceryBrightWhite', s:bright_white)
 
 " special
 call s:HL('SrceryOrange', s:orange)
+call s:HL('SrceryBrightOrange', s:bright_orange)
 call s:HL('SrceryOrangeBold', s:orange, s:none, s:bold)
 call s:HL('SrceryHardBlack', s:hard_black)
 call s:HL('SrceryXgray1', s:xgray1)
@@ -198,7 +204,12 @@ if version >= 700
   hi! link TabLine TabLineFill
 
   " Match paired bracket under the cursor
-  call s:HL('MatchParen', s:yellow, s:bright_black, s:bold)
+  "
+  if g:srcery_strong_match_paren == 1 
+    call s:HL('MatchParen', s:none, s:black, s:inverse)
+  else
+    call s:HL('MatchParen', s:bright_yellow, s:none, s:bold)
+  endif
 endif
 
 if version >= 703
@@ -218,8 +229,8 @@ hi! link SpecialKey SrceryWhiteAlt
 call s:HL('Visual',    s:none,  s:black, s:inverse)
 hi! link VisualNOS Visual
 
-call s:HL('Search',    s:black, s:yellow)
-call s:HL('IncSearch', s:black, s:yellow)
+call s:HL('Search',    s:bright_white, s:magenta)
+call s:HL('IncSearch', s:bright_white, s:magenta)
 
 call s:HL('Underlined', s:blue, s:none, s:underline)
 
@@ -305,7 +316,7 @@ hi! link Keyword SrceryRed
 " Variable name
 hi! link Identifier SrceryBlue
 " Function name
-hi! link Function SrceryGreenBold
+hi! link Function SrceryYellow
 
 " Generic preprocessor
 hi! link PreProc SrceryCyan
@@ -314,7 +325,7 @@ hi! link Include SrceryCyan
 " Preprocessor #define
 hi! link Define SrceryCyan
 " Same as Define
-hi! link Macro SrceryCyan
+hi! link Macro SrceryOrange
 " Preprocessor #if, #else, #endif, etc.
 hi! link PreCondit SrceryCyan
 
@@ -330,22 +341,22 @@ hi! link Number SrceryBrightMagenta
 hi! link Float SrceryBrightMagenta
 
 " Generic type
-hi! link Type SrceryYellow
+hi! link Type SrceryBrightBlue
 " static, register, volatile, etc
 hi! link StorageClass SrceryOrange
 " struct, union, enum, etc.
 hi! link Structure SrceryCyan
 " typedef
-hi! link Typedef SrceryYellow
+hi! link Typedef SrceryMagenta
 
 " }}}
 " Completion Menu: {{{
 
 if version >= 700
   " Popup menu: normal item
-  call s:HL('Pmenu', s:bright_white, s:black)
+  call s:HL('Pmenu', s:bright_white, s:bright_black)
   " Popup menu: selected item
-  call s:HL('PmenuSel', s:black, s:blue, s:bold)
+  call s:HL('PmenuSel', s:bright_white, s:magenta, s:bold)
   " Popup menu: scrollbar
   call s:HL('PmenuSbar', s:none, s:black)
   " Popup menu: scrollbar thumb
@@ -355,10 +366,10 @@ endif
 " }}}
 " Diffs: {{{
 
-call s:HL('DiffDelete', s:red, s:black, s:inverse)
-call s:HL('DiffAdd',    s:green, s:black, s:inverse)
-call s:HL('DiffChange', s:cyan, s:black, s:inverse)
-call s:HL('DiffText',   s:yellow, s:black, s:inverse)
+call s:HL('DiffDelete', s:red, s:black)
+call s:HL('DiffAdd',    s:green, s:black)
+call s:HL('DiffChange', s:cyan, s:black)
+call s:HL('DiffText',   s:yellow, s:black)
 
 " }}}
 " Spelling: {{{
@@ -390,13 +401,13 @@ hi! link SneakStreakStatusLine Search
 if !exists('g:rbpt_colorpairs')
   let g:rbpt_colorpairs =
     \ [
-      \ ['blue', '#458588'], ['magenta', '#b16286'],
-      \ ['red',  '#cc241d'], ['166',     '#d65d0e']
+      \ ['blue',  '#2C78BF'], ['166',  '#D75F00'],
+      \ ['cyan',  '#0AAEB3'], ['magenta', '#E02C6D']
     \ ]
 endif
-
-let g:rainbow_guifgs = [ '#d65d0e', '#cc241d', '#b16286', '#458588' ]
-let g:rainbow_ctermfgs = [ '166', 'red', 'magenta', 'blue' ]
+                          
+let g:rainbow_guifgs = [ '#E02C6D', '#0AAEB3', '#D75F00', '#2C78BF']
+let g:rainbow_ctermfgs = [ 'magenta', 'cyan', '166', 'blue' ]
 
 if !exists('g:rainbow_conf')
    let g:rainbow_conf = {}
@@ -415,15 +426,26 @@ let g:niji_light_colours = g:rbpt_colorpairs
 " GitGutter: {{{
 
 hi! link GitGutterAdd SrceryGreen
-hi! link GitGutterChange SrceryCyan
+hi! link GitGutterChange SrceryYellow
 hi! link GitGutterDelete SrceryRed
-hi! link GitGutterChangeDelete SrceryCyan
+hi! link GitGutterChangeDelete SrceryYellow
 
 " }}}
 " GitCommit: "{{{
 
 hi! link gitcommitSelectedFile SrceryGreen
 hi! link gitcommitDiscardedFile SrceryRed
+
+" }}}
+" Asynchronous Lint Engine: {{{
+
+call s:HL('ALEError', s:none, s:none, s:undercurl, s:red)
+call s:HL('ALEWarning', s:none, s:none, s:undercurl, s:yellow)
+call s:HL('ALEInfo', s:none, s:none, s:undercurl, s:blue)
+
+hi! link ALEErrorSign SrceryRed
+hi! link ALEWarningSign SrceryYellow
+hi! link ALEInfoSign SrceryBlue
 
 " }}}
 
@@ -449,7 +471,7 @@ hi! link htmlTagName SrceryCyanBold
 hi! link htmlArg SrceryCyan
 
 hi! link htmlScriptTag SrceryMagenta
-hi! link htmlTagN SrceryFg1
+hi! link htmlTagN SrceryBlue
 hi! link htmlSpecialTagName SrceryCyanBold
 
 call s:HL('htmlLink', s:bright_white, s:none, s:underline)
@@ -506,9 +528,9 @@ hi! link vimContinue SrceryBrightWhite
 " Clojure: {{{
 
 hi! link clojureKeyword SrceryBlue
-hi! link clojureCond SrceryOrange
-hi! link clojureSpecial SrceryOrange
-hi! link clojureDefine SrceryOrange
+hi! link clojureCond SrceryBrightRed
+hi! link clojureSpecial SrceryBrightRed
+hi! link clojureDefine SrceryBrightRed
 
 hi! link clojureFunc SrceryYellow
 hi! link clojureRepeat SrceryYellow
@@ -522,10 +544,10 @@ call s:HL('clojureRegexpCharClass', s:bright_white, s:none, s:bold)
 hi! link clojureRegexpMod clojureRegexpCharClass
 hi! link clojureRegexpQuantifier clojureRegexpCharClass
 
-hi! link clojureParen SrceryFg3
+hi! link clojureParen SrceryBrightBlue
 hi! link clojureAnonArg SrceryYellow
 hi! link clojureVariable SrceryBlue
-hi! link clojureMacro SrceryOrange
+hi! link clojureMacro SrceryBrightRed
 
 hi! link clojureMeta SrceryYellow
 hi! link clojureDeref SrceryYellow
@@ -565,7 +587,7 @@ hi! link cssColor SrceryBlue
 hi! link cssSelectorOp SrceryBlue
 hi! link cssSelectorOp2 SrceryBlue
 hi! link cssImportant SrceryGreen
-hi! link cssVendor SrceryFg1
+hi! link cssVendor SrceryBlue
 
 hi! link cssTextProp SrceryCyan
 hi! link cssAnimationProp SrceryCyan
@@ -592,69 +614,30 @@ hi! link cssGeneratedContentProp SrceryCyan
 " }}}
 " JavaScript: {{{
 
-hi! link javaScriptBraces SrceryFg1
-hi! link javaScriptFunction SrceryCyan
-hi! link javaScriptIdentifier SrceryRed
 hi! link javaScriptMember SrceryBlue
-hi! link javaScriptNumber SrceryMagenta
 hi! link javaScriptNull SrceryMagenta
-hi! link javaScriptParens SrceryBrightWhite
 
 " }}}
 " YAJS: {{{
 
-hi! link javascriptImport SrceryCyan
-hi! link javascriptExport SrceryCyan
-hi! link javascriptClassKeyword SrceryCyan
-hi! link javascriptClassExtends SrceryCyan
-hi! link javascriptDefault SrceryCyan
+hi! link javascriptParens SrceryBrightCyan
+hi! link javascriptFuncArg Normal
+hi! link javascriptDocComment SrceryGreen
+hi! link javascriptArrayMethod Function
+hi! link javascriptReflectMethod Function
+hi! link javascriptStringMethod Function
+hi! link javascriptObjectMethod Function
+hi! link javascriptObjectStaticMethod Function
+hi! link javascriptObjectLabel SrceryBlue
 
-hi! link javascriptClassName SrceryYellow
-hi! link javascriptClassSuperName SrceryYellow
-hi! link javascriptGlobal SrceryYellow
+hi! link javascriptProp SrceryBlue
 
-hi! link javascriptEndColons SrceryFg1
-hi! link javascriptFuncArg SrceryFg1
-hi! link javascriptGlobalMethod SrceryFg1
-hi! link javascriptNodeGlobal SrceryFg1
-
-" hi! link javascriptVariable SrceryYellow
-hi! link javascriptVariable SrceryRed
-" hi! link javascriptIdentifier SrceryYellow
-" hi! link javascriptClassSuper SrceryYellow
-hi! link javascriptIdentifier SrceryYellow
-hi! link javascriptClassSuper SrceryYellow
-
-" hi! link javascriptFuncKeyword SrceryYellow
-" hi! link javascriptAsyncFunc SrceryYellow
-hi! link javascriptFuncKeyword SrceryCyan
-hi! link javascriptAsyncFunc SrceryCyan
-hi! link javascriptClassStatic SrceryYellow
-
-hi! link javascriptOperator SrceryRed
-hi! link javascriptForOperator SrceryRed
-hi! link javascriptYield SrceryRed
-hi! link javascriptExceptions SrceryRed
-hi! link javascriptMessage SrceryRed
-
-hi! link javascriptTemplateSB SrceryCyan
-hi! link javascriptTemplateSubstitution SrceryFg1
-
-" hi! link javascriptLabel SrceryBlue
-" hi! link javascriptObjectLabel SrceryBlue
-" hi! link javascriptPropertyName SrceryBlue
-hi! link javascriptLabel SrceryFg1
-hi! link javascriptObjectLabel SrceryFg1
-hi! link javascriptPropertyName SrceryFg1
-
-hi! link javascriptLogicSymbols SrceryFg1
-hi! link javascriptArrowFunc SrceryFg1
-
-hi! link javascriptDocParamName SrceryFg4
-hi! link javascriptDocTags SrceryFg4
-hi! link javascriptDocNotation SrceryFg4
-hi! link javascriptDocParamType SrceryFg4
-hi! link javascriptDocNamedParamType SrceryFg4
+hi! link javascriptVariable SrceryBrightBlue
+hi! link javascriptOperator SrceryBrightCyan
+hi! link javascriptFuncKeyword SrceryBrightRed
+hi! link javascriptFunctionMethod SrceryYellow
+hi! link javascriptReturn SrceryBrightRed
+hi! link javascriptEndColons Normal
 
 " }}}
 " CoffeeScript: {{{
@@ -729,21 +712,21 @@ hi! link elixirInterpolationDelimiter SrceryCyan
 " Scala: {{{
 
 " NB: scala vim syntax file is kinda horrible
-hi! link scalaNameDefinition SrceryFg1
-hi! link scalaCaseFollowing SrceryFg1
-hi! link scalaCapitalWord SrceryFg1
-hi! link scalaTypeExtension SrceryFg1
+hi! link scalaNameDefinition SrceryBlue
+hi! link scalaCaseFollowing SrceryBlue
+hi! link scalaCapitalWord SrceryBlue
+hi! link scalaTypeExtension SrceryBlue
 
 hi! link scalaKeyword SrceryRed
 hi! link scalaKeywordModifier SrceryRed
 
 hi! link scalaSpecial SrceryCyan
-hi! link scalaOperator SrceryFg1
+hi! link scalaOperator SrceryBlue
 
 hi! link scalaTypeDeclaration SrceryYellow
 hi! link scalaTypeTypePostDeclaration SrceryYellow
 
-hi! link scalaInstanceDeclaration SrceryFg1
+hi! link scalaInstanceDeclaration SrceryBlue
 hi! link scalaInterpolation SrceryCyan
 
 " }}}
@@ -787,10 +770,10 @@ hi! link markdownIdDeclaration markdownLinkText
 " hi! link haskellConditional SrceryCyan
 " hi! link haskellLet SrceryYellow
 "
-hi! link haskellType SrceryFg1
-hi! link haskellIdentifier SrceryFg1
-hi! link haskellSeparator SrceryFg1
-hi! link haskellDelimiter SrceryFg4
+hi! link haskellType SrceryBlue
+hi! link haskellIdentifier SrceryBlue
+hi! link haskellSeparator SrceryBlue
+hi! link haskellDelimiter SrceryBrightWhite
 hi! link haskellOperators SrceryBlue
 "
 hi! link haskellBacktick SrceryYellow
@@ -818,9 +801,12 @@ hi! link haskellChar SrceryGreen
 
 hi! link jsonKeyword SrceryGreen
 hi! link jsonQuote SrceryGreen
-hi! link jsonBraces SrceryFg1
-hi! link jsonString SrceryFg1
+hi! link jsonBraces SrceryBlue
+hi! link jsonString SrceryBlue
 
 " }}}
-
+" Rust: {{{
+"https://github.com/rust-lang/rust.vim/blob/master/syntax/rust.vim
+hi! link rustCommentLineDoc SrceryGreen
+" }}}
 " vim: set sw=2 ts=2 sts=2 et tw=80 ft=vim fdm=marker:

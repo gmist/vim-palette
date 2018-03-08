@@ -143,7 +143,7 @@ endif " &background
 
 if v:version >= 700
 
-	Hi MatchParen  fg=555,White  bg=030,DarkGreen
+	Hi MatchParen  fg=030,DarkGreen  bg=443,LightGrey
 
 	Hi Pmenu       fg=000,Black  bg=444,LightGrey
 	Hi PmenuSel    fg=000,Black  bg=550,Yellow

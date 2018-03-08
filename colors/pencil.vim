@@ -41,8 +41,25 @@ if ! exists("g:pencil_higher_contrast_ui")
   let g:pencil_higher_contrast_ui = 0
 endif
 
+if ! exists("g:pencil_neutral_code_bg")
+  let g:pencil_neutral_code_bg = 0
+endif
+
 if ! exists("g:pencil_neutral_headings")
   let g:pencil_neutral_headings = 0
+endif
+
+" not all terminals support italics properly.  If yours does, opt-in.
+if ! exists("g:pencil_terminal_italics")
+  let g:pencil_terminal_italics = 0
+endif
+
+if ! exists("g:pencil_spell_undercurl")
+  let g:pencil_spell_undercurl = 1
+endif
+
+if ! exists("g:pencil_gutter_color")
+  let g:pencil_gutter_color = 0
 endif
 
 " Colors
@@ -53,12 +70,13 @@ let s:actual_white    = { "gui": "#FFFFFF", "cterm": "231" }
 let s:light_black     = { "gui": "#424242", "cterm": "8"   }
 let s:lighter_black   = { "gui": "#545454", "cterm": "240" }
 
-if g:pencil_higher_contrast_ui == 1
+if g:pencil_higher_contrast_ui == 0
   " darker shadow and whiter grays
   let s:subtle_black  = { "gui": "#262626", "cterm": "235" }
   let s:light_gray    = { "gui": "#D9D9D9", "cterm": "253" }
   let s:lighter_gray  = { "gui": "#E5E6E6", "cterm": "254" }
 else
+  " lighter shadows and darker grays
   let s:subtle_black  = { "gui": "#303030", "cterm": "236" }
   let s:light_gray    = { "gui": "#B2B2B2", "cterm": "249" }
   let s:lighter_gray  = { "gui": "#C6C6C6", "cterm": "251" }
@@ -119,8 +137,24 @@ else
   let s:head_c         = s:dark_cyan
 endif
 
+if g:pencil_neutral_code_bg == 1
+  let s:code_bg        = s:bg
+else
+  let s:code_bg        = s:bg_very_subtle
+endif
+
+if g:pencil_spell_undercurl == 1
+  let s:sp_un      = 'undercurl'
+else
+  let s:sp_un      = 'underline'
+endif
+
 " shamelessly stolen from hemisu: https://github.com/noahfrederick/vim-hemisu/
 function! s:h(group, style)
+  " Not all terminals support italics properly. If yours does, opt-in.
+  if g:pencil_terminal_italics == 0 && has_key(a:style, "cterm") && a:style["cterm"] == "italic"
+    unlet a:style.cterm
+  endif
   execute "highlight" a:group
     \ "guifg="   (has_key(a:style, "fg")    ? a:style.fg.gui   : "NONE")
     \ "guibg="   (has_key(a:style, "bg")    ? a:style.bg.gui   : "NONE")
@@ -136,7 +170,7 @@ endfunction
 
 call s:h("Normal",        {"bg": s:bg, "fg": s:norm})
 call s:h("Cursor",        {"bg": s:blue, "fg": s:norm })
-call s:h("Comment",       {"fg": s:medium_gray, "gui": "italic"})
+call s:h("Comment",       {"fg": s:medium_gray, "gui": "italic", "cterm": "italic"})
 
 call s:h("Constant",      {"fg": s:cyan})
 hi! link String           Constant
@@ -174,26 +208,27 @@ hi! link Delimiter        Special
 hi! link SpecialComment   Special
 hi! link Debug            Special
 
-call s:h("Underlined",    {"fg": s:norm, "gui": "underline", "cterm": "underline"})
-call s:h("Ignore",        {"fg": s:bg})
-call s:h("Error",         {"fg": s:actual_white, "bg": s:red, "cterm": "bold"})
-call s:h("Todo",          {"fg": s:actual_white, "bg": s:pink, "gui": "bold", "cterm": "bold"})
+call s:h("Underlined",    {"fg": s:norm                      , "gui": "underline", "cterm": "underline"})
+call s:h("Ignore",        {"fg": s:bg                                                                  })
+call s:h("Error",         {"fg": s:actual_white, "bg": s:red , "gui": "bold"     , "cterm": "bold"     })
+call s:h("Todo",          {"fg": s:actual_white, "bg": s:pink, "gui": "bold"     , "cterm": "bold"     })
 
 " ui chrome ====================================================================
 " ordered according to `:help hitest.vim`
 
 call s:h("SpecialKey",    {"fg": s:light_green})
-call s:h("NonText",       {"fg": s:medium_gray})
+call s:h("NonText",       {"fg": s:bg_subtle})
 call s:h("Directory",     {"fg": s:dark_blue})
 call s:h("ErrorMsg",      {"fg": s:pink})
 call s:h("IncSearch",     {"bg": s:yellow, "fg": s:light_black})
 call s:h("Search",        {"bg": s:bg_subtle})
-call s:h("MoreMsg",       {"fg": s:medium_gray, "cterm": "bold", "gui": "bold"})
+call s:h("MoreMsg",       {"fg": s:medium_gray, "gui": "bold", "cterm": "bold"})
 hi! link ModeMsg MoreMsg
 call s:h("LineNr",        {"fg": s:bg_subtle})
 call s:h("CursorLineNr",  {"fg": s:blue, "bg": s:bg_very_subtle})
 call s:h("Question",      {"fg": s:red})
 call s:h("StatusLine",    {"bg": s:bg_very_subtle})
+call s:h("Conceal",       {"fg": s:norm})
 call s:h("StatusLineNC",  {"bg": s:bg_very_subtle, "fg": s:medium_gray})
 call s:h("VertSplit",     {"bg": s:bg_very_subtle, "fg": s:bg_very_subtle})
 call s:h("Title",         {"fg": s:dark_blue})
@@ -203,22 +238,22 @@ call s:h("WarningMsg",    {"fg": s:red})
 call s:h("WildMenu",      {"fg": s:bg, "bg": s:norm})
 call s:h("Folded",        {"fg": s:medium_gray})
 call s:h("FoldColumn",    {"fg": s:bg_subtle})
-call s:h("DiffAdd",       {"fg": s:green})
-call s:h("DiffDelete",    {"fg": s:red})
-call s:h("DiffChange",    {"fg": s:dark_yellow})
-call s:h("DiffText",      {"fg": s:dark_blue})
+call s:h("DiffAdd",       {"bg": s:bg_subtle, "fg": s:green})
+call s:h("DiffDelete",    {"bg": s:bg_subtle, "fg": s:red})
+call s:h("DiffChange",    {"bg": s:bg_subtle, "fg": s:dark_yellow})
+call s:h("DiffText",      {"bg": s:bg_subtle, "fg": s:dark_blue})
 call s:h("SignColumn",    {"fg": s:light_green})
-" hi Conceal
+
 if has("gui_running")
-  call s:h("SpellBad",    {"gui": "underline", "sp": s:red})
-  call s:h("SpellCap",    {"gui": "underline", "sp": s:light_green})
-  call s:h("SpellRare",   {"gui": "underline", "sp": s:pink})
-  call s:h("SpellLocal",  {"gui": "underline", "sp": s:dark_green})
+  call s:h("SpellBad",    {"gui": s:sp_un, "sp": s:red})
+  call s:h("SpellCap",    {"gui": s:sp_un, "sp": s:light_green})
+  call s:h("SpellRare",   {"gui": s:sp_un, "sp": s:pink})
+  call s:h("SpellLocal",  {"gui": s:sp_un, "sp": s:dark_green})
 else
-  call s:h("SpellBad",    {"cterm": "underline", "fg": s:red})
-  call s:h("SpellCap",    {"cterm": "underline", "fg": s:light_green})
-  call s:h("SpellRare",   {"cterm": "underline", "fg": s:pink})
-  call s:h("SpellLocal",  {"cterm": "underline", "fg": s:dark_green})
+  call s:h("SpellBad",    {"cterm": s:sp_un, "fg": s:red})
+  call s:h("SpellCap",    {"cterm": s:sp_un, "fg": s:light_green})
+  call s:h("SpellRare",   {"cterm": s:sp_un, "fg": s:pink})
+  call s:h("SpellLocal",  {"cterm": s:sp_un, "fg": s:dark_green})
 endif
 call s:h("Pmenu",         {"fg": s:norm, "bg": s:bg_subtle})
 call s:h("PmenuSel",      {"fg": s:norm, "bg": s:blue})
@@ -246,31 +281,34 @@ hi! link htmlTagName      KeyWord
 hi! link htmlTagN         Keyword
 
 " HTML content
-call s:h("htmlItalic",    {"gui": "italic", "cterm": "bold"})
-call s:h("htmlBold",      {"gui": "bold", "cterm": "bold"})
-call s:h("htmlBoldItalic",{"gui": "bold,italic", "cterm": "bold"})
-call s:h("htmlH1",        {"fg": s:head_a, "gui": "bold,italic"})
-call s:h("htmlH2",        {"fg": s:head_a, "gui": "bold"})
-call s:h("htmlH3",        {"fg": s:head_b, "gui": "italic"})
-call s:h("htmlH4",        {"fg": s:head_b, "gui": "italic"})
-call s:h("htmlH5",        {"fg": s:head_c})
-call s:h("htmlH6",        {"fg": s:head_c})
-call s:h("htmlLink",      {"fg": s:blue, "gui": "underline", "cterm": "underline"})
+call s:h("htmlH1",        {"fg": s:head_a, "gui": "bold,italic", "cterm": "bold"     })
+call s:h("htmlH2",        {"fg": s:head_a, "gui": "bold"       , "cterm": "bold"     })
+call s:h("htmlH3",        {"fg": s:head_b, "gui": "italic"     , "cterm": "italic"   })
+call s:h("htmlH4",        {"fg": s:head_b, "gui": "italic"     , "cterm": "italic"   })
+call s:h("htmlH5",        {"fg": s:head_c                                            })
+call s:h("htmlH6",        {"fg": s:head_c                                            })
+call s:h("htmlLink",      {"fg": s:blue  , "gui": "underline"  , "cterm": "underline"})
+call s:h("htmlItalic",    {                "gui": "italic"     , "cterm": "italic"   })
+call s:h("htmlBold",      {                "gui": "bold"       , "cterm": "bold"     })
+call s:h("htmlBoldItalic",{                "gui": "bold,italic", "cterm": "bold"     })
 " hi htmlString     guifg=#87875f guibg=NONE gui=NONE        ctermfg=101 ctermbg=NONE cterm=NONE
 
 " tpope/vim-markdown
-call s:h("markdownBlockquote",          {"fg": s:medium_gray})
-call s:h("markdownCodeDelimiter",       {"fg": s:norm})
-call s:h("markdownH1",                  {"fg": s:head_a, "gui": "bold,italic"})
-call s:h("markdownH2",                  {"fg": s:head_a, "gui": "bold"})
-call s:h("markdownH3",                  {"fg": s:head_a, "gui": "italic"})
-call s:h("markdownH4",                  {"fg": s:head_a, "gui": "italic"})
+call s:h("markdownBlockquote",          {"fg": s:norm})
+call s:h("markdownBold",                {"fg": s:norm  , "gui": "bold"       , "cterm": "bold"  })
+call s:h("markdownBoldItalic",          {"fg": s:norm  , "gui": "bold,italic", "cterm": "bold"  })
+call s:h("markdownEscape",              {"fg": s:norm})
+call s:h("markdownH1",                  {"fg": s:head_a, "gui": "bold,italic", "cterm": "bold"  })
+call s:h("markdownH2",                  {"fg": s:head_a, "gui": "bold"       , "cterm": "bold"  })
+call s:h("markdownH3",                  {"fg": s:head_a, "gui": "italic"     , "cterm": "italic"})
+call s:h("markdownH4",                  {"fg": s:head_a, "gui": "italic"     , "cterm": "italic"})
 call s:h("markdownH5",                  {"fg": s:head_a})
 call s:h("markdownH6",                  {"fg": s:head_a})
 call s:h("markdownHeadingDelimiter",    {"fg": s:norm})
 call s:h("markdownHeadingRule",         {"fg": s:norm})
-call s:h("markdownId",                  {"fg": s:norm})
+call s:h("markdownId",                  {"fg": s:medium_gray})
 call s:h("markdownIdDeclaration",       {"fg": s:norm_subtle})
+call s:h("markdownItalic",              {"fg": s:norm  , "gui": "italic"     , "cterm": "italic"})
 call s:h("markdownLinkDelimiter",       {"fg": s:medium_gray})
 call s:h("markdownLinkText",            {"fg": s:norm})
 call s:h("markdownLinkTextDelimiter",   {"fg": s:medium_gray})
@@ -281,20 +319,49 @@ call s:h("markdownUrl",                 {"fg": s:medium_gray, "gui": "underline"
 call s:h("markdownUrlDelimiter",        {"fg": s:medium_gray})
 call s:h("markdownUrlTitle",            {"fg": s:norm})
 call s:h("markdownUrlTitleDelimiter",   {"fg": s:medium_gray})
+call s:h("markdownCode",                {"fg": s:norm, "bg": s:code_bg})
+call s:h("markdownCodeDelimiter",       {"fg": s:norm, "bg": s:code_bg})
 
 " plasticboy/vim-markdown
 call s:h("mkdBlockQuote",               {"fg": s:norm})
-call s:h("mkdCode",                     {"fg": s:norm})
 call s:h("mkdDelimiter",                {"fg": s:medium_gray})
-call s:h("mkdID",                       {"fg": s:norm})
-call s:h("mkdIndentCode",               {"fg": s:norm})
+call s:h("mkdID",                       {"fg": s:medium_gray})
 call s:h("mkdLineContinue",             {"fg": s:norm})
 call s:h("mkdLink",                     {"fg": s:norm})
-call s:h("mkdLinkDef",                  {"fg": s:norm})
+call s:h("mkdLinkDef",                  {"fg": s:medium_gray})
 call s:h("mkdListItem",                 {"fg": s:norm})
-call s:h("mkdNonListItemBlock",         {"fg": s:norm})
+call s:h("mkdNonListItemBlock",         {"fg": s:norm})  " bug in syntax?
 call s:h("mkdRule",                     {"fg": s:norm})
 call s:h("mkdUrl",                      {"fg": s:medium_gray, "gui": "underline", "cterm": "underline"})
+call s:h("mkdCode",                     {"fg": s:norm, "bg": s:code_bg})
+call s:h("mkdIndentCode",               {"fg": s:norm, "bg": s:code_bg})
+
+" gabrielelana/vim-markdown
+call s:h("markdownBlockquoteDelimiter", {"fg": s:norm})
+call s:h("markdownInlineDelimiter",     {"fg": s:norm})
+call s:h("markdownItemDelimiter",       {"fg": s:norm})
+call s:h("markdownLinkReference",       {"fg": s:medium_gray})
+call s:h("markdownLinkText",            {"fg": s:norm})
+call s:h("markdownLinkTextContainer",   {"fg": s:medium_gray})
+call s:h("markdownLinkUrl",             {"fg": s:medium_gray, "gui": "underline", "cterm": "underline"})
+call s:h("markdownLinkUrlContainer",    {"fg": s:medium_gray})
+call s:h("markdownFencedCodeBlock",     {"fg": s:norm, "bg": s:code_bg})
+call s:h("markdownInlineCode",          {"fg": s:norm, "bg": s:code_bg})
+
+" mattly/vim-markdown-enhancements
+call s:h("mmdFootnoteDelimiter",        {"fg": s:medium_gray})
+call s:h("mmdFootnoteMarker",           {"fg": s:norm})
+call s:h("mmdTableAlign",               {"fg": s:norm})
+call s:h("mmdTableDelimiter",           {"fg": s:norm})
+call s:h("mmdTableHeadDelimiter",       {"fg": s:norm})
+call s:h("mmdTableHeader",              {"fg": s:norm})
+call s:h("mmdTableCaptionDelimiter",    {"fg": s:norm})
+call s:h("mmdTableCaption",             {"fg": s:norm})
+
+" Textile content
+" https://github.com/timcharper/textile.vim/blob/master/syntax/textile.vim
+"call s:h("txtBold",                {"fg": s:norm  , "gui": "bold"       , "cterm": "bold"  })
+"call s:h("txtEmphasis",            {"fg": s:norm  , "gui": "italic"     , "cterm": "italic"})
 
 " XML content
 hi! link xmlTag                     htmlTag
@@ -302,11 +369,20 @@ hi! link xmlEndTag                  xmlTag
 hi! link xmlTagName                 htmlTagName
 
 " Signify, git-gutter
-hi link SignifySignAdd              LineNr
-hi link SignifySignDelete           LineNr
-hi link SignifySignChange           LineNr
-hi link GitGutterAdd                LineNr
-hi link GitGutterDelete             LineNr
-hi link GitGutterChange             LineNr
-hi link GitGutterChangeDelete       LineNr
-
+if g:pencil_gutter_color == 1
+  hi link SignifySignAdd              DiffAdd
+  hi link SignifySignDelete           DiffDelete
+  hi link SignifySignChange           DiffChange
+  hi link GitGutterAdd                DiffAdd
+  hi link GitGutterDelete             DiffDelete
+  hi link GitGutterChange             DiffChange
+  hi link GitGutterChangeDelete       DiffChange
+else
+  hi link SignifySignAdd              LineNr
+  hi link SignifySignDelete           LineNr
+  hi link SignifySignChange           LineNr
+  hi link GitGutterAdd                LineNr
+  hi link GitGutterDelete             LineNr
+  hi link GitGutterChange             LineNr
+  hi link GitGutterChangeDelete       LineNr
+endif

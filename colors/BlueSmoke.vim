@@ -9,34 +9,46 @@ endif
 
 let colors_name = "BlueSmoke"
 
-" Interesting colors
-" SlateBlue, DeepSkyBlue, BlueViolet
-
 " Normal should come first
-"Blue tint: #F8F8FF
-"Orange tint: #FEF1E0
-hi Normal		 guifg=Grey10 guibg=White
+hi Normal	         guifg=Black guibg=White
+
+hi Comment         guifg=Green4
+hi String          guifg=Green4
+hi Character       guifg=Green4
+hi Constant        guifg=Black
+hi Operator        guifg=Red4
+hi SyntaxChar      guifg=Black
+hi Statement       guifg=Blue3 gui=bold
+hi StorageClass    guifg=Blue3 gui=bold
+hi Keyword         guifg=Blue3 gui=bold
+hi cType           guifg=Black gui=bold
+hi Type            guifg=Black gui=bold
+hi Function        guifg=Black gui=bold
+hi Identifier      guifg=Magenta4 gui=bold
+hi PreProc         guifg=Magenta4
+
+" printf() formatting specifiers
+hi Special         guifg=Magenta4
 
 hi Cursor       guifg=White	guibg=Red
 hi lCursor      guifg=NONE guibg=Cyan
 
-"#338FFF
-hi Visual       guifg=White guibg=SlateBlue
+hi Visual       guibg=#b6d6fd
 hi VisualNOS    gui=underline
+
 
 hi Folded       guifg=#808080 guibg=#ECECEC gui=none
 
 hi StatusLineNC	guifg=Grey75 guibg=NavyBlue gui=reverse,underline
 hi VertSplit    guifg=Grey75 guibg=NavyBlue
-hi StatusLine   guifg=NavyBlue guibg=Grey75 gui=underline
+hi StatusLine   guifg=NavyBlue guibg=Grey75 gui=bold,underline
 
 hi LineNr       guifg=#959595 guibg=#ECECEC
-"#FFF4CE
 hi CursorLine   guibg=#FFF4CE
 
 hi DiffAdd       guibg=LightBlue
 hi DiffChange    guibg=LightMagenta
-hi DiffDelete    gui=bold guifg=Blue guibg=LightCyan
+hi DiffDelete    gui=none guifg=Black guibg=LightCyan
 hi DiffText      gui=bold guibg=Red
 hi Directory     guifg=Blue
 hi ErrorMsg      guibg=White guifg=DarkRed	   
@@ -54,29 +66,5 @@ hi SpecialKey    guifg=Blue
 hi Title         gui=bold guifg=Magenta
 hi WarningMsg    guifg=Red
 hi WildMenu      guibg=Yellow guifg=Black
-
-" Syntax highlighting
-
-"Cold hue: #607d8b, #858E8F
-"Warm hue: Grey50
-hi Comment         guifg=Green4
-hi String          guifg=Green4
-hi Constant        guifg=Red4
-hi Operator        guifg=Red4
-hi SyntaxChar      guifg=Cyan4 gui=None
-
-" github #BA1D5D
-hi Statement       guifg=Blue3 gui=Bold
-hi StorageClass    guifg=Blue3
-hi Identifier      guifg=Magenta4
-hi Function        guifg=Magenta4
-hi Keyword         guifg=Blue3
-
-hi csClassOrStruct guifg=Blue3
-hi Type            guifg=Magenta4 gui=None
-hi PreProc         guifg=Magenta4
-
-"Orange3
-hi Special         guifg=Magenta4
 
 " vim: sw=2

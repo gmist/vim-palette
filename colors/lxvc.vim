@@ -124,7 +124,10 @@ hi Ignore           guifg=bg
 hi Ignore           ctermfg=darkgrey    ctermbg=NONE        cterm=NONE
 
 hi Error            guifg=#e37170       guibg=#432323       gui=NONE
-hi Error            ctermfg=white       ctermbg=NONE        cterm=NONE
+hi Error            ctermfg=1           ctermbg=NONE        cterm=NONE
+
+hi Warning          guifg=#e37170       guibg=#432323       gui=NONE
+hi Warning          ctermfg=1           ctermbg=NONE        cterm=NONE
 
 hi Todo             guifg=#e0e090       guibg=NONE          gui=underline
 hi Todo             ctermfg=black       ctermbg=blue        cterm=NONE
@@ -141,7 +144,7 @@ hi CursorIM         guifg=bg            guibg=#96cdcd
 hi CursorColumn     guifg=NONE          guibg=#404448       gui=NONE
 
 hi CursorLine                           guibg=#34373b       gui=NONE
-hi CursorLine       ctermfg=NONE        ctermbg=236         cterm=NONE
+hi CursorLine       ctermfg=NONE        ctermbg=0         cterm=NONE
 
 hi CursorLineNr     guifg=#8895dd                           gui=bold
 hi CursorLineNr     ctermfg=blue        ctermbg=NONE        cterm=bold
@@ -182,8 +185,7 @@ hi WarningMsg       ctermfg=black       ctermbg=NONE        cterm=NONE
 hi WildMenu         guifg=#cae682       guibg=#363946       gui=bold,underline
 hi WildMenu         ctermfg=black       ctermbg=darkgrey    cterm=NONE
 
-hi SignColumn       guifg=#9fafaf       guibg=#181818       gui=NONE
-
+hi clear SignColumn
 
 """"""
 " TABS
@@ -205,10 +207,10 @@ hi Title            ctermfg=darkgrey    ctermbg=NONE
 " COMPLETION
 """"""""""""""""""""""""
 hi Pmenu            guifg=#e0e0e0       guibg=#101010       gui=NONE
-hi Pmenu            ctermfg=darkgrey    ctermbg=black       cterm=reverse
+hi Pmenu            ctermfg=white       ctermbg=0           cterm=NONE
 
 hi PmenuSel         guifg=#a5a9af       guibg=#202020       gui=NONE
-hi PmenuSel         ctermfg=black       ctermbg=darkgrey    cterm=bold
+hi PmenuSel         ctermfg=black       ctermbg=white       cterm=NONE
 
 hi PMenuSbar                            guibg=#505860       gui=NONE
 
@@ -264,8 +266,12 @@ hi FoldColumn       ctermfg=darkgrey    ctermbg=NONE         cterm=NONE
 """"""
 " SPELLING
 """"""""""""""""""""""""
-hi SpellBad         guisp=#ee0000                            gui=undercurl
+hi SpellBad         guifg=#ee0000      guibg=NONE            gui=undercurl
+hi SpellBad         ctermfg=1          ctermbg=NONE          cterm=NONE
+
 hi SpellCap         guisp=#eeee00                            gui=undercurl
+hi SpellCap         ctermfg=1          ctermbg=NONE          cterm=NONE
+
 hi SpellRare        guisp=#ffa500                            gui=undercurl
 hi SpellLocal       guisp=#ffa500                            gui=undercurl
 
@@ -282,7 +288,7 @@ hi OverLength       guifg=#cc3333       guibg=#592929
 hi OverLength       ctermfg=196         ctermbg=0
 
 hi ColorColumn      guifg=#cc3333       guibg=#212121        gui=NONE
-hi ColorColumn      ctermfg=196         ctermbg=234          cterm=NONE
+hi ColorColumn                          ctermbg=0            cterm=NONE
 
 """"""
 " TERMINAL
@@ -326,10 +332,10 @@ hi TagbarVisibilityProtected ctermfg=darkgrey
 
 "IndentGuides
 hi IndentGuidesOdd                      guibg=#272727
-hi IndentGuidesOdd                      ctermbg=234
+hi IndentGuidesOdd                      ctermbg=0
 
 hi IndentGuidesEven                     guibg=#272727
-hi IndentGuidesEven                     ctermbg=234
+hi IndentGuidesEven                     ctermbg=0
 
 "Vimwiki
 hi VimwikiHeader1   ctermfg=blue
@@ -363,3 +369,7 @@ hi link EasyMotionTarget Number
 hi link EasyMotionShade  Comment
 hi link EasyMotionTarget2First MatchParen
 hi link EasyMotionTarget2Second MatchParen
+
+"Syntastic
+hi link SyntasticErrorSign Error
+hi link SyntasticWarningSign Warning

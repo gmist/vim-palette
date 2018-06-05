@@ -19,10 +19,10 @@ let s:gui00        = "282936"
 let g:base16_gui00 = "282936"
 let s:gui01        = "3a3c4e"
 let g:base16_gui01 = "3a3c4e"
-let s:gui02        = "4d4f68"
-let g:base16_gui02 = "4d4f68"
-let s:gui03        = "626483"
-let g:base16_gui03 = "626483"
+let s:gui02        = "626483"
+let g:base16_gui02 = "626483"
+let s:gui03        = "4d4f68"
+let g:base16_gui03 = "4d4f68"
 let s:gui04        = "62d6e8"
 let g:base16_gui04 = "62d6e8"
 let s:gui05        = "e9e9f4"
@@ -35,10 +35,10 @@ let s:gui08        = "ea51b2"
 let g:base16_gui08 = "ea51b2"
 let s:gui09        = "b45bcf"
 let g:base16_gui09 = "b45bcf"
-let s:gui0A        = "00f769"
-let g:base16_gui0A = "00f769"
-let s:gui0B        = "ebff87"
-let g:base16_gui0B = "ebff87"
+let s:gui0A        = "ebff87"
+let g:base16_gui0A = "ebff87"
+let s:gui0B        = "00f769"
+let g:base16_gui0B = "00f769"
 let s:gui0C        = "a1efe4"
 let g:base16_gui0C = "a1efe4"
 let s:gui0D        = "62d6e8"
@@ -101,16 +101,16 @@ endif
 if has("nvim")
   let g:terminal_color_0 =  "#282936"
   let g:terminal_color_1 =  "#ea51b2"
-  let g:terminal_color_2 =  "#ebff87"
-  let g:terminal_color_3 =  "#00f769"
+  let g:terminal_color_2 =  "#00f769"
+  let g:terminal_color_3 =  "#ebff87"
   let g:terminal_color_4 =  "#62d6e8"
   let g:terminal_color_5 =  "#b45bcf"
   let g:terminal_color_6 =  "#a1efe4"
   let g:terminal_color_7 =  "#e9e9f4"
-  let g:terminal_color_8 =  "#626483"
+  let g:terminal_color_8 =  "#4d4f68"
   let g:terminal_color_9 =  "#ea51b2"
-  let g:terminal_color_10 = "#ebff87"
-  let g:terminal_color_11 = "#00f769"
+  let g:terminal_color_10 = "#00f769"
+  let g:terminal_color_11 = "#ebff87"
   let g:terminal_color_12 = "#62d6e8"
   let g:terminal_color_13 = "#b45bcf"
   let g:terminal_color_14 = "#a1efe4"
@@ -172,8 +172,8 @@ call <sid>hi("MatchParen",    "", s:gui03, "", s:cterm03,  "", "")
 call <sid>hi("ModeMsg",       s:gui0B, "", s:cterm0B, "", "", "")
 call <sid>hi("MoreMsg",       s:gui0B, "", s:cterm0B, "", "", "")
 call <sid>hi("Question",      s:gui0D, "", s:cterm0D, "", "", "")
-call <sid>hi("Search",        s:gui03, s:gui0A, s:cterm03, s:cterm0A,  "", "")
-call <sid>hi("Substitute",    s:gui03, s:gui0A, s:cterm03, s:cterm0A, "none", "")
+call <sid>hi("Search",        s:gui01, s:gui0A, s:cterm01, s:cterm0A,  "", "")
+call <sid>hi("Substitute",    s:gui01, s:gui0A, s:cterm01, s:cterm0A, "none", "")
 call <sid>hi("SpecialKey",    s:gui03, "", s:cterm03, "", "", "")
 call <sid>hi("TooLong",       s:gui08, "", s:cterm08, "", "", "")
 call <sid>hi("Underlined",    s:gui08, "", s:cterm08, "", "", "")
@@ -361,10 +361,10 @@ call <sid>hi("SignifySignChange",  s:gui0D, s:gui01, s:cterm0D, s:cterm01, "", "
 call <sid>hi("SignifySignDelete",  s:gui08, s:gui01, s:cterm08, s:cterm01, "", "")
 
 " Spelling highlighting
-call <sid>hi("SpellBad",     "", s:gui00, "", s:cterm00, "undercurl", s:gui08)
-call <sid>hi("SpellLocal",   "", s:gui00, "", s:cterm00, "undercurl", s:gui0C)
-call <sid>hi("SpellCap",     "", s:gui00, "", s:cterm00, "undercurl", s:gui0D)
-call <sid>hi("SpellRare",    "", s:gui00, "", s:cterm00, "undercurl", s:gui0E)
+call <sid>hi("SpellBad",     "", "", "", "", "undercurl", s:gui08)
+call <sid>hi("SpellLocal",   "", "", "", "", "undercurl", s:gui0C)
+call <sid>hi("SpellCap",     "", "", "", "", "undercurl", s:gui0D)
+call <sid>hi("SpellRare",    "", "", "", "", "undercurl", s:gui0E)
 
 " Startify highlighting
 call <sid>hi("StartifyBracket",  s:gui03, "", s:cterm03, "", "", "")
@@ -377,6 +377,9 @@ call <sid>hi("StartifySection",  s:gui0E, "", s:cterm0E, "", "", "")
 call <sid>hi("StartifySelect",   s:gui0C, "", s:cterm0C, "", "", "")
 call <sid>hi("StartifySlash",    s:gui03, "", s:cterm03, "", "", "")
 call <sid>hi("StartifySpecial",  s:gui03, "", s:cterm03, "", "", "")
+
+" Java highlighting
+call <sid>hi("javaOperator",     s:gui0D, "", s:cterm0D, "", "", "")
 
 " Remove functions
 delf <sid>hi

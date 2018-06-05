@@ -15,38 +15,38 @@ if !has('gui_running')
 endif
 
 " GUI color definitions
-let s:gui00        = "222222"
-let g:base16_gui00 = "222222"
-let s:gui01        = "424242"
-let g:base16_gui01 = "424242"
-let s:gui02        = "616161"
-let g:base16_gui02 = "616161"
-let s:gui03        = "757575"
-let g:base16_gui03 = "757575"
-let s:gui04        = "9e9e9e"
-let g:base16_gui04 = "9e9e9e"
-let s:gui05        = "bdbdbd"
-let g:base16_gui05 = "bdbdbd"
-let s:gui06        = "e0e0e0"
-let g:base16_gui06 = "e0e0e0"
-let s:gui07        = "eeeeee"
-let g:base16_gui07 = "eeeeee"
-let s:gui08        = "0097a7"
-let g:base16_gui08 = "0097a7"
-let s:gui09        = "00acc1"
-let g:base16_gui09 = "00acc1"
-let s:gui0A        = "00bcd4"
-let g:base16_gui0A = "00bcd4"
-let s:gui0B        = "26c6da"
-let g:base16_gui0B = "26c6da"
-let s:gui0C        = "4dd0e1"
-let g:base16_gui0C = "4dd0e1"
-let s:gui0D        = "80deea"
-let g:base16_gui0D = "80deea"
-let s:gui0E        = "b3ebf2"
-let g:base16_gui0E = "b3ebf2"
-let s:gui0F        = "e0f7fa"
-let g:base16_gui0F = "e0f7fa"
+let s:gui00        = "021012"
+let g:base16_gui00 = "021012"
+let s:gui01        = "031619"
+let g:base16_gui01 = "031619"
+let s:gui02        = "041f23"
+let g:base16_gui02 = "041f23"
+let s:gui03        = "052e34"
+let g:base16_gui03 = "052e34"
+let s:gui04        = "064048"
+let g:base16_gui04 = "064048"
+let s:gui05        = "095b67"
+let g:base16_gui05 = "095b67"
+let s:gui06        = "0c7c8c"
+let g:base16_gui06 = "0c7c8c"
+let s:gui07        = "109cb0"
+let g:base16_gui07 = "109cb0"
+let s:gui08        = "16c1d9"
+let g:base16_gui08 = "16c1d9"
+let s:gui09        = "b3ebf2"
+let g:base16_gui09 = "b3ebf2"
+let s:gui0A        = "80deea"
+let g:base16_gui0A = "80deea"
+let s:gui0B        = "4dd0e1"
+let g:base16_gui0B = "4dd0e1"
+let s:gui0C        = "26c6da"
+let g:base16_gui0C = "26c6da"
+let s:gui0D        = "00bcd4"
+let g:base16_gui0D = "00bcd4"
+let s:gui0E        = "00acc1"
+let g:base16_gui0E = "00acc1"
+let s:gui0F        = "0097a7"
+let g:base16_gui0F = "0097a7"
 
 " Terminal color definitions
 let s:cterm00        = "00"
@@ -99,22 +99,22 @@ endif
 
 " Neovim terminal colours
 if has("nvim")
-  let g:terminal_color_0 =  "#222222"
-  let g:terminal_color_1 =  "#0097a7"
-  let g:terminal_color_2 =  "#26c6da"
-  let g:terminal_color_3 =  "#00bcd4"
-  let g:terminal_color_4 =  "#80deea"
-  let g:terminal_color_5 =  "#b3ebf2"
-  let g:terminal_color_6 =  "#4dd0e1"
-  let g:terminal_color_7 =  "#bdbdbd"
-  let g:terminal_color_8 =  "#757575"
-  let g:terminal_color_9 =  "#0097a7"
-  let g:terminal_color_10 = "#26c6da"
-  let g:terminal_color_11 = "#00bcd4"
-  let g:terminal_color_12 = "#80deea"
-  let g:terminal_color_13 = "#b3ebf2"
-  let g:terminal_color_14 = "#4dd0e1"
-  let g:terminal_color_15 = "#eeeeee"
+  let g:terminal_color_0 =  "#021012"
+  let g:terminal_color_1 =  "#16c1d9"
+  let g:terminal_color_2 =  "#4dd0e1"
+  let g:terminal_color_3 =  "#80deea"
+  let g:terminal_color_4 =  "#00bcd4"
+  let g:terminal_color_5 =  "#00acc1"
+  let g:terminal_color_6 =  "#26c6da"
+  let g:terminal_color_7 =  "#095b67"
+  let g:terminal_color_8 =  "#052e34"
+  let g:terminal_color_9 =  "#16c1d9"
+  let g:terminal_color_10 = "#4dd0e1"
+  let g:terminal_color_11 = "#80deea"
+  let g:terminal_color_12 = "#00bcd4"
+  let g:terminal_color_13 = "#00acc1"
+  let g:terminal_color_14 = "#26c6da"
+  let g:terminal_color_15 = "#109cb0"
   let g:terminal_color_background = g:terminal_color_0
   let g:terminal_color_foreground = g:terminal_color_5
   if &background == "light"
@@ -172,8 +172,8 @@ call <sid>hi("MatchParen",    "", s:gui03, "", s:cterm03,  "", "")
 call <sid>hi("ModeMsg",       s:gui0B, "", s:cterm0B, "", "", "")
 call <sid>hi("MoreMsg",       s:gui0B, "", s:cterm0B, "", "", "")
 call <sid>hi("Question",      s:gui0D, "", s:cterm0D, "", "", "")
-call <sid>hi("Search",        s:gui03, s:gui0A, s:cterm03, s:cterm0A,  "", "")
-call <sid>hi("Substitute",    s:gui03, s:gui0A, s:cterm03, s:cterm0A, "none", "")
+call <sid>hi("Search",        s:gui01, s:gui0A, s:cterm01, s:cterm0A,  "", "")
+call <sid>hi("Substitute",    s:gui01, s:gui0A, s:cterm01, s:cterm0A, "none", "")
 call <sid>hi("SpecialKey",    s:gui03, "", s:cterm03, "", "", "")
 call <sid>hi("TooLong",       s:gui08, "", s:cterm08, "", "", "")
 call <sid>hi("Underlined",    s:gui08, "", s:cterm08, "", "", "")
@@ -361,10 +361,10 @@ call <sid>hi("SignifySignChange",  s:gui0D, s:gui01, s:cterm0D, s:cterm01, "", "
 call <sid>hi("SignifySignDelete",  s:gui08, s:gui01, s:cterm08, s:cterm01, "", "")
 
 " Spelling highlighting
-call <sid>hi("SpellBad",     "", s:gui00, "", s:cterm00, "undercurl", s:gui08)
-call <sid>hi("SpellLocal",   "", s:gui00, "", s:cterm00, "undercurl", s:gui0C)
-call <sid>hi("SpellCap",     "", s:gui00, "", s:cterm00, "undercurl", s:gui0D)
-call <sid>hi("SpellRare",    "", s:gui00, "", s:cterm00, "undercurl", s:gui0E)
+call <sid>hi("SpellBad",     "", "", "", "", "undercurl", s:gui08)
+call <sid>hi("SpellLocal",   "", "", "", "", "undercurl", s:gui0C)
+call <sid>hi("SpellCap",     "", "", "", "", "undercurl", s:gui0D)
+call <sid>hi("SpellRare",    "", "", "", "", "undercurl", s:gui0E)
 
 " Startify highlighting
 call <sid>hi("StartifyBracket",  s:gui03, "", s:cterm03, "", "", "")
@@ -377,6 +377,9 @@ call <sid>hi("StartifySection",  s:gui0E, "", s:cterm0E, "", "", "")
 call <sid>hi("StartifySelect",   s:gui0C, "", s:cterm0C, "", "", "")
 call <sid>hi("StartifySlash",    s:gui03, "", s:cterm03, "", "", "")
 call <sid>hi("StartifySpecial",  s:gui03, "", s:cterm03, "", "", "")
+
+" Java highlighting
+call <sid>hi("javaOperator",     s:gui0D, "", s:cterm0D, "", "", "")
 
 " Remove functions
 delf <sid>hi

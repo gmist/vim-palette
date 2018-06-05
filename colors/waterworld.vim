@@ -52,7 +52,8 @@ let s:border_fg = s:navy_blue
 "#334a60"
 let s:cursor_line = "#24448e"
 
-let s:status_line = "#edf779"
+"#44f7f2"
+let s:status_line = s:border_bg
 
 
 " Normal should come first
@@ -78,7 +79,7 @@ call s:HL("Visual",       {"bg": s:visual,  "fg": "NONE"})
 call s:HL("ErrorMsg",     {"bg": s:error,   "fg": s:fg})
 call s:HL("Error",        {"bg": s:error,   "fg": s:fg})
 call s:HL("WarningMsg",   {"bg": s:warning, "fg": s:navy_blue})
-call s:HL("MatchParen",   {"bg": "#006997", "fg": s:fg})
+call s:HL("MatchParen",   {"bg": "#0b82a4", "fg": s:fg})
 call s:HL("LineNr",       {"bg": s:bg,      "fg": "#9e9f86"})
 call s:HL("StatusLineNC", {"bg": s:border_bg,   "fg": s:border_fg, "gui": "underline"})
 call s:HL("StatusLine",   {"bg": s:status_line, "fg": s:border_fg, "gui": "underline"})

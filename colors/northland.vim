@@ -30,8 +30,8 @@ hi ErrorMsg           gui=NONE       guifg=Yellow        guibg=NONE
 hi ModeMsg            gui=bold       guifg=White         guibg=DarkRed
 
 "hi Directory          gui=NONE       guifg=DarkGreen     guibg=NONE
-"hi Directory gui=bold guifg=#0475B9    "---lighter blue
-hi Directory gui=bold guifg=#035587     "---darker blue
+"hi Directory gui=bold guifg=#0475B9	"---lighter blue
+hi Directory gui=bold guifg=#035587	"---darker blue
 
 hi Search             gui=NONE       guifg=White         guibg=DarkRed
  hi IncSearch          gui=NONE       guifg=White         guibg=DarkRed
@@ -79,20 +79,20 @@ hi Title              gui=bold       guifg=#507080       guibg=NONE
 " ===== :he group-name
 hi Comment gui=italic guifg=DarkGray
 "*Comment       any comment
-"hi Constant gui=none guifg=#0475B9     "---lighter blue
-hi Constant gui=none guifg=#035587      "---darker blue
+"hi Constant gui=none guifg=#0475B9	"---lighter blue
+hi Constant gui=none guifg=#035587	"---darker blue
 "*Constant      any constant
 " String        a string constant: "this is a string"
 " Character     a character constant: 'c', '\n'
 " Number        a number constant: 234, 0xff
 " Boolean       a boolean constant: TRUE, false
 " Float         a floating point constant: 2.3e10
-"hi Identifier gui=bold,italic guifg=#FB000A    "---lighter
-hi Identifier gui=bold,italic guifg=#BC0007     "---darker
+"hi Identifier gui=bold,italic guifg=#FB000A	"---lighter
+hi Identifier gui=bold,italic guifg=#BC0007	"---darker
 "*Identifier    any variable name
 " Function      function name (also: methods for classes)
-"hi Statement gui=bold guifg=#FF9500            "---lighter
-hi Statement gui=bold guifg=#BF6F00             "---darker
+"hi Statement gui=bold guifg=#FF9500		"---lighter
+hi Statement gui=bold guifg=#BF6F00		"---darker
 "*Statement     any statement
 " Conditional   if, then, else, endif, switch, etc.
 " Repeat        for, do, while, etc.
@@ -100,16 +100,16 @@ hi Statement gui=bold guifg=#BF6F00             "---darker
 " Operator      "sizeof", "+", "*", etc.
 " Keyword       any other keyword
 " Exception     try, catch, throw
-"hi PreProc gui=bold,italic guifg=#640A9B       "---
-"hi PreProc gui=bold,italic guifg=#576D02       "---
+"hi PreProc gui=bold,italic guifg=#640A9B	"---
+"hi PreProc gui=bold,italic guifg=#576D02	"---
 hi PreProc gui=bold,italic guifg=#AD6141
 "*PreProc       generic Preprocessor
 " Include       preprocessor #include
 " Define        preprocessor #define
 " Macro         same as Define
 " PreCondit     preprocessor #if, #else, #endif, etc.
-"hi Type gui=none guifg=#14AE00 "---lighter
-hi Type gui=none guifg=#0F8200  "---darker
+"hi Type gui=none guifg=#14AE00	"---lighter
+hi Type gui=none guifg=#0F8200	"---darker
 "*Type          int, long, char, etc.
 " StorageClass  static, register, volatile, etc.
 " Structure     struct, union, enum, etc.
@@ -136,8 +136,8 @@ hi fortranUnitHeader gui=bold guifg=Purple
 hi fortranType gui=none guifg=#0F8200
 hi! link fortranTypeR fortranType
 hi! link fortranStructure fortranType
-hi! link fortranOperator Normal         "///
-hi! link fortranNumber Normal           "///
+hi! link fortranOperator Normal		"///
+hi! link fortranNumber Normal		"///
 
 
 

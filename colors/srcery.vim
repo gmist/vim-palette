@@ -258,7 +258,7 @@ hi! link NonText SrceryWhiteAlt
 hi! link SpecialKey SrceryWhiteAlt
 
 if g:srcery_inverse == 1
-  call s:HL('Visual', s:none, s:none, s:inverse)
+  call s:HL('Visual', s:none, s:xgray5, s:inverse)
 else
   call s:HL('Visual', s:none, s:bright_black, s:bold)
 endif
@@ -269,8 +269,8 @@ if g:srcery_inverse == 1 && g:srcery_inverse_matches == 1
   call s:HL('Search', s:none, s:none, s:inverse)
   call s:HL('IncSearch', s:none, s:none, s:inverse)
 else
-  call s:HL('Search', s:bright_white, s:magenta)
-  call s:HL('IncSearch', s:bright_white, s:magenta)
+  call s:HL('Search', s:none, s:xgray4, s:bold)
+  call s:HL('IncSearch', s:none, s:xgray4, s:underline . s:bold)
 endif
 
 call s:HL('Underlined', s:blue, s:none, s:underline)
@@ -279,7 +279,7 @@ call s:HL('StatusLine',   s:bright_white, s:bright_black)
 
 if g:srcery_transparent_background == 1 && !has('gui_running')
   call s:HL('StatusLineNC', s:white, s:none, s:underline)
-  
+
   " The column separating vertically split windows
   call s:HL('VertSplit', s:bright_white, s:none)
 
@@ -549,6 +549,19 @@ call s:HL('IndentGuidesEven', s:none, s:xgray2)
 call s:HL('IndentGuidesOdd',  s:none, s:xgray3)
 
 " }}}
+" vim-startify {{{
+
+hi! link StartifyNumber Statement
+hi! link StartifyFile Normal
+hi! link StartifyPath String
+hi! link StartifySlash Normal
+hi! link StartifyBracket Comment
+hi! link StartifyHeader Type
+hi! link StartifyFooter Normal
+hi! link StartifySpecial Comment
+hi! link StartifySection Identifier
+
+" }}}
 
 " Filetype specific -----------------------------------------------------------
 " Diff: {{{
@@ -699,8 +712,9 @@ hi! link pythonDot SrceryBrightWhite
 
 hi! link cssBraces SrceryBrightWhite
 hi! link cssFunctionName SrceryYellow
-hi! link cssIdentifier SrceryYellow
-hi! link cssClassName SrceryGreen
+hi! link cssIdentifier SrceryBlue
+hi! link cssClassName SrceryBlue
+hi! link cssClassNameDot SrceryBlue
 hi! link cssColor SrceryBrightMagenta
 hi! link cssSelectorOp SrceryBlue
 hi! link cssSelectorOp2 SrceryBlue
@@ -708,6 +722,7 @@ hi! link cssImportant SrceryGreen
 hi! link cssVendor SrceryBlue
 hi! link cssMediaProp SrceryYellow
 hi! link cssBorderProp SrceryYellow
+hi! link cssAttrComma SrceryBrightWhite
 
 hi! link cssTextProp SrceryYellow
 hi! link cssAnimationProp SrceryYellow
@@ -935,6 +950,12 @@ hi! link jsonString SrceryBlue
 " Rust: {{{
 "https://github.com/rust-lang/rust.vim/blob/master/syntax/rust.vim
 hi! link rustCommentLineDoc SrceryGreen
+hi! link rustModPathSep SrceryWhite
+" }}}
+" Make: {{{
+hi! link makePreCondit SrceryRed
+hi! link makeCommands SrceryBrightWhite
+hi! link makeTarget SrceryYellow
 " }}}
 " Misc: {{{
 call s:HL('shParenError', s:bright_white, s:bright_red)
